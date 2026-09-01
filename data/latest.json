@@ -70,13 +70,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-329da38db46d",
-      "category": "観光・イベント",
-      "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
+      "id": "rss-aa4e29a98c25",
+      "category": "議会",
+      "title": "令和８年9月定例会一般質問を掲載",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-09-01",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2747/_17269.html"
     }
   ],
   "council": {
@@ -95,6 +95,11 @@
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310.html"
   },
   "latest": [
+    {
+      "date": "2026-09-01",
+      "title": "令和８年9月定例会一般質問を掲載",
+      "url": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2747/_17269.html"
+    },
     {
       "date": "2026-09-01",
       "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
@@ -149,11 +154,6 @@
       "date": "2026-09-01",
       "title": "小学校入学予定者の就学時健康診断を実施します",
       "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_1214/_1974/_10365.html"
-    },
-    {
-      "date": "2026-09-01",
-      "title": "路線と時刻表を令和8年10月1日から変更します",
-      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
     }
   ],
   "sourceHealth": [
@@ -198,5 +198,5 @@
       "status": "ok"
     }
   ],
-  "generatedAt": "2026-09-01T05:01:13Z"
+  "generatedAt": "2026-09-01T05:47:45Z"
 }
