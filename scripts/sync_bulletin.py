@@ -49,19 +49,28 @@ class BulletinParser(HTMLParser):
         self.links: list[dict[str, str]] = []
         self.headings: list[str] = []
         self.list_items: list[dict] = []
+        self._blocks: list[dict] = []
         self._anchor: dict | None = None
+        self._pending_link: dict | None = None
         self._heading: list[str] | None = None
         self._li: dict | None = None
         self._li_depth = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attrs_map = dict(attrs)
+        if tag in {"li", "div", "p", "dd", "dt", "section", "article"}:
+            self._blocks.append({"tag": tag, "parts": []})
         if tag == "li":
             if self._li_depth == 0:
                 self._li = {"text": [], "links": []}
             self._li_depth += 1
         if tag == "a":
-            self._anchor = {"href": attrs_map.get("href") or "", "text": []}
+            self._pending_link = None
+            self._anchor = {
+                "href": attrs_map.get("href") or "",
+                "text": [],
+                "blockRefs": list(self._blocks),
+            }
         if tag in {"h1", "h2", "h3", "h4"}:
             self._heading = []
 
@@ -75,16 +84,23 @@ class BulletinParser(HTMLParser):
             self._heading.append(value)
         if self._li is not None and self._li_depth:
             self._li["text"].append(value)
+        for block in self._blocks:
+            block["parts"].append(value)
+        if self._anchor is None and self._pending_link is not None:
+            self._pending_link.setdefault("afterText", []).append(value)
 
     def handle_endtag(self, tag: str) -> None:
         if tag == "a" and self._anchor is not None:
             link = {
                 "href": self._anchor["href"],
                 "text": clean(" ".join(self._anchor["text"])),
+                "blockRefs": self._anchor["blockRefs"],
+                "afterText": [],
             }
             self.links.append(link)
             if self._li is not None and self._li_depth:
                 self._li["links"].append(link)
+            self._pending_link = link
             self._anchor = None
         if tag in {"h1", "h2", "h3", "h4"} and self._heading is not None:
             heading = clean(" ".join(self._heading))
@@ -101,6 +117,8 @@ class BulletinParser(HTMLParser):
                     }
                 )
                 self._li = None
+        if tag in {"li", "div", "p", "dd", "dt", "section", "article"} and self._blocks:
+            self._blocks.pop()
 
 
 def fetch_text(url: str, timeout: int = 25) -> str:
@@ -169,6 +187,23 @@ def updated_date(html: str) -> str | None:
 
 
 def page_description(parser: BulletinParser, href: str, base_url: str) -> str:
+    for link in parser.links:
+        if urljoin(base_url, link["href"]) != href:
+            continue
+        after = clean(" ".join(link.get("afterText", [])))
+        after = re.split(r"同封配布物|このページの作成担当|ページの先頭|お役立ちコーナー", after)[0]
+        after = re.sub(r"\(?\s*[\d,.]+\s*KB\s*;\s*PDFファイル\s*\)?", "", after, flags=re.I)
+        if after:
+            return clean(after.strip("・:："))
+        for block in reversed(link.get("blockRefs", [])):
+            value = clean(" ".join(block["parts"]))
+            if value and value != clean(link["text"]):
+                for candidate in (link["text"],):
+                    value = value.replace(clean(candidate), "", 1)
+                value = re.sub(r"\(?\s*[\d,.]+\s*KB\s*;\s*PDFファイル\s*\)?", "", value, flags=re.I)
+                value = clean(value.strip("・:："))
+                if value:
+                    return value
     for item in parser.list_items:
         if not any(urljoin(base_url, x["href"]) == href for x in item["links"]):
             continue
@@ -207,7 +242,7 @@ def make_pages(issue: dict[str, str | int], issue_html: str, issue_url: str) -> 
             continue
         seen.add(href)
         label = normalized(link["text"])
-        if "一括" in label:
+        if "一括" in label or "市報PDF" in label or re.search(r"_all(?:\.|$)", urlparse(href).path, re.I):
             continue
         description = page_description(parser, href, issue_url)
         combined = clean(f"{label} {description}")
@@ -261,7 +296,10 @@ def build_data(old: dict) -> dict:
         (
             urljoin(issue_url, link["href"])
             for link in BulletinParserLinks(issue_html)
-            if "一括" in normalized(link["text"]) and ".pdf" in urlparse(urljoin(issue_url, link["href"])).path.lower()
+            if ("一括" in normalized(link["text"])
+                or "市報PDF" in normalized(link["text"])
+                or re.search(r"_all(?:\.|$)", urlparse(urljoin(issue_url, link["href"])).path, re.I))
+            and ".pdf" in urlparse(urljoin(issue_url, link["href"])).path.lower()
         ),
         None,
     )
