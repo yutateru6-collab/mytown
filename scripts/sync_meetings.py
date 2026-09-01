@@ -35,6 +35,17 @@ def clean(value: str) -> str:
     return re.sub(r"\s+", " ", unescape(value or "")).strip()
 
 
+def session_rank(label: str) -> tuple[int, int] | None:
+    match = re.search(r"令和\s*(\d+)\s*年\s*(\d{1,2})\s*月\s*(?:定例会|臨時会)日程", clean(label))
+    if not match:
+        return None
+    western_year = 2018 + int(match.group(1))
+    month = int(match.group(2))
+    if not 1 <= month <= 12:
+        return None
+    return western_year, month
+
+
 class CouncilParser(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
@@ -42,6 +53,9 @@ class CouncilParser(HTMLParser):
         self.rows: list[list[str]] = []
         self.headings: list[str] = []
         self.text_parts: list[str] = []
+        self.main_heading: str | None = None
+        self.after_main_heading_parts: list[str] = []
+        self._capture_after_main_heading = False
         self._anchor_href: str | None = None
         self._anchor_parts: list[str] = []
         self._heading_parts: list[str] | None = None
@@ -65,6 +79,8 @@ class CouncilParser(HTMLParser):
         if not value:
             return
         self.text_parts.append(value)
+        if self._capture_after_main_heading:
+            self.after_main_heading_parts.append(value)
         if self._anchor_href is not None:
             self._anchor_parts.append(value)
         if self._heading_parts is not None:
@@ -81,6 +97,10 @@ class CouncilParser(HTMLParser):
             heading = clean(" ".join(self._heading_parts))
             if heading:
                 self.headings.append(heading)
+                if self.main_heading is None and session_rank(heading) is not None:
+                    self.main_heading = heading
+                    self.after_main_heading_parts = []
+                    self._capture_after_main_heading = True
             self._heading_parts = None
         elif tag in {"td", "th"} and self._row is not None and self._cell_parts is not None:
             self._row.append(clean(" ".join(self._cell_parts)))
@@ -95,6 +115,10 @@ class CouncilParser(HTMLParser):
     def text(self) -> str:
         return clean(" ".join(self.text_parts))
 
+    @property
+    def text_after_main_heading(self) -> str:
+        return clean(" ".join(self.after_main_heading_parts))
+
 
 def fetch_html(url: str, timeout: int = 25) -> str:
     parsed = urlparse(url)
@@ -108,17 +132,6 @@ def fetch_html(url: str, timeout: int = 25) -> str:
         return raw.decode(charset)
     except UnicodeDecodeError:
         return raw.decode("utf-8", errors="replace")
-
-
-def session_rank(label: str) -> tuple[int, int] | None:
-    match = re.search(r"令和\s*(\d+)\s*年\s*(\d{1,2})\s*月\s*(?:定例会|臨時会)日程", clean(label))
-    if not match:
-        return None
-    western_year = 2018 + int(match.group(1))
-    month = int(match.group(2))
-    if not 1 <= month <= 12:
-        return None
-    return western_year, month
 
 
 def discover_schedule_url(index_html: str) -> str:
@@ -137,11 +150,8 @@ def discover_schedule_url(index_html: str) -> str:
     return max(candidates, key=lambda item: item[0])[1]
 
 
-def official_updated(text: str, anchor: str = "") -> str | None:
-    scoped = text
-    if anchor and anchor in scoped:
-        scoped = scoped.rsplit(anchor, 1)[-1]
-    match = re.search(r"更新日\s*(20\d{2})年\s*(\d{1,2})月\s*(\d{1,2})日", scoped)
+def official_updated(text: str) -> str | None:
+    match = re.search(r"更新日\s*(20\d{2})年\s*(\d{1,2})月\s*(\d{1,2})日", text)
     if not match:
         return None
     return f"{int(match.group(1)):04d}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
@@ -161,12 +171,12 @@ def opening_time(text: str) -> time | None:
 def parse_schedule_html(html: str, source_url: str) -> dict:
     parser = CouncilParser()
     parser.feed(html)
-    title = next((x for x in parser.headings if "会日程" in x), "")
+    title = parser.main_heading or next((x for x in parser.headings if "会日程" in x), "")
     rank = session_rank(title)
     if not title or rank is None:
         raise RuntimeError("official council schedule title could not be identified")
     year, title_month = rank
-    start_time = opening_time(parser.text)
+    start_time = opening_time(parser.text_after_main_heading or parser.text)
     if start_time is None:
         raise RuntimeError("official opening time could not be identified")
 
@@ -227,7 +237,7 @@ def parse_schedule_html(html: str, source_url: str) -> dict:
 
     first_date = min(all_dates)
     last_date = max(all_dates)
-    source_updated = official_updated(parser.text, title)
+    source_updated = official_updated(parser.text_after_main_heading)
     series_title = re.sub(r"日程$", "", title)
     return {
         "schemaVersion": 1,
