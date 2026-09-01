@@ -18,6 +18,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
 
+import sync_nogata as legacy
+
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "data" / "meetings.json"
 JST = timezone(timedelta(hours=9))
@@ -150,13 +152,6 @@ def discover_schedule_url(index_html: str) -> str:
     return max(candidates, key=lambda item: item[0])[1]
 
 
-def official_updated(text: str) -> str | None:
-    match = re.search(r"更新日\s*(20\d{2})年\s*(\d{1,2})月\s*(\d{1,2})日", text)
-    if not match:
-        return None
-    return f"{int(match.group(1)):04d}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
-
-
 def opening_time(text: str) -> time | None:
     match = re.search(r"午前\s*(\d{1,2})時(?:\s*(\d{1,2})分)?", text)
     if not match:
@@ -237,7 +232,10 @@ def parse_schedule_html(html: str, source_url: str) -> dict:
 
     first_date = min(all_dates)
     last_date = max(all_dates)
-    source_updated = official_updated(parser.text_after_main_heading)
+    # Reuse the same proven page-text/update-date parser as sync_nogata_v2.
+    # This prevents the meeting file and the user-facing latest.json from
+    # disagreeing about which "更新日" belongs to the current page.
+    source_updated = legacy.official_update_date(legacy.html_text(html), title)
     series_title = re.sub(r"日程$", "", title)
     return {
         "schemaVersion": 1,
