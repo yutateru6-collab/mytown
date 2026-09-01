@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "city": "直方市",
   "verifiedOn": "2026-09-01",
-  "generatedAt": "2026-09-01T04:00:00Z",
+  "generatedAt": "2026-09-01T04:54:07Z",
   "population": {
-    "asOf": "2026年7月末",
-    "total": 53876,
-    "male": 25605,
-    "female": 28271,
-    "households": 27963,
+    "asOf": "令和8年8月末",
+    "total": 53847,
+    "male": 25597,
+    "female": 28250,
+    "households": 27969,
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/home.html"
   },
   "featured": [
@@ -29,7 +29,8 @@
         "武谷線は『中泉線』へ名称変更",
         "赤地新入線は新入線と中泉線へ統合して廃止"
       ],
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html",
+      "sourceUpdated": "2026-09-01"
     },
     {
       "id": "school-health-check-2026",
@@ -48,7 +49,8 @@
         "10月22日：直方西小・上頓野小・福地小",
         "10月23日：下境小・中泉小・植木小"
       ],
-      "sourceUrl": "https://city.nogata.fukuoka.jp/kyoikubunka/_1214/_1974/_10365.html"
+      "sourceUrl": "https://city.nogata.fukuoka.jp/kyoikubunka/_1214/_1974/_10365.html",
+      "sourceUpdated": "2026-09-01"
     },
     {
       "id": "pilates-2026-autumn",
@@ -72,11 +74,11 @@
   ],
   "council": {
     "title": "令和8年9月定例会",
-    "status": "9/3開会予定",
+    "status": "9/3予定",
     "nextDateLabel": "9/3 10:00",
-    "nextSummary": "本会議で議案の提案説明が予定されています。9月4日、7日、8日、9日は一般質問、25日は採決の予定です。",
+    "nextSummary": "本会議（議案の提案説明）が予定されています。日程・開会時間は変更されることがあります。",
     "summary": "9月3日から25日までの日程が公表されています。",
-    "sourceUpdated": "2026-07-02",
+    "sourceUpdated": "2026-08-31",
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
   },
   "garbage": {
@@ -88,8 +90,48 @@
   "latest": [
     {
       "date": "2026-09-01",
-      "title": "路線と時刻表を令和8年10月1日から変更します",
-      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
+      "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html"
+    },
+    {
+      "date": "2026-09-01",
+      "title": "東京藝術大学との幼児教育連携事業について",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_16388/_17260.html"
+    },
+    {
+      "date": "2026-09-01",
+      "title": "【募集中】施設管理員",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_16776.html"
+    },
+    {
+      "date": "2026-09-01",
+      "title": "遠賀川水系河川整備計画【変更原案】について地元説明会を開催します",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3986/_17266.html"
+    },
+    {
+      "date": "2026-09-01",
+      "title": "ハーバリウムづくり体験～のおがたSDGsフェスタ2026 in イオンモール直方～",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17212.html"
+    },
+    {
+      "date": "2026-09-01",
+      "title": "シニアのためのミニしごと合同説明会（筑豊地区）",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_17128.html"
+    },
+    {
+      "date": "2026-09-01",
+      "title": "親子で楽しむ環境学習プログラム",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html"
+    },
+    {
+      "date": "2026-09-01",
+      "title": "自分を輝かせ、素敵な就職と未来を手に入れよう！（令和8年度女性のための就職サポートセミナー）",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17158.html"
+    },
+    {
+      "date": "2026-09-01",
+      "title": "直方オートキャンプ場（事前にネット予約が必要です）",
+      "url": "https://www.city.nogata.fukuoka.jp/kanko/_1226/_1757.html"
     },
     {
       "date": "2026-09-01",
@@ -99,23 +141,54 @@
     {
       "date": "2026-09-01",
       "title": "小学校入学予定者の就学時健康診断を実施します",
-      "url": "https://city.nogata.fukuoka.jp/kyoikubunka/_1214/_1974/_10365.html"
+      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_1214/_1974/_10365.html"
     },
     {
-      "date": "2026-08-31",
-      "title": "災害情報・火災案内",
-      "url": "https://www.city.nogata.fukuoka.jp/syobo.html"
-    },
-    {
-      "date": "2026-08-31",
-      "title": "デザインマンホールを設置しています",
-      "url": "https://www.city.nogata.fukuoka.jp/home.html"
+      "date": "2026-09-01",
+      "title": "路線と時刻表を令和8年10月1日から変更します",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
     }
   ],
   "sourceHealth": [
-    {"name": "直方市ホーム／RSS", "mode": "auto", "status": "seeded"},
-    {"name": "人口と世帯数", "mode": "auto", "status": "seeded"},
-    {"name": "市議会日程", "mode": "page-check", "status": "seeded"},
-    {"name": "ごみ収集案内", "mode": "page-check", "status": "seeded"}
+    {
+      "name": "人口と世帯数",
+      "mode": "auto",
+      "status": "ok"
+    },
+    {
+      "name": "直方市新着RSS",
+      "mode": "auto",
+      "status": "ok"
+    },
+    {
+      "name": "直方市注目RSS",
+      "mode": "auto",
+      "status": "ok"
+    },
+    {
+      "name": "コミュニティバス変更",
+      "mode": "page-check",
+      "status": "ok"
+    },
+    {
+      "name": "就学時健康診断",
+      "mode": "page-check",
+      "status": "ok"
+    },
+    {
+      "name": "ピラティス教室",
+      "mode": "page-check",
+      "status": "ok"
+    },
+    {
+      "name": "市議会日程",
+      "mode": "page-check",
+      "status": "ok"
+    },
+    {
+      "name": "ごみ収集案内",
+      "mode": "page-check",
+      "status": "ok"
+    }
   ]
 }
