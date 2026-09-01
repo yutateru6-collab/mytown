@@ -1,0 +1,168 @@
+/* REVIEW FIXES
+   2026-09-01: accessibility, search state, map/filter consistency and mobile interaction polish.
+*/
+
+html {
+  scroll-padding-bottom: 112px;
+}
+
+.main:focus {
+  outline: none;
+}
+
+button,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+.brand,
+.icon-button,
+.back-button,
+.filter-chip,
+.suggestion-chip,
+.primary-button,
+.secondary-button,
+.search-box button,
+.nav-item {
+  min-height: 44px;
+}
+
+.card-kicker,
+.pill,
+.source-note,
+.answer-card .answer-source,
+.suggestion-chip,
+.filter-chip,
+.nav-item {
+  font-size: max(.78rem, 12px);
+}
+
+.question-button.is-active,
+.category-button.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 2px rgba(39, 106, 85, .08);
+}
+
+.question-button.is-active strong,
+.category-button.is-active strong {
+  color: var(--accent-strong);
+}
+
+.search-summary {
+  margin: 10px 2px 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: .84rem;
+}
+
+.search-summary button {
+  min-height: 40px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--accent-strong);
+  font-weight: 800;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.empty-state {
+  background: rgba(255,255,255,.78);
+  box-shadow: none;
+}
+
+.privacy-note {
+  margin-top: 18px;
+  background: #f4f7f4;
+  box-shadow: none;
+}
+
+.map-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.key-number {
+  margin: 2px 0 0 !important;
+  font-size: clamp(1.16rem, 5vw, 1.42rem);
+  line-height: 1.4;
+  font-weight: 850;
+  color: var(--accent-strong) !important;
+}
+
+.detail-note {
+  margin-top: 8px !important;
+}
+
+.timeline-intro {
+  margin-bottom: 16px !important;
+}
+
+.map-card::after {
+  content: "位置はデモ";
+  font-weight: 800;
+}
+
+.filter-chip.is-active {
+  box-shadow: 0 0 0 2px rgba(30, 41, 36, .08);
+}
+
+.nav-item[aria-current="page"] {
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+}
+
+@media (max-width: 380px) {
+  .main {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .ask-form {
+    flex-direction: column;
+  }
+
+  .ask-form .primary-button {
+    width: 100%;
+  }
+
+  .search-box {
+    flex-wrap: wrap;
+  }
+
+  .search-box input {
+    flex: 1 1 calc(100% - 36px);
+  }
+
+  .search-box button {
+    width: 100%;
+  }
+
+  .question-button {
+    min-height: 88px;
+    padding: 14px;
+  }
+}
+
+@media (forced-colors: active) {
+  .question-button.is-active,
+  .category-button.is-active,
+  .nav-item[aria-current="page"] {
+    outline: 2px solid CanvasText;
+  }
+}
