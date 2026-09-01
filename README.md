@@ -6,7 +6,7 @@
 
 ### 1. 暮らしから入る「今日の直方」
 
-直方市の公式公開情報を約6時間ごとに確認し、新着、人口、ごみ、市議会日程、交通、イベント等を生活者の言葉で表示します。
+直方市の公式公開情報を約2時間ごとに確認し、新着、人口、ごみ、市議会日程、交通、イベント等を生活者の言葉で表示します。市報の最新号も自動検知し、公式ページ・PDF・ページ見出しを表示します。
 
 ### 2. 徹底的に見える化する「市長・議会」
 
@@ -92,6 +92,7 @@ MYTOWNではこのズレを隠さず表示し、古い基準日の所属を「�
 - ごみ・資源リサイクル収集案内
 - 人口・世帯数
 - 直方市公式サイト新着・注目情報
+- 市報のおがた最新号・ページ別PDF・公式見出し
 - 市長
 - 市議会議員19人
 - 会派・委員会
@@ -101,16 +102,17 @@ MYTOWNではこのズレを隠さず表示し、古い基準日の所属を「�
 
 ## 自動同期・再検証
 
-`.github/workflows/sync-nogata.yml` が約6時間ごとに実行されます。
+`.github/workflows/sync-nogata.yml` が約2時間ごとに実行されます（GitHub Actionsの予約実行のため、時刻は前後することがあります）。
 
 処理:
 
 1. 直方市の一次情報を取得
-2. `data/latest.json` を更新
+2. `data/latest.json` と `data/bulletin.json` を更新
 3. 市議会日程など高リスク情報を再検証
 4. `data/politics.json` の市長・議員・会派・委員会・選挙・政務活動費・一般質問を公式ページと再照合
-5. JSONを検証
-6. 変更がある場合だけGitHubへ自動コミット
+5. 市報の最新号、ページ別PDF、公式ページ上の見出しを検知（記事内容の要約は確認待ち）
+6. JSONを検証
+7. 変更がある場合だけGitHubへ自動コミット
 
 政治データが公式ページと一致しなくなった場合、検証を成功扱いにしない設計です。
 
@@ -140,11 +142,13 @@ MYTOWNではこのズレを隠さず表示し、古い基準日の所属を「�
 - `app.js` — 暮らし・検索・質問
 - `politics.js` — 市長・議会・初心者向け政治UX
 - `data/latest.json` — 定期同期データ
+- `data/bulletin.json` — 市報の最新号・ページ候補・確認待ち下書き
 - `data/politics.json` — 市長・議員・選挙・用語等の検証対象データ
-- `scripts/sync_nogata.py` — データ同期
+- `scripts/sync_nogata.py` — 暮らし・行政情報の同期
+- `scripts/sync_bulletin.py` — 市報の最新号とPDF見出しの検知
 - `scripts/verify_high_risk.py` — 市議会等の追加検証
 - `scripts/verify_politics.py` — 政治透明化データの公式ページ照合
-- `.github/workflows/sync-nogata.yml` — 約6時間ごとの同期・検証
+- `.github/workflows/sync-nogata.yml` — 約2時間ごとの同期・検証
 - `.github/workflows/qa.yml` — フロントエンド品質確認
 - `sw.js` — PWAキャッシュ
 
