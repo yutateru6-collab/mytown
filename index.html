@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#F7F8F4" />
-  <meta name="description" content="直方市の公式公開情報を定期同期し、暮らし・市長・市議会・選挙を前提知識ゼロでも分かる言葉で見る非公式地域生活アプリMVP。" />
+  <meta name="theme-color" content="#F8F4EA" />
+  <meta name="description" content="直方市の公式公開情報を定期同期し、暮らしから市役所・市議会・予算まで前提知識ゼロでもたどれる非公式地域生活アプリMVP。" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <link rel="preload" as="image" href="./assets/hero/nogata-watercolor.webp" type="image/webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="./assets/mascot/machinavi.webp" type="image/webp" fetchpriority="high" />
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="./review-fixes.css" />
   <link rel="stylesheet" href="./politics.css" />
   <link rel="stylesheet" href="./election-history.css" />
+  <link rel="stylesheet" href="./ui-v2.css" />
   <title>MYTOWN 直方</title>
 </head>
 <body>
@@ -32,25 +35,25 @@
     <main id="main" class="main" tabindex="-1"></main>
 
     <nav class="bottom-nav" aria-label="メインナビゲーション">
-      <button type="button" data-tab="today" class="nav-item is-active">
+      <button type="button" data-v2-nav="home" class="nav-item is-active" aria-current="page">
         <span class="nav-icon" aria-hidden="true">⌂</span>
-        <span>きょう</span>
+        <span>ホーム</span>
       </button>
-      <button type="button" data-tab="nearby" class="nav-item">
-        <span class="nav-icon" aria-hidden="true">⌖</span>
-        <span>場所</span>
+      <button type="button" data-v2-nav="search" class="nav-item" aria-current="false">
+        <span class="nav-icon" aria-hidden="true">⌕</span>
+        <span>さがす</span>
       </button>
-      <button type="button" data-tab="discover" class="nav-item">
-        <span class="nav-icon" aria-hidden="true">◎</span>
-        <span>見つける</span>
+      <button type="button" data-v2-nav="action" class="nav-item is-center" aria-label="何を調べるか選ぶ">
+        <span class="nav-icon" aria-hidden="true">＋</span>
+        <span>調べる</span>
       </button>
-      <button type="button" data-tab="politics" class="nav-item">
-        <span class="nav-icon" aria-hidden="true">🏛</span>
-        <span>市長・議会</span>
+      <button type="button" data-v2-nav="notifications" class="nav-item" aria-current="false">
+        <span class="nav-icon" aria-hidden="true">🔔</span>
+        <span>お知らせ</span>
       </button>
-      <button type="button" data-tab="ask" class="nav-item">
-        <span class="nav-icon" aria-hidden="true">✦</span>
-        <span>聞く</span>
+      <button type="button" data-v2-nav="menu" class="nav-item" aria-current="false">
+        <span class="nav-icon" aria-hidden="true">☰</span>
+        <span>メニュー</span>
       </button>
     </nav>
   </div>
@@ -60,5 +63,6 @@
   <script src="./app-runtime.js" defer></script>
   <script src="./politics.js" defer></script>
   <script src="./election-history.js" defer></script>
+  <script src="./ui-v2.js" defer></script>
 </body>
 </html>
