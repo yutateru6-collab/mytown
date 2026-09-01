@@ -137,8 +137,11 @@ def discover_schedule_url(index_html: str) -> str:
     return max(candidates, key=lambda item: item[0])[1]
 
 
-def official_updated(text: str) -> str | None:
-    match = re.search(r"更新日\s*(20\d{2})年\s*(\d{1,2})月\s*(\d{1,2})日", text)
+def official_updated(text: str, anchor: str = "") -> str | None:
+    scoped = text
+    if anchor and anchor in scoped:
+        scoped = scoped.rsplit(anchor, 1)[-1]
+    match = re.search(r"更新日\s*(20\d{2})年\s*(\d{1,2})月\s*(\d{1,2})日", scoped)
     if not match:
         return None
     return f"{int(match.group(1)):04d}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
@@ -224,7 +227,7 @@ def parse_schedule_html(html: str, source_url: str) -> dict:
 
     first_date = min(all_dates)
     last_date = max(all_dates)
-    source_updated = official_updated(parser.text)
+    source_updated = official_updated(parser.text, title)
     series_title = re.sub(r"日程$", "", title)
     return {
         "schemaVersion": 1,
