@@ -83,9 +83,9 @@
     "title": "令和8年9月定例会",
     "status": "9/3予定",
     "nextDateLabel": "9/3 10:00",
-    "nextSummary": "本会議（議案の提案説明）が予定されています。日程・開会時間は変更されることがあります。",
-    "summary": "9月3日から25日までの日程が公表されています。",
-    "sourceUpdated": "2026-07-02",
+    "nextSummary": "本会議 （議案の提案説明）が予定されています。日程・開会時間は変更されることがあります。",
+    "summary": "9月3日から9月25日までの日程が公表されています。",
+    "sourceUpdated": "2026-09-01",
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
   },
   "garbage": {
@@ -204,5 +204,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-01T08:32:09Z"
+  "generatedAt": "2026-09-01T08:35:11Z"
 }
