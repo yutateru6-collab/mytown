@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "city": "直方市",
-  "verifiedOn": "2026-09-01",
+  "verifiedOn": "2026-09-02",
   "population": {
     "asOf": "令和8年8月末",
     "total": 53847,
@@ -70,13 +70,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-9c7432436953",
-      "category": "防災",
-      "title": "災害情報・火災案内",
+      "id": "rss-0b725cb34fb0",
+      "category": "その他",
+      "title": "直方市指定給水装置工事事業者一覧表",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-09-01",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_12946.html"
     }
   ],
   "council": {
@@ -95,6 +95,11 @@
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310.html"
   },
   "latest": [
+    {
+      "date": "2026-09-01",
+      "title": "直方市指定給水装置工事事業者一覧表",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_12946.html"
+    },
     {
       "date": "2026-09-01",
       "title": "災害情報・火災案内",
@@ -149,11 +154,6 @@
       "date": "2026-09-01",
       "title": "直方オートキャンプ場（事前にネット予約が必要です）",
       "url": "https://www.city.nogata.fukuoka.jp/kanko/_1226/_1757.html"
-    },
-    {
-      "date": "2026-09-01",
-      "title": "ピラティス教室参加者募集",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     }
   ],
   "sourceHealth": [
@@ -204,5 +204,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-01T08:35:11Z"
+  "generatedAt": "2026-09-01T18:32:08Z"
 }
