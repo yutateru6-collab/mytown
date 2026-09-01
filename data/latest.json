@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "city": "直方市",
   "verifiedOn": "2026-09-01",
   "population": {
@@ -70,13 +70,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-961029f96cd5",
-      "category": "その他",
-      "title": "親子で楽しむ環境学習プログラム",
+      "id": "rss-9c7432436953",
+      "category": "防災",
+      "title": "災害情報・火災案内",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-09-01",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
     }
   ],
   "council": {
@@ -95,6 +95,11 @@
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310.html"
   },
   "latest": [
+    {
+      "date": "2026-09-01",
+      "title": "災害情報・火災案内",
+      "url": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
+    },
     {
       "date": "2026-09-01",
       "title": "親子で楽しむ環境学習プログラム",
@@ -149,11 +154,6 @@
       "date": "2026-09-01",
       "title": "ピラティス教室参加者募集",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
-    },
-    {
-      "date": "2026-09-01",
-      "title": "小学校入学予定者の就学時健康診断を実施します",
-      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_1214/_1974/_10365.html"
     }
   ],
   "sourceHealth": [
@@ -164,12 +164,12 @@
     },
     {
       "name": "直方市新着RSS",
-      "mode": "auto",
+      "mode": "feedparser",
       "status": "ok"
     },
     {
       "name": "直方市注目RSS",
-      "mode": "auto",
+      "mode": "feedparser",
       "status": "ok"
     },
     {
@@ -188,15 +188,21 @@
       "status": "ok"
     },
     {
-      "name": "市議会日程",
+      "name": "ごみ収集案内",
       "mode": "page-check",
       "status": "ok"
     },
     {
-      "name": "ごみ収集案内",
+      "name": "市議会日程",
       "mode": "page-check",
       "status": "ok"
     }
   ],
-  "generatedAt": "2026-09-01T07:32:26Z"
+  "pipeline": {
+    "refreshHours": 6,
+    "rssParser": "feedparser",
+    "meetingSource": "data/meetings.json",
+    "sourceRegistry": "data/sources.json"
+  },
+  "generatedAt": "2026-09-01T08:23:53Z"
 }

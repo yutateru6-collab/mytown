@@ -9,22 +9,118 @@
   "source": {
     "publisher": "直方市議会",
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html",
-    "sourceUpdated": "2026-07-02",
+    "sourceUpdated": "2026-09-01",
     "discoveryUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736.html",
     "extractionMode": "official_schedule_table"
   },
   "meetings": [
-    {"id":"nogata-council-2026-09-03-1","body":"直方市議会","title":"本会議（議案の提案説明）","meetingType":"本会議","start":"2026-09-03T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"},
-    {"id":"nogata-council-2026-09-04-1","body":"直方市議会","title":"本会議（一般質問）","meetingType":"本会議","start":"2026-09-04T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"},
-    {"id":"nogata-council-2026-09-07-1","body":"直方市議会","title":"本会議（一般質問）","meetingType":"本会議","start":"2026-09-07T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"},
-    {"id":"nogata-council-2026-09-08-1","body":"直方市議会","title":"本会議（一般質問）","meetingType":"本会議","start":"2026-09-08T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"},
-    {"id":"nogata-council-2026-09-09-1","body":"直方市議会","title":"本会議（一般質問）","meetingType":"本会議","start":"2026-09-09T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"},
-    {"id":"nogata-council-2026-09-11-1","body":"直方市議会","title":"本会議（決算質疑）","meetingType":"本会議","start":"2026-09-11T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"},
-    {"id":"nogata-council-2026-09-15-1","body":"直方市議会","title":"本会議（予算等質疑）","meetingType":"本会議","start":"2026-09-15T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"},
-    {"id":"nogata-council-2026-09-16-1","body":"直方市議会","title":"委員会（付託議案審査）","meetingType":"委員会","start":"2026-09-16T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"},
-    {"id":"nogata-council-2026-09-17-1","body":"直方市議会","title":"委員会（付託議案審査）","meetingType":"委員会","start":"2026-09-17T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"},
-    {"id":"nogata-council-2026-09-18-1","body":"直方市議会","title":"委員会（付託議案審査）","meetingType":"委員会","start":"2026-09-18T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"},
-    {"id":"nogata-council-2026-09-24-1","body":"直方市議会","title":"委員会（付託議案審査）","meetingType":"委員会","start":"2026-09-24T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"},
-    {"id":"nogata-council-2026-09-25-1","body":"直方市議会","title":"本会議（採決）","meetingType":"本会議","start":"2026-09-25T10:00:00+09:00","status":"scheduled","sourceUrl":"https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"}
+    {
+      "id": "nogata-council-2026-09-03-1",
+      "body": "直方市議会",
+      "title": "本会議 （議案の提案説明）",
+      "meetingType": "本会議",
+      "start": "2026-09-03T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    },
+    {
+      "id": "nogata-council-2026-09-04-1",
+      "body": "直方市議会",
+      "title": "本会議 （一般質問）",
+      "meetingType": "本会議",
+      "start": "2026-09-04T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    },
+    {
+      "id": "nogata-council-2026-09-07-1",
+      "body": "直方市議会",
+      "title": "本会議 （一般質問）",
+      "meetingType": "本会議",
+      "start": "2026-09-07T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    },
+    {
+      "id": "nogata-council-2026-09-08-1",
+      "body": "直方市議会",
+      "title": "本会議 （一般質問）",
+      "meetingType": "本会議",
+      "start": "2026-09-08T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    },
+    {
+      "id": "nogata-council-2026-09-09-1",
+      "body": "直方市議会",
+      "title": "本会議 （一般質問）",
+      "meetingType": "本会議",
+      "start": "2026-09-09T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    },
+    {
+      "id": "nogata-council-2026-09-11-1",
+      "body": "直方市議会",
+      "title": "本会議（決算質疑）",
+      "meetingType": "本会議",
+      "start": "2026-09-11T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    },
+    {
+      "id": "nogata-council-2026-09-15-1",
+      "body": "直方市議会",
+      "title": "本会議（予算等質疑）",
+      "meetingType": "本会議",
+      "start": "2026-09-15T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    },
+    {
+      "id": "nogata-council-2026-09-16-1",
+      "body": "直方市議会",
+      "title": "委員会（付託議案審査）",
+      "meetingType": "委員会",
+      "start": "2026-09-16T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    },
+    {
+      "id": "nogata-council-2026-09-17-1",
+      "body": "直方市議会",
+      "title": "委員会（付託議案審査）",
+      "meetingType": "委員会",
+      "start": "2026-09-17T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    },
+    {
+      "id": "nogata-council-2026-09-18-1",
+      "body": "直方市議会",
+      "title": "委員会（付託議案審査）",
+      "meetingType": "委員会",
+      "start": "2026-09-18T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    },
+    {
+      "id": "nogata-council-2026-09-24-1",
+      "body": "直方市議会",
+      "title": "委員会（付託議案審査）",
+      "meetingType": "委員会",
+      "start": "2026-09-24T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    },
+    {
+      "id": "nogata-council-2026-09-25-1",
+      "body": "直方市議会",
+      "title": "本会議 （採決)",
+      "meetingType": "本会議",
+      "start": "2026-09-25T10:00:00+09:00",
+      "status": "scheduled",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+    }
   ]
 }
