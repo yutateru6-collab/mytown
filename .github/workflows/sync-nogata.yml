@@ -75,16 +75,28 @@ jobs:
           python -m json.tool data/politics.json > /dev/null
           python -m json.tool data/bulletin.json > /dev/null
 
-      - name: Commit changes
+      - name: Commit changes safely
         run: |
           if git diff --quiet -- data/latest.json data/meetings.json data/politics.json data/bulletin.json; then
             echo "No data changes"
             exit 0
           fi
+
+          # Never merge generated civic data across a moving main branch.
+          # A newer code/config push will trigger a newer sync; otherwise the
+          # next scheduled six-hour run will regenerate from official sources.
+          git fetch origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "Main advanced during this sync; skipping stale generated-data commit"
+            exit 0
+          fi
+
           git config user.name "mytown-data-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/latest.json data/meetings.json data/politics.json data/bulletin.json
           git commit -m "data: sync Nogata official information"
-          git fetch origin main
-          git rebase origin/main
-          git push origin HEAD:main
+
+          if ! git push origin HEAD:main; then
+            echo "Main advanced before push; leaving data to the newer or next scheduled sync"
+            exit 0
+          fi
