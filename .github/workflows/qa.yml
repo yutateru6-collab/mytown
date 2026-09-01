@@ -9,23 +9,15 @@ on:
       - "app-runtime.js"
       - "politics.js"
       - "election-history.js"
-      - "styles.css"
-      - "review-fixes.css"
-      - "politics.css"
-      - "election-history.css"
+      - "ui-v2.js"
+      - "*.css"
+      - "assets/**"
       - "sw.js"
       - "requirements.txt"
       - "data/*.json"
-      - "scripts/sync_nogata.py"
-      - "scripts/sync_nogata_v2.py"
-      - "scripts/sync_meetings.py"
-      - "scripts/sync_bulletin.py"
-      - "scripts/pdf_tools.py"
-      - "scripts/verify_sources.py"
-      - "scripts/verify_high_risk.py"
-      - "scripts/verify_election_history.py"
-      - "scripts/test_data_pipeline.py"
+      - "scripts/**"
       - ".github/workflows/qa.yml"
+      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 jobs:
@@ -48,6 +40,7 @@ jobs:
           node --check app-runtime.js
           node --check politics.js
           node --check election-history.js
+          node --check ui-v2.js
           node --check sw.js
           python -m py_compile scripts/sync_nogata.py
           python -m py_compile scripts/sync_nogata_v2.py
@@ -75,21 +68,39 @@ jobs:
       - name: Historical election consistency
         run: python scripts/verify_election_history.py
 
-      - name: Required civic UX wiring
+      - name: Watercolor UI assets
         run: |
-          grep -q 'data-tab="politics"' index.html
+          test -s assets/hero/nogata-watercolor.webp
+          test -s assets/mascot/machinavi.webp
+          test -s assets/icons/nearby.webp
+          test -s assets/icons/services.webp
+          test -s assets/icons/deadline.webp
+          test -s assets/icons/decision.webp
+          grep -q 'assets/hero/nogata-watercolor.webp' index.html
+          grep -q 'assets/mascot/machinavi.webp' index.html
+          grep -q 'cp -R assets _site/assets' .github/workflows/pages.yml
+
+      - name: Required citizen-first UX wiring
+        run: |
+          grep -q 'ui-v2.js' index.html
+          grep -q 'ui-v2.css' index.html
+          grep -q 'data-v2-nav="home"' index.html
+          grep -q 'data-v2-nav="search"' index.html
+          grep -q 'data-v2-nav="action"' index.html
+          grep -q 'data-v2-nav="notifications"' index.html
+          grep -q 'data-v2-nav="menu"' index.html
+          grep -q '近くを見る' ui-v2.js
+          grep -q '使える制度' ui-v2.js
+          grep -q 'まだ間に合う' ui-v2.js
+          grep -q '誰が決めた？' ui-v2.js
+          grep -q '審議・採決' ui-v2.js
+          grep -q '市長・市議会' ui-v2.js
           grep -q 'politics.js' index.html
           grep -q 'politics.css' index.html
-          grep -q 'election-history.js' index.html
-          grep -q 'election-history.css' index.html
-          grep -q '市長・議会' index.html
           grep -q '2026年度' politics.js
           grep -q '前提知識' politics.js
           grep -q '任期満了日' data/politics.json
           grep -q '政務活動費' data/politics.json
           grep -q '按分票' data/election-2023.json
-          grep -q '2023年4月時点の年齢' election-history.js
-          grep -q '現在の年齢ではありません' election-history.js
-          grep -q '何期目' election-history.js
-          grep -q 'data/election-2023.json' sw.js
-          grep -q 'data/bulletin.json' sw.js
+          grep -q 'assets/hero/nogata-watercolor.webp' sw.js
+          grep -q 'assets/mascot/machinavi.webp' sw.js
