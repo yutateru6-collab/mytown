@@ -9,7 +9,6 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import sync_meetings
-import sync_nogata
 import sync_nogata_v2
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,31 +31,17 @@ def meeting_signature(meeting: dict) -> tuple[str, str]:
     return start_key, normalized_title(str(meeting.get("title") or ""))
 
 
-def schedule_updated_date(text: str, series_title: str) -> str | None:
-    marker = f"{series_title}の会議予定は次のとおりです"
-    marker_pos = text.find(marker)
-    if marker_pos < 0:
-        return None
-    matches = list(
-        re.finditer(
-            r"更新日\s*(20\d{2})年\s*(\d{1,2})月\s*(\d{1,2})日",
-            text[:marker_pos],
-        )
+def schedule_updated_date(html: str) -> str | None:
+    """Read the current page's explicit update badge from the city template."""
+    match = re.search(
+        r'<div[^>]*class=["\'][^"\']*\bngt-update\b[^"\']*["\'][^>]*>\s*更新日\s*'
+        r'(20\d{2})年\s*(\d{1,2})月\s*(\d{1,2})日\s*</div>',
+        html,
+        flags=re.I | re.S,
     )
-    if not matches:
+    if not match:
         return None
-    match = matches[-1]
     return f"{int(match.group(1)):04d}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
-
-
-def print_update_diagnostics(html: str) -> None:
-    matches = list(re.finditer("更新日", html))
-    print(f"Council HTML update-date candidates: {len(matches)}")
-    for index, match in enumerate(matches[:20]):
-        start = max(0, match.start() - 220)
-        end = min(len(html), match.end() + 420)
-        snippet = re.sub(r"\s+", " ", html[start:end]).strip()
-        print(f"COUNCIL_UPDATE_HTML_{index}: {snippet}")
 
 
 def mark_council_unverified(payload: dict, message: str) -> None:
@@ -73,16 +58,20 @@ def verify_council(payload: dict, meetings_data: dict) -> tuple[bool, bool]:
     source_url = str(source.get("sourceUrl") or "")
     parsed_url = urlparse(source_url)
     if parsed_url.scheme != "https" or parsed_url.hostname not in ALLOWED_HOSTS:
-        mark_council_unverified(payload, "会議データの公式URLを確認できません。推測せず、公式ページで最新情報を確認してください。")
+        mark_council_unverified(
+            payload,
+            "会議データの公式URLを確認できません。推測せず、公式ページで最新情報を確認してください。",
+        )
         return True, False
 
     try:
         html = sync_meetings.fetch_html(source_url)
-        print_update_diagnostics(html)
         official = sync_meetings.parse_schedule_html(html, source_url)
-        plain_text = sync_nogata.html_text(html)
     except Exception:
-        mark_council_unverified(payload, "公式ページの再確認に失敗しました。推測せず、公式ページで最新情報を確認してください。")
+        mark_council_unverified(
+            payload,
+            "公式ページの再確認に失敗しました。推測せず、公式ページで最新情報を確認してください。",
+        )
         return True, False
 
     expected = [meeting_signature(x) for x in meetings_data.get("meetings") or []]
@@ -93,12 +82,14 @@ def verify_council(payload: dict, meetings_data: dict) -> tuple[bool, bool]:
         or meetings_data.get("sessionEnd") != official.get("sessionEnd")
         or expected != observed
     ):
-        mark_council_unverified(payload, "公式ページの会議予定と同期データが一致しません。推測せず、公式ページで最新情報を確認してください。")
+        mark_council_unverified(
+            payload,
+            "公式ページの会議予定と同期データが一致しません。推測せず、公式ページで最新情報を確認してください。",
+        )
         return True, False
 
     meetings_changed = False
-    verified_update = schedule_updated_date(plain_text, str(meetings_data.get("seriesTitle") or ""))
-    print(f"Council text-derived update date: {verified_update or 'unresolved'}")
+    verified_update = schedule_updated_date(html)
     if verified_update and source.get("sourceUpdated") != verified_update:
         source["sourceUpdated"] = verified_update
         meetings_data["source"] = source
