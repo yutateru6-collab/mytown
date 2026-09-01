@@ -16,7 +16,7 @@ const demoEvents = [
     icon: "🚧",
     type: "工事",
     category: "道路",
-    title: "近くで道路工事があるとしたら",
+    title: "近くの道路工事を調べる",
     short: "何をしている工事なのか、理由・お金・決まり方までたどれる体験のデモです。",
     distance: "距離はデモ",
     status: "工事情報・デモ",
@@ -174,7 +174,7 @@ function japaneseDate() {
 function demoBanner() {
   return `<div class="demo-banner" role="note">
     <span class="demo-badge">DEMO</span>
-    <span>現在はUI/UX確認用です。表示中の工事・制度・イベント・距離はサンプルで、実在情報ではありません。</span>
+    <span>直方市公式アプリではない、非公式のUI/UX確認用MVPです。表示中の工事・制度・イベント・距離はサンプルで、実在情報ではありません。</span>
   </div>`;
 }
 
@@ -230,7 +230,7 @@ function todayView() {
         <div class="quick-grid">
           <button class="quick-button" type="button" data-quick="nearby"><span aria-hidden="true">⌖</span><strong>近くで何してる？</strong></button>
           <button class="quick-button" type="button" data-quick="discover"><span aria-hidden="true">◎</span><strong>制度を見つける</strong></button>
-          <button class="quick-button" type="button" data-quick="ask"><span aria-hidden="true">✦</span><strong>直方に聞く</strong></button>
+          <button class="quick-button" type="button" data-quick="ask"><span aria-hidden="true">✦</span><strong>直方のことを聞く</strong></button>
           <button class="quick-button" type="button" data-quick="money"><span aria-hidden="true">¥</span><strong>直方のお金</strong></button>
         </div>
       </div>
@@ -294,7 +294,7 @@ function nearbyView() {
 
       <div class="card info-card privacy-note">
         <h2>現在地について</h2>
-        <p>このMVPでは、役に立たない位置情報の許可を求めません。実データの地図と距離計算を接続した段階で、許可した人だけ現在地を使えるようにします。</p>
+        <p>このMVPでは距離計算がまだ未接続なので、位置情報の許可は求めません。実データの地図と距離計算を接続した段階で、許可した人だけ現在地を使えるようにします。</p>
       </div>
     </section>`;
 }
@@ -384,7 +384,7 @@ function askView() {
   return `
     <section class="page">
       <div class="hero">
-        <p class="eyebrow">直方に聞く</p>
+        <p class="eyebrow">直方のことを聞く</p>
         <h1>検索より、ふつうに聞く。</h1>
         <p>難しい制度名や議会用語を知らなくても大丈夫。</p>
       </div>
@@ -644,7 +644,7 @@ function setHistory(mode = "push") {
 
 function render({ focusMain = false } = {}) {
   document.querySelectorAll("[data-tab]").forEach((btn) => {
-    const active = state.view === "tab" && btn.dataset.tab === state.tab;
+    const active = btn.dataset.tab === state.tab;
     btn.classList.toggle("is-active", active);
     if (active) btn.setAttribute("aria-current", "page");
     else btn.removeAttribute("aria-current");
