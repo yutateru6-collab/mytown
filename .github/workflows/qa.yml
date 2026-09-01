@@ -22,6 +22,7 @@ on:
       - "scripts/sync_bulletin.py"
       - "scripts/pdf_tools.py"
       - "scripts/verify_sources.py"
+      - "scripts/verify_high_risk.py"
       - "scripts/verify_election_history.py"
       - "scripts/test_data_pipeline.py"
       - ".github/workflows/qa.yml"
@@ -54,6 +55,7 @@ jobs:
           python -m py_compile scripts/sync_bulletin.py
           python -m py_compile scripts/pdf_tools.py
           python -m py_compile scripts/verify_sources.py
+          python -m py_compile scripts/verify_high_risk.py
 
       - name: JSON validity
         run: |
