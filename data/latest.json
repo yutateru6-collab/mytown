@@ -28,8 +28,7 @@
         "武谷線は『中泉線』へ名称変更",
         "赤地新入線は新入線と中泉線へ統合して廃止"
       ],
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html",
-      "sourceUpdated": "2026-09-01"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
     },
     {
       "id": "school-health-check-2026",
@@ -82,9 +81,9 @@
   ],
   "council": {
     "title": "令和8年9月定例会",
-    "status": "9/3予定",
-    "nextDateLabel": "9/3 10:00",
-    "nextSummary": "本会議（議案の提案説明）が予定されています。日程・開会時間は変更されることがあります。",
+    "status": "公式日程更新あり",
+    "nextDateLabel": "",
+    "nextSummary": "公式ページの日程が更新されています。変更内容を推測せず、最新の日程は公式ページで確認してください。",
     "summary": "9月3日から25日までの日程が公表されています。",
     "sourceUpdated": "2026-08-31",
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
@@ -199,5 +198,5 @@
       "status": "ok"
     }
   ],
-  "generatedAt": "2026-09-01T04:58:23Z"
+  "generatedAt": "2026-09-01T05:01:13Z"
 }
