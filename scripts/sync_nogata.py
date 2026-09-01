@@ -125,7 +125,11 @@ def normalize_date(value: str) -> str:
         return value[:10]
 
 
-def official_update_date(text: str) -> str | None:
+def official_update_date(text: str, anchor: str = "") -> str | None:
+    # Navigation/sidebar entries can contain other dates. Scope the search to
+    # the last occurrence of the page's own title so we read the main content.
+    if anchor and anchor in text:
+        text = text.rsplit(anchor, 1)[-1]
     m = re.search(r"更新日\s*(20\d{2})年\s*(\d{1,2})月\s*(\d{1,2})日", text)
     if not m:
         return None
@@ -353,17 +357,17 @@ def main() -> int:
                 break
 
     fixed_sources = [
-        ("コミュニティバス変更", BUS_URL),
-        ("就学時健康診断", SCHOOL_URL),
-        ("ピラティス教室", PILATES_URL),
-        ("市議会日程", COUNCIL_URL),
-        ("ごみ収集案内", GARBAGE_URL),
+        ("コミュニティバス変更", BUS_URL, "路線と時刻表を令和8年10月1日から変更します"),
+        ("就学時健康診断", SCHOOL_URL, "小学校入学予定者の就学時健康診断を実施します"),
+        ("ピラティス教室", PILATES_URL, "ピラティス教室参加者募集"),
+        ("市議会日程", COUNCIL_URL, "令和8年9月定例会日程"),
+        ("ごみ収集案内", GARBAGE_URL, "ごみ・資源リサイクルの収集日"),
     ]
     source_dates: dict[str, str] = {}
-    for name, url in fixed_sources:
+    for name, url, anchor in fixed_sources:
         try:
             text = html_text(fetch_text(url))
-            updated = official_update_date(text)
+            updated = official_update_date(text, anchor)
             if updated:
                 source_dates[url] = updated
             health.append({"name": name, "mode": "page-check", "status": "ok"})
@@ -373,19 +377,38 @@ def main() -> int:
 
     featured = build_featured(latest)
     for item in featured:
-        if item["sourceUrl"] in source_dates:
-            item["sourceUpdated"] = source_dates[item["sourceUrl"]]
+        source_updated = source_dates.get(item["sourceUrl"])
+        if not source_updated:
+            continue
+        item["sourceUpdated"] = source_updated
+        published = item.get("published")
+        if published and source_updated > published:
+            item["needsReview"] = True
+            item["status"] = "公式ページ更新あり"
+            item["summary"] = "この公式ページは公開後に更新されています。同期システムが変更を検知したため、最新内容は公式ページで確認してください。"
+            item["why"] = "更新後の内容を自動推測せず、公式ページの確認を優先しています。"
+            item["money"] = None
+            item.pop("moneyNote", None)
+            item["bullets"] = []
 
+    garbage_updated = source_dates.get(GARBAGE_URL, old.get("garbage", {}).get("sourceUpdated", "2026-03-04"))
+    garbage_summary = "令和8年1月からの『もやせるごみ』『カン・ビン、もやせないごみ』『資源リサイクル』の収集日程が案内されています。地域ごとの日程は公式ページから確認できます。"
+    if garbage_updated > "2026-03-04":
+        garbage_summary = "ごみ収集の公式ページが更新されています。地域ごとの最新日程は公式ページで確認してください。"
     garbage = {
         "title": "ごみ・資源リサイクルの収集日",
-        "summary": "令和8年1月からの『もやせるごみ』『カン・ビン、もやせないごみ』『資源リサイクル』の収集日程が案内されています。地域ごとの日程は公式ページから確認できます。",
-        "sourceUpdated": source_dates.get(GARBAGE_URL, old.get("garbage", {}).get("sourceUpdated", "2026-03-04")),
+        "summary": garbage_summary,
+        "sourceUpdated": garbage_updated,
         "sourceUrl": GARBAGE_URL,
     }
 
     council = council_data()
     if council and COUNCIL_URL in source_dates:
         council["sourceUpdated"] = source_dates[COUNCIL_URL]
+        if council["sourceUpdated"] > "2026-07-02":
+            council["status"] = "公式日程更新あり"
+            council["nextDateLabel"] = ""
+            council["nextSummary"] = "公式ページの日程が更新されています。変更内容を推測せず、最新の日程は公式ページで確認してください。"
 
     core_payload = {
         "schemaVersion": 1,
