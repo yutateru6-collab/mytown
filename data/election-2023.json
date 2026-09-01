@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "verifiedOn": "2026-09-01",
+  "election": {
+    "name": "直方市議会議員一般選挙",
+    "date": "2023-04-23",
+    "seats": 19,
+    "candidateCount": 24,
+    "validVotes": 22777,
+    "invalidVotes": 453,
+    "ballots": 23230,
+    "resultSourceUrl": "https://www.city.nogata.fukuoka.jp/library/senkan/R5kaihyoukekka_sigi.pdf",
+    "filingSourceUrl": "https://www.city.nogata.fukuoka.jp/library/data/senkan/todokede_sigi.pdf",
+    "note": "年齢・職業・所属党派・新現元は2023年4月16日の立候補届出資料、当落・得票数は2023年4月23日の確定開票結果を基にしています。現在の年齢・職業・所属党派を表すものではありません。",
+    "fractionalVotes": {
+      "easy": "票なのに小数？ これは『按分票（あんぶんひょう）』があるためです。",
+      "explain": "同じ姓や名の候補者が複数いるとき、姓や名だけが書かれた票を無効にせず、候補者の得票割合に応じて分ける仕組みがあります。そのため得票に小数が出ることがあります。",
+      "sourceLabel": "按分の一般的な説明（市川市選挙管理委員会）",
+      "sourceUrl": "https://www.city.ichikawa.lg.jp/page/73905.html"
+    }
+  },
+  "candidates": [
+    {"order":1,"electionName":"村上なりとし","currentName":null,"party":"NHK党","age":52,"occupation":"会社役員","statusBefore":"新","result":"落","votes":259.000},
+    {"order":2,"electionName":"渡辺かずゆき","currentName":"渡辺和幸","party":"日本共産党","age":63,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":903.421},
+    {"order":3,"electionName":"高宮まこと","currentName":"高宮誠","party":"無所属","age":50,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":993.000},
+    {"order":4,"electionName":"森本ゆうじ","currentName":"森本裕次","party":"無所属","age":65,"occupation":"会社役員","statusBefore":"現","result":"当","votes":1742.000},
+    {"order":5,"electionName":"みねこうじ","currentName":null,"party":"無所属","age":56,"occupation":"自営業","statusBefore":"現","result":"落","votes":478.000},
+    {"order":6,"electionName":"すみた和昭","currentName":"澄田和昭","party":"無所属","age":68,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":994.000},
+    {"order":7,"electionName":"中村きよみ","currentName":null,"party":"日本共産党","age":64,"occupation":"介護職","statusBefore":"新","result":"落","votes":574.507},
+    {"order":8,"electionName":"村田あきこ","currentName":"村田明子","party":"無所属","age":52,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":848.000},
+    {"order":9,"electionName":"おがた友信","currentName":null,"party":"無所属","age":70,"occupation":"会社役員","statusBefore":"新","result":"落","votes":546.000},
+    {"order":10,"electionName":"しのはら正之","currentName":"篠原正之","party":"無所属","age":69,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":723.000},
+    {"order":11,"electionName":"なす和也","currentName":"那須和也","party":"日本共産党","age":64,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":927.000},
+    {"order":12,"electionName":"おかまつ誠二","currentName":"岡松誠二","party":"無所属","age":58,"occupation":"会社役員","statusBefore":"元","result":"当","votes":810.000},
+    {"order":13,"electionName":"やすなが浩之","currentName":"安永浩之","party":"無所属","age":44,"occupation":"会社役員","statusBefore":"現","result":"当","votes":1711.000},
+    {"order":14,"electionName":"わたなべ幸一","currentName":"渡辺幸一","party":"無所属","age":70,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":993.459},
+    {"order":15,"electionName":"渡辺かつや","currentName":"渡辺克也","party":"無所属","age":71,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":737.118},
+    {"order":16,"electionName":"松田のぼる","currentName":"松田昇","party":"無所属","age":77,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":663.000},
+    {"order":17,"electionName":"しむら博之","currentName":"紫村博之","party":"公明党","age":68,"occupation":"団体役員","statusBefore":"現","result":"当","votes":1418.000},
+    {"order":18,"electionName":"中西省三","currentName":"中西省三","party":"無所属","age":65,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":1371.000},
+    {"order":19,"electionName":"草野知一郎","currentName":"草野知一郎","party":"無所属","age":63,"occupation":"無職","statusBefore":"新","result":"当","votes":1485.000},
+    {"order":20,"electionName":"たしろ文也","currentName":"田代文也","party":"無所属","age":71,"occupation":"会社員","statusBefore":"現","result":"当","votes":648.000},
+    {"order":21,"electionName":"のげ昭宣","currentName":"野下昭宣","party":"無所属","age":82,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":1013.000},
+    {"order":22,"electionName":"谷きよみ","currentName":null,"party":"無所属","age":54,"occupation":"無職","statusBefore":"新","result":"落","votes":557.492},
+    {"order":23,"electionName":"みやぞの祐美子","currentName":"宮園祐美子","party":"公明党","age":54,"occupation":"直方市議会議員","statusBefore":"現","result":"当","votes":1491.000},
+    {"order":24,"electionName":"やの富士雄","currentName":"矢野富士雄","party":"無所属","age":69,"occupation":"米穀商","statusBefore":"現","result":"当","votes":891.000}
+  ],
+  "labels": {
+    "新": "その選挙で初めて議席を目指した『新人』",
+    "現": "選挙時点ですでにその議員だった『現職』",
+    "元": "以前に議員を務めたことがある『元職』",
+    "当": "当選",
+    "落": "落選"
+  }
+}
