@@ -15,7 +15,15 @@ const FALLBACK_DATA = {
   latest: [],
   council: null,
   garbage: null,
-  sourceHealth: []
+  sourceHealth: [],
+  bulletin: {
+    archiveUrl: "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16195.html",
+    currentIssue: null,
+    pages: [],
+    drafts: [],
+    availableIssues: [],
+    sync: { status: "pending", message: "市報の最新号を確認しています。" }
+  }
 };
 
 const state = {
@@ -73,6 +81,14 @@ function normalizeData(raw) {
     featured: Array.isArray(data.featured) ? data.featured : [],
     latest: Array.isArray(data.latest) ? data.latest : [],
     sourceHealth: Array.isArray(data.sourceHealth) ? data.sourceHealth : [],
+    bulletin: {
+      ...FALLBACK_DATA.bulletin,
+      ...(data.bulletin || {}),
+      currentIssue: data.bulletin?.currentIssue || FALLBACK_DATA.bulletin.currentIssue,
+      pages: Array.isArray(data.bulletin?.pages) ? data.bulletin.pages : [],
+      drafts: Array.isArray(data.bulletin?.drafts) ? data.bulletin.drafts : [],
+      availableIssues: Array.isArray(data.bulletin?.availableIssues) ? data.bulletin.availableIssues : [],
+    },
   };
 }
 
@@ -80,9 +96,14 @@ async function loadOfficialData() {
   state.loading = true;
   render();
   try {
-    const response = await fetch(`./data/latest.json?v=${Date.now()}`, { cache: "no-store" });
+    const [response, bulletinResponse] = await Promise.all([
+      fetch(`./data/latest.json?v=${Date.now()}`, { cache: "no-store" }),
+      fetch(`./data/bulletin.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
+    ]);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    state.data = normalizeData(await response.json());
+    const latest = await response.json();
+    const bulletin = bulletinResponse?.ok ? await bulletinResponse.json() : {};
+    state.data = normalizeData({ ...latest, bulletin });
     state.loadError = false;
   } catch (error) {
     console.warn("Official data load failed", error);
@@ -148,6 +169,43 @@ function latestRow(item) {
   </a>`;
 }
 
+function bulletinPageRow(page) {
+  const href = page.pdfUrl || page.sourceUrl;
+  return `<a class="bulletin-page-row" href="${esc(href || "#")}" target="_blank" rel="noopener noreferrer">
+    <div><span>${esc(page.pageLabel || "市報ページ")}</span><strong>${esc(page.sourceDescription || page.title || "公式PDF")}</strong></div><span aria-hidden="true">↗</span>
+  </a>`;
+}
+
+function bulletinItems() {
+  const bulletin = state.data.bulletin || {};
+  const issue = bulletin.currentIssue;
+  if (!issue) return [];
+  const issueItem = {
+    ...issue,
+    id: issue.id || `bulletin-${issue.issueKey || "latest"}`,
+    sourceUrl: issue.sourceUrl || bulletin.archiveUrl,
+    pdfUrl: issue.wholePdfUrl || null,
+    status: issue.isNewIssue ? "新号を検知" : (issue.status || "最新号"),
+  };
+  const pages = Array.isArray(bulletin.pages) ? bulletin.pages : [];
+  return [issueItem, ...pages];
+}
+
+function bulletinPreview(bulletin) {
+  if (!bulletin?.currentIssue) return "";
+  const issue = bulletinItems()[0];
+  const pages = Array.isArray(bulletin.pages) ? bulletin.pages : [];
+  return `<div class="section bulletin-section">
+    <div class="section-head"><div><h2>市報のおがた</h2><p>最新号を自動検知</p></div></div>
+    ${realCard(issue)}
+    <div class="bulletin-pages">
+      <div class="bulletin-pages-head"><strong>ページごとの見出し</strong><span>${pages.length}ページ</span></div>
+      ${pages.slice(0, 8).map(bulletinPageRow).join("") || emptyCard("ページ情報を確認中です。")}
+    </div>
+    ${sourceLink(issue.sourceUrl, "市報の号全体を確認")}
+  </div>`;
+}
+
 function todayView() {
   if (state.loading) return loadingView();
   const d = state.data;
@@ -175,6 +233,8 @@ function todayView() {
       <div class="section-head"><div><h2>直方市の新着</h2><p>公式サイトのRSS等から同期</p></div></div>
       <div class="latest-list">${d.latest.slice(0, 7).map(latestRow).join("") || emptyCard("新着情報を取得できませんでした。")}</div>
     </div>
+
+    ${bulletinPreview(d.bulletin)}
 
     <div class="section">
       <div class="section-head"><h2>すぐ見る</h2></div>
@@ -228,8 +288,9 @@ const discoverCategories = ["交通", "学校・教育", "健康・スポーツ"
 function combinedSearchItems() {
   const featured = state.data.featured.map((x) => ({ ...x, url: x.sourceUrl, date: x.published }));
   const latest = state.data.latest.map((x, i) => ({ id: `latest-${i}`, ...x, sourceUrl: x.url, published: x.date, summary: "直方市公式サイトの新着情報です。", category: classifyTitle(x.title) }));
+  const bulletin = bulletinItems();
   const seen = new Set();
-  return [...featured, ...latest].filter((x) => {
+  return [...featured, ...latest, ...bulletin].filter((x) => {
     const key = `${x.title}|${x.sourceUrl || x.url || ""}`;
     if (seen.has(key)) return false;
     seen.add(key);
@@ -336,7 +397,7 @@ function detailView(item) {
 function renderDetailSection(item, section) {
   if (!section || section === "what") {
     const bullets = Array.isArray(item.bullets) ? item.bullets : [];
-    return `<div class="card info-card"><h2>30秒でいうと</h2><p>${esc(item.summary || "")}</p>${item.location ? `<p class="fact-line"><strong>場所：</strong>${esc(item.location)}</p>` : ""}${item.when ? `<p class="fact-line"><strong>いつ：</strong>${esc(item.when)}</p>` : ""}${bullets.length ? `<ul class="plain-list">${bullets.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}${sourceLink(item.sourceUrl)}</div>`;
+    return `<div class="card info-card"><h2>30秒でいうと</h2><p>${esc(item.summary || "")}</p>${item.location ? `<p class="fact-line"><strong>場所：</strong>${esc(item.location)}</p>` : ""}${item.when ? `<p class="fact-line"><strong>いつ：</strong>${esc(item.when)}</p>` : ""}${bullets.length ? `<ul class="plain-list">${bullets.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}${sourceLink(item.sourceUrl)}${item.pdfUrl ? sourceLink(item.pdfUrl, "市報PDFを見る") : ""}</div>`;
   }
   if (section === "why") {
     return `<div class="card info-card"><h2>なんで？</h2><p>${esc(item.why || "この公式ページだけからは、理由を十分に確認できません。推測では補いません。")}</p>${sourceLink(item.sourceUrl)}</div>`;
@@ -352,7 +413,7 @@ function moneyView() {
 }
 
 function settingsView() {
-  return `<section class="page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="hero"><p class="eyebrow">設定</p><h1>自分にちょうどいい直方へ</h1><p>住所やアカウント登録はまだ必要ありません。</p></div><div class="card info-card"><h2>このアプリについて</h2><p>MYTOWNは非公式のMVPです。直方市公式アプリではありません。表示内容は直方市の公開情報を定期同期し、必ず公式ページへのリンクを付けます。</p><p class="fact-line"><strong>自動同期：</strong>GitHub Actionsで約6時間ごと（実行時刻は前後することがあります）</p></div></section>`;
+  return `<section class="page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="hero"><p class="eyebrow">設定</p><h1>自分にちょうどいい直方へ</h1><p>住所やアカウント登録はまだ必要ありません。</p></div><div class="card info-card"><h2>このアプリについて</h2><p>MYTOWNは非公式のMVPです。直方市公式アプリではありません。表示内容は直方市の公開情報を定期同期し、必ず公式ページへのリンクを付けます。</p><p class="fact-line"><strong>自動同期：</strong>GitHub Actionsで約2時間ごと（実行時刻は前後することがあります）</p></div></section>`;
 }
 
 function emptyCard(message) {
