@@ -6,6 +6,7 @@ inferring facts that are not explicitly present in those sources.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -204,9 +205,42 @@ def council_data() -> dict | None:
     }
 
 
-def build_featured() -> list[dict]:
-    return [
-        {
+def classify_title(title: str) -> str:
+    if re.search(r"バス|交通|路線|時刻", title):
+        return "交通"
+    if re.search(r"学校|小学校|中学校|教育|就学|給食", title):
+        return "学校・教育"
+    if re.search(r"健康|スポーツ|体育|ピラティス|講習", title):
+        return "健康・スポーツ"
+    if re.search(r"議会|定例会|会議録|議案", title):
+        return "議会"
+    if re.search(r"ごみ|廃棄|リサイクル", title):
+        return "ごみ"
+    if re.search(r"消防|災害|防災|火災|避難", title):
+        return "防災"
+    if re.search(r"観光|キャンプ|イベント|まつり|シンポジウム|マンホール|フェスタ", title):
+        return "観光・イベント"
+    return "その他"
+
+
+def rss_feature(item: dict[str, str]) -> dict:
+    digest = hashlib.sha1(item["url"].encode("utf-8"), usedforsecurity=False).hexdigest()[:12]
+    return {
+        "id": f"rss-{digest}",
+        "category": classify_title(item["title"]),
+        "title": item["title"],
+        "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
+        "published": item.get("date", ""),
+        "status": "新着",
+        "sourceUrl": item["url"],
+    }
+
+
+def build_featured(latest: list[dict[str, str]]) -> list[dict]:
+    fixed: list[dict] = []
+
+    if TODAY <= date(2026, 10, 31):
+        fixed.append({
             "id": "community-bus-20261001",
             "category": "交通",
             "title": "コミュニティバスの路線と時刻表が10月1日から変わります",
@@ -224,8 +258,10 @@ def build_featured() -> list[dict]:
                 "赤地新入線は新入線と中泉線へ統合して廃止",
             ],
             "sourceUrl": BUS_URL,
-        },
-        {
+        })
+
+    if TODAY <= date(2026, 10, 23):
+        fixed.append({
             "id": "school-health-check-2026",
             "category": "学校・教育",
             "title": "小学校入学予定者の就学時健康診断を実施します",
@@ -243,8 +279,10 @@ def build_featured() -> list[dict]:
                 "10月23日：下境小・中泉小・植木小",
             ],
             "sourceUrl": SCHOOL_URL,
-        },
-        {
+        })
+
+    if TODAY <= date(2026, 10, 5):
+        fixed.append({
             "id": "pilates-2026-autumn",
             "category": "健康・スポーツ",
             "title": "ピラティス教室の参加者募集",
@@ -262,8 +300,17 @@ def build_featured() -> list[dict]:
                 "申込期間：9月22日〜10月5日（定員になり次第締切）",
             ],
             "sourceUrl": PILATES_URL,
-        },
-    ]
+        })
+
+    used_urls = {item["sourceUrl"] for item in fixed}
+    for item in latest:
+        if len(fixed) >= 4:
+            break
+        if item["url"] in used_urls:
+            continue
+        fixed.append(rss_feature(item))
+        used_urls.add(item["url"])
+    return fixed
 
 
 def main() -> int:
@@ -324,7 +371,7 @@ def main() -> int:
             print(f"WARN {name}: {exc}", file=sys.stderr)
             health.append({"name": name, "mode": "page-check", "status": "failed"})
 
-    featured = build_featured()
+    featured = build_featured(latest)
     for item in featured:
         if item["sourceUrl"] in source_dates:
             item["sourceUpdated"] = source_dates[item["sourceUrl"]]
@@ -340,11 +387,10 @@ def main() -> int:
     if council and COUNCIL_URL in source_dates:
         council["sourceUpdated"] = source_dates[COUNCIL_URL]
 
-    payload = {
+    core_payload = {
         "schemaVersion": 1,
         "city": "直方市",
         "verifiedOn": TODAY.isoformat(),
-        "generatedAt": NOW.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "population": population,
         "featured": featured,
         "council": council,
@@ -353,6 +399,15 @@ def main() -> int:
         "sourceHealth": health,
     }
 
+    old_core = {k: v for k, v in old.items() if k != "generatedAt"}
+    if old_core == core_payload:
+        print("No semantic data changes")
+        return 0
+
+    payload = {
+        **core_payload,
+        "generatedAt": NOW.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+    }
     DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
     DATA_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {DATA_PATH.relative_to(ROOT)} with {len(latest)} latest items")
