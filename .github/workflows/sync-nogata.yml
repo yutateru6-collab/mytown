@@ -8,6 +8,8 @@ on:
     paths:
       - "scripts/sync_nogata.py"
       - "scripts/verify_high_risk.py"
+      - "scripts/verify_politics.py"
+      - "data/politics.json"
       - ".github/workflows/sync-nogata.yml"
 
 permissions:
@@ -38,18 +40,23 @@ jobs:
       - name: Double-check high-risk civic data
         run: python scripts/verify_high_risk.py
 
+      - name: Verify mayor council election data
+        run: python scripts/verify_politics.py
+
       - name: Validate JSON
-        run: python -m json.tool data/latest.json > /dev/null
+        run: |
+          python -m json.tool data/latest.json > /dev/null
+          python -m json.tool data/politics.json > /dev/null
 
       - name: Commit changes
         run: |
-          if git diff --quiet -- data/latest.json; then
+          if git diff --quiet -- data/latest.json data/politics.json; then
             echo "No data changes"
             exit 0
           fi
           git config user.name "mytown-data-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/latest.json
+          git add data/latest.json data/politics.json
           git commit -m "data: sync Nogata official information"
           git fetch origin main
           git rebase origin/main
