@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "city": "直方市",
+  "verifiedOn": "2026-09-01",
+  "generatedAt": "2026-09-01T04:00:00Z",
+  "population": {
+    "asOf": "2026年7月末",
+    "total": 53876,
+    "male": 25605,
+    "female": 28271,
+    "households": 27963,
+    "sourceUrl": "https://www.city.nogata.fukuoka.jp/home.html"
+  },
+  "featured": [
+    {
+      "id": "community-bus-20261001",
+      "category": "交通",
+      "title": "コミュニティバスの路線と時刻表が10月1日から変わります",
+      "summary": "直方市コミュニティバスは2026年10月1日から路線・時刻表を変更します。新しいバス停の設置、路線名の変更、路線の統合・廃止などがあります。",
+      "published": "2026-09-01",
+      "status": "10/1から変更",
+      "when": "2026年10月1日から",
+      "why": "直方市公式ページでは、利用面の改善、交通空白への対応、他路線の廃止・統合への対応などが路線ごとに説明されています。",
+      "money": null,
+      "decision": "この案内ページだけでは、路線変更に至る意思決定の全過程までは確認できません。関連する公共交通協議会資料などとの紐付けは次の段階で行います。",
+      "bullets": [
+        "上頓野線に『もち吉工場直売所』『アグリー福智の郷』バス停を新設",
+        "鴨生田団地線は『新入線』へ名称変更",
+        "武谷線は『中泉線』へ名称変更",
+        "赤地新入線は新入線と中泉線へ統合して廃止"
+      ],
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
+    },
+    {
+      "id": "school-health-check-2026",
+      "category": "学校・教育",
+      "title": "小学校入学予定者の就学時健康診断を実施します",
+      "summary": "2027年4月に直方市内の小学校へ入学予定の子どもを対象に、10月20日から23日まで就学時健康診断を実施します。会場は直方市中央公民館です。",
+      "published": "2026-09-01",
+      "status": "10/20〜23実施",
+      "when": "10月20日〜23日、各日13:30〜15:00予定",
+      "location": "直方市中央公民館（直方市津田町7番20号）",
+      "why": "現在の健康状態を把握し、疾病の早期発見や必要な助言を行い、健やかな学校生活へ向けた準備をするためと直方市が説明しています。",
+      "money": null,
+      "bullets": [
+        "10月20日：直方南小・直方北小・直方東小",
+        "10月21日：新入小・感田小",
+        "10月22日：直方西小・上頓野小・福地小",
+        "10月23日：下境小・中泉小・植木小"
+      ],
+      "sourceUrl": "https://city.nogata.fukuoka.jp/kyoikubunka/_1214/_1974/_10365.html"
+    },
+    {
+      "id": "pilates-2026-autumn",
+      "category": "健康・スポーツ",
+      "title": "ピラティス教室の参加者募集",
+      "summary": "直方市体育館で全10回のピラティス教室を開催。市内在住・在勤の18歳以上が対象で、申込期間は9月22日から10月5日です。",
+      "published": "2026-09-01",
+      "status": "9/22受付開始",
+      "when": "10月9日〜12月18日の指定金曜日・全10回",
+      "location": "直方市体育館（直方市大字直方674-25）",
+      "why": "直方市公式ページでは、インナーマッスルや体幹を鍛え、筋力不足や姿勢の改善にもつながる教室として案内されています。",
+      "money": "参加料 4,000円",
+      "moneyNote": "保険料込み。市の事業費や予算額ではなく、参加者が支払う参加料です。",
+      "bullets": [
+        "Aコース 9:30〜10:30、Bコース 10:45〜11:45",
+        "各コース定員20名",
+        "申込期間：9月22日〜10月5日（定員になり次第締切）"
+      ],
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
+    }
+  ],
+  "council": {
+    "title": "令和8年9月定例会",
+    "status": "9/3開会予定",
+    "nextDateLabel": "9/3 10:00",
+    "nextSummary": "本会議で議案の提案説明が予定されています。9月4日、7日、8日、9日は一般質問、25日は採決の予定です。",
+    "summary": "9月3日から25日までの日程が公表されています。",
+    "sourceUpdated": "2026-07-02",
+    "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
+  },
+  "garbage": {
+    "title": "ごみ・資源リサイクルの収集日",
+    "summary": "令和8年1月からの『もやせるごみ』『カン・ビン、もやせないごみ』『資源リサイクル』の収集日程が案内されています。地域ごとの日程は公式ページから確認できます。",
+    "sourceUpdated": "2026-03-04",
+    "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310.html"
+  },
+  "latest": [
+    {
+      "date": "2026-09-01",
+      "title": "路線と時刻表を令和8年10月1日から変更します",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
+    },
+    {
+      "date": "2026-09-01",
+      "title": "ピラティス教室参加者募集",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
+    },
+    {
+      "date": "2026-09-01",
+      "title": "小学校入学予定者の就学時健康診断を実施します",
+      "url": "https://city.nogata.fukuoka.jp/kyoikubunka/_1214/_1974/_10365.html"
+    },
+    {
+      "date": "2026-08-31",
+      "title": "災害情報・火災案内",
+      "url": "https://www.city.nogata.fukuoka.jp/syobo.html"
+    },
+    {
+      "date": "2026-08-31",
+      "title": "デザインマンホールを設置しています",
+      "url": "https://www.city.nogata.fukuoka.jp/home.html"
+    }
+  ],
+  "sourceHealth": [
+    {"name": "直方市ホーム／RSS", "mode": "auto", "status": "seeded"},
+    {"name": "人口と世帯数", "mode": "auto", "status": "seeded"},
+    {"name": "市議会日程", "mode": "page-check", "status": "seeded"},
+    {"name": "ごみ収集案内", "mode": "page-check", "status": "seeded"}
+  ]
+}
