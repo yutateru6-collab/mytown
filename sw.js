@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v8-watercolor";
+const CACHE = "mytown-civic-v9-reference";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -7,11 +7,17 @@ const STATIC_ASSETS = [
   "./politics.css",
   "./election-history.css",
   "./ui-v2.css",
+  "./reference-ui.css",
   "./app.js",
   "./app-runtime.js",
   "./politics.js",
   "./election-history.js",
   "./ui-v2.js",
+  "./reference-top-1.js",
+  "./reference-top-2.js",
+  "./reference-top-3.js",
+  "./reference-top-4.js",
+  "./reference-ui.js",
   "./manifest.webmanifest",
   "./icon.svg",
   "./assets/hero/nogata-watercolor.webp",
