@@ -1,8 +1,10 @@
 {
+  "id": "./",
   "name": "MYTOWN 直方",
   "short_name": "MYTOWN",
   "description": "直方のこと、これ1個見ればだいたい分かる。生活から街の動きまでつながる地域生活アプリ。",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#F7F8F4",
   "theme_color": "#276A55",
@@ -12,7 +14,7 @@
       "src": "./icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
