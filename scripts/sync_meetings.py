@@ -178,7 +178,7 @@ def parse_schedule_html(html: str, source_url: str) -> dict:
         date_label = clean(row[0])
         weekday = clean(row[1])
         agenda = clean(" ".join(row[2:]))
-        if "日付" in date_label or "曜日" in weekday or not agenda:
+        if date_label == "日付" or weekday == "曜日" or not agenda:
             continue
 
         month_match = re.search(r"(\d{1,2})\s*月", date_label)
