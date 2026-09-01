@@ -1,10 +1,11 @@
-const CACHE = "mytown-real-data-v3";
+const CACHE = "mytown-real-data-v4";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./review-fixes.css",
   "./app.js",
+  "./app-runtime.js",
   "./manifest.webmanifest",
   "./icon.svg",
   "./data/latest.json"
