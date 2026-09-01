@@ -2,14 +2,16 @@ name: Sync Nogata official data
 
 on:
   schedule:
-    - cron: "17 */6 * * *"
+    - cron: "17 */2 * * *"
   workflow_dispatch:
   push:
     paths:
       - "scripts/sync_nogata.py"
+      - "scripts/sync_bulletin.py"
       - "scripts/verify_high_risk.py"
       - "scripts/verify_politics.py"
       - "data/politics.json"
+      - "data/bulletin.json"
       - ".github/workflows/sync-nogata.yml"
 
 permissions:
@@ -37,6 +39,9 @@ jobs:
       - name: Sync official data
         run: python scripts/sync_nogata.py
 
+      - name: Detect latest city bulletin
+        run: python scripts/sync_bulletin.py
+
       - name: Double-check high-risk civic data
         run: python scripts/verify_high_risk.py
 
@@ -47,16 +52,17 @@ jobs:
         run: |
           python -m json.tool data/latest.json > /dev/null
           python -m json.tool data/politics.json > /dev/null
+          python -m json.tool data/bulletin.json > /dev/null
 
       - name: Commit changes
         run: |
-          if git diff --quiet -- data/latest.json data/politics.json; then
+          if git diff --quiet -- data/latest.json data/politics.json data/bulletin.json; then
             echo "No data changes"
             exit 0
           fi
           git config user.name "mytown-data-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/latest.json data/politics.json
+          git add data/latest.json data/politics.json data/bulletin.json
           git commit -m "data: sync Nogata official information"
           git fetch origin main
           git rebase origin/main
