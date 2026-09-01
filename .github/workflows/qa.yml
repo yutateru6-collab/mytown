@@ -14,9 +14,16 @@ on:
       - "politics.css"
       - "election-history.css"
       - "sw.js"
+      - "requirements.txt"
       - "data/*.json"
+      - "scripts/sync_nogata.py"
+      - "scripts/sync_nogata_v2.py"
+      - "scripts/sync_meetings.py"
       - "scripts/sync_bulletin.py"
+      - "scripts/pdf_tools.py"
+      - "scripts/verify_sources.py"
       - "scripts/verify_election_history.py"
+      - "scripts/test_data_pipeline.py"
       - ".github/workflows/qa.yml"
   workflow_dispatch:
 
@@ -26,21 +33,42 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: JavaScript syntax
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install parser dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: JavaScript and Python syntax
         run: |
           node --check app.js
           node --check app-runtime.js
           node --check politics.js
           node --check election-history.js
           node --check sw.js
+          python -m py_compile scripts/sync_nogata.py
+          python -m py_compile scripts/sync_nogata_v2.py
+          python -m py_compile scripts/sync_meetings.py
           python -m py_compile scripts/sync_bulletin.py
+          python -m py_compile scripts/pdf_tools.py
+          python -m py_compile scripts/verify_sources.py
 
       - name: JSON validity
         run: |
           python -m json.tool data/latest.json > /dev/null
+          python -m json.tool data/meetings.json > /dev/null
+          python -m json.tool data/sources.json > /dev/null
           python -m json.tool data/politics.json > /dev/null
           python -m json.tool data/election-2023.json > /dev/null
           python -m json.tool data/bulletin.json > /dev/null
+
+      - name: Official source registry
+        run: python scripts/verify_sources.py
+
+      - name: Civic pipeline regression tests
+        run: python scripts/test_data_pipeline.py
 
       - name: Historical election consistency
         run: python scripts/verify_election_history.py
