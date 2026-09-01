@@ -4,11 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#F7F8F4" />
+  <meta name="color-scheme" content="light" />
   <meta name="description" content="直方のこと、これ1個見ればだいたい分かる。生活から街の動きまで、やさしくつながる地域生活アプリのMVP。" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="MYTOWN" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="./icon.svg" />
   <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./review-fixes.css" />
   <title>MYTOWN 直方</title>
 </head>
 <body>
@@ -30,7 +35,7 @@
     <main id="main" class="main" tabindex="-1"></main>
 
     <nav class="bottom-nav" aria-label="メインナビゲーション">
-      <button type="button" data-tab="today" class="nav-item is-active">
+      <button type="button" data-tab="today" class="nav-item is-active" aria-current="page">
         <span class="nav-icon" aria-hidden="true">⌂</span>
         <span>きょう</span>
       </button>
@@ -49,7 +54,7 @@
     </nav>
   </div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
   <script src="./app.js" defer></script>
 </body>
 </html>
