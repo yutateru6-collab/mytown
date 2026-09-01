@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "city": "直方市",
+  "defaultRefreshHours": 6,
+  "allowedHosts": [
+    "city.nogata.fukuoka.jp",
+    "www.city.nogata.fukuoka.jp"
+  ],
+  "sources": [
+    {
+      "id": "nogata-home",
+      "name": "直方市トップページ・人口",
+      "type": "html",
+      "url": "https://www.city.nogata.fukuoka.jp/home.html",
+      "refreshHours": 6,
+      "riskLevel": "medium",
+      "publishPolicy": "verified_fields_only"
+    },
+    {
+      "id": "nogata-home-rss",
+      "name": "直方市新着RSS",
+      "type": "rss",
+      "url": "https://city.nogata.fukuoka.jp/rss/home.xml",
+      "refreshHours": 6,
+      "riskLevel": "low",
+      "publishPolicy": "metadata_auto"
+    },
+    {
+      "id": "nogata-topic-rss",
+      "name": "直方市注目RSS",
+      "type": "rss",
+      "url": "https://city.nogata.fukuoka.jp/rss/topic.xml",
+      "refreshHours": 6,
+      "riskLevel": "low",
+      "publishPolicy": "metadata_auto"
+    },
+    {
+      "id": "nogata-community-bus",
+      "name": "コミュニティバス変更",
+      "type": "html",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html",
+      "refreshHours": 6,
+      "riskLevel": "medium",
+      "publishPolicy": "verified_summary"
+    },
+    {
+      "id": "nogata-school-health-check",
+      "name": "就学時健康診断",
+      "type": "html",
+      "url": "https://city.nogata.fukuoka.jp/kyoikubunka/_1214/_1974/_10365.html",
+      "refreshHours": 6,
+      "riskLevel": "medium",
+      "publishPolicy": "verified_summary"
+    },
+    {
+      "id": "nogata-pilates",
+      "name": "ピラティス教室",
+      "type": "html",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html",
+      "refreshHours": 6,
+      "riskLevel": "medium",
+      "publishPolicy": "verified_summary"
+    },
+    {
+      "id": "nogata-council-schedule",
+      "name": "直方市議会日程",
+      "type": "meeting-index",
+      "url": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736.html",
+      "fallbackUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html",
+      "refreshHours": 6,
+      "riskLevel": "high",
+      "publishPolicy": "source_verified_only"
+    },
+    {
+      "id": "nogata-garbage",
+      "name": "ごみ・資源リサイクル収集日",
+      "type": "html",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310.html",
+      "refreshHours": 6,
+      "riskLevel": "medium",
+      "publishPolicy": "verified_summary"
+    },
+    {
+      "id": "nogata-bulletin",
+      "name": "市報のおがた",
+      "type": "bulletin-index",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16195.html",
+      "refreshHours": 6,
+      "riskLevel": "high",
+      "publishPolicy": "metadata_then_review"
+    }
+  ]
+}
