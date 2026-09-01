@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "city": "直方市",
+  "checkedOn": null,
+  "archiveUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16195.html",
+  "currentIssue": null,
+  "pages": [],
+  "drafts": [],
+  "availableIssues": [],
+  "sync": {
+    "status": "pending",
+    "mode": "official_archive_and_issue_page",
+    "message": "次回の公式同期で市報の最新号を確認します。"
+  }
+}
