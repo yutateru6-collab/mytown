@@ -1,0 +1,47 @@
+name: MYTOWN QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "app.js"
+      - "app-runtime.js"
+      - "politics.js"
+      - "styles.css"
+      - "review-fixes.css"
+      - "politics.css"
+      - "sw.js"
+      - "data/*.json"
+      - ".github/workflows/qa.yml"
+  workflow_dispatch:
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JavaScript syntax
+        run: |
+          node --check app.js
+          node --check app-runtime.js
+          node --check politics.js
+          node --check sw.js
+
+      - name: JSON validity
+        run: |
+          python -m json.tool data/latest.json > /dev/null
+          python -m json.tool data/politics.json > /dev/null
+
+      - name: Required civic UX wiring
+        run: |
+          grep -q 'data-tab="politics"' index.html
+          grep -q 'politics.js' index.html
+          grep -q 'politics.css' index.html
+          grep -q '市長・議会' index.html
+          grep -q '2026年度' politics.js
+          grep -q '前提知識' politics.js
+          grep -q '任期満了日' data/politics.json
+          grep -q '政務活動費' data/politics.json
+          grep -q 'data/politics.json' sw.js
