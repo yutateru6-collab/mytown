@@ -33,7 +33,6 @@ def meeting_signature(meeting: dict) -> tuple[str, str]:
 
 
 def schedule_updated_date(text: str, series_title: str) -> str | None:
-    """Choose the update date directly preceding the current schedule body."""
     marker = f"{series_title}の会議予定は次のとおりです"
     marker_pos = text.find(marker)
     if marker_pos < 0:
@@ -50,6 +49,16 @@ def schedule_updated_date(text: str, series_title: str) -> str | None:
     return f"{int(match.group(1)):04d}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
 
 
+def print_update_diagnostics(html: str) -> None:
+    matches = list(re.finditer("更新日", html))
+    print(f"Council HTML update-date candidates: {len(matches)}")
+    for index, match in enumerate(matches[:20]):
+        start = max(0, match.start() - 220)
+        end = min(len(html), match.end() + 420)
+        snippet = re.sub(r"\s+", " ", html[start:end]).strip()
+        print(f"COUNCIL_UPDATE_HTML_{index}: {snippet}")
+
+
 def mark_council_unverified(payload: dict, message: str) -> None:
     council = payload.get("council")
     if not council:
@@ -60,7 +69,6 @@ def mark_council_unverified(payload: dict, message: str) -> None:
 
 
 def verify_council(payload: dict, meetings_data: dict) -> tuple[bool, bool]:
-    """Return (latest_changed, meetings_changed)."""
     source = meetings_data.get("source") or {}
     source_url = str(source.get("sourceUrl") or "")
     parsed_url = urlparse(source_url)
@@ -70,6 +78,7 @@ def verify_council(payload: dict, meetings_data: dict) -> tuple[bool, bool]:
 
     try:
         html = sync_meetings.fetch_html(source_url)
+        print_update_diagnostics(html)
         official = sync_meetings.parse_schedule_html(html, source_url)
         plain_text = sync_nogata.html_text(html)
     except Exception:
@@ -89,6 +98,7 @@ def verify_council(payload: dict, meetings_data: dict) -> tuple[bool, bool]:
 
     meetings_changed = False
     verified_update = schedule_updated_date(plain_text, str(meetings_data.get("seriesTitle") or ""))
+    print(f"Council text-derived update date: {verified_update or 'unresolved'}")
     if verified_update and source.get("sourceUpdated") != verified_update:
         source["sourceUpdated"] = verified_update
         meetings_data["source"] = source
