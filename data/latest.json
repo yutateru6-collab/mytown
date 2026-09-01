@@ -70,13 +70,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-aa4e29a98c25",
-      "category": "議会",
-      "title": "令和８年9月定例会一般質問を掲載",
+      "id": "rss-961029f96cd5",
+      "category": "その他",
+      "title": "親子で楽しむ環境学習プログラム",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-09-01",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2747/_17269.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html"
     }
   ],
   "council": {
@@ -95,6 +95,11 @@
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310.html"
   },
   "latest": [
+    {
+      "date": "2026-09-01",
+      "title": "親子で楽しむ環境学習プログラム",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html"
+    },
     {
       "date": "2026-09-01",
       "title": "令和８年9月定例会一般質問を掲載",
@@ -129,11 +134,6 @@
       "date": "2026-09-01",
       "title": "シニアのためのミニしごと合同説明会（筑豊地区）",
       "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_17128.html"
-    },
-    {
-      "date": "2026-09-01",
-      "title": "親子で楽しむ環境学習プログラム",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html"
     },
     {
       "date": "2026-09-01",
@@ -198,5 +198,5 @@
       "status": "ok"
     }
   ],
-  "generatedAt": "2026-09-01T06:34:32Z"
+  "generatedAt": "2026-09-01T07:27:02Z"
 }
