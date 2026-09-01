@@ -7,6 +7,7 @@ on:
   push:
     paths:
       - "scripts/sync_nogata.py"
+      - "scripts/verify_high_risk.py"
       - ".github/workflows/sync-nogata.yml"
 
 permissions:
@@ -33,6 +34,9 @@ jobs:
 
       - name: Sync official data
         run: python scripts/sync_nogata.py
+
+      - name: Double-check high-risk civic data
+        run: python scripts/verify_high_risk.py
 
       - name: Validate JSON
         run: python -m json.tool data/latest.json > /dev/null
