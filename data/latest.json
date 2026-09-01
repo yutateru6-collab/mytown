@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "city": "直方市",
   "verifiedOn": "2026-09-01",
-  "generatedAt": "2026-09-01T04:54:07Z",
   "population": {
     "asOf": "令和8年8月末",
     "total": 53847,
@@ -70,6 +69,15 @@
         "申込期間：9月22日〜10月5日（定員になり次第締切）"
       ],
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
+    },
+    {
+      "id": "rss-329da38db46d",
+      "category": "観光・イベント",
+      "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
+      "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
+      "published": "2026-09-01",
+      "status": "新着",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html"
     }
   ],
   "council": {
@@ -190,5 +198,6 @@
       "mode": "page-check",
       "status": "ok"
     }
-  ]
+  ],
+  "generatedAt": "2026-09-01T04:58:23Z"
 }
