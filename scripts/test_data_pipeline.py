@@ -33,7 +33,8 @@ class FeedParserTests(unittest.TestCase):
 class MeetingParserTests(unittest.TestCase):
     def test_official_schedule_table_is_normalized(self) -> None:
         html = """
-        <html><body><h1>令和8年9月定例会日程</h1><p>更新日 2026年07月02日</p>
+        <html><body><aside>別ページ 更新日 2026年09月01日</aside>
+        <h1>令和8年9月定例会日程</h1><p>更新日 2026年07月02日</p>
         <table><tr><th>日付</th><th>曜日</th><th>日程</th></tr>
         <tr><td>9月 3日</td><td>木曜日</td><td>本会議（議案の提案説明）</td></tr>
         <tr><td>4日</td><td>金曜日</td><td>本会議（一般質問）</td></tr>
