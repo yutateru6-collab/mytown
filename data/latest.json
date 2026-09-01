@@ -81,11 +81,11 @@
   ],
   "council": {
     "title": "令和8年9月定例会",
-    "status": "公式日程更新あり",
-    "nextDateLabel": "",
-    "nextSummary": "公式ページの日程が更新されています。変更内容を推測せず、最新の日程は公式ページで確認してください。",
+    "status": "9/3予定",
+    "nextDateLabel": "9/3 10:00",
+    "nextSummary": "本会議（議案の提案説明）が予定されています。日程・開会時間は変更されることがあります。",
     "summary": "9月3日から25日までの日程が公表されています。",
-    "sourceUpdated": "2026-08-31",
+    "sourceUpdated": "2026-07-02",
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
   },
   "garbage": {
