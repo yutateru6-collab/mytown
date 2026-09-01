@@ -1,0 +1,1 @@
+MYTOWN UI v2 visual assets. Mascot and watercolor art are fixed approved project assets; UI code must not silently replace them.
