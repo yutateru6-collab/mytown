@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v6";
+const CACHE = "mytown-civic-v7";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -13,6 +13,7 @@ const STATIC_ASSETS = [
   "./manifest.webmanifest",
   "./icon.svg",
   "./data/latest.json",
+  "./data/bulletin.json",
   "./data/politics.json",
   "./data/election-2023.json"
 ];
@@ -50,7 +51,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
 
-  const isSyncedData = url.pathname.endsWith("/data/latest.json") || url.pathname.endsWith("/data/politics.json") || url.pathname.endsWith("/data/election-2023.json");
+  const isSyncedData = url.pathname.endsWith("/data/latest.json") || url.pathname.endsWith("/data/bulletin.json") || url.pathname.endsWith("/data/politics.json") || url.pathname.endsWith("/data/election-2023.json");
   if (isSyncedData || event.request.mode === "navigate") {
     event.respondWith(networkFirst(event.request).catch(() => caches.match("./index.html")));
     return;
