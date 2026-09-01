@@ -6,7 +6,7 @@
 
 ### 1. 暮らしから入る「今日の直方」
 
-直方市の公式公開情報を約2時間ごとに確認し、新着、人口、ごみ、市議会日程、交通、イベント等を生活者の言葉で表示します。市報の最新号も自動検知し、公式ページ・PDF・ページ見出しを表示します。
+直方市の公式公開情報を約6時間ごとに確認し、新着、人口、ごみ、市議会日程、交通、イベント等を生活者の言葉で表示します。市報の最新号も自動検知し、公式ページ・PDF・ページ見出しを表示します。
 
 ### 2. 徹底的に見える化する「市長・議会」
 
@@ -83,6 +83,8 @@ MYTOWNではこのズレを隠さず表示し、古い基準日の所属を「�
 
 と表示します。
 
+PDFについても、文字を抽出できたことと内容を確認できたことを同一視しません。画像だけのPDFや抽出が不安定なPDFは、OCR・人の確認が必要な状態として扱い、自動抽出だけで行政上の事実を確定しません。
+
 ## 現在の実データ
 
 - 直方市コミュニティバスの2026年10月1日変更
@@ -102,26 +104,44 @@ MYTOWNではこのズレを隠さず表示し、古い基準日の所属を「�
 
 ## 自動同期・再検証
 
-`.github/workflows/sync-nogata.yml` が約2時間ごとに実行されます（GitHub Actionsの予約実行のため、時刻は前後することがあります）。
+`.github/workflows/sync-nogata.yml` が約6時間ごとに実行されます（GitHub Actionsの予約実行のため、時刻は前後することがあります）。
 
 処理:
 
-1. 直方市の一次情報を取得
-2. `data/latest.json` と `data/bulletin.json` を更新
-3. 市議会日程など高リスク情報を再検証
-4. `data/politics.json` の市長・議員・会派・委員会・選挙・政務活動費・一般質問を公式ページと再照合
-5. 市報の最新号、ページ別PDF、公式ページ上の見出しを検知（記事内容の要約は確認待ち）
-6. JSONを検証
-7. 変更がある場合だけGitHubへ自動コミット
+1. `data/sources.json` の公式情報源レジストリを検証
+2. RSS・会議・PDF基盤等のオフライン回帰テストを実行
+3. 市議会日程ページを発見し、`data/meetings.json` に共通形式で正規化
+4. `feedparser` を使って直方市RSSを取得し、`data/latest.json` を更新
+5. 市報の最新号、ページ別PDF、公式ページ上の見出しを検知して `data/bulletin.json` を更新
+6. 市議会等の高リスク情報を再検証
+7. `data/politics.json` の市長・議員・会派・委員会・選挙・政務活動費・一般質問を公式ページと再照合
+8. 全JSONを検証
+9. 意味のある変更がある場合だけGitHubへ自動コミット
 
 政治データが公式ページと一致しなくなった場合、検証を成功扱いにしない設計です。
+
+### データ基盤 v2
+
+取得方法を画面の都合に直結させず、次の順に分けます。
+
+`公式情報源 → 取得 → 正規化 → 検証 → 公開用JSON → UI`
+
+- RSS: `feedparser`
+- HTML: 既存の第一当事者ページ解析
+- 会議: City Scrapersの「会議を共通形式に正規化する」考え方を参考にした `meetings.json`
+- PDF: `pypdf` を使う検査ユーティリティ。抽出結果は自動公開せず `needs_review` を基本とする
+- 地図・市民投稿: FixMyStreetの位置→管轄→状態追跡の考え方を研究し、データ基盤が整ってからMYTOWN向けに実装する
+
+City ScrapersやFixMyStreetをそのまま依存関係として組み込むのではなく、現在の直方市MVPに必要な設計思想だけを段階的に取り入れます。
 
 ## QA
 
 `.github/workflows/qa.yml` で以下を確認します。
 
-- JavaScript構文
+- JavaScript・Python構文
 - JSON妥当性
+- 公式情報源レジストリのドメイン・必須項目
+- RSS・会議・PDFのオフライン回帰テスト
 - 市長・議会タブの配線
 - 初心者向け用語説明の存在
 - PWAキャッシュ対象
@@ -141,15 +161,23 @@ MYTOWNではこのズレを隠さず表示し、古い基準日の所属を「�
 - `styles.css` / `review-fixes.css` / `politics.css` — UI
 - `app.js` — 暮らし・検索・質問
 - `politics.js` — 市長・議会・初心者向け政治UX
+- `requirements.txt` — 同期処理用Python依存関係
 - `data/latest.json` — 定期同期データ
+- `data/meetings.json` — 市議会等の会議を共通形式で保持
+- `data/sources.json` — 公式情報源レジストリ
 - `data/bulletin.json` — 市報の最新号・ページ候補・確認待ち下書き
 - `data/politics.json` — 市長・議員・選挙・用語等の検証対象データ
-- `scripts/sync_nogata.py` — 暮らし・行政情報の同期
+- `scripts/sync_nogata.py` — 旧同期処理。v2移行中の参照・ロールバック用
+- `scripts/sync_nogata_v2.py` — 情報源ベースの暮らし・行政情報同期
+- `scripts/sync_meetings.py` — 公式市議会日程の発見・正規化
 - `scripts/sync_bulletin.py` — 市報の最新号とPDF見出しの検知
+- `scripts/pdf_tools.py` — pypdfによるPDF抽出可否の安全な検査
+- `scripts/verify_sources.py` — 公式情報源レジストリ検証
+- `scripts/test_data_pipeline.py` — RSS・会議・PDF基盤の回帰テスト
 - `scripts/verify_high_risk.py` — 市議会等の追加検証
 - `scripts/verify_politics.py` — 政治透明化データの公式ページ照合
-- `.github/workflows/sync-nogata.yml` — 約2時間ごとの同期・検証
-- `.github/workflows/qa.yml` — フロントエンド品質確認
+- `.github/workflows/sync-nogata.yml` — 約6時間ごとの同期・検証
+- `.github/workflows/qa.yml` — フロントエンド＋データ基盤品質確認
 - `sw.js` — PWAキャッシュ
 
 ## 最重要原則
