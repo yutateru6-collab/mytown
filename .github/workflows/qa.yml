@@ -10,6 +10,7 @@ on:
       - "politics.js"
       - "election-history.js"
       - "ui-v2.js"
+      - "reference-*.js"
       - "*.css"
       - "assets/**"
       - "sw.js"
@@ -41,6 +42,11 @@ jobs:
           node --check politics.js
           node --check election-history.js
           node --check ui-v2.js
+          node --check reference-top-1.js
+          node --check reference-top-2.js
+          node --check reference-top-3.js
+          node --check reference-top-4.js
+          node --check reference-ui.js
           node --check sw.js
           python -m py_compile scripts/sync_nogata.py
           python -m py_compile scripts/sync_nogata_v2.py
@@ -76,9 +82,21 @@ jobs:
           test -s assets/icons/services.webp
           test -s assets/icons/deadline.webp
           test -s assets/icons/decision.webp
-          grep -q 'assets/hero/nogata-watercolor.webp' index.html
-          grep -q 'assets/mascot/machinavi.webp' index.html
           grep -q 'cp -R assets _site/assets' .github/workflows/pages.yml
+
+      - name: Supplied reference UI
+        run: |
+          grep -q 'reference-ui.css' index.html
+          grep -q 'reference-top-1.js' index.html
+          grep -q 'reference-top-4.js' index.html
+          grep -q 'reference-ui.js' index.html
+          grep -q 'Our City 直方市' reference-ui.js
+          grep -q '提案する' reference-ui.js
+          grep -q '投票する' reference-ui.js
+          grep -q '意見をみる' reference-ui.js
+          grep -q '進みぐあい' reference-ui.js
+          grep -q '864/930' reference-ui.css
+          grep -q 'mytown-civic-v9-reference' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
@@ -89,12 +107,6 @@ jobs:
           grep -q 'data-v2-nav="action"' index.html
           grep -q 'data-v2-nav="notifications"' index.html
           grep -q 'data-v2-nav="menu"' index.html
-          grep -q '近くを見る' ui-v2.js
-          grep -q '使える制度' ui-v2.js
-          grep -q 'まだ間に合う' ui-v2.js
-          grep -q '誰が決めた？' ui-v2.js
-          grep -q '審議・採決' ui-v2.js
-          grep -q '市長・市議会' ui-v2.js
           grep -q 'politics.js' index.html
           grep -q 'politics.css' index.html
           grep -q '2026年度' politics.js
@@ -102,5 +114,3 @@ jobs:
           grep -q '任期満了日' data/politics.json
           grep -q '政務活動費' data/politics.json
           grep -q '按分票' data/election-2023.json
-          grep -q 'assets/hero/nogata-watercolor.webp' sw.js
-          grep -q 'assets/mascot/machinavi.webp' sw.js
