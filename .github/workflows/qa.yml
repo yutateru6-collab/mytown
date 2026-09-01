@@ -8,11 +8,14 @@ on:
       - "app.js"
       - "app-runtime.js"
       - "politics.js"
+      - "election-history.js"
       - "styles.css"
       - "review-fixes.css"
       - "politics.css"
+      - "election-history.css"
       - "sw.js"
       - "data/*.json"
+      - "scripts/verify_election_history.py"
       - ".github/workflows/qa.yml"
   workflow_dispatch:
 
@@ -27,21 +30,32 @@ jobs:
           node --check app.js
           node --check app-runtime.js
           node --check politics.js
+          node --check election-history.js
           node --check sw.js
 
       - name: JSON validity
         run: |
           python -m json.tool data/latest.json > /dev/null
           python -m json.tool data/politics.json > /dev/null
+          python -m json.tool data/election-2023.json > /dev/null
+
+      - name: Historical election consistency
+        run: python scripts/verify_election_history.py
 
       - name: Required civic UX wiring
         run: |
           grep -q 'data-tab="politics"' index.html
           grep -q 'politics.js' index.html
           grep -q 'politics.css' index.html
+          grep -q 'election-history.js' index.html
+          grep -q 'election-history.css' index.html
           grep -q '市長・議会' index.html
           grep -q '2026年度' politics.js
           grep -q '前提知識' politics.js
           grep -q '任期満了日' data/politics.json
           grep -q '政務活動費' data/politics.json
-          grep -q 'data/politics.json' sw.js
+          grep -q '按分票' data/election-2023.json
+          grep -q '2023年4月時点の年齢' election-history.js
+          grep -q '現在の年齢ではありません' election-history.js
+          grep -q '何期目' election-history.js
+          grep -q 'data/election-2023.json' sw.js
