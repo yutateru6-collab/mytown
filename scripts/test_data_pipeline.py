@@ -12,6 +12,7 @@ from pypdf import PdfWriter
 import pdf_tools
 import sync_meetings
 import sync_nogata_v2
+import verify_high_risk
 import verify_sources
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,6 +47,14 @@ class MeetingParserTests(unittest.TestCase):
         self.assertEqual(data["source"]["sourceUpdated"], "2026-07-02")
         self.assertEqual(len(data["meetings"]), 2)
         self.assertEqual(data["meetings"][0]["start"], "2026-09-03T10:00:00+09:00")
+
+    def test_high_risk_update_date_uses_page_badge(self) -> None:
+        html = """
+        <div>別ページ 更新日 2026年07月02日</div>
+        <div class="pbBlock pbTitleBlock ngt-update">更新日 2026年09月01日</div>
+        <div>更新日 2026年10月01日</div>
+        """
+        self.assertEqual(verify_high_risk.schedule_updated_date(html), "2026-09-01")
 
 
 class SourceRegistryTests(unittest.TestCase):
