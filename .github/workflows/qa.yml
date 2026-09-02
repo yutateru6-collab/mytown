@@ -10,6 +10,7 @@ on:
       - "politics.js"
       - "election-history.js"
       - "ui-v2.js"
+      - "ui-home-v4.js"
       - "reference-*.js"
       - "*.css"
       - "assets/**"
@@ -46,6 +47,7 @@ jobs:
           node --check politics.js
           node --check election-history.js
           node --check ui-v2.js
+          node --check ui-home-v4.js
           node --check reference-top-1.js
           node --check reference-top-2.js
           node --check reference-top-3.js
@@ -87,6 +89,7 @@ jobs:
           test -s assets/icons/services.webp
           test -s assets/icons/deadline.webp
           test -s assets/icons/decision.webp
+          test -s assets/illustrations/event-festival.svg
           python scripts/verify_image_density.py
           grep -q 'cp -R assets _site/assets' .github/workflows/pages.yml
 
@@ -96,12 +99,16 @@ jobs:
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
           grep -q '>調べる</span>' index.html
-          grep -q 'mytown-civic-v14-overview' sw.js
+          grep -q 'mytown-civic-v15-bento' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
           grep -q 'ui-v2.js' index.html
           grep -q 'ui-v2.css' index.html
+          grep -q 'ui-home-v4.js' index.html
+          grep -q 'ui-home-v4.css' index.html
+          grep -q '直方で、なにする？' ui-home-v4.js
+          grep -q '少しずつ分かる' ui-home-v4.js
           grep -q 'data-v2-nav="home"' index.html
           grep -q 'data-v2-nav="search"' index.html
           grep -q 'data-v2-nav="action"' index.html
