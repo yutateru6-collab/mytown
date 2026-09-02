@@ -32,6 +32,8 @@ def main() -> None:
     home_polish_css = read("ui-home-v5.css")
     map_ui = read("map-nearby.js")
     map_css = read("map-nearby.css")
+    bulletin_ui = read("bulletin-reader.js")
+    bulletin_css = read("bulletin-reader.css")
     sw = read("sw.js")
 
     require(index, ">調べる</span>", "truthful center-nav label")
@@ -40,8 +42,10 @@ def main() -> None:
     require(index, "./ui-v2.css?v=14", "versioned citizen-first styles")
     require(index, "./ui-home-v4.js?v=16", "event-led home runtime")
     require(index, "./ui-home-v4.css?v=15", "event-led home styles")
-    require(index, "./map-nearby.js?v=1", "nearby map runtime")
-    require(index, "./map-nearby.css?v=1", "nearby map styles")
+    require(index, "./map-nearby.js?v=2", "nearby map runtime")
+    require(index, "./map-nearby.css?v=2", "nearby map styles")
+    require(index, "./bulletin-reader.js?v=1", "bulletin reader runtime")
+    require(index, "./bulletin-reader.css?v=1", "bulletin reader styles")
     # Cache-bust query values change frequently during UI polish; verify the asset is
     # versioned without coupling the UX contract to one specific revision number.
     require(index, "./ui-home-v5.css?v=", "versioned home polish styles")
@@ -104,12 +108,31 @@ def main() -> None:
         "130.7301452",
         "130.7253475",
         "mytown-nearby-map",
+        "mytown-map-detail",
         "Googleマップで開く",
         "住所と位置を確認できた情報だけ",
+        "この地図の下に内容が表示されます",
     ):
         require(map_ui, token, "verified nearby map contract")
+    forbid(map_ui, "new maplibregl.Popup", "clipping-prone map popup")
     require(map_css, ".mytown-nearby-map", "nearby map container styling")
     require(map_css, ".mytown-map-marker", "nearby map marker styling")
+    require(map_css, ".mytown-map-detail", "below-map detail styling")
+    require(map_css, ".mytown-map-detail-actions", "map detail actions styling")
+
+    for token in (
+        "data-v2-action=\"bulletin\"",
+        "bulletin-reader-frame",
+        "bulletin-page-button",
+        "wholePdfUrl",
+        "#bulletin",
+        "市の公式PDFを、MYTOWNの中でそのまま読めます。",
+        "ページを選ぶ",
+    ):
+        require(bulletin_ui, token, "in-app bulletin reader contract")
+    require(bulletin_css, ".bulletin-reader-frame", "bulletin PDF frame styling")
+    require(bulletin_css, ".bulletin-page-button", "bulletin page picker styling")
+    require(bulletin_css, ".v2-bulletin-button", "bulletin home button styling")
 
     require(app, "30秒まとめ", "30-second layer")
     require(app, "もう少しくわしく", "three-minute layer")
@@ -122,11 +145,13 @@ def main() -> None:
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v18-nearby-map", "service-worker cache revision")
+    require(sw, "mytown-civic-v19-map-bulletin", "service-worker cache revision")
     require(sw, "ui-home-v4.js", "v4 runtime precache")
     require(sw, "ui-home-v5.css", "v5 polish precache")
     require(sw, "map-nearby.js", "nearby map runtime precache")
     require(sw, "map-nearby.css", "nearby map style precache")
+    require(sw, "bulletin-reader.js", "bulletin reader runtime precache")
+    require(sw, "bulletin-reader.css", "bulletin reader style precache")
     require(sw, "event-festival.svg", "event illustration precache")
     for token in (
         "card-nearby.svg",
