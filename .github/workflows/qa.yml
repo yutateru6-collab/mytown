@@ -96,7 +96,7 @@ jobs:
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
           grep -q '>調べる</span>' index.html
-          grep -q 'mytown-civic-v13-retina-assets' sw.js
+          grep -q 'mytown-civic-v14-overview' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
