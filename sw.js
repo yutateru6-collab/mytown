@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v14-overview";
+const CACHE = "mytown-civic-v15-bento";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -7,11 +7,13 @@ const STATIC_ASSETS = [
   "./politics.css",
   "./election-history.css",
   "./ui-v2.css",
+  "./ui-home-v4.css",
   "./app.js",
   "./app-runtime.js",
   "./politics.js",
   "./election-history.js",
   "./ui-v2.js",
+  "./ui-home-v4.js",
   "./manifest.webmanifest",
   "./icon.svg",
   "./assets/hero/nogata-watercolor.webp?v=13",
@@ -20,6 +22,7 @@ const STATIC_ASSETS = [
   "./assets/icons/services.webp?v=13",
   "./assets/icons/deadline.webp?v=13",
   "./assets/icons/decision.webp?v=13",
+  "./assets/illustrations/event-festival.svg?v=15",
   "./data/latest.json",
   "./data/bulletin.json",
   "./data/politics.json",
