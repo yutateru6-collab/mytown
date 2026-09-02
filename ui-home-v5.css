@@ -69,6 +69,21 @@
   font-size: .8125rem;
 }
 
+/* 「直方のいまをひと目で」「今日、何を見よう？」を横1列にする。 */
+.v4-bento .v4-section-heading > div {
+  display: flex;
+  min-width: 0;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.v4-bento .v4-section-heading p,
+.v4-bento .v4-section-heading h2 {
+  margin: 0;
+  white-space: nowrap;
+}
+
 /* 「今日、何を見よう？」は用途ごとに別の絵を割り当てる。 */
 .v4-bento-card > img {
   display: none;
@@ -178,6 +193,19 @@
     min-height: 34px;
     padding: 5px 10px;
     font-size: .75rem;
+  }
+
+  .v4-bento .v4-section-heading > div {
+    gap: 5px;
+  }
+
+  .v4-bento .v4-section-heading p {
+    font-size: .72rem;
+    letter-spacing: .01em;
+  }
+
+  .v4-bento .v4-section-heading h2 {
+    font-size: 1.05rem;
   }
 
   .v4-bento-card {
