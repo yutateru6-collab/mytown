@@ -103,7 +103,7 @@ jobs:
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
           grep -q '>調べる</span>' index.html
-          grep -q 'mytown-civic-v16-home-polish' sw.js
+          grep -q 'mytown-civic-v17-copy-polish' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
@@ -112,8 +112,8 @@ jobs:
           grep -q 'ui-home-v4.js' index.html
           grep -q 'ui-home-v4.css' index.html
           grep -q 'ui-home-v5.css' index.html
-          grep -q '直方で、なにする？' ui-home-v4.js
-          grep -q '少しずつ分かる' ui-home-v4.js
+          grep -q '直方のイベント' ui-home-v4.js
+          grep -q '決まり方を見る' ui-home-v4.js
           grep -q 'card-nearby.svg' ui-home-v5.css
           grep -q 'card-deadline.svg' ui-home-v5.css
           grep -q 'card-services.svg' ui-home-v5.css
@@ -126,7 +126,7 @@ jobs:
           grep -q 'politics.js' index.html
           grep -q 'politics.css' index.html
           grep -q '2026年度' politics.js
-          grep -q '前提知識' politics.js
+          grep -q '難しい言葉' politics.js
           grep -q '任期満了日' data/politics.json
           grep -q '政務活動費' data/politics.json
           grep -q '按分票' data/election-2023.json
