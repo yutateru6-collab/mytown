@@ -57,8 +57,10 @@ try {
       const heroImage = await loadImage(urls.at(-1));
       const images = [...document.querySelectorAll('img[src*="assets/"]')].map((image) => {
         const box = image.getBoundingClientRect();
+        const src = image.getAttribute("src") || "";
         return {
-          src: image.getAttribute("src"),
+          src,
+          isVector: /\.svg(?:[?#]|$)/i.test(src),
           naturalWidth: image.naturalWidth,
           naturalHeight: image.naturalHeight,
           renderedWidth: box.width,
@@ -85,7 +87,9 @@ try {
     assert.ok(metrics.hero.widthDensity >= requiredDensity, `${spec.name}: hero density ${metrics.hero.widthDensity.toFixed(2)}x < ${requiredDensity}x`);
     for (const image of metrics.images) {
       assert.ok(image.naturalWidth > 0 && image.naturalHeight > 0, `${spec.name}: undecoded ${image.src}`);
-      if (image.renderedWidth > 0) {
+      // SVG is resolution-independent. Keep raster assets on the DPR density check,
+      // while still requiring vectors to decode with valid intrinsic dimensions.
+      if (image.renderedWidth > 0 && !image.isVector) {
         assert.ok(image.widthDensity >= requiredDensity, `${spec.name}: ${image.src} density ${image.widthDensity.toFixed(2)}x < ${requiredDensity}x`);
       }
     }
