@@ -16,9 +16,7 @@
 }
 
 .mytown-map-head p,
-.mytown-map-head h2 {
-  margin: 0;
-}
+.mytown-map-head h2 { margin: 0; }
 
 .mytown-map-head p {
   color: var(--accent);
@@ -92,6 +90,7 @@
   box-shadow: 0 7px 18px rgba(45, 64, 56, .24);
   cursor: pointer;
   transform: rotate(-45deg);
+  transition: transform .15s ease, box-shadow .15s ease;
 }
 
 .mytown-map-marker > span {
@@ -99,6 +98,10 @@
   font-size: 1.05rem;
   line-height: 1;
   transform: rotate(45deg);
+}
+
+.mytown-map-marker.is-selected {
+  box-shadow: 0 0 0 5px rgba(240, 91, 120, .2), 0 8px 20px rgba(45, 64, 56, .28);
 }
 
 .mytown-map-marker:focus-visible {
@@ -117,69 +120,85 @@
   box-shadow: 0 5px 18px rgba(35, 52, 45, .16);
 }
 
-.mytown-map-card .maplibregl-ctrl-attrib {
-  font-size: 10px;
-}
+.mytown-map-card .maplibregl-ctrl-attrib { font-size: 10px; }
 
-.mytown-map-card .maplibregl-popup-content {
-  padding: 14px;
-  border-radius: 16px;
-  box-shadow: 0 12px 34px rgba(31, 49, 41, .18);
-}
-
-.mytown-map-card .maplibregl-popup-close-button {
-  width: 32px;
-  height: 32px;
-  font-size: 20px;
-}
-
-.mytown-map-popup small {
-  display: block;
-  padding-right: 22px;
-  color: var(--accent);
-  font-weight: 800;
-}
-
-.mytown-map-popup h3 {
-  margin: 4px 20px 4px 0;
-  font-size: .98rem;
-  line-height: 1.35;
-}
-
-.mytown-map-popup p {
+.mytown-map-detail {
+  position: relative;
   margin: 0;
-  color: #5f6964;
-  font-size: .78rem;
-  line-height: 1.45;
+  padding: 15px 16px 16px;
+  border-top: 1px solid rgba(39, 106, 85, .14);
+  background: linear-gradient(180deg, #fffefb, #f7fbf8);
+  scroll-margin-bottom: 110px;
 }
 
-.mytown-map-popup-actions {
+.mytown-map-detail[hidden] { display: none; }
+
+.mytown-map-detail-close {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
   display: grid;
-  gap: 7px;
-  margin-top: 11px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #eef2ee;
+  color: #49534e;
+  font-size: 1.25rem;
+  cursor: pointer;
 }
 
-.mytown-map-popup-actions button,
-.mytown-map-popup-actions a {
-  min-height: 40px;
+.mytown-map-detail > small {
+  display: block;
+  padding-right: 42px;
+  color: var(--accent);
+  font-size: .78rem;
+  font-weight: 850;
+}
+
+.mytown-map-detail h3 {
+  margin: 4px 44px 5px 0;
+  font-size: 1.02rem;
+  line-height: 1.4;
+}
+
+.mytown-map-detail p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.55;
+}
+
+.mytown-map-detail-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.mytown-map-detail-actions button,
+.mytown-map-detail-actions a {
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 11px;
+  padding: 9px 11px;
   border-radius: 12px;
-  font-size: .8rem;
-  font-weight: 800;
+  font-size: .82rem;
+  font-weight: 850;
   text-decoration: none;
 }
 
-.mytown-map-popup-actions button {
+.mytown-map-detail-actions button {
   border: 0;
   background: var(--accent);
   color: #fff;
   cursor: pointer;
 }
 
-.mytown-map-popup-actions a {
+.mytown-map-detail-actions a {
   border: 1px solid var(--line);
   background: #fff;
   color: var(--accent-strong);
@@ -191,13 +210,15 @@
     border-radius: 20px;
   }
 
-  .mytown-map-head {
-    padding: 13px 14px 11px;
+  .mytown-map-head { padding: 13px 14px 11px; }
+  .mytown-nearby-map { height: 238px; }
+
+  .mytown-map-detail {
+    padding: 13px 13px 14px;
+    scroll-margin-bottom: 120px;
   }
 
-  .mytown-nearby-map {
-    height: 238px;
-  }
+  .mytown-map-detail-actions { grid-template-columns: 1fr; }
 
   .mytown-map-note {
     padding: 10px 13px 12px;
