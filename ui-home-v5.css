@@ -205,58 +205,59 @@
 }
 
 /*
-  弁当カードは「左＝文字／右＝イラスト」の同一行にする。
-  イラストを右下の別レイヤーに落とさず、文字ブロックと同じ高さで中央揃え。
-  余った下段をなくし、カード自体も少しコンパクトにする。
+  弁当カードの最終バランス。
+  右側に専用グリッド列を作ると文字幅が細くなり過ぎるため、
+  文字はカード幅をしっかり使い、イラストだけを右中央へ絶対配置する。
+  イラストは文字の縦ブロックと同じ高さに見せ、下段を作らない。
 */
 .v4-bento-card {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 58px;
-  grid-template-rows: auto auto auto;
-  column-gap: 7px;
-  row-gap: 2px;
-  align-items: start;
-  min-height: 118px;
-  padding: 8px 38px 8px 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0;
+  min-height: 116px;
+  padding: 8px 54px 8px 11px;
 }
 
 .v4-bento-kicker,
 .v4-bento-card > strong,
 .v4-bento-card > small {
-  grid-column: 1;
   width: 100%;
   min-width: 0;
+  flex: 0 0 auto;
 }
 
 .v4-bento-kicker {
-  grid-row: 1;
-  justify-self: start;
   min-height: 22px;
   margin: 0;
-  padding-block: 2px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  line-height: 1.15;
 }
 
 .v4-bento-card > strong {
-  grid-row: 2;
-  margin-top: 1px;
+  margin-top: 3px;
+  font-size: 1.03rem;
+  line-height: 1.24;
 }
 
 .v4-bento-card > small {
-  grid-row: 3;
-  margin-top: 1px;
+  margin-top: 3px;
+  font-size: .79rem;
+  line-height: 1.35;
 }
 
 .v4-bento-card::after {
   content: "";
-  position: static;
+  position: absolute;
   z-index: 1;
-  grid-column: 2;
-  grid-row: 1 / 4;
-  align-self: center;
-  justify-self: center;
-  width: 56px;
-  height: 56px;
+  right: 7px;
+  top: 58%;
+  width: 47px;
+  height: 47px;
+  transform: translateY(-50%);
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -276,25 +277,33 @@
 
 @media (max-width: 460px) {
   .v4-bento-card {
-    grid-template-columns: minmax(0, 1fr) 54px;
-    min-height: 114px;
-    padding: 7px 36px 7px 10px;
-    column-gap: 5px;
+    min-height: 112px;
+    padding: 7px 50px 7px 10px;
   }
 
-  .v4-bento-card::after {
-    width: 51px;
-    height: 51px;
+  .v4-bento-kicker {
+    min-height: 21px;
+    padding: 2px 7px;
+    font-size: .71rem;
   }
 
   .v4-bento-card > strong {
-    font-size: 1rem;
+    margin-top: 3px;
+    font-size: .96rem;
     line-height: 1.22;
   }
 
   .v4-bento-card > small {
-    font-size: .78rem;
-    line-height: 1.34;
+    margin-top: 3px;
+    font-size: .75rem;
+    line-height: 1.32;
+  }
+
+  .v4-bento-card::after {
+    right: 6px;
+    top: 60%;
+    width: 43px;
+    height: 43px;
   }
 
   .v4-bento-card > b {
