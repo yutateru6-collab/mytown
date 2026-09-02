@@ -12,6 +12,7 @@ on:
       - "ui-v2.js"
       - "ui-home-v4.js"
       - "map-nearby.js"
+      - "bulletin-reader.js"
       - "reference-*.js"
       - "*.css"
       - "assets/**"
@@ -50,6 +51,7 @@ jobs:
           node --check ui-v2.js
           node --check ui-home-v4.js
           node --check map-nearby.js
+          node --check bulletin-reader.js
           node --check reference-top-1.js
           node --check reference-top-2.js
           node --check reference-top-3.js
@@ -105,7 +107,7 @@ jobs:
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
           grep -q '>調べる</span>' index.html
-          grep -q 'mytown-civic-v18-nearby-map' sw.js
+          grep -q 'mytown-civic-v19-map-bulletin' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
@@ -116,9 +118,16 @@ jobs:
           grep -q 'ui-home-v5.css' index.html
           grep -q 'map-nearby.js' index.html
           grep -q 'map-nearby.css' index.html
+          grep -q 'bulletin-reader.js' index.html
+          grep -q 'bulletin-reader.css' index.html
           grep -q 'tiles.openfreemap.org/styles/liberty' map-nearby.js
           grep -q 'VERIFIED_LOCATION_POINTS' map-nearby.js
+          grep -q 'mytown-map-detail' map-nearby.js
+          ! grep -q 'new maplibregl.Popup' map-nearby.js
           grep -q 'Googleマップで開く' map-nearby.js
+          grep -q 'data-v2-action="bulletin"' bulletin-reader.js
+          grep -q 'bulletin-reader-frame' bulletin-reader.js
+          grep -q 'wholePdfUrl' bulletin-reader.js
           grep -q '直方のイベント' ui-home-v4.js
           grep -q '決まり方を見る' ui-home-v4.js
           grep -q 'card-nearby.svg' ui-home-v5.css
