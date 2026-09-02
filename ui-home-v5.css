@@ -229,3 +229,37 @@
 .v4-event-topline > span {
   display: none;
 }
+
+/* 弁当カードは上側に余白を溜めず、内容を自然に上寄せする。 */
+.v4-bento-card {
+  padding-top: 7px;
+  padding-bottom: 9px;
+}
+
+.v4-bento-kicker {
+  min-height: 22px;
+  padding-block: 2px;
+}
+
+.v4-bento-card > strong {
+  margin-top: 3px;
+}
+
+.v4-bento-card > small {
+  margin-top: 3px;
+}
+
+.v4-bento-card > b {
+  top: 6px;
+}
+
+@media (max-width: 460px) {
+  .v4-bento-card {
+    padding-top: 6px;
+    padding-bottom: 8px;
+  }
+
+  .v4-bento-card > b {
+    top: 5px;
+  }
+}
