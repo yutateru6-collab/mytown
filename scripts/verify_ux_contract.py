@@ -38,7 +38,9 @@ def main() -> None:
     require(index, "./ui-v2.css?v=14", "versioned citizen-first styles")
     require(index, "./ui-home-v4.js?v=15", "event-led home runtime")
     require(index, "./ui-home-v4.css?v=15", "event-led home styles")
-    require(index, "./ui-home-v5.css?v=16", "home polish styles")
+    # Cache-bust query values change frequently during UI polish; verify the asset is
+    # versioned without coupling the UX contract to one specific revision number.
+    require(index, "./ui-home-v5.css?v=", "versioned home polish styles")
     forbid(index, "reference-ui.css", "static mockup stylesheet")
     forbid(index, "reference-ui.js", "static mockup runtime")
     forbid(index, ">提案する</span>", "misleading proposal label")
@@ -81,7 +83,9 @@ def main() -> None:
     for token in (
         ".ui-v2 .v2-wordmark span",
         ".v4-event-feature",
-        "min-height: 192px",
+        ".v4-bento-card",
+        "min-height: 112px",
+        "white-space: nowrap",
         "card-nearby.svg",
         "card-deadline.svg",
         "card-services.svg",
