@@ -30,6 +30,8 @@ def main() -> None:
     home_ui = read("ui-home-v4.js")
     home_css = read("ui-home-v4.css")
     home_polish_css = read("ui-home-v5.css")
+    map_ui = read("map-nearby.js")
+    map_css = read("map-nearby.css")
     sw = read("sw.js")
 
     require(index, ">調べる</span>", "truthful center-nav label")
@@ -38,6 +40,8 @@ def main() -> None:
     require(index, "./ui-v2.css?v=14", "versioned citizen-first styles")
     require(index, "./ui-home-v4.js?v=16", "event-led home runtime")
     require(index, "./ui-home-v4.css?v=15", "event-led home styles")
+    require(index, "./map-nearby.js?v=1", "nearby map runtime")
+    require(index, "./map-nearby.css?v=1", "nearby map styles")
     # Cache-bust query values change frequently during UI polish; verify the asset is
     # versioned without coupling the UX contract to one specific revision number.
     require(index, "./ui-home-v5.css?v=", "versioned home polish styles")
@@ -93,6 +97,20 @@ def main() -> None:
     ):
         require(home_polish_css, token, "home v5 polish contract")
 
+    for token in (
+        "maplibre-gl@${MAPLIBRE_VERSION}",
+        "https://tiles.openfreemap.org/styles/liberty",
+        "VERIFIED_LOCATION_POINTS",
+        "130.7301452",
+        "130.7253475",
+        "mytown-nearby-map",
+        "Googleマップで開く",
+        "住所と位置を確認できた情報だけ",
+    ):
+        require(map_ui, token, "verified nearby map contract")
+    require(map_css, ".mytown-nearby-map", "nearby map container styling")
+    require(map_css, ".mytown-map-marker", "nearby map marker styling")
+
     require(app, "30秒まとめ", "30-second layer")
     require(app, "もう少しくわしく", "three-minute layer")
     require(app, "市の元資料", "primary-source layer")
@@ -104,9 +122,11 @@ def main() -> None:
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v17-copy-polish", "service-worker cache revision")
+    require(sw, "mytown-civic-v18-nearby-map", "service-worker cache revision")
     require(sw, "ui-home-v4.js", "v4 runtime precache")
     require(sw, "ui-home-v5.css", "v5 polish precache")
+    require(sw, "map-nearby.js", "nearby map runtime precache")
+    require(sw, "map-nearby.css", "nearby map style precache")
     require(sw, "event-festival.svg", "event illustration precache")
     for token in (
         "card-nearby.svg",
