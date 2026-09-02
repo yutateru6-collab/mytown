@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v18-nearby-map";
+const CACHE = "mytown-civic-v19-map-bulletin";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -10,6 +10,7 @@ const STATIC_ASSETS = [
   "./ui-home-v4.css",
   "./ui-home-v5.css",
   "./map-nearby.css",
+  "./bulletin-reader.css",
   "./app.js",
   "./app-runtime.js",
   "./politics.js",
@@ -17,6 +18,7 @@ const STATIC_ASSETS = [
   "./ui-v2.js",
   "./ui-home-v4.js",
   "./map-nearby.js",
+  "./bulletin-reader.js",
   "./manifest.webmanifest",
   "./icon.svg",
   "./assets/hero/nogata-watercolor.webp?v=13",
