@@ -1,0 +1,84 @@
+name: One-time wording-only polish
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/copy-polish-once.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  polish-copy:
+    if: github.event.head_commit.message == 'Run one-time user copy polish'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use latest main
+        run: git pull --rebase origin main
+
+      - name: Patch migration-script ordering only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("scripts/polish_user_copy_20260902.py")
+          source = path.read_text(encoding="utf-8")
+
+          source = source.replace(
+              '    ("近くで確認", "近くで何がある？"),',
+              '    (\'title: "近くで確認"\', \'title: "近くで何がある？"\'),',
+          )
+          source = source.replace(
+              '    ("募集・申込", "申し込み・募集"),',
+              '    (\'kicker: "募集・申込"\', \'kicker: "申し込み・募集"\'),',
+          )
+          source = source.replace(
+              '    ("使える制度", "制度・手続きを探す"),',
+              '    (\'title: "使える制度"\', \'title: "制度・手続きを探す"\'),',
+          )
+
+          duplicate = '    ("公式資料ベース", "市の資料から"),\n'
+          first = source.find(duplicate)
+          second = source.find(duplicate, first + len(duplicate)) if first >= 0 else -1
+          if second >= 0:
+              source = source[:second] + source[second + len(duplicate):]
+
+          path.write_text(source, encoding="utf-8")
+          PY
+
+      - name: Apply wording-only changes
+        run: python scripts/polish_user_copy_20260902.py
+
+      - name: Validate syntax and data
+        run: |
+          node --check app.js
+          node --check app-runtime.js
+          node --check politics.js
+          node --check election-history.js
+          node --check ui-v2.js
+          node --check ui-home-v4.js
+          node --check sw.js
+          python -m json.tool manifest.webmanifest > /dev/null
+          python -m json.tool data/politics.json > /dev/null
+          python -m json.tool data/bulletin.json > /dev/null
+          python scripts/verify_ux_contract.py
+          git diff --check
+
+      - name: Restore the unchanged migration helper
+        run: git restore scripts/polish_user_copy_20260902.py
+
+      - name: Commit wording only
+        run: |
+          git config user.name "MYTOWN Copy Polish"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html manifest.webmanifest ui-home-v4.js ui-v2.js app.js app-runtime.js politics.js election-history.js data/politics.json data/bulletin.json scripts/sync_bulletin.py scripts/verify_ux_contract.py sw.js
+          git diff --cached --stat
+          git commit -m "Polish user-facing wording without changing features"
+          git push origin main
