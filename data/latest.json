@@ -119,13 +119,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-0b725cb34fb0",
+      "id": "rss-026bfd8bf894",
       "category": "その他",
-      "title": "直方市指定給水装置工事事業者一覧表",
+      "title": "令和8年度二酸化炭素排出抑制対策事業費等補助金（建築物等のZEB化・省CO2化普及加速事業）",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-01",
+      "published": "2026-09-02",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_12946.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_17261.html"
     }
   ],
   "council": {
@@ -144,6 +144,11 @@
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310.html"
   },
   "latest": [
+    {
+      "date": "2026-09-02",
+      "title": "令和8年度二酸化炭素排出抑制対策事業費等補助金（建築物等のZEB化・省CO2化普及加速事業）",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_17261.html"
+    },
     {
       "date": "2026-09-01",
       "title": "直方市指定給水装置工事事業者一覧表",
@@ -198,11 +203,6 @@
       "date": "2026-09-01",
       "title": "自分を輝かせ、素敵な就職と未来を手に入れよう！（令和8年度女性のための就職サポートセミナー）",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17158.html"
-    },
-    {
-      "date": "2026-09-01",
-      "title": "直方オートキャンプ場（事前にネット予約が必要です）",
-      "url": "https://www.city.nogata.fukuoka.jp/kanko/_1226/_1757.html"
     }
   ],
   "sourceHealth": [
@@ -253,5 +253,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-01T18:32:08Z"
+  "generatedAt": "2026-09-02T00:03:53Z"
 }
