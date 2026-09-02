@@ -29,6 +29,7 @@ def main() -> None:
     css = read("ui-v2.css")
     home_ui = read("ui-home-v4.js")
     home_css = read("ui-home-v4.css")
+    home_polish_css = read("ui-home-v5.css")
     sw = read("sw.js")
 
     require(index, ">調べる</span>", "truthful center-nav label")
@@ -37,6 +38,7 @@ def main() -> None:
     require(index, "./ui-v2.css?v=14", "versioned citizen-first styles")
     require(index, "./ui-home-v4.js?v=15", "event-led home runtime")
     require(index, "./ui-home-v4.css?v=15", "event-led home styles")
+    require(index, "./ui-home-v5.css?v=16", "home polish styles")
     forbid(index, "reference-ui.css", "static mockup stylesheet")
     forbid(index, "reference-ui.js", "static mockup runtime")
     forbid(index, ">提案する</span>", "misleading proposal label")
@@ -76,6 +78,17 @@ def main() -> None:
     require(home_css, ".v4-bento-grid", "bento grid styling")
     require(home_css, "min-height: 44px", "minimum v4 interactive target")
 
+    for token in (
+        ".ui-v2 .v2-wordmark span",
+        ".v4-event-feature",
+        "min-height: 192px",
+        "card-nearby.svg",
+        "card-deadline.svg",
+        "card-services.svg",
+        "card-decision.svg",
+    ):
+        require(home_polish_css, token, "home v5 polish contract")
+
     require(app, "MYTOWNによる30秒要約", "30-second layer")
     require(app, "3分で背景まで", "three-minute layer")
     require(app, "原文・一次資料", "primary-source layer")
@@ -87,9 +100,17 @@ def main() -> None:
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v15-bento", "service-worker cache revision")
+    require(sw, "mytown-civic-v16-home-polish", "service-worker cache revision")
     require(sw, "ui-home-v4.js", "v4 runtime precache")
+    require(sw, "ui-home-v5.css", "v5 polish precache")
     require(sw, "event-festival.svg", "event illustration precache")
+    for token in (
+        "card-nearby.svg",
+        "card-deadline.svg",
+        "card-services.svg",
+        "card-decision.svg",
+    ):
+        require(sw, token, "distinct bento illustration precache")
 
     print("UX contract checks passed")
 
