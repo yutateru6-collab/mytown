@@ -220,3 +220,12 @@
     height: 62px;
   }
 }
+
+/* 「直方のイベント」は見出しと重複するため非表示。件数だけ右側に残す。 */
+.v4-event-topline {
+  justify-content: flex-end;
+}
+
+.v4-event-topline > span {
+  display: none;
+}
