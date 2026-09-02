@@ -17,6 +17,7 @@
 
   let mapLibrePromise = null;
   let activeMap = null;
+  let activeMarker = null;
 
   function normalizedLocation(value = "") {
     return String(value || "").normalize("NFKC").replace(/\s+/g, "");
@@ -55,16 +56,36 @@
     return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
   }
 
-  function popupHtml(point) {
-    return `<div class="mytown-map-popup">
+  function detailHtml(point) {
+    return `<button class="mytown-map-detail-close" type="button" data-mytown-map-close aria-label="選んだ場所を閉じる">×</button>
       <small>${esc(point.category)}</small>
       <h3>${esc(point.title)}</h3>
       <p>${esc(point.location)}</p>
-      <div class="mytown-map-popup-actions">
+      <div class="mytown-map-detail-actions">
         ${point.id ? `<button type="button" data-real-id="${esc(point.id)}">内容を見る</button>` : ""}
         <a href="${esc(googleMapsUrl(point.location))}" target="_blank" rel="noopener noreferrer">Googleマップで開く <span aria-hidden="true">↗</span></a>
-      </div>
-    </div>`;
+      </div>`;
+  }
+
+  function showMapDetail(point, marker) {
+    const panel = document.querySelector("#mytown-map-detail");
+    if (!panel) return;
+    if (activeMarker) activeMarker.classList.remove("is-selected");
+    activeMarker = marker || null;
+    if (activeMarker) activeMarker.classList.add("is-selected");
+    panel.innerHTML = detailHtml(point);
+    panel.hidden = false;
+    requestAnimationFrame(() => panel.scrollIntoView({ block: "nearest", behavior: "smooth" }));
+  }
+
+  function hideMapDetail() {
+    const panel = document.querySelector("#mytown-map-detail");
+    if (panel) {
+      panel.hidden = true;
+      panel.innerHTML = "";
+    }
+    if (activeMarker) activeMarker.classList.remove("is-selected");
+    activeMarker = null;
   }
 
   function ensureMapLibre() {
@@ -99,6 +120,7 @@
   }
 
   function destroyNearbyMap() {
+    hideMapDetail();
     if (!activeMap) return;
     try {
       activeMap.remove();
@@ -141,11 +163,14 @@
         marker.className = "mytown-map-marker";
         marker.setAttribute("aria-label", `${point.title}を地図で見る`);
         marker.innerHTML = `<span aria-hidden="true">${markerIcon(point.category)}</span>`;
+        marker.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          showMapDetail(point, marker);
+        });
 
-        const popup = new maplibregl.Popup({ offset: 20, closeButton: true, maxWidth: "290px" }).setHTML(popupHtml(point));
         new maplibregl.Marker({ element: marker, anchor: "bottom" })
           .setLngLat([point.lng, point.lat])
-          .setPopup(popup)
           .addTo(activeMap);
       });
 
@@ -168,7 +193,7 @@
         <span>${points.length}件</span>
       </div>
       ${points.length
-        ? `<div id="mytown-nearby-map" class="mytown-nearby-map" role="region" aria-label="直方市の場所が確認できる情報を表示した地図"><div class="mytown-map-loading">地図を読み込んでいます…</div></div><p class="mytown-map-note">ピンは、住所と位置を確認できた情報だけ表示しています。ピンを押すと内容とGoogleマップへのリンクを確認できます。</p>`
+        ? `<div id="mytown-nearby-map" class="mytown-nearby-map" role="region" aria-label="直方市の場所が確認できる情報を表示した地図"><div class="mytown-map-loading">地図を読み込んでいます…</div></div><div id="mytown-map-detail" class="mytown-map-detail" aria-live="polite" hidden></div><p class="mytown-map-note">ピンは、住所と位置を確認できた情報だけ表示しています。ピンを押すと、この地図の下に内容が表示されます。</p>`
         : `<div class="mytown-map-empty"><strong>地図に表示できる情報はまだありません</strong><span>住所と位置を確認できた情報から追加します。</span></div>`}
     </div>`;
   }
@@ -189,6 +214,12 @@
     }
     return result;
   };
+
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest("[data-mytown-map-close]")) return;
+    event.preventDefault();
+    hideMapDetail();
+  });
 
   render();
 })();
