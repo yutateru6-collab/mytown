@@ -5,50 +5,68 @@
   display: none;
 }
 
-/* イベント欄は情報量を保ったまま、縦の占有を少し圧縮。 */
+/*
+  トップのイベント欄は「入口」に徹する。
+  詳細説明はイベント一覧で読めるので、ホームでは件数・見出し・代表イベント・CTAだけ残し、
+  以前の約半分に近い存在感まで圧縮する。
+*/
 .v4-event-feature {
-  grid-template-columns: minmax(124px, .76fr) minmax(0, 1.44fr);
-  min-height: 198px;
+  grid-template-columns: minmax(108px, .66fr) minmax(0, 1.5fr);
+  min-height: 146px;
 }
 
 .v4-event-art {
   align-items: center;
   justify-content: center;
-  padding: 5px 0;
+  padding: 3px 0;
 }
 
 .v4-event-art img {
-  width: 106%;
-  max-width: 250px;
+  width: 96%;
+  max-width: 190px;
   transform: translate(0, 1%);
 }
 
 .v4-event-copy {
-  padding: 15px 17px 15px 11px;
+  padding: 10px 14px 10px 8px;
+}
+
+.v4-event-topline > span {
+  min-height: 24px;
+  padding: 3px 8px;
+  font-size: .72rem;
+}
+
+.v4-event-topline small {
+  font-size: .72rem;
 }
 
 .v4-event-copy h2 {
-  margin-top: 7px;
-  font-size: clamp(1.36rem, 4vw, 1.78rem);
+  margin: 5px 0 1px;
+  font-size: clamp(1.08rem, 3.5vw, 1.42rem);
 }
 
 .v4-event-copy h3 {
-  margin-top: 6px;
-  font-size: 1rem;
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 4px 0 3px;
+  font-size: .88rem;
+  line-height: 1.3;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
-.v4-event-copy > p {
-  font-size: .875rem;
-  line-height: 1.48;
-}
-
+/* ホームでは説明文・補助チップを省き、詳細はタップ後に見せる。 */
+.v4-event-copy > p,
 .v4-event-chips {
-  margin-top: 7px;
+  display: none;
 }
 
 .v4-primary-cta {
-  min-height: 42px;
-  padding: 8px 16px;
+  min-height: 38px;
+  margin-top: auto;
+  padding: 6px 12px;
+  font-size: .8125rem;
 }
 
 /* 「今日、何を見よう？」は用途ごとに別の絵を割り当てる。 */
@@ -93,66 +111,73 @@
 
 @media (max-width: 620px) {
   .v4-event-feature {
-    grid-template-columns: minmax(110px, .72fr) minmax(0, 1.48fr);
-    min-height: 194px;
+    grid-template-columns: 94px minmax(0, 1fr);
+    min-height: 132px;
   }
 
   .v4-event-art img {
-    width: 116%;
-    max-width: 225px;
-    transform: translate(0, 2%);
+    width: 105%;
+    max-width: 165px;
+    transform: translate(0, 1%);
   }
 
   .v4-event-copy {
-    padding: 14px 14px 14px 8px;
+    padding: 8px 11px 8px 6px;
   }
 }
 
 @media (max-width: 460px) {
   .v4-event-feature {
-    grid-template-columns: 104px minmax(0, 1fr);
-    min-height: 192px;
-    border-radius: 22px;
+    grid-template-columns: 88px minmax(0, 1fr);
+    min-height: 124px;
+    border-radius: 20px;
   }
 
   .v4-event-art {
-    padding: 4px 0;
+    padding: 2px 0;
   }
 
   .v4-event-art img {
-    width: 124%;
-    max-width: 205px;
-    transform: translate(0, 2%);
+    width: 108%;
+    max-width: 150px;
+    transform: translate(0, 1%);
   }
 
   .v4-event-copy {
-    padding: 13px 12px 13px 7px;
+    padding: 7px 9px 7px 5px;
   }
 
   .v4-event-topline {
-    gap: 3px;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .v4-event-topline > span {
+    min-height: 22px;
+    padding: 2px 7px;
+    font-size: .67rem;
+  }
+
+  .v4-event-topline small {
+    font-size: .67rem;
   }
 
   .v4-event-copy h2 {
-    margin-top: 5px;
-    font-size: 1.23rem;
+    margin-top: 4px;
+    font-size: 1.02rem;
   }
 
   .v4-event-copy h3 {
-    margin: 5px 0 3px;
-    font-size: .92rem;
-    line-height: 1.32;
-  }
-
-  .v4-event-copy > p {
+    margin: 3px 0 2px;
     font-size: .78rem;
-    line-height: 1.42;
+    line-height: 1.25;
   }
 
   .v4-primary-cta {
-    min-height: 40px;
-    padding: 7px 12px;
-    font-size: .8125rem;
+    min-height: 34px;
+    padding: 5px 10px;
+    font-size: .75rem;
   }
 
   .v4-bento-card {
