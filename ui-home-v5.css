@@ -221,12 +221,17 @@
   }
 }
 
-/* 「直方のイベント」は見出しと重複するため非表示。件数だけ右側に残す。 */
+/* イベント欄は「直方のイベント」を復活し、「直方で、なにする？」は表示しない。 */
 .v4-event-topline {
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .v4-event-topline > span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.v4-event-copy h2 {
   display: none;
 }
 
