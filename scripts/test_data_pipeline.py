@@ -30,6 +30,13 @@ class FeedParserTests(unittest.TestCase):
         self.assertEqual(items[0]["title"], "公式のお知らせ")
         self.assertEqual(items[0]["date"], "2026-09-01")
 
+    def test_population_date_shows_western_and_japanese_years(self) -> None:
+        data = sync_nogata_v2.legacy.parse_population(
+            "総人口：53,847人 男性：25,597人 女性：28,250人 世帯数：27,969世帯 （令和8年8月末現在）",
+            {},
+        )
+        self.assertEqual(data["asOf"], "2026年（令和8年）8月末")
+
 
 class MeetingParserTests(unittest.TestCase):
     def test_official_schedule_table_is_normalized(self) -> None:
@@ -47,6 +54,11 @@ class MeetingParserTests(unittest.TestCase):
         self.assertEqual(data["source"]["sourceUpdated"], "2026-07-02")
         self.assertEqual(len(data["meetings"]), 2)
         self.assertEqual(data["meetings"][0]["start"], "2026-09-03T10:00:00+09:00")
+        self.assertEqual(data["meetings"][0]["title"], "本会議（議案の提案説明）")
+
+    def test_agenda_spacing_and_brackets_are_normalized(self) -> None:
+        self.assertEqual(sync_meetings.normalize_agenda("本会議 （一般質問）"), "本会議（一般質問）")
+        self.assertEqual(sync_meetings.normalize_agenda("本会議 （採決)"), "本会議（採決）")
 
     def test_high_risk_update_date_uses_page_badge(self) -> None:
         html = """

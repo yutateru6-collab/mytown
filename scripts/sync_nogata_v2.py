@@ -170,7 +170,7 @@ def main() -> int:
 
     old_garbage = old.get("garbage") or {}
     garbage_updated = source_dates.get(legacy.GARBAGE_URL, old_garbage.get("sourceUpdated", ""))
-    garbage_summary = "令和8年1月からの『もやせるごみ』『カン・ビン、もやせないごみ』『資源リサイクル』の収集日程が案内されています。地域ごとの日程は公式ページから確認できます。"
+    garbage_summary = "2026年（令和8年）1月からの『もやせるごみ』『カン・ビン、もやせないごみ』『資源リサイクル』の収集日程が案内されています。地域ごとの日程は公式ページから確認できます。"
     if old_garbage.get("sourceUpdated") and garbage_updated > old_garbage.get("sourceUpdated", ""):
         garbage_summary = "ごみ収集の公式ページが更新されています。地域ごとの最新日程は公式ページで確認してください。"
     garbage = {

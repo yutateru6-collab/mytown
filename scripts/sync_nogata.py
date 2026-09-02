@@ -150,7 +150,8 @@ def parse_population(text: str, old: dict) -> dict:
             result[key] = int(m.group(1).replace(",", ""))
     m = re.search(r"[（(]令和(\d+)年(\d+)月末現在[）)]", text)
     if m:
-        result["asOf"] = f"令和{m.group(1)}年{m.group(2)}月末"
+        western_year = 2018 + int(m.group(1))
+        result["asOf"] = f"{western_year}年（令和{m.group(1)}年）{int(m.group(2))}月末"
     result["sourceUrl"] = HOME_URL
     return result
 
@@ -254,12 +255,12 @@ def build_featured(latest: list[dict[str, str]]) -> list[dict]:
             "when": "2026年10月1日から",
             "why": "直方市公式ページでは、利用面の改善、交通空白への対応、他路線の廃止・統合への対応などが路線ごとに説明されています。",
             "money": None,
-            "decision": "関連する直方市地域公共交通協議会の資料と、10月1日変更の案内を時系列で確認できます。ただし、今回の変更項目すべてについて、最終的に決定・承認した会議資料や日付までは、現在確認した公開資料だけでは特定できません。",
+            "decision": "関連する直方市地域公共交通協議会の資料と、2026年10月1日の変更案内を時系列で表示しています。変更項目すべての最終決定・承認に当たる会議資料と日付は、現在確認した公開資料だけでは特定できません。",
             "decisionTimeline": [
                 {
                     "date": "2026年1月19日",
                     "title": "関連路線の変更案を協議資料として掲載",
-                    "detail": "令和7年度第4回直方市地域公共交通協議会に、感田線・上頓野線の路線変更案などが資料として掲載されました。これは今回の変更全体の最終決定を示す資料とは断定しません。",
+                    "detail": "2026年1月19日の協議会資料には、感田線・上頓野線の路線変更案などが掲載されています。この資料だけでは、今回の変更全体が最終決定されたとは判断できません。",
                     "status": "協議資料",
                     "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_14310.html",
                 },
@@ -441,7 +442,7 @@ def main() -> int:
             item["bullets"] = []
 
     garbage_updated = source_dates.get(GARBAGE_URL, old.get("garbage", {}).get("sourceUpdated", "2026-03-04"))
-    garbage_summary = "令和8年1月からの『もやせるごみ』『カン・ビン、もやせないごみ』『資源リサイクル』の収集日程が案内されています。地域ごとの日程は公式ページから確認できます。"
+    garbage_summary = "2026年（令和8年）1月からの『もやせるごみ』『カン・ビン、もやせないごみ』『資源リサイクル』の収集日程が案内されています。地域ごとの日程は公式ページから確認できます。"
     if garbage_updated > "2026-03-04":
         garbage_summary = "ごみ収集の公式ページが更新されています。地域ごとの最新日程は公式ページで確認してください。"
     garbage = {

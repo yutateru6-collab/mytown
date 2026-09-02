@@ -3,6 +3,7 @@
 state.v2Page = state.v2Page || null;
 state.v2SearchMode = state.v2SearchMode || "keyword";
 document.body.classList.add("ui-v2");
+history.replaceState({ ...(history.state || {}), mytownRoot: true }, "", location.href);
 
 const V2_ASSETS = Object.freeze({
   hero: "./assets/hero/nogata-watercolor.webp?v=13",
@@ -29,7 +30,8 @@ function v2Mascot(alt = "まちナビ") {
 function v2LoadPreferences() {
   try {
     const saved = JSON.parse(localStorage.getItem(V2_PREFERENCES_KEY) || "{}");
-    return { ...V2_DEFAULT_PREFERENCES, ...saved, interests: Array.isArray(saved.interests) ? saved.interests.filter((x) => V2_INTERESTS.includes(x)) : [] };
+    const civicDigest = saved.civicDigest === "off" ? "off" : "weekly";
+    return { ...V2_DEFAULT_PREFERENCES, ...saved, civicDigest, interests: [] };
   } catch (error) {
     console.warn("Preference load failed", error);
     return { ...V2_DEFAULT_PREFERENCES };
@@ -90,10 +92,10 @@ function v2Hero() {
   const district = (state.v2Preferences?.district || "").trim();
   return `<section class="v2-hero" aria-labelledby="v2-home-title">
     <div class="v2-hero-actions">
-      <button type="button" class="v2-round-action" data-v2-nav="notifications" aria-label="お知らせを見る"><span aria-hidden="true">🔔</span><small>お知らせ</small></button>
-      <button type="button" class="v2-round-action" data-v2-action="settings" aria-label="地域やテーマの設定を開く"><span aria-hidden="true">⚙︎</span><small>設定</small></button>
+      <button type="button" class="v2-round-action" data-v2-nav="notifications" aria-label="新着を見る"><span aria-hidden="true">🔔</span><small>新着</small></button>
+      <button type="button" class="v2-round-action" data-v2-action="settings" aria-label="地域と表示順の設定を開く"><span aria-hidden="true">⚙︎</span><small>設定</small></button>
     </div>
-    <div class="v2-hero-copy"><p class="v2-date">${esc(v2DateLabel())}</p><p class="v2-wordmark">MYTOWN <span>直方</span></p><h1 id="v2-home-title">今日の直方</h1><p class="v2-tagline">${district ? `直方のイベント・暮らし・市の動きを、まとめて探せる非公式アプリ。${esc(district)}を優先表示中。` : "直方のイベント・暮らし・市の動きを、まとめて探せる非公式アプリ。"}</p></div>
+    <div class="v2-hero-copy"><p class="v2-date">${esc(v2DateLabel())}</p><p class="v2-wordmark">MYTOWN <span>直方</span></p><h1 id="v2-home-title">今日の直方</h1><p class="v2-tagline">イベント、暮らし、市の動きをひとつに。${district ? `よく見る地域：${esc(district)}。` : ""}</p><p class="v2-data-note">非公式アプリ｜直方市の公開情報をもとに掲載</p></div>
     ${v2Mascot("チューリップと石炭をモチーフにしたMYTOWNの案内役まちナビ")}
   </section>`;
 }
@@ -108,10 +110,10 @@ function v2CapabilityOverview() {
   const services = v2FindServices();
   const council = state.data.council || null;
   const capabilities = [
-    { action: "nearby", tone: "mint", kicker: "工事・施設・イベント", title: "近くで何がある？", note: nearby ? "場所が分かる情報があります" : "場所が分かる情報を探す" },
-    { action: "deadline", tone: "pink", kicker: "申し込み・募集", title: "まだ間に合う", note: deadlines.length ? `${deadlines.length}件を確認できます` : "募集中の情報を探す" },
+    { action: "nearby", tone: "mint", kicker: "工事・施設・イベント", title: "地図から探す", note: nearby ? "場所を確認できる情報があります" : "場所を確認できる情報を探す" },
+    { action: "deadline", tone: "pink", kicker: "申し込み・募集", title: "締切のある情報", note: deadlines.length ? `${deadlines.length}件を確認できます` : "募集情報を探す" },
     { action: "services", tone: "yellow", kicker: "補助・手続き", title: "制度・手続きを探す", note: services.length ? `${services.length}件の条件を確認` : "対象条件から探す" },
-    { action: "decision", tone: "blue", kicker: "市長・市議会", title: "誰が決めた？", note: council ? "決まるまでの流れを見る" : "市の情報を見る" },
+    { action: "decision", tone: "blue", kicker: "市の動き", title: "どうやって決まった？", note: council ? "市長・市議会の役割を見る" : "市の情報を見る" },
   ];
   return `<section class="v2-overview" aria-labelledby="v2-overview-title">
     <div class="v2-overview-heading"><p>今日の直方をひと目で</p><h2 id="v2-overview-title">何を見ますか？</h2><small>暮らしの情報から、市の決まり方まで。</small></div>
@@ -138,7 +140,7 @@ function v2NearbyCard() {
   const district = (state.v2Preferences?.district || "").trim();
   return `<section class="v2-home-section v2-nearby-section" aria-labelledby="v2-nearby-title"><article class="v2-nearby-card">
     ${v2Icon(V2_ASSETS.nearby, "", "v2-nearby-art")}
-    <div class="v2-nearby-copy"><p class="v2-card-eyebrow">場所が分かる市の情報</p><h2 id="v2-nearby-title">近くで何がある？</h2>
+    <div class="v2-nearby-copy"><p class="v2-card-eyebrow">場所を確認できた市の情報</p><h2 id="v2-nearby-title">地図から探す</h2>
       ${item ? `<h3>${esc(item.title)}</h3><p>${esc(item.location || item.summary || "")}</p>${v2OpenDetailButton(item, "場所と内容を見る")}` : `<p>現在、場所が分かる情報はありません。確認できない距離は表示しません。</p><button class="v2-card-button" type="button" data-v2-action="nearby">場所から見る <span aria-hidden="true">›</span></button>`}
       ${district ? `<small class="v2-local-note">優先表示：${esc(district)}。同じ場所名がある情報を先に表示します。</small>` : `<button class="v2-text-link" type="button" data-v2-action="settings">よく見る地域を設定</button>`}
     </div></article></section>`;
@@ -150,7 +152,7 @@ function v2DailyCards() {
   return `<section class="v2-home-section" aria-labelledby="v2-life-title">${v2SectionHeading("今日の暮らし", "ごみ・締切など", "v2-life-title")}
     <div class="v2-daily-grid">
       <article class="v2-compact-card"><p class="v2-card-eyebrow">明日のごみ</p><h3>${garbage ? "ごみ収集日を確認" : "地区設定後に表示予定"}</h3><p>${garbage ? "地域ごとの日程を、市のページで確認できます。" : "収集日データを確認中です。"}</p>${garbage?.sourceUrl ? `<a class="v2-card-button" href="${esc(garbage.sourceUrl)}" target="_blank" rel="noopener noreferrer">公式日程を見る <span aria-hidden="true">↗</span></a>` : ""}</article>
-      <article class="v2-compact-card tone-pink">${v2Icon(V2_ASSETS.deadline, "", "v2-compact-art")}<p class="v2-card-eyebrow">まだ間に合う</p><h3>${esc(deadline?.title || "募集中の情報を確認")}</h3><p>${deadline ? esc(deadline.summary || "条件と期限を公式ページで確認できます。") : "現在、募集・申し込み中の情報は見つかりませんでした。"}</p>${deadline ? v2OpenDetailButton(deadline, "内容を確認") : `<button class="v2-card-button" type="button" data-v2-action="deadline">募集を探す <span aria-hidden="true">›</span></button>`}</article>
+      <article class="v2-compact-card tone-pink">${v2Icon(V2_ASSETS.deadline, "", "v2-compact-art")}<p class="v2-card-eyebrow">締切のある情報</p><h3>${esc(deadline?.title || "募集情報を確認")}</h3><p>${deadline ? esc(deadline.summary || "条件と期限を直方市のページで確認できます。") : "締切に関する情報は見つかりませんでした。"}</p>${deadline ? v2OpenDetailButton(deadline, "内容を確認") : `<button class="v2-card-button" type="button" data-v2-action="deadline">募集を探す <span aria-hidden="true">›</span></button>`}</article>
     </div></section>`;
 }
 
@@ -176,7 +178,7 @@ function v2CivicCards() {
   return `<section class="v2-home-section v2-civic-section" aria-labelledby="v2-civic-title">${v2SectionHeading("暮らしに関わる市の動き", "30秒で読めます", "v2-civic-title")}
     <div class="v2-civic-grid">
       <article class="v2-civic-card"><p class="v2-card-eyebrow">次の市議会</p><h3>${esc(council?.nextDateLabel || council?.title || "日程を確認中")}</h3><p>${esc(council?.nextSummary || council?.summary || "公式日程を確認しています。")}</p>${council ? `<button class="v2-card-button" type="button" data-v2-action="meeting">この会議を見る <span aria-hidden="true">›</span></button>` : ""}</article>
-      <article class="v2-civic-card tone-lavender">${v2Icon(V2_ASSETS.decision, "", "v2-compact-art")}<p class="v2-card-eyebrow">なぜ？ 誰が決めた？</p><h3>${esc(featured?.title || "決まり方をたどる")}</h3><p>市の資料で分かったことと、分からないことを分けて表示します。</p>${featured ? v2OpenDetailButton(featured, "決まり方を見る", "decision") : `<button class="v2-card-button" type="button" data-v2-action="decision">市長・議会を見る <span aria-hidden="true">›</span></button>`}</article>
+      <article class="v2-civic-card tone-lavender">${v2Icon(V2_ASSETS.decision, "", "v2-compact-art")}<p class="v2-card-eyebrow">どうやって決まった？</p><h3>${esc(featured?.title || "決まり方をたどる")}</h3><p>市の資料で確認できたことと、確認できないことを分けて表示します。</p>${featured ? v2OpenDetailButton(featured, "決まり方を見る", "decision") : `<button class="v2-card-button" type="button" data-v2-action="decision">市長・議会を見る <span aria-hidden="true">›</span></button>`}</article>
     </div></section>`;
 }
 
@@ -192,14 +194,14 @@ function v2LifeAndLatest() {
 
 function todayV2View() {
   if (state.loading) return `<section class="page v2-page v2-home-page">${v2Hero()}<div class="v2-content"><div class="card info-card"><div class="loading-line"></div><div class="loading-line short"></div><p class="muted">直方市の公式情報を確認しています…</p></div></div></section>`;
-  return `<section class="page v2-page v2-home-page">${v2Hero()}<div class="v2-content">${v2CapabilityOverview()}${v2CivicPath()}<div class="v2-sync-wrap">${syncBanner()}</div>${v2NearbyCard()}${v2DailyCards()}${v2SpotlightCard()}${v2ServicesCard()}${state.v2Preferences.civicDigest === "off" ? "" : v2CivicCards()}${v2AskCard()}${v2LifeAndLatest()}<p class="v2-disclaimer">MYTOWNは直方市の公式アプリではありません。手続き・期限・選挙などの大切な情報は、市の元ページでも確認してください。</p></div></section>`;
+  return `<section class="page v2-page v2-home-page">${v2Hero()}<div class="v2-content">${v2CapabilityOverview()}${v2CivicPath()}<div class="v2-sync-wrap">${syncBanner()}</div>${v2NearbyCard()}${v2DailyCards()}${v2SpotlightCard()}${v2ServicesCard()}${state.v2Preferences.civicDigest === "off" ? "" : v2CivicCards()}${v2AskCard()}${v2LifeAndLatest()}<p class="v2-disclaimer">MYTOWNは、直方市の公開情報をもとにした非公式アプリです。掲載範囲は、現在取り込めた情報に限られます。手続き・期限・選挙は、直方市のページで最終確認してください。</p></div></section>`;
 }
 
 function v2SearchIntro() {
   const deadlines = v2FindDeadlines().slice(0, 2);
   const bulletin = v2CurrentBulletin();
   return `<div class="v2-search-intro"><section class="v2-popular-search" aria-labelledby="v2-popular-title"><h2 id="v2-popular-title">検索の例</h2><div class="v2-query-chips">${["バス", "ごみ", "子育て", "学校", "工事"].map((q) => `<button type="button" data-v2-query="${q}">${q}</button>`).join("")}</div></section>
-    <section class="v2-search-groups" aria-label="探し方"><button type="button" data-v2-action="deadline"><strong>締切が近い</strong><span>${deadlines.length ? `${deadlines.length}件を確認` : "募集中の情報を探す"}</span></button><button type="button" data-v2-query="子育て 学校"><strong>暮らし</strong><span>制度・手続き・学校</span></button><button type="button" data-v2-action="nearby"><strong>近く</strong><span>場所が確認できる情報</span></button><button type="button" data-v2-action="decision"><strong>市政</strong><span>議会・選挙・決まり方</span></button>${bulletin ? `<button type="button" data-v2-query="市報"><strong>市報</strong><span>${esc(bulletin.title || "最新号")}</span></button>` : ""}</section><p class="v2-search-note">現在取り込んでいる市の公開情報から検索します。</p></div>`;
+    <section class="v2-search-groups" aria-label="探し方"><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><span>${deadlines.length ? `${deadlines.length}件を確認` : "募集情報を探す"}</span></button><button type="button" data-v2-query="子育て 学校"><strong>暮らし</strong><span>制度・手続き・学校</span></button><button type="button" data-v2-action="nearby"><strong>地図</strong><span>場所を確認できる情報</span></button><button type="button" data-v2-action="decision"><strong>市の動き</strong><span>議会・選挙・決まり方</span></button>${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報</strong><span>${esc(bulletin.title || "最新号")}</span></button>` : ""}</section><p class="v2-search-note">現在取り込んでいる市の公開情報から検索します。</p></div>`;
 }
 
 function v2SearchHubView() {
@@ -211,15 +213,18 @@ function v2SearchHubView() {
     const text = normalizeQuery(`${item.title} ${item.summary || ""} ${item.category || ""}`);
     return (!q || q.split(/\s+/).every((token) => text.includes(token))) && (!category || (item.category || classifyTitle(item.title)) === category);
   }) : [];
-  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">さがす</p><h1>制度名や担当課が分からなくても探せます</h1><p>「バス」「ごみ」「学校」など、普通の言葉で探せます。</p></div></div>${syncBanner()}<form class="search-box v2-search-box" id="discover-form"><span aria-hidden="true">⌕</span><input id="discover-search" type="search" value="${esc(state.discoverQuery)}" placeholder="例：バス、学校、ごみ" aria-label="街の情報を検索"><button>探す</button></form>${hasSearch ? `<div class="filter-row" aria-label="カテゴリで絞る"><button class="filter-chip ${!category ? "is-active" : ""}" type="button" data-category-filter="">すべて</button>${discoverCategories.map((x) => `<button class="filter-chip ${category === x ? "is-active" : ""}" type="button" data-category-filter="${esc(x)}">${esc(x)}</button>`).join("")}</div><div class="section"><div class="section-head"><h2>検索結果</h2><p>${results.length}件</p></div><div class="stack">${results.length ? results.slice(0, 30).map(realCard).join("") : emptyCard("見つかりませんでした。言葉を短くして、もう一度検索してください。掲載していない情報を推測で補うことはありません。")}</div></div>` : v2SearchIntro()}</section>`;
+  const noResults = state.discoverQuery
+    ? `「${state.discoverQuery}」に合う情報は見つかりませんでした。キーワードを1語にするか、分類を「すべて」に戻してください。`
+    : "この分類に合う情報は見つかりませんでした。分類を「すべて」に戻してください。";
+  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">さがす</p><h1>直方の情報を探す</h1><p>制度名や担当課が分からなくても、「バス」「ごみ」のような言葉で探せます。</p></div></div>${syncBanner()}<form class="search-box v2-search-box" id="discover-form"><span aria-hidden="true">⌕</span><input id="discover-search" type="search" value="${esc(state.discoverQuery)}" placeholder="例：バス、学校、ごみ" aria-label="直方の情報を検索"><button>探す</button></form>${hasSearch ? `<div class="filter-row" aria-label="カテゴリで絞る"><button class="filter-chip ${!category ? "is-active" : ""}" type="button" data-category-filter="">すべて</button>${discoverCategories.map((x) => `<button class="filter-chip ${category === x ? "is-active" : ""}" type="button" data-category-filter="${esc(x)}">${esc(x)}</button>`).join("")}</div><div class="section"><div class="section-head"><h2>検索結果</h2><p>${results.length}件</p></div><div class="stack">${results.length ? results.slice(0, 30).map(realCard).join("") : emptyCard(noResults)}</div></div>` : v2SearchIntro()}</section>`;
 }
 
 function v2CollectionView(type) {
   const isServices = type === "services";
   const items = isServices ? v2FindServices() : v2FindDeadlines();
-  const title = isServices ? "制度・手続きを探す" : "まだ間に合う";
-  const sub = isServices ? "補助・助成・給付・支援・手続きに関する、市の公開情報です。対象条件は市のページで確認してください。" : "募集・申し込み・意見募集に関する、市の公開情報です。期限は市のページで最終確認してください。";
-  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-v2-action="home">‹ きょうへ</button><div class="v2-inner-hero"><div><p class="eyebrow">暮らしから探す</p><h1>${title}</h1><p>${sub}</p></div></div>${syncBanner()}<div class="section"><div class="section-head"><h2>掲載中の情報</h2><p>${items.length}件</p></div><div class="stack">${items.length ? items.slice(0, 30).map(realCard).join("") : emptyCard(isServices ? "現在、対象条件まで確認できる制度情報はありません。ほかの言葉でも検索できます。" : "現在、募集・申し込み中の情報は見つかりませんでした。")}</div></div><button class="v2-wide-button" type="button" data-v2-nav="search">別の言葉で探す →</button></section>`;
+  const title = isServices ? "制度・手続きを探す" : "締切のある情報";
+  const sub = isServices ? "補助・給付・暮らしの手続きを掲載しています。利用できる条件は、直方市のページで最終確認してください。" : "募集・申し込み・意見募集に関する情報です。受付中かどうかと期限は、直方市のページで最終確認してください。";
+  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-v2-action="back-route">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">暮らしから探す</p><h1>${title}</h1><p>${sub}</p></div></div>${syncBanner()}<div class="section"><div class="section-head"><h2>掲載中の情報</h2><p>${items.length}件</p></div><div class="stack">${items.length ? items.slice(0, 30).map(realCard).join("") : emptyCard(isServices ? "現在、対象条件まで確認できる制度情報はありません。ほかの言葉でも検索できます。" : "現在、募集・申し込み中の情報は見つかりませんでした。")}</div></div><button class="v2-wide-button" type="button" data-v2-nav="search">別の言葉で探す →</button></section>`;
 }
 
 function v2NotificationGroups() {
@@ -230,24 +235,24 @@ function v2NotificationGroups() {
 
 function v2NotificationsView() {
   const { life, civic } = v2NotificationGroups();
-  const lifeSection = `<section class="v2-notification-group"><div class="section-head"><div><h2>生活のお知らせ</h2><p>防災・施設・イベント・手続きなど</p></div><span>${life.length}件</span></div><div class="latest-list">${life.length ? life.map(latestRow).join("") : emptyCard("現在、生活に分類できる新着はありません。")}</div></section>`;
+  const lifeSection = `<section class="v2-notification-group"><div class="section-head"><div><h2>暮らしのお知らせ</h2><p>防災・施設・イベント・手続きなど</p></div><span>${life.length}件</span></div><div class="latest-list">${life.length ? life.map(latestRow).join("") : emptyCard("現在、暮らしに分類できる新着はありません。")}</div></section>`;
   const civicSection = `<section class="v2-notification-group"><div class="section-head"><div><h2>市の動き</h2><p>議会・計画・予算など</p></div><span>${civic.length}件</span></div><div class="latest-list">${civic.length ? civic.map(latestRow).join("") : emptyCard("現在、市政に分類できる新着はありません。")}</div></section>`;
   const ordered = state.v2Preferences.lifeNotifications ? `${lifeSection}${civicSection}` : `${civicSection}${lifeSection}`;
-  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">お知らせ</p><h1>暮らしと市の動きを分けて見る</h1><p>暮らしの情報と、市の動きを分けて確認できます。</p></div></div>${syncBanner()}${ordered}</section>`;
+  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">新着</p><h1>暮らしと市の動き</h1><p>「暮らしのお知らせ」と「市の動き」に分けて表示します。</p></div></div>${syncBanner()}${ordered}</section>`;
 }
 
 function v2MeetingView() {
   const council = state.data.council || {};
-  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-v2-action="home">‹ きょうへ</button><div class="v2-inner-hero"><div><p class="eyebrow">次の市議会</p><h1>${esc(council.nextDateLabel || council.title || "日程を確認中")}</h1><p>${esc(council.nextSummary || council.summary || "公式日程を確認しています。")}</p></div></div>${syncBanner()}<div class="card info-card v2-meeting-detail"><h2>${esc(council.title || "直方市議会")}</h2><p><strong>予定：</strong>${esc(council.nextDateLabel || "確認中")}</p><p><strong>内容：</strong>${esc(council.nextSummary || "確認中")}</p><p><strong>注意：</strong>日程・開会時間は変更されることがあります。</p>${sourceLink(council.sourceUrl, "この会議の公式日程を見る")}</div><div class="card info-card"><h2>このページでは分からないこと</h2><p>議案の詳しい内容や採決結果は、この日程ページだけでは分かりません。別の資料と推測で結び付けることはしません。</p></div></section>`;
+  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-v2-action="back-route">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">次の市議会</p><h1>${esc(council.nextDateLabel || council.title || "日程を確認中")}</h1><p>${esc(council.nextSummary || council.summary || "公式日程を確認しています。")}</p></div></div>${syncBanner()}<div class="card info-card v2-meeting-detail"><h2>${esc(council.title || "直方市議会")}</h2><p><strong>予定：</strong>${esc(council.nextDateLabel || "確認中")}</p><p><strong>内容：</strong>${esc(council.nextSummary || "確認中")}</p><p><strong>注意：</strong>日程・開会時間は変更されることがあります。</p>${sourceLink(council.sourceUrl, "この会議の公式日程を見る")}</div><div class="card info-card"><h2>このページでは分からないこと</h2><p>議案の詳しい内容や採決結果は、この日程ページだけでは分かりません。別の資料と推測で結び付けることはしません。</p></div></section>`;
 }
 
 function v2MenuView() {
-  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">メニュー</p><h1>知りたいところから</h1><p>未完成の機能は、現在の状態が分かる名前で表示します。</p></div></div><div class="v2-menu-grid"><button type="button" data-v2-action="decision"><strong>市長・市議会</strong><small>誰が、どう決める？</small></button><button type="button" data-v2-action="ask"><strong>まちナビに聞く</strong><small>市の資料で分からないことは伝えます</small></button><button type="button" data-v2-action="glossary"><strong>役所ことば図鑑</strong><small>難しい言葉をやさしく</small></button><button type="button" data-v2-action="settings"><strong>地域・テーマ</strong><small>このスマホだけに保存</small></button><button type="button" data-v2-action="nearby"><strong>場所から見る</strong><small>住所が確認できる情報</small></button><button type="button" data-v2-action="money"><strong>直方市の予算</strong><small>市の資料と照合した数字だけ</small></button></div><div class="v2-menu-note card info-card"><h2>MYTOWNの約束</h2><p>分からないことは分からないと表示します。政治家をAIが採点・評価しません。大事な情報には市の元資料へのリンクを付けます。</p></div></section>`;
+  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">メニュー</p><h1>知りたいところから</h1><p>未完成の機能は、現在の状態が分かる名前で表示します。</p></div></div><div class="v2-menu-grid"><button type="button" data-v2-action="decision"><strong>市長・市議会</strong><small>役割・議員・選挙</small></button><button type="button" data-v2-action="ask"><strong>まちナビに聞く</strong><small>市の資料から答えを探す</small></button><button type="button" data-v2-action="glossary"><strong>役所ことば図鑑</strong><small>難しい言葉をやさしく</small></button><button type="button" data-v2-action="settings"><strong>地域と表示順</strong><small>このブラウザだけに保存</small></button><button type="button" data-v2-action="nearby"><strong>地図から探す</strong><small>位置を確認できる情報</small></button><button type="button" data-v2-action="money"><strong>直方市の予算</strong><small>市の資料と照合した数字だけ</small></button></div><div class="v2-menu-note card info-card"><h2>MYTOWNの約束</h2><p>公開資料で確認できないことは、推測で補いません。人物の評価や採点はしません。大切な情報には、確認に使った直方市のページへのリンクを付けます。</p></div></section>`;
 }
 
 function v2SettingsView() {
   const preferences = state.v2Preferences;
-  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">地域・テーマ</p><h1>自分に関係する情報を先に</h1><p>住所や会員登録は不要です。設定はこの端末の中だけに保存します。</p></div></div><form id="v2-preferences-form" class="v2-preferences-form"><fieldset><legend>よく見る地域（任意）</legend><label class="v2-field"><span>町名・駅名・よく行く場所</span><input type="text" name="district" value="${esc(preferences.district)}" placeholder="例：植木、感田、直方駅周辺" maxlength="30"><small>位置情報は使いません。市の情報に同じ場所名がある場合だけ、先に表示します。</small></label></fieldset><fieldset><legend>知りたいテーマ</legend><div class="v2-interest-grid">${V2_INTERESTS.map((interest) => `<label><input type="checkbox" name="interests" value="${esc(interest)}" ${preferences.interests.includes(interest) ? "checked" : ""}><span>${esc(interest)}</span></label>`).join("")}</div></fieldset><fieldset><legend>表示の設定</legend><label class="v2-check-row"><input type="checkbox" name="lifeNotifications" ${preferences.lifeNotifications ? "checked" : ""}><span><strong>暮らしの情報を上に表示</strong><small>オフにすると、市の動きを先に表示します。</small></span></label><label class="v2-field"><span>市の動きの表示</span><select name="civicDigest"><option value="weekly" ${preferences.civicDigest === "weekly" ? "selected" : ""}>ホームに表示する</option><option value="all" ${preferences.civicDigest === "all" ? "selected" : ""}>ホームに表示する（現在は上と同じ）</option><option value="off" ${preferences.civicDigest === "off" ? "selected" : ""}>ホームには表示しない</option></select><small>この設定はホームの表示に使います。スマホへの通知はまだ届きません。</small></label></fieldset><button class="primary-button v2-save-button" type="submit">設定を保存する</button></form><div class="card info-card v2-about-card"><h2>このアプリについて</h2><p>MYTOWNは試験公開中の非公式アプリです。直方市の公式アプリではありません。市の公開情報を約6時間ごとに確認し、市の元ページへのリンクを付けます。</p></div></section>`;
+  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">設定</p><h1>よく見る地域と表示順を設定</h1><p>会員登録は不要です。設定は、このブラウザだけに保存されます。</p></div></div><form id="v2-preferences-form" class="v2-preferences-form"><fieldset><legend>よく見る地域（任意）</legend><label class="v2-field"><span>町名・駅名・よく行く場所</span><input type="text" name="district" value="${esc(preferences.district)}" placeholder="例：植木、感田、直方駅周辺" maxlength="30"><small>入力した地名が掲載情報に含まれるとき、ホームの「地図から探す」に表示します。位置情報は使いません。</small></label></fieldset><fieldset><legend>表示の設定</legend><label class="v2-check-row"><input type="checkbox" name="lifeNotifications" ${preferences.lifeNotifications ? "checked" : ""}><span><strong>「新着」で暮らしの情報を先に表示</strong><small>オフにすると、「市の動き」が上になります。</small></span></label><label class="v2-field"><span>ホームに市の動きを表示</span><select name="civicDigest"><option value="weekly" ${preferences.civicDigest !== "off" ? "selected" : ""}>表示する</option><option value="off" ${preferences.civicDigest === "off" ? "selected" : ""}>表示しない</option></select><small>この設定はホームの表示だけを変えます。スマホには通知しません。</small></label></fieldset><button class="primary-button v2-save-button" type="submit">設定を保存</button></form><div class="card info-card v2-about-card"><h2>このアプリについて</h2><p>MYTOWNは試験公開中の非公式アプリです。直方市の公式アプリではありません。市の公開情報を約6時間ごとに確認し、直方市のページへのリンクを付けます。</p></div></section>`;
 }
 
 settingsView = v2SettingsView;
@@ -258,7 +263,7 @@ function v2EnsureActionSheet() {
   wrapper.id = "v2-action-sheet";
   wrapper.className = "v2-sheet";
   wrapper.setAttribute("aria-hidden", "true");
-  wrapper.innerHTML = `<button class="v2-sheet-backdrop" type="button" data-v2-sheet-close aria-label="閉じる"></button><section class="v2-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="v2-sheet-title"><div class="v2-sheet-handle" aria-hidden="true"></div><div class="v2-sheet-head"><div>${v2Mascot("")}</div><div><small>MYTOWN</small><h2 id="v2-sheet-title">何を調べる？</h2></div><button type="button" data-v2-sheet-close aria-label="閉じる">×</button></div><div class="v2-sheet-list"><button type="button" data-v2-action="nearby"><div><strong>この工事・場所は何？</strong><small>場所が分かる市の情報から</small></div><b>›</b></button><button type="button" data-v2-action="services"><div><strong>制度・手続きを探す</strong><small>補助・支援・手続き</small></div><b>›</b></button><button type="button" data-v2-action="money"><div><strong>直方市の予算</strong><small>現在は準備中</small></div><b>›</b></button><button type="button" data-v2-action="decision"><div><strong>誰が決めた？</strong><small>市長・市議会・議員</small></div><b>›</b></button><button type="button" data-v2-action="ask"><div><strong>まちナビに聞く</strong><small>市の資料で分からないことは伝えます</small></div><b>›</b></button></div></section>`;
+  wrapper.innerHTML = `<button class="v2-sheet-backdrop" type="button" data-v2-sheet-close aria-label="閉じる"></button><section class="v2-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="v2-sheet-title"><div class="v2-sheet-handle" aria-hidden="true"></div><div class="v2-sheet-head"><div>${v2Mascot("")}</div><div><small>MYTOWN</small><h2 id="v2-sheet-title">何を調べる？</h2></div><button type="button" data-v2-sheet-close aria-label="閉じる">×</button></div><div class="v2-sheet-list"><button type="button" data-v2-action="nearby"><div><strong>地図から探す</strong><small>位置を確認できる市の情報</small></div><b>›</b></button><button type="button" data-v2-action="services"><div><strong>制度・手続きを探す</strong><small>補助・支援・手続き</small></div><b>›</b></button><button type="button" data-v2-action="money"><div><strong>直方市の予算</strong><small>現在は準備中</small></div><b>›</b></button><button type="button" data-v2-action="decision"><div><strong>市長・市議会を知る</strong><small>役割・議員・選挙</small></div><b>›</b></button><button type="button" data-v2-action="ask"><div><strong>まちナビに聞く</strong><small>市の資料から答えを探す</small></div><b>›</b></button></div></section>`;
   document.body.appendChild(wrapper);
 }
 
@@ -288,13 +293,22 @@ function v2CloseSheet(restoreFocus = true) {
 
 function v2SetRoute({ tab = "today", page = null, view = "tab", hash = "" } = {}) {
   state.tab = tab; state.v2Page = page; state.view = view; state.detailSection = null; state.selectedId = null;
-  if (hash) history.pushState({ tab, page, view }, "", hash);
+  if (hash) history.pushState({ tab, page, view, mytownRoute: true }, "", hash);
   render();
 }
 
 function v2HandleAction(action) {
   v2CloseSheet(false);
   if (action === "home") return v2SetRoute({ tab: "today", page: null, hash: "#home" });
+  if (action === "back-route") {
+    if (history.state?.mytownRoute) return history.back();
+    return v2SetRoute({ tab: "today", page: null, hash: "#home" });
+  }
+  if (action === "reload") return loadOfficialData();
+  if (action === "retry-question") {
+    document.querySelector("#ask-input")?.focus();
+    return;
+  }
   if (action === "nearby") return v2SetRoute({ tab: "nearby", page: null, hash: "#nearby" });
   if (action === "services") return v2SetRoute({ tab: "today", page: "services", hash: "#services" });
   if (action === "deadline") return v2SetRoute({ tab: "today", page: "deadline", hash: "#deadline" });
@@ -308,6 +322,7 @@ function v2HandleAction(action) {
 
 function v2HandleNav(nav) {
   if (nav === "home") return v2HandleAction("home");
+  if (nav === "nearby") return v2HandleAction("nearby");
   if (nav === "search") return v2SetRoute({ tab: "discover", page: null, hash: "#search" });
   if (nav === "action") return v2OpenSheet();
   if (nav === "notifications") return v2SetRoute({ tab: "today", page: "notifications", hash: "#notifications" });
@@ -317,7 +332,8 @@ function v2HandleNav(nav) {
 function v2ActiveNav() {
   if (state.v2Page === "notifications") return "notifications";
   if (state.v2Page === "menu" || state.tab === "politics" || state.view === "settings" || state.view === "money") return "menu";
-  if (state.tab === "discover" || state.tab === "nearby") return "search";
+  if (state.tab === "nearby") return "nearby";
+  if (state.tab === "discover") return "search";
   return "home";
 }
 
@@ -326,7 +342,7 @@ function v2SyncNav() {
   document.querySelectorAll("[data-v2-nav]").forEach((button) => {
     const isActive = button.dataset.v2Nav === active;
     button.classList.toggle("is-active", isActive);
-    if (["home", "search", "notifications", "menu"].includes(button.dataset.v2Nav)) button.setAttribute("aria-current", isActive ? "page" : "false");
+    if (["home", "nearby", "search", "notifications", "menu"].includes(button.dataset.v2Nav)) button.setAttribute("aria-current", isActive ? "page" : "false");
   });
 }
 
@@ -366,13 +382,13 @@ document.addEventListener("submit", (event) => {
   if (event.target.id !== "v2-preferences-form") return;
   event.preventDefault();
   const formData = new FormData(event.target);
-  state.v2Preferences = { ...V2_DEFAULT_PREFERENCES, district: String(formData.get("district") || "").trim(), interests: formData.getAll("interests").map(String), lifeNotifications: formData.get("lifeNotifications") === "on", civicDigest: String(formData.get("civicDigest") || "weekly") };
+  state.v2Preferences = { ...V2_DEFAULT_PREFERENCES, district: String(formData.get("district") || "").trim(), interests: [], lifeNotifications: formData.get("lifeNotifications") === "on", civicDigest: String(formData.get("civicDigest") || "weekly") };
   try {
     localStorage.setItem(V2_PREFERENCES_KEY, JSON.stringify(state.v2Preferences));
-    showToast("地域とテーマの設定を保存しました");
+    showToast("設定を保存しました");
   } catch (error) {
     console.warn("Preference save failed", error);
-    showToast("このブラウザでは設定を保存できませんでした");
+    showToast("今回は反映しましたが、次に開くと元に戻ります");
   }
   render();
 });

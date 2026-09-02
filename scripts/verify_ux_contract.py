@@ -36,15 +36,17 @@ def main() -> None:
     bulletin_css = read("bulletin-reader.css")
     sw = read("sw.js")
 
-    require(index, ">調べる</span>", "truthful center-nav label")
-    require(index, "aria-label=\"調べるメニューを開く\"", "center-nav accessible name")
-    require(index, "./ui-v2.js?v=15", "versioned citizen-first runtime")
-    require(index, "./ui-v2.css?v=14", "versioned citizen-first styles")
-    require(index, "./ui-home-v4.js?v=16", "event-led home runtime")
+    require(index, ">地図</span>", "dedicated map navigation")
+    require(index, ">さがす</span>", "search center-nav label")
+    require(index, "aria-label=\"直方の情報をさがす\"", "search accessible name")
+    require(index, "./ui-v2.js?v=16", "versioned citizen-first runtime")
+    require(index, "./app-runtime.js?v=3", "versioned data-load recovery runtime")
+    require(index, "./ui-v2.css?v=15", "versioned citizen-first styles")
+    require(index, "./ui-home-v4.js?v=17", "event-led home runtime")
     require(index, "./ui-home-v4.css?v=15", "event-led home styles")
-    require(index, "./map-nearby.js?v=2", "nearby map runtime")
+    require(index, "./map-nearby.js?v=3", "nearby map runtime")
     require(index, "./map-nearby.css?v=2", "nearby map styles")
-    require(index, "./bulletin-reader.js?v=1", "bulletin reader runtime")
+    require(index, "./bulletin-reader.js?v=2", "bulletin reader runtime")
     require(index, "./bulletin-reader.css?v=1", "bulletin reader styles")
     # Cache-bust query values change frequently during UI polish; verify the asset is
     # versioned without coupling the UX contract to one specific revision number.
@@ -55,25 +57,31 @@ def main() -> None:
 
     for token in (
         "今日の直方",
-        "今日の直方をひと目で",
+        "直方の情報を探す",
         "v2-capability-grid",
         "決まるまでの流れ",
-        "近くで何がある？",
+        "地図から探す",
         "今日の暮らし",
         "暮らしに関わる市の動き",
         "data-v2-action=\"meeting\"",
+        "data-v2-action=\"back-route\"",
         "V2_PREFERENCES_KEY",
         "hasVerifiedConditions",
         "appShell.inert = true",
         "event.key !== \"Tab\"",
     ):
         require(ui, token, "base citizen-first UI contract")
+    require(ui, "このブラウザだけに保存されます", "accurate preference storage scope")
+    require(ui, "今回は反映しましたが、次に開くと元に戻ります", "preference save failure state")
+    forbid(ui, "<legend>知りたいテーマ", "inactive interest settings")
+    forbid(ui, "まだ間に合う", "unverified active deadline claim")
 
     for token in (
         "直方のイベント",
         "v4-bento-grid",
-        "決まり方を見る",
-        "市長・市議会",
+        "暮らしから探す",
+        "市報を読む",
+        "次の市議会",
         "イベント・体験を探す",
         "掲載について",
         "すべてのイベントを掲載しているわけではありません",
@@ -84,6 +92,7 @@ def main() -> None:
         require(home_ui, token, "event-led bento home contract")
 
     forbid(home_ui, "350m", "unverified distance on home")
+    forbid(home_ui, "まだ間に合う", "unverified home deadline claim")
     require(home_css, ".v4-event-feature", "event feature styling")
     require(home_css, ".v4-bento-grid", "bento grid styling")
     require(home_css, "min-height: 44px", "minimum v4 interactive target")
@@ -97,7 +106,7 @@ def main() -> None:
         "card-nearby.svg",
         "card-deadline.svg",
         "card-services.svg",
-        "card-decision.svg",
+        "card-bulletin.svg",
     ):
         require(home_polish_css, token, "home v5 polish contract")
 
@@ -110,8 +119,8 @@ def main() -> None:
         "mytown-nearby-map",
         "mytown-map-detail",
         "Googleマップで開く",
-        "住所と位置を確認できた情報だけ",
-        "この地図の下に内容が表示されます",
+        "位置まで確認できた情報だけ",
+        "地図の下に内容が表示されます",
     ):
         require(map_ui, token, "verified nearby map contract")
     forbid(map_ui, "new maplibregl.Popup", "clipping-prone map popup")
@@ -126,18 +135,21 @@ def main() -> None:
         "bulletin-page-button",
         "wholePdfUrl",
         "#bulletin",
-        "市の公式PDFを、MYTOWNの中でそのまま読めます。",
-        "ページを選ぶ",
+        "直方市が公開した市報PDFです。",
+        "読みたいページを選ぶ",
+        "PDFを別画面で開く",
     ):
         require(bulletin_ui, token, "in-app bulletin reader contract")
     require(bulletin_css, ".bulletin-reader-frame", "bulletin PDF frame styling")
     require(bulletin_css, ".bulletin-page-button", "bulletin page picker styling")
     require(bulletin_css, ".v2-bulletin-button", "bulletin home button styling")
 
-    require(app, "30秒まとめ", "30-second layer")
-    require(app, "もう少しくわしく", "three-minute layer")
-    require(app, "市の元資料", "primary-source layer")
-    require(app, "市の資料では分かりませんでした", "safe unanswered state")
+    require(app, "30秒で読む", "30-second layer")
+    require(app, "背景・費用・決まり方", "detail layer")
+    require(app, "確認に使った資料", "primary-source layer")
+    require(app, "現在取り込んでいる市の資料では、答えを確認できませんでした", "safe unanswered state")
+    require(app, 'item.sourceUpdated || item.published || "確認できず"', "separate source date fallback")
+    forbid(app, "item.sourceUpdated || item.published || state.data.verifiedOn", "mixed source and app verification dates")
     require(app, "市の資料で確認できた流れ", "decision evidence timeline")
     require(data, '"decisionTimeline"', "verified bus decision timeline data")
     require(data, '"decisionUnknowns"', "explicit decision unknowns")
@@ -145,7 +157,7 @@ def main() -> None:
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v19-map-bulletin", "service-worker cache revision")
+    require(sw, "mytown-civic-v20-copy-clarity", "service-worker cache revision")
     require(sw, "ui-home-v4.js", "v4 runtime precache")
     require(sw, "ui-home-v5.css", "v5 polish precache")
     require(sw, "map-nearby.js", "nearby map runtime precache")
@@ -158,6 +170,7 @@ def main() -> None:
         "card-deadline.svg",
         "card-services.svg",
         "card-decision.svg",
+        "card-bulletin.svg",
     ):
         require(sw, token, "distinct bento illustration precache")
 

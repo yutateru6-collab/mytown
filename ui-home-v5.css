@@ -102,7 +102,7 @@
 }
 
 .v4-bento-card:nth-child(4)::after {
-  background-image: url("./assets/illustrations/card-decision.svg?v=16");
+  background-image: url("./assets/illustrations/card-bulletin.svg?v=17");
 }
 
 @media (max-width: 620px) {

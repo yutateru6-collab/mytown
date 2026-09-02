@@ -136,6 +136,12 @@ body.ui-v2 small { font-size: .8125rem; }
   font-size: .875rem;
   font-weight: 800;
 }
+.v2-data-note {
+  margin: 5px 0 0;
+  color: #4f6256;
+  font-size: .75rem;
+  font-weight: 700;
+}
 
 .v2-hero > .v2-mascot {
   position: absolute;

@@ -135,46 +135,46 @@
       : null;
     const deadlines = typeof v2FindDeadlines === "function" ? v2FindDeadlines() : [];
     const services = typeof v2FindServices === "function" ? v2FindServices() : [];
-    const council = state.data?.council || null;
+    const bulletin = typeof v2CurrentBulletin === "function" ? v2CurrentBulletin() : null;
 
     const cards = [
       {
         action: "nearby",
         tone: "mint",
         icon: V4_ASSETS.nearby,
-        kicker: "近くで",
-        title: "何がある？",
-        note: localMatch ? v4Short(localMatch.title, 26) : locationItems.length ? `場所が分かる情報 ${locationItems.length}件` : "施設・イベントを見る",
+        kicker: "施設・イベント・工事",
+        title: "地図から探す",
+        note: localMatch ? v4Short(localMatch.title, 26) : locationItems.length ? `場所を確認できる情報 ${locationItems.length}件` : "場所を確認できる情報を見る",
       },
       {
         action: "deadline",
         tone: "pink",
         icon: V4_ASSETS.deadline,
-        kicker: "まだ間に合う",
-        title: "申し込み・意見募集",
-        note: deadlines.length ? `${deadlines.length}件掲載中` : "締切がある情報を見る",
+        kicker: "申し込み・募集",
+        title: "締切のある情報",
+        note: deadlines.length ? `${deadlines.length}件掲載中` : "募集情報を見る",
       },
       {
         action: "services",
         tone: "yellow",
         icon: V4_ASSETS.services,
-        kicker: "制度・手続き",
-        title: "使えるものは？",
-        note: services.length ? `条件が分かる情報 ${services.length}件` : "子育て・暮らしから",
+        kicker: "補助・給付・暮らし",
+        title: "制度・手続きを探す",
+        note: services.length ? `条件を確認できる情報 ${services.length}件` : "子育て・暮らしから",
       },
       {
-        action: "decision",
+        action: "bulletin",
         tone: "blue",
         icon: V4_ASSETS.decision,
-        kicker: "決まり方を見る",
-        title: "市長・市議会",
-        note: council?.nextDateLabel ? `${council.nextDateLabel} 次の会議` : "誰が、どう決める？",
+        kicker: "市報のおがた",
+        title: "市報を読む",
+        note: bulletin ? v4Short(bulletin.title || "最新号", 28) : "最新号を確認",
       },
     ];
 
     return `<section class="v4-bento" aria-labelledby="v4-bento-title">
       <div class="v4-section-heading">
-        <div><p>今日の直方を</p><h2 id="v4-bento-title">ひと目で</h2></div>
+        <div><p>必要な情報を</p><h2 id="v4-bento-title">暮らしから探す</h2></div>
       </div>
       <div class="v4-bento-grid">${cards.map(v4BentoCard).join("")}</div>
     </section>`;
@@ -186,7 +186,7 @@
       ${garbage?.sourceUrl
         ? `<a href="${esc(garbage.sourceUrl)}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🗑️</span><div><small>ごみ</small><strong>ごみ収集日を見る</strong></div><b aria-hidden="true">↗</b></a>`
         : `<button type="button" data-v2-query="ごみ"><span aria-hidden="true">🗑️</span><div><small>ごみ</small><strong>ごみ情報を探す</strong></div><b aria-hidden="true">›</b></button>`}
-      <button type="button" data-v2-action="settings"><span aria-hidden="true">📍</span><div><small>地域を設定</small><strong>${state.v2Preferences?.district ? `${esc(state.v2Preferences.district)}を優先表示` : "よく見る地域を選ぶ"}</strong></div><b aria-hidden="true">›</b></button>
+      <button type="button" data-v2-action="settings"><span aria-hidden="true">📍</span><div><small>地域を設定</small><strong>${state.v2Preferences?.district ? `よく見る地域：${esc(state.v2Preferences.district)}` : "よく見る地域を選ぶ"}</strong></div><b aria-hidden="true">›</b></button>
     </div>`;
   }
 
@@ -199,8 +199,8 @@
 
     return `<section class="v4-civic-layer" aria-labelledby="v4-civic-title">
       <div class="v4-section-heading v4-civic-heading">
-        <div><p>暮らしに関わる</p><h2 id="v4-civic-title"><span aria-hidden="true">🌱</span> 市の動きを30秒で</h2></div>
-        <button type="button" data-v2-action="decision">市長・市議会を見る</button>
+        <div><p>暮らしに関わる</p><h2 id="v4-civic-title"><span aria-hidden="true">🌱</span> 市の動き</h2></div>
+        <button type="button" data-v2-action="decision">市長・市議会を知る</button>
       </div>
       <div class="v4-civic-grid">
         <article class="v4-civic-card tone-mint">
@@ -210,10 +210,10 @@
           ${lifeItem ? v4ItemControl(lifeItem, "30秒で読む") : `<button class="v4-inline-cta" type="button" data-v2-nav="notifications">新着を見る <span aria-hidden="true">→</span></button>`}
         </article>
         <article class="v4-civic-card tone-lavender">
-          <div class="v4-civic-badge"><span aria-hidden="true">👥</span> だれが決めた？</div>
+          <div class="v4-civic-badge"><span aria-hidden="true">🏛️</span> 次の市議会</div>
           <h3>${esc(council?.nextDateLabel || council?.title || "市議会の日程を確認中")}</h3>
-          <p>${esc(v4Short(council?.nextSummary || council?.summary || "会議から、決まるまでの流れを見られます。", 82))}</p>
-          <button class="v4-inline-cta" type="button" data-v2-action="decision">流れを見る <span aria-hidden="true">→</span></button>
+          <p>${esc(v4Short(council?.nextSummary || council?.summary || "直方市議会の公式日程を確認しています。", 82))}</p>
+          <button class="v4-inline-cta" type="button" data-v2-action="meeting">日程を見る <span aria-hidden="true">→</span></button>
         </article>
       </div>
     </section>`;
@@ -224,7 +224,7 @@
     const sample = bus ? "10月からバスはどう変わる？" : "今度の市議会はいつ？";
     return `<section class="v4-ask-bar" aria-labelledby="v4-ask-title">
       <div class="v4-ask-mascot"><img src="${V4_ASSETS.mascot}" alt="" loading="lazy" decoding="async"></div>
-      <div class="v4-ask-copy"><p>市の情報から答えます</p><h2 id="v4-ask-title">まちナビに聞く</h2><button type="button" data-v2-action="ask"><span>${esc(sample)}</span><b aria-hidden="true">→</b></button><small>市の資料で分からないことは、そう伝えます。</small></div>
+      <div class="v4-ask-copy"><p>市の資料から答えを探します</p><h2 id="v4-ask-title">まちナビに聞く</h2><button type="button" data-v2-action="ask"><span>${esc(sample)}</span><b aria-hidden="true">→</b></button><small>見つからないときは、推測せず「確認できません」と伝えます。</small></div>
     </section>`;
   }
 
@@ -248,9 +248,8 @@
       <div class="v2-sync-wrap v4-sync-wrap">${syncBanner()}</div>
       ${state.v2Preferences?.civicDigest === "off" ? "" : v4CivicLayer()}
       ${v4AskBar()}
-      ${v4ParticipationTeaser()}
       ${v2LifeAndLatest()}
-      <p class="v2-disclaimer">MYTOWNは直方市の公式アプリではありません。掲載しているのは、現在取り込めた市の公開情報です。手続き・期限・選挙などの大切な情報は、市の元ページでも確認してください。</p>
+      <p class="v2-disclaimer">MYTOWNは、直方市の公開情報をもとにした非公式アプリです。掲載範囲は、現在取り込めた情報に限られます。手続き・期限・選挙は、直方市のページで最終確認してください。</p>
     </div></section>`;
   };
 
@@ -291,23 +290,23 @@
     const shown = items.filter(activeFilter.test);
 
     return `<section class="page v2-page v2-inner-page v4-events-page">
-      <button class="back-button" type="button" data-v2-action="home">‹ きょうへ</button>
+      <button class="back-button" type="button" data-v2-action="back-route">‹ 戻る</button>
       <div class="v4-events-hero">
-        <div><p class="eyebrow">直方のイベント</p><h1>イベント・体験を探す</h1><p>現在は、直方市が公開しているイベント情報を掲載しています。地域団体などの情報は今後追加予定です。</p></div>
+        <div><p class="eyebrow">直方のイベント</p><h1>イベント・体験を探す</h1><p>直方市が公開しているイベントを探せます。</p></div>
         <img src="${V4_ASSETS.event}" alt="" aria-hidden="true" decoding="async">
       </div>
       <div class="v2-sync-wrap v4-sync-wrap">${syncBanner()}</div>
-      <div class="v4-event-page-note"><strong>掲載について</strong><p>直方市内すべてのイベントを掲載しているわけではありません。現在は、市が公開している情報を掲載しています。</p></div>
+      <div class="v4-event-page-note"><strong>掲載について</strong><p>市内のすべてのイベントを掲載しているわけではありません。地域団体などの情報は、今後追加する予定です。</p></div>
       <div class="v4-event-filter-row" aria-label="イベントの種類で絞る">${filters.map((filter) => `<button type="button" class="${active === filter.id ? "is-active" : ""}" data-v4-event-filter="${esc(filter.id)}">${esc(filter.label)} <span>${filter.count}</span></button>`).join("")}</div>
       <div class="v4-event-results-head"><h2>${esc(activeFilter.label)}</h2><span>${shown.length}件</span></div>
-      <div class="v4-event-list">${shown.length ? shown.map(v4EventListCard).join("") : emptyCard("この種類のイベントは見つかりませんでした。別の種類も見てください。")}</div>
+      <div class="v4-event-list">${shown.length ? shown.map(v4EventListCard).join("") : emptyCard("この種類のイベントは見つかりませんでした。上の分類から別の種類を選んでください。")}</div>
       <section class="v4-event-contribute"><div><small>載っていないイベントがありますか？</small><h2>イベント情報の受付は準備中です</h2><p>主催者や市民からの情報受付は、確認方法と安全対策を整えてから始めます。</p></div><button type="button" data-v2-action="participate">準備中の内容を見る →</button></section>
     </section>`;
   }
 
   function v4ParticipationView() {
     return `<section class="page v2-page v2-inner-page v4-participation-page">
-      <button class="back-button" type="button" data-v2-action="home">‹ きょうへ</button>
+      <button class="back-button" type="button" data-v2-action="back-route">‹ 戻る</button>
       <div class="v2-inner-hero"><div><p class="eyebrow">まちに参加する</p><h1>イベントや地域活動に参加する</h1><p>イベント情報の掲載や、短時間のボランティア募集を受け付ける仕組みを準備しています。</p></div></div>
       <div class="v4-participation-grid">
         <article><span class="v4-status-chip">準備中</span><div class="v4-participation-icon" aria-hidden="true">🎪</div><h2>イベントを載せる</h2><p>主催者から日時・場所・市のページなどの情報を受け付け、確認後に掲載する仕組みを準備しています。現在はまだ投稿できません。</p><button type="button" data-v2-action="events">現在のイベントを見る →</button></article>
@@ -322,12 +321,13 @@
     const eventCount = v4EventItems().length;
     const bulletin = typeof v2CurrentBulletin === "function" ? v2CurrentBulletin() : null;
     return `<div class="v2-search-intro"><section class="v2-popular-search" aria-labelledby="v2-popular-title"><h2 id="v2-popular-title">検索の例</h2><div class="v2-query-chips">${["イベント", "バス", "ごみ", "子育て", "学校"].map((query) => `<button type="button" data-v2-query="${esc(query)}">${esc(query)}</button>`).join("")}</div></section>
-      <section class="v2-search-groups" aria-label="探し方"><button type="button" data-v2-action="events"><strong>イベント</strong><span>${eventCount ? `${eventCount}件掲載中` : "イベント・体験を探す"}</span></button><button type="button" data-v2-action="deadline"><strong>まだ間に合う</strong><span>${deadlines.length ? `${deadlines.length}件掲載中` : "募集・申込を探す"}</span></button><button type="button" data-v2-action="services"><strong>制度・手続き</strong><span>子育て・暮らしの手続き</span></button><button type="button" data-v2-action="nearby"><strong>近くで何がある？</strong><span>場所が分かる情報</span></button><button type="button" data-v2-action="decision"><strong>市長・市議会</strong><span>決まるまでの流れ</span></button>${bulletin ? `<button type="button" data-v2-query="市報"><strong>市報</strong><span>${esc(bulletin.title || "最新号")}</span></button>` : ""}</section><p class="v2-search-note">現在取り込んでいる市の公開情報から検索します。</p></div>`;
+      <section class="v2-search-groups" aria-label="探し方"><button type="button" data-v2-action="events"><strong>イベント</strong><span>${eventCount ? `${eventCount}件掲載中` : "イベント・体験を探す"}</span></button><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><span>${deadlines.length ? `${deadlines.length}件掲載中` : "募集・申し込みを探す"}</span></button><button type="button" data-v2-action="services"><strong>制度・手続き</strong><span>子育て・暮らしの手続き</span></button><button type="button" data-v2-action="nearby"><strong>地図</strong><span>場所を確認できる情報</span></button><button type="button" data-v2-action="decision"><strong>市長・市議会</strong><span>役割・議員・選挙</span></button>${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報</strong><span>${esc(bulletin.title || "最新号")}</span></button>` : ""}</section><p class="v2-search-note">現在取り込んでいる市の公開情報から検索します。</p></div>`;
   };
 
   v2MenuView = function v4MenuView() {
     const eventCount = v4EventItems().length;
-    return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">メニュー</p><h1>やりたいことから選ぶ</h1><p>イベント、暮らし、市の動きをまとめて探せます。</p></div></div><div class="v2-menu-grid v4-menu-grid"><button type="button" data-v2-action="events"><strong>イベント・おでかけ</strong><small>${eventCount ? `${eventCount}件掲載中` : "体験・教室も探す"}</small></button><button type="button" data-v2-action="nearby"><strong>近くで何がある？</strong><small>施設・イベント・工事など</small></button><button type="button" data-v2-action="deadline"><strong>まだ間に合う</strong><small>申し込み・募集・意見募集</small></button><button type="button" data-v2-action="services"><strong>制度・手続き</strong><small>子育て・暮らしから</small></button><button type="button" data-v2-action="decision"><strong>市長・市議会</strong><small>決まるまでの流れ</small></button><button type="button" data-v2-action="ask"><strong>まちナビに聞く</strong><small>市の資料をもとに案内</small></button><button type="button" data-v2-action="participate"><strong>イベント掲載・ボランティア</strong><small>受付機能は準備中</small></button><button type="button" data-v2-action="settings"><strong>地域・テーマを設定</strong><small>このスマホだけに保存</small></button><button type="button" data-v2-action="glossary"><strong>役所ことば図鑑</strong><small>難しい言葉をやさしく</small></button><button type="button" data-v2-action="money"><strong>直方市の予算</strong><small>市の資料と照合した数字だけ</small></button></div><div class="v2-menu-note card info-card"><h2>MYTOWNの約束</h2><p>分からないことは分からないと表示します。政治家をAIが採点・評価しません。大事な情報には市の元資料へのリンクを付けます。</p></div></section>`;
+    const bulletin = typeof v2CurrentBulletin === "function" ? v2CurrentBulletin() : null;
+    return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">メニュー</p><h1>やりたいことから選ぶ</h1><p>イベント、暮らし、市の動きをまとめて探せます。</p></div></div><div class="v2-menu-grid v4-menu-grid"><button type="button" data-v2-action="events"><strong>イベント・おでかけ</strong><small>${eventCount ? `${eventCount}件掲載中` : "体験・教室も探す"}</small></button><button type="button" data-v2-action="nearby"><strong>地図から探す</strong><small>施設・イベント・工事など</small></button><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><small>申し込み・募集・意見募集</small></button><button type="button" data-v2-action="services"><strong>制度・手続き</strong><small>子育て・暮らしから</small></button>${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報のおがた</strong><small>${esc(bulletin.title || "最新号")}</small></button>` : ""}<button type="button" data-v2-action="decision"><strong>市長・市議会</strong><small>役割・議員・選挙</small></button><button type="button" data-v2-action="ask"><strong>まちナビに聞く</strong><small>市の資料から答えを探す</small></button><button type="button" data-v2-action="participate"><strong>イベント掲載・ボランティア</strong><small>受付機能は準備中</small></button><button type="button" data-v2-action="settings"><strong>地域と表示順を設定</strong><small>このブラウザだけに保存</small></button><button type="button" data-v2-action="glossary"><strong>役所ことば図鑑</strong><small>難しい言葉をやさしく</small></button><button type="button" data-v2-action="money"><strong>直方市の予算</strong><small>市の資料と照合した数字だけ</small></button></div><div class="v2-menu-note card info-card"><h2>MYTOWNの約束</h2><p>公開資料で確認できないことは、推測で補いません。人物の評価や採点はしません。大切な情報には、確認に使った直方市のページへのリンクを付けます。</p></div></section>`;
   };
 
   function v4PatchActionSheet() {

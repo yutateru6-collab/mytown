@@ -35,7 +35,7 @@ function electionStatusExplanation(record) {
 }
 
 function electionHistoryCard(record) {
-  if (!record) return `<div class="card info-card"><h2>2023年市議選</h2><p>現在の議員名と2023年の公式選挙資料を安全に対応付けできませんでした。推測では補いません。</p></div>`;
+  if (!record) return `<div class="card info-card"><h2>2023年市議選</h2><p>現在の議員と2023年市議選の候補者が同じ人物か、公式資料だけでは確実に確認できませんでした。推測では結び付けていません。</p></div>`;
   return `<div class="card election-history-card">
     <div class="split-head"><div><span class="pill verified">2023年の市の選挙資料</span><h2>2023年市議選の記録</h2></div><strong>${esc(record.result === "当" ? "当選" : "落選")}</strong></div>
     <p class="history-note">${esc(electionStatusExplanation(record))}</p>
@@ -64,11 +64,11 @@ memberView = function memberViewWithElectionHistory() {
       ${m.steering ? `<div class="card info-card"><small>議会運営委員会</small><strong>${esc(m.steering)}</strong></div>` : ""}
       <div class="card info-card"><small>会派</small><strong>${esc(faction?.name || "公式一覧から確認できず")}</strong></div>
     </div>
-    ${faction ? `<div class="caution-card"><strong>⚠️ 会派の所属は確認日をご覧ください</strong><p>この所属は直方市公式の会派一覧（${esc(state.politics.factions.membershipBasisDate)}現在）を基にしています。現在も同じ所属とは限りません。</p></div>` : ""}
+    ${faction ? `<div class="caution-card"><strong>会派所属は${esc(politicsJapaneseDate(state.politics.factions.membershipBasisDate))}時点</strong><p>直方市の会派一覧で確認した所属です。現在の所属と異なる場合があります。</p></div>` : ""}
 
     ${electionHistoryCard(record)}
 
-    <div class="section"><div class="section-head"><div><h2>2026年6月の一般質問</h2><p>${esc(m.recentQuestionsLabel || "2026年6月定例会")}</p></div></div>${m.recentQuestions?.length ? `<div class="question-topic-list">${m.recentQuestions.map((q) => `<div class="topic-card"><span>🙋</span><p>${esc(q)}</p></div>`).join("")}</div>` : `<div class="card info-card"><p>2026年6月の一般質問通告一覧に、この議員の記載はありませんでした。</p><p class="muted">これは「活動していない」という意味ではありません。</p></div>`}${sourceLink(c.questionsSourceUrl, "2026年6月の一般質問通告一覧")}</div>
+    <div class="section"><div class="section-head"><div><h2>2026年6月定例会の一般質問</h2><p>${esc(m.recentQuestionsLabel || "2026年6月定例会")}</p></div></div>${m.recentQuestions?.length ? `<div class="question-topic-list">${m.recentQuestions.map((q) => `<div class="topic-card"><span>🙋</span><p>${esc(q)}</p></div>`).join("")}</div>` : `<div class="card info-card"><p>今回確認した2026年6月定例会の一覧には、この議員の記載がありません。</p><p class="muted">議員活動全体を示すものではありません。</p></div>`}${sourceLink(c.questionsSourceUrl, "2026年6月の一般質問通告一覧")}</div>
 
     <div class="card info-card"><h2>当選回数は？</h2><p>${record ? esc(electionStatusExplanation(record)) : esc(c.historyNote || "現在の資料だけでは確認できません。")}</p><p class="muted">過去の選挙資料を続けて確認できた場合にだけ、当選回数を表示します。</p>${guideBubble("確認できない当選回数は推測しません。確認できた選挙記録を一つずつ追加します。")}</div>
     ${sourceLink(c.membersSourceUrl, "現在の公式議員名簿")}
@@ -91,7 +91,7 @@ electionsView = function electionsViewWithHistory() {
   const e = state.politics.elections || {};
   const history = state.electionHistory || ELECTION_HISTORY_FALLBACK;
   const past = history.election;
-  return `<section class="page politics-page">${politicsBackButton()}<div class="hero"><p class="eyebrow">🗳️ 選挙</p><h1>次の選挙と、2023年の結果</h1><p>次の選挙予定と、2023年の市議選結果を確認できます。</p></div>
+  return `<section class="page politics-page">${politicsBackButton()}<div class="hero"><p class="eyebrow">🗳️ 選挙</p><h1>次の選挙と、2023年の結果</h1><p>任期満了日と2023年の市議選結果を確認できます。次回選挙の投票日は、まだ公式発表されていません。</p></div>
     ${guideBubble("任期が終わる日と投票日は同じとは限りません。得票数は2023年の選挙結果で、現在の支持を示すものではありません。")}
     <div class="election-list">${(e.items || []).map((x) => `<div class="card election-card"><span class="pill verified">市の資料で確認</span><h2>${esc(x.name)}</h2><div class="election-date"><small>任期が終わる日</small><strong>${esc(x.termEnd)}</strong></div><div class="election-date"><small>投票日</small><strong>${x.scheduledDate ? esc(x.scheduledDate) : "まだ公式発表なし"}</strong></div></div>`).join("")}</div>
     <div class="card beginner-card"><h2>そもそも「任期」って？</h2><p>その役職を担当する期間のこと。「任期満了日」は今の期間がいったん終わる日です。</p><p><strong>大事：</strong>任期満了日と選挙の投票日は同じとは限りません。</p></div>

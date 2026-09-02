@@ -98,6 +98,7 @@ jobs:
           test -s assets/illustrations/card-deadline.svg
           test -s assets/illustrations/card-services.svg
           test -s assets/illustrations/card-decision.svg
+          test -s assets/illustrations/card-bulletin.svg
           python scripts/verify_image_density.py
           grep -q 'cp -R assets _site/assets' .github/workflows/pages.yml
 
@@ -106,8 +107,8 @@ jobs:
           python scripts/verify_ux_contract.py
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
-          grep -q '>調べる</span>' index.html
-          grep -q 'mytown-civic-v19-map-bulletin' sw.js
+          grep -q '>さがす</span>' index.html
+          grep -q 'mytown-civic-v20-copy-clarity' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
@@ -129,14 +130,15 @@ jobs:
           grep -q 'bulletin-reader-frame' bulletin-reader.js
           grep -q 'wholePdfUrl' bulletin-reader.js
           grep -q '直方のイベント' ui-home-v4.js
-          grep -q '決まり方を見る' ui-home-v4.js
+          grep -q '次の市議会' ui-home-v4.js
           grep -q 'card-nearby.svg' ui-home-v5.css
           grep -q 'card-deadline.svg' ui-home-v5.css
           grep -q 'card-services.svg' ui-home-v5.css
-          grep -q 'card-decision.svg' ui-home-v5.css
+          grep -q 'card-bulletin.svg' ui-home-v5.css
           grep -q 'data-v2-nav="home"' index.html
+          grep -q 'data-v2-nav="nearby"' index.html
           grep -q 'data-v2-nav="search"' index.html
-          grep -q 'data-v2-nav="action"' index.html
+          ! grep -q 'data-v2-nav="action"' index.html
           grep -q 'data-v2-nav="notifications"' index.html
           grep -q 'data-v2-nav="menu"' index.html
           grep -q 'politics.js' index.html

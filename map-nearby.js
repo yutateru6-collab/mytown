@@ -189,12 +189,12 @@
     const points = currentMapPoints();
     return `<div class="mytown-map-card">
       <div class="mytown-map-head">
-        <div><p>地図で見る</p><h2>場所が分かる情報</h2></div>
+        <div><p>地図で探す</p><h2>位置を確認できた情報</h2></div>
         <span>${points.length}件</span>
       </div>
       ${points.length
-        ? `<div id="mytown-nearby-map" class="mytown-nearby-map" role="region" aria-label="直方市の場所が確認できる情報を表示した地図"><div class="mytown-map-loading">地図を読み込んでいます…</div></div><div id="mytown-map-detail" class="mytown-map-detail" aria-live="polite" hidden></div><p class="mytown-map-note">ピンは、住所と位置を確認できた情報だけ表示しています。ピンを押すと、この地図の下に内容が表示されます。</p>`
-        : `<div class="mytown-map-empty"><strong>地図に表示できる情報はまだありません</strong><span>住所と位置を確認できた情報から追加します。</span></div>`}
+        ? `<div id="mytown-nearby-map" class="mytown-nearby-map" role="region" aria-label="直方市の場所が確認できる情報を表示した地図"><div class="mytown-map-loading">地図を読み込んでいます…</div></div><div id="mytown-map-detail" class="mytown-map-detail" aria-live="polite" hidden></div><p class="mytown-map-note">位置まで確認できた情報だけ、ピンで表示しています。ピンを選ぶと、地図の下に内容が表示されます。</p>`
+        : `<div class="mytown-map-empty"><strong>位置まで確認できた情報は、まだありません</strong><span>地図にない情報は、下の一覧で確認できます。</span></div>`}
     </div>`;
   }
 

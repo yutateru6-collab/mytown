@@ -9,7 +9,7 @@ if (typeof syncBanner === "function") {
   syncBanner = function syncBannerWithSourceHealth() {
     const { generatedAt, verifiedOn, sourceHealth = [] } = state.data;
     if (state.loadError) {
-      return `<div class="sync-banner is-warning" role="status"><strong>市の情報を読み込めませんでした</strong><span>現在は一部の情報だけを表示しています。市のページで最新情報を確認してください。</span></div>`;
+      return `<div class="sync-banner is-warning" role="status"><strong>市の情報を読み込めませんでした</strong><span>現在は一部の情報だけを表示しています。</span><button class="text-button" type="button" data-v2-action="reload">もう一度読み込む</button><a href="https://www.city.nogata.fukuoka.jp/" target="_blank" rel="noopener noreferrer">直方市のページを開く ↗</a></div>`;
     }
     const failed = sourceHealth.filter((source) => source.status !== "ok");
     if (failed.length) {

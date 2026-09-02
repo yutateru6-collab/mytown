@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v19-map-bulletin";
+const CACHE = "mytown-civic-v20-copy-clarity";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -32,6 +32,7 @@ const STATIC_ASSETS = [
   "./assets/illustrations/card-deadline.svg?v=16",
   "./assets/illustrations/card-services.svg?v=16",
   "./assets/illustrations/card-decision.svg?v=16",
+  "./assets/illustrations/card-bulletin.svg?v=17",
   "./data/latest.json",
   "./data/bulletin.json",
   "./data/politics.json",

@@ -37,6 +37,12 @@ def clean(value: str) -> str:
     return re.sub(r"\s+", " ", unescape(value or "")).strip()
 
 
+def normalize_agenda(value: str) -> str:
+    """Normalize spacing and brackets without changing the official wording."""
+    agenda = clean(value).replace("(", "（").replace(")", "）")
+    return re.sub(r"\s+（", "（", agenda)
+
+
 def session_rank(label: str) -> tuple[int, int] | None:
     match = re.search(r"令和\s*(\d+)\s*年\s*(\d{1,2})\s*月\s*(?:定例会|臨時会)日程", clean(label))
     if not match:
@@ -185,7 +191,7 @@ def parse_schedule_html(html: str, source_url: str) -> dict:
             continue
         date_label = clean(row[0])
         weekday = clean(row[1])
-        agenda = clean(" ".join(row[2:]))
+        agenda = normalize_agenda(" ".join(row[2:]))
         if date_label == "日付" or weekday == "曜日" or not agenda:
             continue
 
