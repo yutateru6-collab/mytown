@@ -235,15 +235,32 @@
   display: none;
 }
 
-/* 弁当カードは上側に余白を溜めず、内容を自然に上寄せする。 */
+/*
+  弁当カードは Safari の button 内部レイアウトに任せず、
+  flex-column で先頭から明示的に上詰めする。
+  これでカード上部に残っていた空白をなくす。
+*/
 .v4-bento-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0;
   padding-top: 7px;
   padding-bottom: 9px;
 }
 
 .v4-bento-kicker {
+  flex: 0 0 auto;
   min-height: 22px;
+  margin: 0;
   padding-block: 2px;
+}
+
+.v4-bento-card > strong,
+.v4-bento-card > small {
+  width: 100%;
+  flex: 0 0 auto;
 }
 
 .v4-bento-card > strong {
@@ -260,8 +277,7 @@
 
 @media (max-width: 460px) {
   .v4-bento-card {
-    padding-top: 6px;
-    padding-bottom: 8px;
+    padding: 6px 52px 8px 11px;
   }
 
   .v4-bento-card > b {
