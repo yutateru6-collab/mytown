@@ -334,9 +334,9 @@ function discoverView() {
 
 function askView(answer = "") {
   return `<section class="page">
-    <div class="hero"><p class="eyebrow">直方のことを聞く</p><h1>ふつうの言葉で聞く。</h1><p>このMVPでは、同期済みの公式データだけから答えます。</p></div>
+    <div class="hero"><p class="eyebrow">公式情報に質問</p><h1>ふつうの言葉で聞く。</h1><p>同期済みの公式資料に直接答えがある質問だけに回答します。</p></div>
     ${syncBanner()}
-    <div class="ask-panel"><h2>何が気になる？</h2><p>AIが想像して答えるのではなく、今ある公式データから答えられる範囲だけ返します。</p><form class="ask-form" id="ask-form"><input id="ask-input" type="text" placeholder="10月からバスどう変わる？" autocomplete="off" aria-label="直方について質問"><button class="primary-button" type="submit">聞く</button></form><div class="suggestion-list"><button class="suggestion-chip" type="button" data-question="10月からバスどう変わる？">10月からバスどう変わる？</button><button class="suggestion-chip" type="button" data-question="今度の市議会いつ？">今度の市議会いつ？</button><button class="suggestion-chip" type="button" data-question="ごみの収集日は？">ごみの収集日は？</button><button class="suggestion-chip" type="button" data-question="直方の人口は？">直方の人口は？</button></div></div>
+    <div class="ask-panel"><h2>何が気になる？</h2><p>質問の一部に関係する言葉があっても、質問そのものに答える資料がなければ「確認できません」と返します。</p><form class="ask-form" id="ask-form"><input id="ask-input" type="text" placeholder="10月からバスどう変わる？" autocomplete="off" aria-label="直方について質問"><button class="primary-button" type="submit">聞く</button></form><div class="suggestion-list"><button class="suggestion-chip" type="button" data-question="10月からバスどう変わる？">10月からバスどう変わる？</button><button class="suggestion-chip" type="button" data-question="今度の市議会いつ？">今度の市議会いつ？</button><button class="suggestion-chip" type="button" data-question="ごみの収集日は？">ごみの収集日は？</button><button class="suggestion-chip" type="button" data-question="直方の人口は？">直方の人口は？</button></div></div>
     ${answer}
   </section>`;
 }
@@ -345,36 +345,30 @@ function answerFor(question) {
   const q = normalizeQuery(question);
   if (!q) return "";
   const d = state.data;
-  let title = "確認できる範囲では";
-  let body = "今の同期データだけでは、その質問に正確に答えられません。推測では補いません。";
-  let url = "https://www.city.nogata.fukuoka.jp/";
+  let answer = null;
 
   const bus = d.featured.find((x) => /バス|路線と時刻表/.test(x.title));
-  if (/バス|路線|時刻/.test(q) && bus) {
-    title = "10月1日からコミュニティバスが変わります";
-    body = bus.summary;
-    url = bus.sourceUrl;
-  } else if (/議会|定例会|市議会/.test(q) && d.council) {
-    title = d.council.title;
-    body = `${d.council.nextDateLabel || ""} ${d.council.nextSummary || d.council.summary || ""}`.trim();
-    url = d.council.sourceUrl;
-  } else if (/ごみ|収集|カン|ビン|燃や/.test(q) && d.garbage) {
-    title = "ごみ・資源リサイクルの収集日";
-    body = d.garbage.summary;
-    url = d.garbage.sourceUrl;
+  if (/バス|路線|時刻|バス停/.test(q) && /変|どう|いつ|路線|時刻|バス停|運行/.test(q) && bus) {
+    answer = { title: "10月1日からコミュニティバスが変わります", body: bus.summary, url: bus.sourceUrl };
+  } else if (/議会|定例会|市議会/.test(q) && /いつ|日程|次|何|内容|予定/.test(q) && d.council) {
+    answer = { title: d.council.title, body: `${d.council.nextDateLabel || ""} ${d.council.nextSummary || d.council.summary || ""}`.trim(), url: d.council.sourceUrl };
+  } else if (/ごみ|収集|カン|ビン|燃や/.test(q) && /いつ|日|曜日|捨て|出す|収集/.test(q) && d.garbage) {
+    answer = { title: "ごみ・資源リサイクルの収集日", body: d.garbage.summary, url: d.garbage.sourceUrl };
   } else if (/人口|何人|世帯/.test(q)) {
-    title = `直方市の人口は ${Number(d.population.total || 0).toLocaleString("ja-JP")}人`;
-    body = `${d.population.asOf}現在。世帯数は ${Number(d.population.households || 0).toLocaleString("ja-JP")}世帯です。`;
-    url = d.population.sourceUrl;
-  } else if (/ピラティス|運動|体育/.test(q)) {
+    answer = { title: `直方市の人口は ${Number(d.population.total || 0).toLocaleString("ja-JP")}人`, body: `${d.population.asOf}現在。世帯数は ${Number(d.population.households || 0).toLocaleString("ja-JP")}世帯です。`, url: d.population.sourceUrl };
+  } else if (/ピラティス/.test(q) && /いつ|どこ|申込|申し込|料金|参加|募集/.test(q)) {
     const item = d.featured.find((x) => /ピラティス/.test(x.title));
-    if (item) { title = item.title; body = item.summary; url = item.sourceUrl; }
-  } else if (/就学|健康診断|入学|小学校/.test(q)) {
+    if (item) answer = { title: item.title, body: item.summary, url: item.sourceUrl };
+  } else if (/就学|健康診断/.test(q) && /いつ|どこ|対象|会場|日程/.test(q)) {
     const item = d.featured.find((x) => /就学時健康診断/.test(x.title));
-    if (item) { title = item.title; body = item.summary; url = item.sourceUrl; }
+    if (item) answer = { title: item.title, body: item.summary, url: item.sourceUrl };
   }
 
-  return `<div class="card answer-card"><span class="pill verified">同期済み公式情報</span><h3>${esc(title)}</h3><p>${esc(body)}</p>${sourceLink(url, "根拠の公式ページ")}</div>`;
+  if (!answer) {
+    return `<div class="card answer-card" role="status"><span class="pill">公開資料で確認できず</span><h3>その質問には、現在の資料から直接答えられません</h3><p>質問に関係しそうな別の情報を、答えの代わりには表示しません。言葉を変えて検索するか、公式窓口で確認してください。</p><p class="muted">入力した質問：${esc(question)}</p></div>`;
+  }
+
+  return `<div class="card answer-card" role="status"><span class="pill verified">質問に対応する公式情報</span><h3>${esc(answer.title)}</h3><p>${esc(answer.body)}</p>${sourceLink(answer.url, "根拠の公式ページ")}</div>`;
 }
 
 function detailView(item) {
@@ -394,10 +388,37 @@ function detailView(item) {
   </section>`;
 }
 
+function renderDecisionEvidence(item) {
+  const timeline = Array.isArray(item.decisionTimeline) ? item.decisionTimeline : [];
+  const unknowns = Array.isArray(item.decisionUnknowns) ? item.decisionUnknowns : [];
+  const sources = Array.isArray(item.decisionSources) ? item.decisionSources : [];
+  if (!timeline.length && !unknowns.length && !sources.length) return "";
+  return `<div class="decision-evidence">
+    ${timeline.length ? `<h3>公式資料で追える経緯</h3><ol class="decision-timeline">${timeline.map((step) => `<li><div class="decision-date"><time>${esc(step.date || "日付確認中")}</time>${step.status ? `<span class="pill">${esc(step.status)}</span>` : ""}</div><h4>${esc(step.title || "確認できた出来事")}</h4><p>${esc(step.detail || "")}</p>${step.url ? sourceLink(step.url, "この段階の公式資料") : ""}</li>`).join("")}</ol>` : ""}
+    ${unknowns.length ? `<div class="decision-unknowns"><h3>まだ確認できないこと</h3><ul class="plain-list">${unknowns.map((fact) => `<li>${esc(fact)}</li>`).join("")}</ul><p>資料が見つかるまで、推測で「決定」とは表示しません。</p></div>` : ""}
+    ${sources.length ? `<div class="decision-source-list"><h3>この経緯に使った一次資料</h3>${sources.map((source) => sourceLink(source.url, source.label || "公式資料を見る")).join("")}</div>` : ""}
+  </div>`;
+}
+
 function renderDetailSection(item, section) {
   if (!section || section === "what") {
     const bullets = Array.isArray(item.bullets) ? item.bullets : [];
-    return `<div class="card info-card"><h2>30秒でいうと</h2><p>${esc(item.summary || "")}</p>${item.location ? `<p class="fact-line"><strong>場所：</strong>${esc(item.location)}</p>` : ""}${item.when ? `<p class="fact-line"><strong>いつ：</strong>${esc(item.when)}</p>` : ""}${bullets.length ? `<ul class="plain-list">${bullets.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}${sourceLink(item.sourceUrl)}${item.pdfUrl ? sourceLink(item.pdfUrl, "市報PDFを見る") : ""}</div>`;
+    const confirmed = [
+      item.when ? `時期・日程：${item.when}` : "",
+      item.location ? `場所：${item.location}` : "",
+      ...bullets,
+    ].filter(Boolean);
+    const sourceDate = item.sourceUpdated || item.published || state.data.verifiedOn || "確認中";
+    return `<div class="detail-layers">
+      <div class="card info-card detail-layer"><span class="detail-layer-label">MYTOWNによる30秒要約</span><h2>30秒でいうと</h2><p>${esc(item.summary || "")}</p></div>
+      <div class="card info-card detail-layer"><span class="detail-layer-label">3分で背景まで</span><h2>もう少しくわしく</h2>
+        <h3>公式資料で確認できた事実</h3>${confirmed.length ? `<ul class="plain-list">${confirmed.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p>この項目について、追加で整理できる事実はまだありません。</p>`}
+        <h3>なぜ？</h3><p>${esc(item.why || "この公式ページだけからは、理由を十分に確認できません。推測では補いません。")}</p>
+        <h3>お金</h3>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>この公式ページからは、費用・予算額を確認できません。</p>`}
+        <h3>誰が、どう決めた？</h3><p>${esc(item.decision || "このページだけでは、提案・審議・契約などの意思決定全体を確認できません。")}</p>${renderDecisionEvidence(item)}
+      </div>
+      <div class="card info-card detail-layer source-layer"><span class="detail-layer-label">原文・一次資料</span><h2>情報源</h2><dl class="source-facts"><div><dt>公開主体</dt><dd>直方市</dd></div><div><dt>公式公開・更新</dt><dd>${esc(sourceDate)}</dd></div><div><dt>MYTOWN最終確認</dt><dd>${esc(state.data.verifiedOn || formatDateTime(state.data.generatedAt) || "確認中")}</dd></div></dl>${sourceLink(item.sourceUrl, "公式原文を見る")}${item.pdfUrl ? sourceLink(item.pdfUrl, "市報PDFを見る") : ""}</div>
+    </div>`;
   }
   if (section === "why") {
     return `<div class="card info-card"><h2>なんで？</h2><p>${esc(item.why || "この公式ページだけからは、理由を十分に確認できません。推測では補いません。")}</p>${sourceLink(item.sourceUrl)}</div>`;
@@ -405,7 +426,7 @@ function renderDetailSection(item, section) {
   if (section === "money") {
     return `<div class="card info-card"><h2>いくら？</h2>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>この公式ページからは、この情報に関する費用・予算額を確認できません。</p>`}${sourceLink(item.sourceUrl)}</div>`;
   }
-  return `<div class="card info-card"><h2>誰が決めた？</h2><p>${esc(item.decision || "このページだけでは、提案・予算・議会・契約までの意思決定全体を確認できません。関連する議案・予算・会議録を一次資料同士で結び付ける機能は次の開発段階です。")}</p>${sourceLink(item.sourceUrl)}</div>`;
+  return `<div class="card info-card"><h2>誰が決めた？</h2><p>${esc(item.decision || "このページだけでは、提案・予算・議会・契約までの意思決定全体を確認できません。関連する議案・予算・会議録を一次資料同士で結び付ける機能は次の開発段階です。")}</p>${renderDecisionEvidence(item)}${sourceLink(item.sourceUrl, "変更案内の公式原文")}</div>`;
 }
 
 function moneyView() {

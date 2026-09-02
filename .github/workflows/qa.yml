@@ -55,6 +55,7 @@ jobs:
           python -m py_compile scripts/pdf_tools.py
           python -m py_compile scripts/verify_sources.py
           python -m py_compile scripts/verify_high_risk.py
+          python -m py_compile scripts/verify_ux_contract.py
 
       - name: JSON validity
         run: |
@@ -84,19 +85,13 @@ jobs:
           test -s assets/icons/decision.webp
           grep -q 'cp -R assets _site/assets' .github/workflows/pages.yml
 
-      - name: Supplied reference UI
+      - name: Citizen-first UX contract
         run: |
-          grep -q 'reference-ui.css' index.html
-          grep -q 'reference-top-1.js' index.html
-          grep -q 'reference-top-4.js' index.html
-          grep -q 'reference-ui.js' index.html
-          grep -q 'Our City 直方市' reference-ui.js
-          grep -q '提案する' reference-ui.js
-          grep -q '投票する' reference-ui.js
-          grep -q '意見をみる' reference-ui.js
-          grep -q '進みぐあい' reference-ui.js
-          grep -q '864/930' reference-ui.css
-          grep -q 'mytown-civic-v9-reference' sw.js
+          python scripts/verify_ux_contract.py
+          ! grep -q 'reference-ui' index.html
+          ! grep -q '>提案する</span>' index.html
+          grep -q '>調べる</span>' index.html
+          grep -q 'mytown-civic-v10-citizen-first' sw.js
 
       - name: Required citizen-first UX wiring
         run: |

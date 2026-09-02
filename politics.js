@@ -242,14 +242,17 @@ answerFor = function answerForWithPolitics(question) {
   const p = state.politics;
   const glossary = p.glossary || [];
   const term = glossary.find((x) => q.includes(normalizeQuery(x.formal)) || q.includes(normalizeQuery(x.easy).slice(0, 5)));
-  if (/市長/.test(q) && p.mayor) {
-    return `<div class="card answer-card"><span class="pill verified">公式資料ベース</span><h3>今の直方市長は ${esc(p.mayor.name)}</h3><p>${esc(p.mayor.term)}。公式記録では2019年に市長1期目、2023年に2期目に就任しています。</p><button class="text-button" type="button" data-tab="politics" data-open-politics="mayor">市長ページで詳しく見る →</button></div>`;
+  if (/市長/.test(q) && /誰|だれ|名前|氏名|現在|今の|任期|何期/.test(q) && p.mayor) {
+    return `<div class="card answer-card" role="status"><span class="pill verified">質問に対応する公式情報</span><h3>今の直方市長は ${esc(p.mayor.name)}</h3><p>${esc(p.mayor.term || "任期情報を確認中です")}。</p><button class="text-button" type="button" data-tab="politics" data-open-politics="mayor">市長ページで詳しく見る →</button></div>`;
   }
-  if (/選挙|市議選|市長選|任期/.test(q)) {
+  if (/市長/.test(q)) {
+    return `<div class="card answer-card" role="status"><span class="pill">公開資料で確認できず</span><h3>その市長に関する質問は、現在の公開資料から確認できません</h3><p>市長という言葉だけを手掛かりに、基本プロフィールを質問への答えとして表示することはしません。</p><button class="text-button" type="button" data-tab="politics" data-open-politics="mayor">参考として市長の基本情報を見る →</button></div>`;
+  }
+  if (/選挙|市議選|市長選|任期/.test(q) && /いつ|次|日|予定|投票|満了/.test(q)) {
     const mayorE = p.elections?.items?.[0]; const councilE = p.elections?.items?.[1];
     return `<div class="card answer-card"><span class="pill verified">公式資料ベース</span><h3>次の市長選・市議選</h3><p>市長の任期満了は ${esc(mayorE?.termEnd || "確認中")}、市議会議員は ${esc(councilE?.termEnd || "確認中")}。投票日は現時点で公式発表されていません。</p><p class="muted">任期満了日と投票日は別です。</p></div>`;
   }
-  if (term) {
+  if (term && /何|なに|意味|とは|教え|わから|どういう/.test(q)) {
     return `<div class="card answer-card"><span class="pill">正式名称：${esc(term.formal)}</span><h3>${esc(term.easy)}</h3><p>${esc(term.explain)}</p><div class="guide-mini"><span>🦖</span><p>${esc(term.guide)}</p></div></div>`;
   }
   return baseAnswerForPolitics(question);

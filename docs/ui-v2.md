@@ -1,4 +1,4 @@
-# MYTOWN UI v2 — Watercolor / Citizen-first
+# MYTOWN UI v3 — Compact Watercolor / Citizen-first
 
 ## Goal
 
@@ -6,11 +6,38 @@ MYTOWNの同期済み公式データ・政治透明化機能を残したまま�
 
 ## Home information architecture
 
-1. Watercolor hero — MYTOWN / 直方市 / 暮らしから、まちがわかる。
-2. Four entrances — 近くを見る / 使える制度 / まだ間に合う / 誰が決めた？
-3. Civic flow — 暮らし → 市役所 → 市議会（審議・採決）→ 決定・実行
-4. Dashboard — 場所 / 募集・期限 / 次の市議会 / お金 / 市報 / まちナビ
-5. Bottom navigation — ホーム / さがす / 調べる / お知らせ / メニュー
+1. Compact watercolor hero — 日付 / MYTOWN直方 / 地区設定 / まちナビ
+2. Daily life — 場所 / ごみ / 募集・期限 / 自分のテーマに近い注目情報
+3. Civic bridge — 次の市議会 / なぜ・誰が決めた / 公式情報への質問
+4. Secondary information — 公式新着 / 市報
+5. Bottom navigation — きょう / さがす / 調べる / お知らせ / メニュー
+
+The original supplied visual remains the design source, but it is no longer used as a
+single interactive screenshot. Scenery and the approved mascot remain image assets;
+dates, labels, cards and controls are semantic HTML.
+
+On viewports up to 520px, important content cards are single-column. Supporting text
+does not shrink to fit a three-column grid, and primary controls keep a 44px minimum
+target.
+
+## Personalization
+
+- Broad district text, interests and display-notification preferences are optional.
+- They are stored only in `localStorage` under `mytown-preferences-v1`.
+- Location permission, account registration and precise addresses are not requested.
+- A location match is only used when the saved text appears in a verified public
+  location field. No distance is inferred.
+
+## Information layers
+
+Every structured detail uses:
+
+1. MYTOWNによる30秒要約
+2. 3分で背景まで
+3. 原文・一次資料
+
+Missing reasons, costs or decision links are shown as unconfirmed rather than filled
+with guesses.
 
 ## Truthfulness rules
 

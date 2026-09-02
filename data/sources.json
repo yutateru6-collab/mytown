@@ -44,6 +44,24 @@
       "publishPolicy": "verified_summary"
     },
     {
+      "id": "nogata-public-transport-council",
+      "name": "直方市地域公共交通協議会",
+      "type": "html",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_14310.html",
+      "refreshHours": 24,
+      "riskLevel": "high",
+      "publishPolicy": "source_verified_only"
+    },
+    {
+      "id": "nogata-public-transport-plan-202606",
+      "name": "令和8年度第1回地域公共交通協議会 今後の取り組み資料",
+      "type": "pdf",
+      "url": "https://www.city.nogata.fukuoka.jp/library/koutsu/14310/R08/01/shiryou08.pdf",
+      "refreshHours": 24,
+      "riskLevel": "high",
+      "publishPolicy": "source_verified_only"
+    },
+    {
       "id": "nogata-school-health-check",
       "name": "就学時健康診断",
       "type": "html",
