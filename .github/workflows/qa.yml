@@ -87,6 +87,7 @@ jobs:
           test -s assets/icons/services.webp
           test -s assets/icons/deadline.webp
           test -s assets/icons/decision.webp
+          python scripts/verify_image_density.py
           grep -q 'cp -R assets _site/assets' .github/workflows/pages.yml
 
       - name: Citizen-first UX contract
@@ -95,7 +96,7 @@ jobs:
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
           grep -q '>調べる</span>' index.html
-          grep -q 'mytown-civic-v11-verified-services' sw.js
+          grep -q 'mytown-civic-v12-retina-assets' sw.js
 
       - name: Required citizen-first UX wiring
         run: |

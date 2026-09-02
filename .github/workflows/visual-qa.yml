@@ -1,0 +1,81 @@
+name: MYTOWN Visual QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "*.css"
+      - "*.js"
+      - "assets/**"
+      - "data/**"
+      - "scripts/capture_visual_qa.mjs"
+      - ".github/workflows/visual-qa.yml"
+  workflow_run:
+    workflows: ["Deploy MYTOWN to GitHub Pages"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-qa-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  screenshots:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout tested revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install pinned Playwright
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Start source preview
+        if: ${{ github.event_name != 'workflow_run' }}
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/mytown-http.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/mytown-http.log
+          exit 1
+
+      - name: Capture source screenshots
+        if: ${{ github.event_name != 'workflow_run' }}
+        env:
+          VISUAL_QA_URL: http://127.0.0.1:4173/
+          VISUAL_QA_DIR: visual-qa-output
+        run: node scripts/capture_visual_qa.mjs
+
+      - name: Capture deployed screenshots
+        if: ${{ github.event_name == 'workflow_run' }}
+        env:
+          VISUAL_QA_URL: https://yutateru6-collab.github.io/mytown/
+          VISUAL_QA_DIR: visual-qa-output
+        run: node scripts/capture_visual_qa.mjs
+
+      - name: Upload screenshots and density report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mytown-visual-qa-${{ github.run_id }}-${{ github.event_name }}
+          path: visual-qa-output
+          if-no-files-found: error
+          retention-days: 30
