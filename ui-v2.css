@@ -206,8 +206,9 @@ body.ui-v2 small { font-size: .8125rem; }
   gap: 16px;
 }
 .v2-ask-shortcut small { display: block; color: var(--v2-green-deep); font-size: .8125rem; font-weight: 850; }
-.v2-ask-shortcut strong { display: block; margin-top: 2px; font-size: 1rem; }
-.v2-ask-shortcut b { color: var(--v2-muted); font-size: .8125rem; line-height: 1.4; text-align: right; }
+.v2-ask-shortcut > span { flex: 0 0 auto; }
+.v2-ask-shortcut strong { display: block; margin-top: 2px; font-size: 1rem; white-space: nowrap; }
+.v2-ask-shortcut b { max-width: 16em; color: var(--v2-muted); font-size: .8125rem; line-height: 1.4; text-align: right; }
 .v2-civic-path {
   margin-top: 12px;
   padding: 14px 16px 16px;
@@ -506,6 +507,7 @@ body.ui-v2 small { font-size: .8125rem; }
   .v2-hero h1 { font-size: 1.4rem; }
   .v2-tagline { font-size: .8125rem; }
   .v2-overview-heading h2 { font-size: 1.12rem; }
+  .v2-overview-heading small { display: none; }
   .v2-ask-shortcut { align-items: flex-start; flex-direction: column; gap: 3px; }
   .v2-ask-shortcut b { text-align: left; }
   .v2-civic-path-heading { align-items: flex-start; }
