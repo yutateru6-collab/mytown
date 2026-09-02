@@ -119,13 +119,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-329da38db46d",
-      "category": "観光・イベント",
-      "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
+      "id": "rss-445bc72a3510",
+      "category": "その他",
+      "title": "就職に役立つセミナーも同時開催  ～合同会社説明会2026～",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-09-02",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_7488/_17263.html"
     }
   ],
   "council": {
@@ -144,6 +144,16 @@
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310.html"
   },
   "latest": [
+    {
+      "date": "2026-09-02",
+      "title": "就職に役立つセミナーも同時開催  ～合同会社説明会2026～",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_7488/_17263.html"
+    },
+    {
+      "date": "2026-09-02",
+      "title": "【募集開始】社会福祉士",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_15544.html"
+    },
     {
       "date": "2026-09-02",
       "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
@@ -193,16 +203,6 @@
       "date": "2026-09-01",
       "title": "ハーバリウムづくり体験～のおがたSDGsフェスタ2026 in イオンモール直方～",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17212.html"
-    },
-    {
-      "date": "2026-09-01",
-      "title": "シニアのためのミニしごと合同説明会（筑豊地区）",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_17128.html"
-    },
-    {
-      "date": "2026-09-01",
-      "title": "自分を輝かせ、素敵な就職と未来を手に入れよう！（令和8年度女性のための就職サポートセミナー）",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17158.html"
     }
   ],
   "sourceHealth": [
@@ -253,5 +253,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-02T00:37:02Z"
+  "generatedAt": "2026-09-02T06:37:56Z"
 }
