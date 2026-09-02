@@ -1,0 +1,169 @@
+/* MYTOWN Home v5 polish — tighter event card, distinct bento illustrations, cleaner hero wording. */
+
+/* 「MYTOWN 直方」→「MYTOWN」。直下の「今日の直方」と地名を重複させない。 */
+.ui-v2 .v2-wordmark span {
+  display: none;
+}
+
+/* イベント欄は情報量を保ったまま、縦の占有を少し圧縮。 */
+.v4-event-feature {
+  grid-template-columns: minmax(124px, .76fr) minmax(0, 1.44fr);
+  min-height: 198px;
+}
+
+.v4-event-art {
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+}
+
+.v4-event-art img {
+  width: 106%;
+  max-width: 250px;
+  transform: translate(0, 1%);
+}
+
+.v4-event-copy {
+  padding: 15px 17px 15px 11px;
+}
+
+.v4-event-copy h2 {
+  margin-top: 7px;
+  font-size: clamp(1.36rem, 4vw, 1.78rem);
+}
+
+.v4-event-copy h3 {
+  margin-top: 6px;
+  font-size: 1rem;
+}
+
+.v4-event-copy > p {
+  font-size: .875rem;
+  line-height: 1.48;
+}
+
+.v4-event-chips {
+  margin-top: 7px;
+}
+
+.v4-primary-cta {
+  min-height: 42px;
+  padding: 8px 16px;
+}
+
+/* 「今日、何を見よう？」は用途ごとに別の絵を割り当てる。 */
+.v4-bento-card > img {
+  display: none;
+}
+
+.v4-bento-card::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  right: 1px;
+  bottom: 1px;
+  width: 70px;
+  height: 70px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 5px 9px rgba(57, 75, 62, .08));
+}
+
+.v4-bento-card:nth-child(1)::after {
+  background-image: url("./assets/illustrations/card-nearby.svg?v=16");
+}
+
+.v4-bento-card:nth-child(2)::after {
+  background-image: url("./assets/illustrations/card-deadline.svg?v=16");
+}
+
+.v4-bento-card:nth-child(3)::after {
+  background-image: url("./assets/illustrations/card-services.svg?v=16");
+}
+
+.v4-bento-card:nth-child(4)::after {
+  background-image: url("./assets/illustrations/card-decision.svg?v=16");
+}
+
+.v4-bento-card {
+  padding-right: 58px;
+}
+
+@media (max-width: 620px) {
+  .v4-event-feature {
+    grid-template-columns: minmax(110px, .72fr) minmax(0, 1.48fr);
+    min-height: 194px;
+  }
+
+  .v4-event-art img {
+    width: 116%;
+    max-width: 225px;
+    transform: translate(0, 2%);
+  }
+
+  .v4-event-copy {
+    padding: 14px 14px 14px 8px;
+  }
+}
+
+@media (max-width: 460px) {
+  .v4-event-feature {
+    grid-template-columns: 104px minmax(0, 1fr);
+    min-height: 192px;
+    border-radius: 22px;
+  }
+
+  .v4-event-art {
+    padding: 4px 0;
+  }
+
+  .v4-event-art img {
+    width: 124%;
+    max-width: 205px;
+    transform: translate(0, 2%);
+  }
+
+  .v4-event-copy {
+    padding: 13px 12px 13px 7px;
+  }
+
+  .v4-event-topline {
+    gap: 3px;
+  }
+
+  .v4-event-copy h2 {
+    margin-top: 5px;
+    font-size: 1.23rem;
+  }
+
+  .v4-event-copy h3 {
+    margin: 5px 0 3px;
+    font-size: .92rem;
+    line-height: 1.32;
+  }
+
+  .v4-event-copy > p {
+    font-size: .78rem;
+    line-height: 1.42;
+  }
+
+  .v4-primary-cta {
+    min-height: 40px;
+    padding: 7px 12px;
+    font-size: .8125rem;
+  }
+
+  .v4-bento-card {
+    min-height: 132px;
+    padding: 11px 52px 11px 11px;
+  }
+
+  .v4-bento-card::after {
+    right: 0;
+    bottom: 0;
+    width: 62px;
+    height: 62px;
+  }
+}
