@@ -119,13 +119,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-026bfd8bf894",
-      "category": "その他",
-      "title": "令和8年度二酸化炭素排出抑制対策事業費等補助金（建築物等のZEB化・省CO2化普及加速事業）",
+      "id": "rss-329da38db46d",
+      "category": "観光・イベント",
+      "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-09-02",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_17261.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html"
     }
   ],
   "council": {
@@ -144,6 +144,11 @@
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310.html"
   },
   "latest": [
+    {
+      "date": "2026-09-02",
+      "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html"
+    },
     {
       "date": "2026-09-02",
       "title": "令和8年度二酸化炭素排出抑制対策事業費等補助金（建築物等のZEB化・省CO2化普及加速事業）",
@@ -168,11 +173,6 @@
       "date": "2026-09-01",
       "title": "令和８年9月定例会一般質問を掲載",
       "url": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2747/_17269.html"
-    },
-    {
-      "date": "2026-09-01",
-      "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
-      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html"
     },
     {
       "date": "2026-09-01",
@@ -253,5 +253,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-02T00:03:53Z"
+  "generatedAt": "2026-09-02T00:37:02Z"
 }
