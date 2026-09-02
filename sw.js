@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v12-retina-assets";
+const CACHE = "mytown-civic-v13-retina-assets";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -14,12 +14,12 @@ const STATIC_ASSETS = [
   "./ui-v2.js",
   "./manifest.webmanifest",
   "./icon.svg",
-  "./assets/hero/nogata-watercolor.webp",
-  "./assets/mascot/machinavi.webp",
-  "./assets/icons/nearby.webp",
-  "./assets/icons/services.webp",
-  "./assets/icons/deadline.webp",
-  "./assets/icons/decision.webp",
+  "./assets/hero/nogata-watercolor.webp?v=13",
+  "./assets/mascot/machinavi.webp?v=13",
+  "./assets/icons/nearby.webp?v=13",
+  "./assets/icons/services.webp?v=13",
+  "./assets/icons/deadline.webp?v=13",
+  "./assets/icons/decision.webp?v=13",
   "./data/latest.json",
   "./data/bulletin.json",
   "./data/politics.json",

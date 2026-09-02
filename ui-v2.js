@@ -5,12 +5,12 @@ state.v2SearchMode = state.v2SearchMode || "keyword";
 document.body.classList.add("ui-v2");
 
 const V2_ASSETS = Object.freeze({
-  hero: "./assets/hero/nogata-watercolor.webp",
-  mascot: "./assets/mascot/machinavi.webp",
-  nearby: "./assets/icons/nearby.webp",
-  services: "./assets/icons/services.webp",
-  deadline: "./assets/icons/deadline.webp",
-  decision: "./assets/icons/decision.webp",
+  hero: "./assets/hero/nogata-watercolor.webp?v=13",
+  mascot: "./assets/mascot/machinavi.webp?v=13",
+  nearby: "./assets/icons/nearby.webp?v=13",
+  services: "./assets/icons/services.webp?v=13",
+  deadline: "./assets/icons/deadline.webp?v=13",
+  decision: "./assets/icons/decision.webp?v=13",
 });
 
 const V2_PREFERENCES_KEY = "mytown-preferences-v1";
