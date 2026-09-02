@@ -59,7 +59,7 @@ def main() -> None:
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v10-citizen-first", "service-worker cache revision")
+    require(sw, "mytown-civic-v11-verified-services", "service-worker cache revision")
 
     print("UX contract checks passed")
 
