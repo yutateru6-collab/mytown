@@ -34,9 +34,9 @@ def main() -> None:
 
     require(index, ">調べる</span>", "truthful center-nav label")
     require(index, "aria-label=\"調べるメニューを開く\"", "center-nav accessible name")
-    require(index, "./ui-v2.js?v=14", "versioned citizen-first runtime")
+    require(index, "./ui-v2.js?v=15", "versioned citizen-first runtime")
     require(index, "./ui-v2.css?v=14", "versioned citizen-first styles")
-    require(index, "./ui-home-v4.js?v=15", "event-led home runtime")
+    require(index, "./ui-home-v4.js?v=16", "event-led home runtime")
     require(index, "./ui-home-v4.css?v=15", "event-led home styles")
     # Cache-bust query values change frequently during UI polish; verify the asset is
     # versioned without coupling the UX contract to one specific revision number.
@@ -47,12 +47,12 @@ def main() -> None:
 
     for token in (
         "今日の直方",
-        "MYTOWNでできること",
+        "今日の直方をひと目で",
         "v2-capability-grid",
-        "暮らしから決定まで",
-        "近くで確認できること",
-        "今日と明日の暮らし",
-        "気づいたら市政も分かる",
+        "決まるまでの流れ",
+        "近くで何がある？",
+        "今日の暮らし",
+        "暮らしに関わる市の動き",
         "data-v2-action=\"meeting\"",
         "V2_PREFERENCES_KEY",
         "hasVerifiedConditions",
@@ -62,15 +62,15 @@ def main() -> None:
         require(ui, token, "base citizen-first UI contract")
 
     for token in (
-        "直方で、なにする？",
+        "直方のイベント",
         "v4-bento-grid",
-        "少しずつ分かる",
-        "市議会・議員",
-        "イベント・体験を見つける",
-        "現在の掲載範囲",
-        "全イベントを網羅しているとは表示しません",
-        "イベントを載せる",
-        "直方をちょっと手伝う",
+        "決まり方を見る",
+        "市長・市議会",
+        "イベント・体験を探す",
+        "掲載について",
+        "すべてのイベントを掲載しているわけではありません",
+        "イベント掲載",
+        "ボランティア",
         "準備中",
     ):
         require(home_ui, token, "event-led bento home contract")
@@ -93,18 +93,18 @@ def main() -> None:
     ):
         require(home_polish_css, token, "home v5 polish contract")
 
-    require(app, "MYTOWNによる30秒要約", "30-second layer")
-    require(app, "3分で背景まで", "three-minute layer")
-    require(app, "原文・一次資料", "primary-source layer")
-    require(app, "公開資料で確認できず", "safe unanswered state")
-    require(app, "公式資料で追える経緯", "decision evidence timeline")
+    require(app, "30秒まとめ", "30-second layer")
+    require(app, "もう少しくわしく", "three-minute layer")
+    require(app, "市の元資料", "primary-source layer")
+    require(app, "市の資料では分かりませんでした", "safe unanswered state")
+    require(app, "市の資料で確認できた流れ", "decision evidence timeline")
     require(data, '"decisionTimeline"', "verified bus decision timeline data")
     require(data, '"decisionUnknowns"', "explicit decision unknowns")
-    require(politics, "市長という言葉だけを手掛かり", "mayor false-match guard")
+    require(politics, "質問に合わない基本情報", "mayor false-match guard")
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v16-home-polish", "service-worker cache revision")
+    require(sw, "mytown-civic-v17-copy-polish", "service-worker cache revision")
     require(sw, "ui-home-v4.js", "v4 runtime precache")
     require(sw, "ui-home-v5.css", "v5 polish precache")
     require(sw, "event-festival.svg", "event illustration precache")

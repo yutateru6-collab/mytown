@@ -22,7 +22,7 @@ const FALLBACK_DATA = {
     pages: [],
     drafts: [],
     availableIssues: [],
-    sync: { status: "pending", message: "市報の最新号を確認しています。" }
+    sync: { status: "pending", message: "市報の最新号を更新しています。" }
   }
 };
 
@@ -121,12 +121,12 @@ function syncBanner() {
     return `<div class="sync-banner is-warning" role="status"><strong>公式データを読み込めませんでした</strong><span>現在は最低限の初期情報を表示しています。公式ページで最新情報を確認してください。</span></div>`;
   }
   return `<div class="sync-banner" role="status">
-    <div><span class="official-badge">公式情報ベース</span><strong>直方市の公開情報を表示</strong></div>
-    <span>データ更新：${generatedAt ? esc(formatDateTime(generatedAt)) : esc(verifiedOn || "確認済み")}</span>
+    <div><span class="official-badge">市の公開情報から</span><strong>直方市の情報を掲載</strong></div>
+    <span>最終更新：${generatedAt ? esc(formatDateTime(generatedAt)) : esc(verifiedOn || "確認済み")}</span>
   </div>`;
 }
 
-function sourceLink(url, label = "直方市公式ページを見る") {
+function sourceLink(url, label = "市の元ページを見る") {
   if (!url) return "";
   return `<a class="source-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)} <span aria-hidden="true">↗</span></a>`;
 }
@@ -151,7 +151,7 @@ function realCard(item) {
         <div class="card-body">
           <div class="card-kicker">${esc(item.category || "直方市情報")}</div>
           <h3 class="card-title">${esc(item.title)}</h3>
-          <p class="card-copy">${esc(item.summary || "直方市公式情報です。")}</p>
+          <p class="card-copy">${esc(item.summary || "直方市が公開した情報です。")}</p>
           <div class="card-meta">
             ${item.status ? `<span class="pill verified">${esc(item.status)}</span>` : ""}
             ${item.published ? `<span class="pill">公開 ${esc(item.published)}</span>` : ""}
@@ -185,7 +185,7 @@ function bulletinItems() {
     id: issue.id || `bulletin-${issue.issueKey || "latest"}`,
     sourceUrl: issue.sourceUrl || bulletin.archiveUrl,
     pdfUrl: issue.wholePdfUrl || null,
-    status: issue.isNewIssue ? "新号を検知" : (issue.status || "最新号"),
+    status: issue.isNewIssue ? "新しい号" : (issue.status || "最新号"),
   };
   const pages = Array.isArray(bulletin.pages) ? bulletin.pages : [];
   return [issueItem, ...pages];
@@ -196,13 +196,13 @@ function bulletinPreview(bulletin) {
   const issue = bulletinItems()[0];
   const pages = Array.isArray(bulletin.pages) ? bulletin.pages : [];
   return `<div class="section bulletin-section">
-    <div class="section-head"><div><h2>市報のおがた</h2><p>最新号を自動検知</p></div></div>
+    <div class="section-head"><div><h2>市報のおがた</h2><p>最新号を掲載</p></div></div>
     ${realCard(issue)}
     <div class="bulletin-pages">
-      <div class="bulletin-pages-head"><strong>ページごとの見出し</strong><span>${pages.length}ページ</span></div>
-      ${pages.slice(0, 8).map(bulletinPageRow).join("") || emptyCard("ページ情報を確認中です。")}
+      <div class="bulletin-pages-head"><strong>主な見出し</strong><span>${pages.length}ページ</span></div>
+      ${pages.slice(0, 8).map(bulletinPageRow).join("") || emptyCard("見出しを更新しています。")}
     </div>
-    ${sourceLink(issue.sourceUrl, "市報の号全体を確認")}
+    ${sourceLink(issue.sourceUrl, "市報をまとめて見る")}
   </div>`;
 }
 
@@ -230,7 +230,7 @@ function todayView() {
     </div>
 
     <div class="section">
-      <div class="section-head"><div><h2>直方市の新着</h2><p>公式サイトのRSS等から同期</p></div></div>
+      <div class="section-head"><div><h2>直方市の新着</h2><p>市の新着情報から</p></div></div>
       <div class="latest-list">${d.latest.slice(0, 7).map(latestRow).join("") || emptyCard("新着情報を取得できませんでした。")}</div>
     </div>
 
@@ -242,7 +242,7 @@ function todayView() {
         <button class="quick-button" type="button" data-quick="nearby"><span>⌖</span><strong>場所から見る</strong></button>
         <button class="quick-button" type="button" data-quick="discover"><span>◎</span><strong>生活から探す</strong></button>
         <button class="quick-button" type="button" data-quick="ask"><span>✦</span><strong>直方のことを聞く</strong></button>
-        <button class="quick-button" type="button" data-quick="money"><span>¥</span><strong>直方のお金</strong></button>
+        <button class="quick-button" type="button" data-quick="money"><span>¥</span><strong>直方市の予算</strong></button>
       </div>
     </div>
   </section>`;
@@ -276,10 +276,10 @@ function populationMini(pop) {
 function nearbyView() {
   const items = state.data.featured.filter((x) => x.location);
   return `<section class="page">
-    <div class="hero"><p class="eyebrow">場所から見る</p><h1>この場所で何がある？</h1><p>架空の地図や距離は表示しません。公式ページで場所を確認できる情報だけを出しています。</p></div>
+    <div class="hero"><p class="eyebrow">場所から見る</p><h1>この場所で何がある？</h1><p>現在は、市のページで場所を確認できる情報を一覧で表示しています。</p></div>
     ${syncBanner()}
-    <div class="card info-card"><h2>地図は次の段階</h2><p>本物の緯度・経度が確認できたデータだけを地図に載せます。今は住所が明記された情報を一覧で確認できます。</p></div>
-    <div class="section"><div class="section-head"><h2>場所が確認できる情報</h2><p>${items.length}件</p></div><div class="stack">${items.length ? items.map(realCard).join("") : emptyCard("現在、住所付きで表示できる同期情報がありません。")}</div></div>
+    <div class="card info-card"><h2>地図は準備中</h2><p>場所を正確に確認できた情報から、今後地図に追加します。現在は一覧で確認できます。</p></div>
+    <div class="section"><div class="section-head"><h2>場所が確認できる情報</h2><p>${items.length}件</p></div><div class="stack">${items.length ? items.map(realCard).join("") : emptyCard("現在、場所が分かる情報はありません。")}</div></div>
   </section>`;
 }
 
@@ -328,15 +328,15 @@ function discoverView() {
     ${syncBanner()}
     <form class="search-box" id="discover-form"><span aria-hidden="true">⌕</span><input id="discover-search" type="search" value="${esc(state.discoverQuery)}" placeholder="例：バス、学校、キャンプ" aria-label="街の情報を検索"><button>探す</button></form>
     <div class="filter-row" aria-label="カテゴリで絞る"><button class="filter-chip ${!category ? "is-active" : ""}" type="button" data-category-filter="">すべて</button>${discoverCategories.map((x) => `<button class="filter-chip ${category === x ? "is-active" : ""}" type="button" data-category-filter="${esc(x)}">${esc(x)}</button>`).join("")}</div>
-    <div class="section"><div class="section-head"><h2>検索結果</h2><p>${results.length}件</p></div><div class="stack">${results.length ? results.slice(0, 20).map(realCard).join("") : emptyCard("該当する同期情報は見つかりませんでした。公式サイトの全文検索は次の段階で接続します。")}</div></div>
+    <div class="section"><div class="section-head"><h2>検索結果</h2><p>${results.length}件</p></div><div class="stack">${results.length ? results.slice(0, 20).map(realCard).join("") : emptyCard("見つかりませんでした。言葉を短くして、もう一度検索してください。")}</div></div>
   </section>`;
 }
 
 function askView(answer = "") {
   return `<section class="page">
-    <div class="hero"><p class="eyebrow">公式情報に質問</p><h1>ふつうの言葉で聞く。</h1><p>同期済みの公式資料に直接答えがある質問だけに回答します。</p></div>
+    <div class="hero"><p class="eyebrow">公式情報に質問</p><h1>ふつうの言葉で聞く。</h1><p>現在取り込んでいる市の資料で、答えを確認できる質問に回答します。</p></div>
     ${syncBanner()}
-    <div class="ask-panel"><h2>何が気になる？</h2><p>質問の一部に関係する言葉があっても、質問そのものに答える資料がなければ「確認できません」と返します。</p><form class="ask-form" id="ask-form"><input id="ask-input" type="text" placeholder="10月からバスどう変わる？" autocomplete="off" aria-label="直方について質問"><button class="primary-button" type="submit">聞く</button></form><div class="suggestion-list"><button class="suggestion-chip" type="button" data-question="10月からバスどう変わる？">10月からバスどう変わる？</button><button class="suggestion-chip" type="button" data-question="今度の市議会いつ？">今度の市議会いつ？</button><button class="suggestion-chip" type="button" data-question="ごみの収集日は？">ごみの収集日は？</button><button class="suggestion-chip" type="button" data-question="直方の人口は？">直方の人口は？</button></div></div>
+    <div class="ask-panel"><h2>何が気になる？</h2><p>質問への答えを市の資料で確認できない場合は、「分かりませんでした」と伝えます。</p><form class="ask-form" id="ask-form"><input id="ask-input" type="text" placeholder="10月からバスどう変わる？" autocomplete="off" aria-label="直方について質問"><button class="primary-button" type="submit">聞く</button></form><div class="suggestion-list"><button class="suggestion-chip" type="button" data-question="10月からバスどう変わる？">10月からバスどう変わる？</button><button class="suggestion-chip" type="button" data-question="今度の市議会いつ？">今度の市議会いつ？</button><button class="suggestion-chip" type="button" data-question="ごみの収集日は？">ごみの収集日は？</button><button class="suggestion-chip" type="button" data-question="直方の人口は？">直方の人口は？</button></div></div>
     ${answer}
   </section>`;
 }
@@ -365,10 +365,10 @@ function answerFor(question) {
   }
 
   if (!answer) {
-    return `<div class="card answer-card" role="status"><span class="pill">公開資料で確認できず</span><h3>その質問には、現在の資料から直接答えられません</h3><p>質問に関係しそうな別の情報を、答えの代わりには表示しません。言葉を変えて検索するか、公式窓口で確認してください。</p><p class="muted">入力した質問：${esc(question)}</p></div>`;
+    return `<div class="card answer-card" role="status"><span class="pill">市の資料では分かりませんでした</span><h3>その質問への答えは、現在の市の資料では分かりませんでした</h3><p>質問に合わない情報を、答えの代わりには表示しません。言葉を変えて検索するか、市の窓口で確認してください。</p><p class="muted">入力した質問：${esc(question)}</p></div>`;
   }
 
-  return `<div class="card answer-card" role="status"><span class="pill verified">質問に対応する公式情報</span><h3>${esc(answer.title)}</h3><p>${esc(answer.body)}</p>${sourceLink(answer.url, "根拠の公式ページ")}</div>`;
+  return `<div class="card answer-card" role="status"><span class="pill verified">市の資料で確認できました</span><h3>${esc(answer.title)}</h3><p>${esc(answer.body)}</p>${sourceLink(answer.url, "元になった市のページ")}</div>`;
 }
 
 function detailView(item) {
@@ -394,9 +394,9 @@ function renderDecisionEvidence(item) {
   const sources = Array.isArray(item.decisionSources) ? item.decisionSources : [];
   if (!timeline.length && !unknowns.length && !sources.length) return "";
   return `<div class="decision-evidence">
-    ${timeline.length ? `<h3>公式資料で追える経緯</h3><ol class="decision-timeline">${timeline.map((step) => `<li><div class="decision-date"><time>${esc(step.date || "日付確認中")}</time>${step.status ? `<span class="pill">${esc(step.status)}</span>` : ""}</div><h4>${esc(step.title || "確認できた出来事")}</h4><p>${esc(step.detail || "")}</p>${step.url ? sourceLink(step.url, "この段階の公式資料") : ""}</li>`).join("")}</ol>` : ""}
-    ${unknowns.length ? `<div class="decision-unknowns"><h3>まだ確認できないこと</h3><ul class="plain-list">${unknowns.map((fact) => `<li>${esc(fact)}</li>`).join("")}</ul><p>資料が見つかるまで、推測で「決定」とは表示しません。</p></div>` : ""}
-    ${sources.length ? `<div class="decision-source-list"><h3>この経緯に使った一次資料</h3>${sources.map((source) => sourceLink(source.url, source.label || "公式資料を見る")).join("")}</div>` : ""}
+    ${timeline.length ? `<h3>市の資料で確認できた流れ</h3><ol class="decision-timeline">${timeline.map((step) => `<li><div class="decision-date"><time>${esc(step.date || "日付確認中")}</time>${step.status ? `<span class="pill">${esc(step.status)}</span>` : ""}</div><h4>${esc(step.title || "確認できた出来事")}</h4><p>${esc(step.detail || "")}</p>${step.url ? sourceLink(step.url, "この段階の市の資料") : ""}</li>`).join("")}</ol>` : ""}
+    ${unknowns.length ? `<div class="decision-unknowns"><h3>まだ分からないこと</h3><ul class="plain-list">${unknowns.map((fact) => `<li>${esc(fact)}</li>`).join("")}</ul><p>確認できる資料が見つかるまで、推測で決まったとは表示しません。</p></div>` : ""}
+    ${sources.length ? `<div class="decision-source-list"><h3>この流れの元になった市の資料</h3>${sources.map((source) => sourceLink(source.url, source.label || "公式資料を見る")).join("")}</div>` : ""}
   </div>`;
 }
 
@@ -410,31 +410,31 @@ function renderDetailSection(item, section) {
     ].filter(Boolean);
     const sourceDate = item.sourceUpdated || item.published || state.data.verifiedOn || "確認中";
     return `<div class="detail-layers">
-      <div class="card info-card detail-layer"><span class="detail-layer-label">MYTOWNによる30秒要約</span><h2>30秒でいうと</h2><p>${esc(item.summary || "")}</p></div>
-      <div class="card info-card detail-layer"><span class="detail-layer-label">3分で背景まで</span><h2>もう少しくわしく</h2>
-        <h3>公式資料で確認できた事実</h3>${confirmed.length ? `<ul class="plain-list">${confirmed.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p>この項目について、追加で整理できる事実はまだありません。</p>`}
-        <h3>なぜ？</h3><p>${esc(item.why || "この公式ページだけからは、理由を十分に確認できません。推測では補いません。")}</p>
+      <div class="card info-card detail-layer"><span class="detail-layer-label">30秒まとめ</span><h2>30秒で分かること</h2><p>${esc(item.summary || "")}</p></div>
+      <div class="card info-card detail-layer"><span class="detail-layer-label">もう少しくわしく</span><h2>もう少しくわしく</h2>
+        <h3>市の資料で分かったこと</h3>${confirmed.length ? `<ul class="plain-list">${confirmed.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p>この項目について、追加で整理できる事実はまだありません。</p>`}
+        <h3>なぜ？</h3><p>${esc(item.why || "この市のページだけでは、理由まで分かりません。推測で補うことはしません。")}</p>
         <h3>お金</h3>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>この公式ページからは、費用・予算額を確認できません。</p>`}
         <h3>誰が、どう決めた？</h3><p>${esc(item.decision || "このページだけでは、提案・審議・契約などの意思決定全体を確認できません。")}</p>${renderDecisionEvidence(item)}
       </div>
-      <div class="card info-card detail-layer source-layer"><span class="detail-layer-label">原文・一次資料</span><h2>情報源</h2><dl class="source-facts"><div><dt>公開主体</dt><dd>直方市</dd></div><div><dt>公式公開・更新</dt><dd>${esc(sourceDate)}</dd></div><div><dt>MYTOWN最終確認</dt><dd>${esc(state.data.verifiedOn || formatDateTime(state.data.generatedAt) || "確認中")}</dd></div></dl>${sourceLink(item.sourceUrl, "公式原文を見る")}${item.pdfUrl ? sourceLink(item.pdfUrl, "市報PDFを見る") : ""}</div>
+      <div class="card info-card detail-layer source-layer"><span class="detail-layer-label">市の元資料</span><h2>情報源</h2><dl class="source-facts"><div><dt>情報を出しているところ</dt><dd>直方市</dd></div><div><dt>市のページの公開・更新日</dt><dd>${esc(sourceDate)}</dd></div><div><dt>このアプリで確認した日</dt><dd>${esc(state.data.verifiedOn || formatDateTime(state.data.generatedAt) || "確認中")}</dd></div></dl>${sourceLink(item.sourceUrl, "市の元ページを見る")}${item.pdfUrl ? sourceLink(item.pdfUrl, "市報PDFを見る") : ""}</div>
     </div>`;
   }
   if (section === "why") {
-    return `<div class="card info-card"><h2>なんで？</h2><p>${esc(item.why || "この公式ページだけからは、理由を十分に確認できません。推測では補いません。")}</p>${sourceLink(item.sourceUrl)}</div>`;
+    return `<div class="card info-card"><h2>なんで？</h2><p>${esc(item.why || "この市のページだけでは、理由まで分かりません。推測で補うことはしません。")}</p>${sourceLink(item.sourceUrl)}</div>`;
   }
   if (section === "money") {
-    return `<div class="card info-card"><h2>いくら？</h2>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>この公式ページからは、この情報に関する費用・予算額を確認できません。</p>`}${sourceLink(item.sourceUrl)}</div>`;
+    return `<div class="card info-card"><h2>いくら？</h2>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>この市のページでは、費用や予算額は分かりません。</p>`}${sourceLink(item.sourceUrl)}</div>`;
   }
-  return `<div class="card info-card"><h2>誰が決めた？</h2><p>${esc(item.decision || "このページだけでは、提案・予算・議会・契約までの意思決定全体を確認できません。関連する議案・予算・会議録を一次資料同士で結び付ける機能は次の開発段階です。")}</p>${renderDecisionEvidence(item)}${sourceLink(item.sourceUrl, "変更案内の公式原文")}</div>`;
+  return `<div class="card info-card"><h2>誰が決めた？</h2><p>${esc(item.decision || "このページだけでは、提案から実施までの流れ全体は分かりません。関連する市の資料を正確につなぐ機能は準備中です。")}</p>${renderDecisionEvidence(item)}${sourceLink(item.sourceUrl, "変更案内の市の元ページ")}</div>`;
 }
 
 function moneyView() {
-  return `<section class="page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="hero"><p class="eyebrow">直方のお金</p><h1>数字は、確認できたものだけ。</h1><p>現在は本格的な予算データ未接続です。</p></div>${syncBanner()}<div class="card info-card"><h2>まだ「円グラフ」は出しません</h2><p>令和8年度予算書・補正予算・決算を正確に構造化して検算してから表示します。個人の税金と特定事業を直接結び付ける表現もしません。</p><a class="source-link" href="https://www.city.nogata.fukuoka.jp/shisei/_1242/_2796/" target="_blank" rel="noopener noreferrer">直方市の財政・予算・決算へ ↗</a></div></section>`;
+  return `<section class="page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="hero"><p class="eyebrow">直方市の予算</p><h1>数字は、市の資料と照合して掲載します。</h1><p>このページは準備中です。</p></div>${syncBanner()}<div class="card info-card"><h2>予算情報は準備中です</h2><p>予算書・補正予算・決算の数字を整理し、市の資料と照合してから掲載します。個人が納めた税金と特定の事業を直接結び付ける表示はしません。</p><a class="source-link" href="https://www.city.nogata.fukuoka.jp/shisei/_1242/_2796/" target="_blank" rel="noopener noreferrer">直方市の財政・予算・決算へ ↗</a></div></section>`;
 }
 
 function settingsView() {
-  return `<section class="page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="hero"><p class="eyebrow">設定</p><h1>自分にちょうどいい直方へ</h1><p>住所やアカウント登録はまだ必要ありません。</p></div><div class="card info-card"><h2>このアプリについて</h2><p>MYTOWNは非公式のMVPです。直方市公式アプリではありません。表示内容は直方市の公開情報を定期同期し、必ず公式ページへのリンクを付けます。</p><p class="fact-line"><strong>自動同期：</strong>GitHub Actionsで約2時間ごと（実行時刻は前後することがあります）</p></div></section>`;
+  return `<section class="page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="hero"><p class="eyebrow">設定</p><h1>自分にちょうどいい直方へ</h1><p>住所やアカウント登録はまだ必要ありません。</p></div><div class="card info-card"><h2>このアプリについて</h2><p>MYTOWNは試験公開中の非公式アプリです。直方市の公式アプリではありません。市の公開情報を定期的に確認し、市の元ページへのリンクを付けます。</p><p class="fact-line"><strong>自動更新：</strong>約6時間ごと（実行時刻は前後することがあります）</p></div></section>`;
 }
 
 function emptyCard(message) {

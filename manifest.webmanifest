@@ -2,7 +2,7 @@
   "id": "./",
   "name": "MYTOWN 直方",
   "short_name": "MYTOWN",
-  "description": "直方のこと、これ1個見ればだいたい分かる。暮らしから街の動きまでつながる非公式の地域生活アプリMVP。",
+  "description": "直方のイベント・暮らし・市の動きを、まとめて探せる非公式アプリ。",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
