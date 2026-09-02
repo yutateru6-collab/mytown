@@ -1,0 +1,51 @@
+name: Install natural-japanese skill
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/install-natural-japanese.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: install-natural-japanese
+  cancel-in-progress: false
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install natural-japanese for Codex
+        env:
+          DISABLE_TELEMETRY: "1"
+        run: npx -y skills add coji/natural-japanese -a codex -y --copy
+
+      - name: Commit installed skill
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "natural-japanese is already up to date"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: install natural-japanese skill"
+
+          # Avoid overwriting a newer main branch. Rebase the generated files
+          # onto the latest main before pushing.
+          git pull --rebase origin main
+          git push origin HEAD:main
