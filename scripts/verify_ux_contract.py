@@ -31,14 +31,17 @@ def main() -> None:
 
     require(index, ">調べる</span>", "truthful center-nav label")
     require(index, "aria-label=\"調べるメニューを開く\"", "center-nav accessible name")
-    require(index, "./ui-v2.js?v=13", "versioned citizen-first runtime")
-    require(index, "./ui-v2.css?v=13", "versioned citizen-first styles")
+    require(index, "./ui-v2.js?v=14", "versioned citizen-first runtime")
+    require(index, "./ui-v2.css?v=14", "versioned citizen-first styles")
     forbid(index, "reference-ui.css", "static mockup stylesheet")
     forbid(index, "reference-ui.js", "static mockup runtime")
     forbid(index, ">提案する</span>", "misleading proposal label")
 
     for token in (
         "今日の直方",
+        "MYTOWNでできること",
+        "v2-capability-grid",
+        "まちの動きを、順番でたどる",
         "近くで確認できること",
         "今日と明日の暮らし",
         "気づいたら市政も分かる",
@@ -61,7 +64,7 @@ def main() -> None:
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v13-retina-assets", "service-worker cache revision")
+    require(sw, "mytown-civic-v14-overview", "service-worker cache revision")
 
     print("UX contract checks passed")
 

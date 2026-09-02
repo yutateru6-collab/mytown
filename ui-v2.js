@@ -102,6 +102,32 @@ function v2SectionHeading(title, note = "", id = "") {
   return `<div class="v2-section-heading"><div><h2${id ? ` id="${esc(id)}"` : ""}>${esc(title)}</h2>${note ? `<p>${esc(note)}</p>` : ""}</div></div>`;
 }
 
+function v2CapabilityOverview() {
+  const nearby = v2FindLocationItem();
+  const deadlines = v2FindDeadlines();
+  const services = v2FindServices();
+  const council = state.data.council || null;
+  const capabilities = [
+    { action: "nearby", tone: "mint", kicker: "工事・施設・催し", title: "近くで確認", note: nearby ? "場所つき情報があります" : "住所つき情報を探す" },
+    { action: "deadline", tone: "pink", kicker: "募集・申込・意見募集", title: "まだ間に合う", note: deadlines.length ? `${deadlines.length}件を確認できます` : "募集中の情報を探す" },
+    { action: "services", tone: "yellow", kicker: "補助・支援・手続き", title: "使える制度", note: services.length ? `${services.length}件の条件を確認` : "公式条件から探す" },
+    { action: "decision", tone: "blue", kicker: "市長・市議会", title: "誰が決めた？", note: council ? "会議と決まり方を見る" : "公開情報を確認する" },
+  ];
+  return `<section class="v2-overview" aria-labelledby="v2-overview-title">
+    <div class="v2-overview-heading"><p>MYTOWNでできること</p><h2 id="v2-overview-title">暮らしから、まちの決まり方まで</h2><small>役所の部署名を知らなくても、知りたいことから選べます。</small></div>
+    <div class="v2-capability-grid">${capabilities.map((item) => `<button type="button" class="v2-capability-card tone-${item.tone}" data-v2-action="${item.action}"><span>${esc(item.kicker)}</span><strong>${esc(item.title)}</strong><small>${esc(item.note)}</small></button>`).join("")}</div>
+    <button type="button" class="v2-ask-shortcut" data-v2-action="ask"><span><small>公式情報に質問</small><strong>直方のことを聞く</strong></span><b>資料にないことは無理に答えません</b></button>
+  </section>`;
+}
+
+function v2CivicPath() {
+  const stages = [["1", "暮らし", "気づく"], ["2", "市役所", "調べる"], ["3", "議会", "話し合う"], ["4", "決定", "実行する"]];
+  return `<section class="v2-civic-path" aria-labelledby="v2-civic-path-title">
+    <div class="v2-civic-path-heading"><div><p>気になったことの先まで</p><h2 id="v2-civic-path-title">まちの動きを、順番でたどる</h2></div><button type="button" data-v2-action="decision">決まり方を見る</button></div>
+    <ol>${stages.map(([number, title, note]) => `<li><span>${number}</span><strong>${title}</strong><small>${note}</small></li>`).join("")}</ol>
+  </section>`;
+}
+
 function v2OpenDetailButton(item, label = "30秒で読む", section = "what") {
   if (!item?.id) return "";
   return `<button class="v2-card-button" type="button" data-v2-detail-id="${esc(item.id)}" data-v2-detail-section="${esc(section)}">${esc(label)} <span aria-hidden="true">›</span></button>`;
@@ -166,7 +192,7 @@ function v2LifeAndLatest() {
 
 function todayV2View() {
   if (state.loading) return `<section class="page v2-page v2-home-page">${v2Hero()}<div class="v2-content"><div class="card info-card"><div class="loading-line"></div><div class="loading-line short"></div><p class="muted">直方市の公式情報を確認しています…</p></div></div></section>`;
-  return `<section class="page v2-page v2-home-page">${v2Hero()}<div class="v2-content"><div class="v2-sync-wrap">${syncBanner()}</div>${v2NearbyCard()}${v2DailyCards()}${v2SpotlightCard()}${v2ServicesCard()}${state.v2Preferences.civicDigest === "off" ? "" : v2CivicCards()}${v2AskCard()}${v2LifeAndLatest()}<p class="v2-disclaimer">MYTOWNは非公式の地域生活アプリMVPです。重要な手続き・期限・選挙情報は必ずリンク先の直方市公式情報も確認してください。</p></div></section>`;
+  return `<section class="page v2-page v2-home-page">${v2Hero()}<div class="v2-content">${v2CapabilityOverview()}${v2CivicPath()}<div class="v2-sync-wrap">${syncBanner()}</div>${v2NearbyCard()}${v2DailyCards()}${v2SpotlightCard()}${v2ServicesCard()}${state.v2Preferences.civicDigest === "off" ? "" : v2CivicCards()}${v2AskCard()}${v2LifeAndLatest()}<p class="v2-disclaimer">MYTOWNは非公式の地域生活アプリMVPです。重要な手続き・期限・選挙情報は必ずリンク先の直方市公式情報も確認してください。</p></div></section>`;
 }
 
 function v2SearchIntro() {

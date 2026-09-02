@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v13-retina-assets";
+const CACHE = "mytown-civic-v14-overview";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
