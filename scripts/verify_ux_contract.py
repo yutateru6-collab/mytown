@@ -31,6 +31,8 @@ def main() -> None:
 
     require(index, ">調べる</span>", "truthful center-nav label")
     require(index, "aria-label=\"調べるメニューを開く\"", "center-nav accessible name")
+    require(index, "./ui-v2.js?v=11", "versioned citizen-first runtime")
+    require(index, "./ui-v2.css?v=11", "versioned citizen-first styles")
     forbid(index, "reference-ui.css", "static mockup stylesheet")
     forbid(index, "reference-ui.js", "static mockup runtime")
     forbid(index, ">提案する</span>", "misleading proposal label")
