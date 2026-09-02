@@ -59,8 +59,10 @@ function v2MatchesPreferences(item) {
 }
 
 function v2FindServices() {
-  if (typeof combinedSearchItems !== "function") return [];
-  return combinedSearchItems().filter((item) => /補助|助成|給付|支援|制度|手続|申請|減免|相談/.test(`${item.title || ""} ${item.summary || ""}`));
+  return (state.data.featured || []).filter((item) => {
+    const hasVerifiedConditions = (Array.isArray(item.eligibility) && item.eligibility.length > 0) || item.eligibilitySummary || item.applicationConditions;
+    return item.sourceUrl && hasVerifiedConditions;
+  });
 }
 
 function v2FindDeadlines() {

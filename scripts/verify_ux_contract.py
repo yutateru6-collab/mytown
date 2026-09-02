@@ -42,6 +42,7 @@ def main() -> None:
         "気づいたら市政も分かる",
         "data-v2-action=\"meeting\"",
         "V2_PREFERENCES_KEY",
+        "hasVerifiedConditions",
         "appShell.inert = true",
         "event.key !== \"Tab\"",
     ):
