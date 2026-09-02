@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   polish-copy:
-    if: github.event.head_commit.message == 'Run one-time user copy polish'
+    if: github.event.head_commit.message == 'Run one-time user copy polish retry'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -42,6 +42,18 @@ jobs:
           source = source.replace(
               '    ("使える制度", "制度・手続きを探す"),',
               '    (\'title: "使える制度"\', \'title: "制度・手続きを探す"\'),',
+          )
+          source = source.replace(
+              "補助・助成・給付・支援・手続きに関係する同期済み公式情報です。対象になるかは公式条件で確認してください。",
+              "補助・助成・給付・支援・手続きに関係する同期済み公式情報です。対象条件は市のページで確認してください。",
+          )
+          source = source.replace(
+              "会派。いきなり固い言葉きたね。ざっくり『議会の中のチーム』。ただし政党と同じとは限りません。",
+              "会派。いきなり固い言葉きたね。ざっくり『議会の中のグループ』。ただし政党と同じとは限りません。",
+          )
+          source = source.replace(
+              '    ("テーマ別に詳しく見るチーム", "分野ごとに詳しく調べる委員会"),',
+              '    ("分野ごとの担当チーム", "分野ごとに詳しく調べる委員会"),',
           )
 
           duplicate = '    ("公式資料ベース", "市の資料から"),\n'
