@@ -13,6 +13,9 @@ on:
       - "sw.js"
       - "data/**"
       - ".github/workflows/pages.yml"
+  workflow_run:
+    workflows: ["Sync Nogata official data"]
+    types: [completed]
   schedule:
     - cron: "47 */6 * * *"
   workflow_dispatch:
@@ -28,6 +31,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

@@ -19,10 +19,14 @@ on:
       - "scripts/**"
       - ".github/workflows/qa.yml"
       - ".github/workflows/pages.yml"
+  workflow_run:
+    workflows: ["Sync Nogata official data"]
+    types: [completed]
   workflow_dispatch:
 
 jobs:
   qa:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
