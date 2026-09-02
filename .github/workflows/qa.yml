@@ -90,6 +90,10 @@ jobs:
           test -s assets/icons/deadline.webp
           test -s assets/icons/decision.webp
           test -s assets/illustrations/event-festival.svg
+          test -s assets/illustrations/card-nearby.svg
+          test -s assets/illustrations/card-deadline.svg
+          test -s assets/illustrations/card-services.svg
+          test -s assets/illustrations/card-decision.svg
           python scripts/verify_image_density.py
           grep -q 'cp -R assets _site/assets' .github/workflows/pages.yml
 
@@ -99,7 +103,7 @@ jobs:
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
           grep -q '>調べる</span>' index.html
-          grep -q 'mytown-civic-v15-bento' sw.js
+          grep -q 'mytown-civic-v16-home-polish' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
@@ -107,8 +111,13 @@ jobs:
           grep -q 'ui-v2.css' index.html
           grep -q 'ui-home-v4.js' index.html
           grep -q 'ui-home-v4.css' index.html
+          grep -q 'ui-home-v5.css' index.html
           grep -q '直方で、なにする？' ui-home-v4.js
           grep -q '少しずつ分かる' ui-home-v4.js
+          grep -q 'card-nearby.svg' ui-home-v5.css
+          grep -q 'card-deadline.svg' ui-home-v5.css
+          grep -q 'card-services.svg' ui-home-v5.css
+          grep -q 'card-decision.svg' ui-home-v5.css
           grep -q 'data-v2-nav="home"' index.html
           grep -q 'data-v2-nav="search"' index.html
           grep -q 'data-v2-nav="action"' index.html
