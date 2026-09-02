@@ -4,8 +4,8 @@
 
 MYTOWNの利用者に見える日本語を書く・直すときは、`natural-japanese` Agent Skillを優先して使う。
 
-- プロジェクトにインストール済みなら `.codex/skills/natural-japanese/SKILL.md` を読む。
-- 未インストールなら `npx skills add coji/natural-japanese -a codex -y --copy` でプロジェクトへ導入できる。
+- プロジェクトにインストール済みの `.agents/skills/natural-japanese/SKILL.md` を読む。
+- 更新・再導入するときは `npx skills add coji/natural-japanese -a codex -y --copy` を使う。
 - natural-japaneseは文章表現の改善に使い、事実そのものを作り変える用途には使わない。
 
 ## MYTOWNでの追加ルール
