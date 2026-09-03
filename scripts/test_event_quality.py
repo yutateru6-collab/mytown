@@ -16,6 +16,8 @@ def main() -> None:
     assert extract_money("お値段：5,000円 定員：20名") == ("5,000円", [])
     assert extract_money("参加費 1,000円 申込期限 8月31日") == ("1,000円", [])
     assert extract_money("参加費：1, 000円 定員：15名") == ("1,000円", [])
+    assert extract_money("参加費：1 ,000円 定員：15名") == ("1,000円", [])
+    assert extract_money("参加費：1 , 000円 定員：15名") == ("1,000円", [])
     assert extract_money("チケット 前売1,000円／当日1,500円") == ("前売1,000円／当日1,500円", [])
     invalid_money, invalid_issues = extract_money("料金：000円")
     assert invalid_money == ""
