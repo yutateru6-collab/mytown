@@ -11,6 +11,7 @@ on:
       - "data/**"
       - "scripts/capture_visual_qa.mjs"
       - "scripts/test_civic_actions_browser.mjs"
+      - "scripts/finalize_event_state.py"
       - ".github/workflows/visual-qa.yml"
   pull_request:
     branches: [main]
@@ -49,7 +50,9 @@ jobs:
 
       - name: Refine source-preview event data
         if: ${{ github.event_name != 'workflow_run' }}
-        run: python3 scripts/refine_event_quality.py
+        run: |
+          python3 scripts/refine_event_quality.py
+          python3 scripts/finalize_event_state.py
 
       - name: Start source preview
         if: ${{ github.event_name != 'workflow_run' }}
