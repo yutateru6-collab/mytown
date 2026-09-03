@@ -35,7 +35,7 @@ ALLOWED_SOURCE_TYPES = {"community", "tourism", "commercial", "cultural"}
 NON_EVENT_PATTERN = re.compile(
     r"クーポン|値引|セール|FURNITURE\s*FAIR|LIMITED\s*STORE|POP\s*UP\s*STORE|"
     r"キャンペーン|販売$|お得デー|応募作品|受賞作品|イベントスペース|"
-    r"超!?C+OOL|ハック術|秋休み|SDGsアクション|眠活",
+    r"超!?CO+L|ハック術|秋休み|SDGsアクション|眠活",
     re.IGNORECASE,
 )
 FAMILY_PATTERN = re.compile(r"親子|子ども|こども|幼児|小学生|家族|キッズ|キャラクター")
@@ -235,11 +235,15 @@ def event_location(text: str, default: str = "") -> str:
         limit=180,
     )
     location = clean_text(segment).strip("|:： ")
-    for marker in (" 【", " ■", " ※", " <", " お問い合わせ", " 開催にあたって"):
+    location = re.sub(r"^[>＞\s]*[・･]?時間\s*[:：]\s*", "", location)
+    for marker in (" 【", " ■", " ※", " <", " お問い合わせ", " 開催にあたって", " 開催地域"):
         location = location.split(marker, 1)[0].strip()
     location = location.split("。", 1)[0].strip()
+    location = re.split(r"\s+\d{1,2}(?::|時)\d{2}", location, maxsplit=1)[0].strip()
+    venue = re.match(r"^(.{1,64}?(?:会場|館|センター|公園|広場|河川敷|ホール|体育館|キャンパス|駅))\b", location)
+    if venue and re.search(r"です|ます|開催|体験|ぜひ|お知らせ", location[len(venue.group(1)) :]):
+        location = venue.group(1).strip()
     if len(location) > 72:
-        venue = re.match(r"^(.{1,64}?(?:会場|館|センター|公園|広場|河川敷|ホール|体育館|キャンパス|駅))\b", location)
         location = venue.group(1).strip() if venue else ""
     if default and location and default not in location:
         return f"{default} {location}"
@@ -457,7 +461,9 @@ def parse_tourism(source: dict, index_html: str, fetcher: Callable[[str], str], 
         except Exception:
             continue
         year_hint = explicit_year_hint(detail, now.year)
-        dates = event_dates(detail, year_hint) or date_tokens(title, year_hint)
+        bracket = re.search(r"【([^】]+)】", title)
+        title_dates = date_tokens(bracket.group(1), year_hint) if bracket else []
+        dates = title_dates or event_dates(detail, year_hint) or date_tokens(title, year_hint)
         if not dates:
             continue
         event = base_event(

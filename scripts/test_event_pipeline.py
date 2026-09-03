@@ -51,6 +51,7 @@ def main() -> None:
     aeon_index = """
       <a href="/event/560fd47c-9d5b-4cb8-9d48-7e8cb6b7dbe5">予告 親子ステージ 2026/09/05 (土)</a>
       <a href="/event/11111111-1111-1111-1111-111111111111">予告 お得クーポン 2026/09/06 (日)</a>
+      <a href="/event/22222222-2222-2222-2222-222222222222">イオンモールの超!COOOOOOL作戦 6月1日~9月30日</a>
     """
     aeon_detail = """
       <h1>親子ステージ</h1><dl><dt>日程</dt><dd>2026/09/05 (土)</dd>
@@ -91,6 +92,20 @@ def main() -> None:
     assert tourism_events[0]["occurrences"] == ["2026-11-17", "2026-11-18", "2026-11-28"]
     assert tourism_events[0]["applicationDeadline"] == "2026-10-09"
     assert "participation" in tourism_events[0]["tags"]
+
+    dated_tourism_index = """
+      <a href="https://nogata-kankoh.com/news/8267.html">【9/11(金)~12(土)】北九州空港で直方市をPR</a>
+      <a href="https://nogata-kankoh.com/news/8300.html">【9/26(土)】 8/31(月)申込締切 バスツアー</a>
+    """
+    dated_details = {
+        "https://nogata-kankoh.com/news/8267.html": "開催日:9月11日(金) 場所:北九州空港ターミナルビル内 特設会場",
+        "https://nogata-kankoh.com/news/8300.html": "日程:8月31日申込締切 9月26日開催 場所:JR直方駅",
+    }
+    dated_events = parse_tourism(tourism_source, dated_tourism_index, dated_details.__getitem__, NOW)
+    assert [(item["startDate"], item["endDate"]) for item in dated_events] == [
+        ("2026-09-11", "2026-09-12"),
+        ("2026-09-26", "2026-09-26"),
+    ]
 
     cleanup_source = source(
         "cleanup",
