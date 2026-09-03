@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "verifiedOn": "2026-09-03",
+  "privacy": {
+    "photoStorage": "none",
+    "locationStorage": "none",
+    "note": "写真と位置情報はMYTOWNのサーバーへ送信・保存しません。利用者が選んだ公式窓口や端末の共有機能へ、自分で進む方式です。"
+  },
+  "routes": {
+    "road": {
+      "label": "道路の穴・落下物・危険箇所",
+      "office": "道路緊急ダイヤル #9910／直方市 土木課",
+      "phone": "#9910",
+      "primaryUrl": "https://www.mlit.go.jp/road/dia/",
+      "secondaryUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_2853/_2308/_2323/_2326.html",
+      "note": "道路の穴、落下物、路肩の崩壊などは#9910が24時間・無料です。事故は110番へ連絡し、運転中は操作しないでください。",
+      "photoTransfer": "mlit-line",
+      "sourceUrls": [
+        "https://www.mlit.go.jp/road/dia/",
+        "https://www.city.nogata.fukuoka.jp/shisei/_1235/_2853/_2308/_2323/_2326.html"
+      ]
+    },
+    "park": {
+      "label": "公園・遊具・ベンチ・街路樹",
+      "office": "直方市 都市計画課 公園街路係",
+      "phone": "0949-25-2200",
+      "primaryUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_2853/_2308/_2334/_2336.html",
+      "note": "公園、遊具、ベンチ、街路樹などの窓口です。公式フォームに写真添付欄があることは確認できていません。",
+      "photoTransfer": "share-separately",
+      "sourceUrls": [
+        "https://www.city.nogata.fukuoka.jp/shisei/_1242/_2794/_7369.html",
+        "https://www.city.nogata.fukuoka.jp/shisei/_1235/_2853/_2308/_2334/_2336.html"
+      ]
+    },
+    "publicFacility": {
+      "label": "公共施設・案内表示・その他の設備",
+      "office": "直方市 お問い合わせ窓口",
+      "phone": "0949-25-2000",
+      "primaryUrl": "https://www.city.nogata.fukuoka.jp/_1118.html",
+      "note": "担当部署が分からない場合の公式窓口です。緊急の連絡は電話を利用してください。",
+      "photoTransfer": "share-separately",
+      "sourceUrls": [
+        "https://www.city.nogata.fukuoka.jp/_1118.html"
+      ]
+    },
+    "cityOpinion": {
+      "label": "市政への提案・改善アイデア",
+      "office": "直方市 市政へのアイデア・意見",
+      "phone": "0949-25-2000",
+      "primaryUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2493/_2721.html",
+      "note": "市長に回覧後、担当部署で検討されます。ただし、直方市は個々の意見に対する回答は行わないと案内しています。",
+      "photoTransfer": "share-separately",
+      "sourceUrls": [
+        "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2493.html",
+        "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2493/_2721.html"
+      ]
+    },
+    "council": {
+      "label": "議会への正式な請願・陳情",
+      "office": "直方市議会事務局",
+      "phone": "0949-25-2342",
+      "primaryUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1256/_2764.html",
+      "note": "誰でも請願・陳情を提出できます。請願には紹介議員が必要ですが、陳情には紹介議員が不要です。",
+      "photoTransfer": "not-applicable",
+      "sourceUrls": [
+        "https://www.city.nogata.fukuoka.jp/sigikai/_1256/_2764.html"
+      ]
+    }
+  }
+}
