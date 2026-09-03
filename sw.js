@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v21-nogata-biyori";
+const CACHE = "mytown-civic-v22-hero-balance";
 const STATIC_ASSETS = [
   "./",
   "./index.html",

@@ -1,8 +1,9 @@
-/* MYTOWN Home v5 polish — tighter event card, distinct bento illustrations, cleaner hero wording. */
+/* Home v5 polish — tighter event card, distinct bento illustrations, cleaner hero wording. */
 
-/* 「MYTOWN 直方」→「MYTOWN」。直下の「今日の直方」と地名を重複させない。 */
-.ui-v2 .v2-wordmark span {
-  display: none;
+/* ロゴの「日和」だけを、イベント導線と同系統の落ち着いた赤で示す。 */
+.ui-v2 .v2-wordmark .v2-wordmark-accent {
+  display: inline;
+  color: #bd405b;
 }
 
 /*

@@ -1,35 +1,42 @@
-# MYTOWN home overview design QA
+# のおがた日和 hero design QA
 
-## Current iteration
+## Scope
 
-- User reference: `29C15145-0CE4-4685-A650-C96099837D62(4).jpeg`.
-- Design intent: preserve the reference's poster-like overview while using truthful, working HTML controls and a life-first information order.
-- Required implementation: compact hero, four immediately scannable capability entrances, official-information question shortcut, and the civic path from daily life to decision.
+- Changed only the home hero: app name, catchphrase hierarchy, accent color, trust note, and mascot balance.
+- Left every section below the hero unchanged.
+- Did not implement the unselected `昨日から変わったこと` module.
 
-## Required comparison
+## Visual target and rendered evidence
 
-- Compare the reference and implementation at the same 390px first-screen state.
-- Confirm the top explains what the app can do without relying on text baked into a raster image.
-- Capture 390px/DPR3, 320px/DPR2, and 1440px/DPR1 in GitHub Actions.
+- Selected source visual: `/workspace/scratch/7378e1883a5d/generated_images/exec-b419898c-3b1f-4c29-b1a1-8a4c8defbe33.png`.
+- Final rendered capture: `/workspace/scratch/nogata-hero-mobile-390-verified-1788422117255.jpg`.
+- Same-state comparison: `/workspace/scratch/nogata-hero-comparison-verified.png`.
+- Comparison viewport: 390 px wide, home route, default region setting, 9月3日(木).
+- Compact check: 320 px wide, home route, default region setting.
 
-## Final comparison
+## Fidelity review
 
-- The reference and the final 390px capture were placed side by side before release.
-- The implementation keeps the source hierarchy: watercolor identity, primary capability menu, civic-process strip, then current information.
-- The source's misleading proposal, voting, public-comment, progress, and unverified budget entrances were intentionally replaced with working life-first routes: nearby, deadlines, services, decision-making, and official-information questions.
-- The mobile capability grid uses two columns instead of the reference's four tiny columns, keeping text readable and tap targets at least 44px.
+| Surface | Result |
+|---|---|
+| Composition | App name and catchphrase keep the selected centered-right balance while the mascot anchors the left side. |
+| Typography | `のおがた日和` is the primary mark; `知れば直方はもっとおもしろい！` is one level quieter and remains readable. |
+| Color | Deep green remains the base; only `日和` uses the restrained rose accent from the selected visual. |
+| Imagery | Existing watercolor scenery and mascot assets are preserved without stretching or replacement. |
+| Spacing and responsive behavior | 390 px and 320 px captures keep all hero text visible with no collision between the title, controls, mascot, and trust note. |
 
-## Automated and interaction checks
+## Iteration history
 
-- Source Visual QA run: `33579610065`, artifact `mytown-visual-qa-33579610065-push`.
-- Deployed Visual QA run: `33579630925`, artifact `mytown-visual-qa-33579630925-workflow_run`.
-- QA run: `33579610024`; Pages deployment run: `33579610025`.
-- Source and deployed 390px screenshots have identical SHA-256 hashes.
-- 390px/DPR3, 320px/DPR2, and 1440px/DPR1 all report zero horizontal overflow and zero app console errors.
-- Hero density is 4.29x at 390px/DPR3, 5.22x at 320px/DPR2, and 2.20x at desktop width.
-- Live browser checks passed for all five capability routes and the civic-flow route.
-- No P0, P1, or P2 findings remain. The 320px first viewport prioritizes the four primary action names; supporting copy and the question shortcut remain available by scrolling.
+1. The first desktop pass let the mascot extend slightly above the hero. Its maximum width was reduced from 160 px to 140 px.
+2. The first mobile pass made the app name too quiet relative to the selected visual. The 390 px wordmark was raised to 2.05 rem while the catchphrase stayed at 1.1 rem.
+3. The first mobile pass placed the trust note behind the overlapping content sheet. Its stacking order was corrected so the entire note remains visible.
+4. The final 390 px source and implementation crops were placed side by side and reviewed together.
 
-## Final Result
+## Interaction and regression checks
 
-passed
+- `新着を見る` opens the new-information screen.
+- The settings action opens the existing region and display-order settings screen.
+- No application console errors were observed; browser-extension errors were excluded.
+- JavaScript syntax, civic pipeline regression, source registry, election history, high-risk data, image density, UX contract, and `git diff --check` passed locally.
+- Natural Japanese lint reported 0 findings for the hero copy.
+
+final result: passed

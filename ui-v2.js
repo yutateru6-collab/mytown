@@ -90,12 +90,13 @@ function v2CurrentBulletin() {
 
 function v2Hero() {
   const district = (state.v2Preferences?.district || "").trim();
-  return `<section class="v2-hero" aria-labelledby="v2-home-title">
+  return `<section class="v2-hero${district ? " has-district" : ""}" aria-labelledby="v2-home-title">
     <div class="v2-hero-actions">
       <button type="button" class="v2-round-action" data-v2-nav="notifications" aria-label="新着を見る"><span aria-hidden="true">🔔</span><small>新着</small></button>
       <button type="button" class="v2-round-action" data-v2-action="settings" aria-label="地域と表示順の設定を開く"><span aria-hidden="true">⚙︎</span><small>設定</small></button>
     </div>
-    <div class="v2-hero-copy"><p class="v2-date">${esc(v2DateLabel())}</p><p class="v2-wordmark">のおがた日和</p><h1 id="v2-home-title">知れば直方は<br>もっとおもしろい！</h1>${district ? `<p class="v2-tagline">よく見る地域：${esc(district)}</p>` : ""}<p class="v2-data-note">非公式アプリ｜直方市の公開情報をもとに掲載</p></div>
+    <div class="v2-hero-copy"><p class="v2-date">${esc(v2DateLabel())}</p><p class="v2-wordmark">のおがた<span class="v2-wordmark-accent">日和</span></p><h1 id="v2-home-title">知れば直方は<br>もっとおもしろい！</h1>${district ? `<p class="v2-tagline">よく見る地域：${esc(district)}</p>` : ""}</div>
+    <p class="v2-data-note">非公式｜直方市の公開情報をもとに掲載</p>
     ${v2Mascot("チューリップと石炭をモチーフにした、のおがた日和の案内役まちナビ")}
   </section>`;
 }

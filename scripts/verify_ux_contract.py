@@ -39,18 +39,16 @@ def main() -> None:
     require(index, ">地図</span>", "dedicated map navigation")
     require(index, ">さがす</span>", "search center-nav label")
     require(index, "aria-label=\"直方の情報をさがす\"", "search accessible name")
-    require(index, "./ui-v2.js?v=17", "versioned citizen-first runtime")
+    require(index, "./ui-v2.js?v=18", "versioned citizen-first runtime")
     require(index, "./app-runtime.js?v=3", "versioned data-load recovery runtime")
-    require(index, "./ui-v2.css?v=16", "versioned citizen-first styles")
+    require(index, "./ui-v2.css?v=17", "versioned citizen-first styles")
     require(index, "./ui-home-v4.js?v=18", "event-led home runtime")
     require(index, "./ui-home-v4.css?v=15", "event-led home styles")
     require(index, "./map-nearby.js?v=3", "nearby map runtime")
     require(index, "./map-nearby.css?v=2", "nearby map styles")
     require(index, "./bulletin-reader.js?v=2", "bulletin reader runtime")
     require(index, "./bulletin-reader.css?v=1", "bulletin reader styles")
-    # Cache-bust query values change frequently during UI polish; verify the asset is
-    # versioned without coupling the UX contract to one specific revision number.
-    require(index, "./ui-home-v5.css?v=", "versioned home polish styles")
+    require(index, "./ui-home-v5.css?v=26", "versioned home polish styles")
     forbid(index, "reference-ui.css", "static mockup stylesheet")
     forbid(index, "reference-ui.js", "static mockup runtime")
     forbid(index, ">提案する</span>", "misleading proposal label")
@@ -74,8 +72,11 @@ def main() -> None:
         require(ui, token, "base citizen-first UI contract")
     require(ui, "このブラウザだけに保存されます", "accurate preference storage scope")
     require(ui, "今回は反映しましたが、次に開くと元に戻ります", "preference save failure state")
+    require(ui, 'class="v2-wordmark-accent"', "accented Hiyori wordmark")
+    require(ui, '<p class="v2-data-note">非公式｜直方市の公開情報をもとに掲載</p>', "separate trust strip")
     forbid(ui, "<legend>知りたいテーマ", "inactive interest settings")
     forbid(ui, "まだ間に合う", "unverified active deadline claim")
+    forbid(ui, "昨日から変わったこと", "unselected change-summary module")
 
     for token in (
         "直方のイベント",
@@ -99,7 +100,7 @@ def main() -> None:
     require(home_css, "min-height: 44px", "minimum v4 interactive target")
 
     for token in (
-        ".ui-v2 .v2-wordmark span",
+        ".ui-v2 .v2-wordmark .v2-wordmark-accent",
         ".v4-event-feature",
         ".v4-bento-card",
         "min-height: 112px",
@@ -158,7 +159,7 @@ def main() -> None:
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v21-nogata-biyori", "service-worker cache revision")
+    require(sw, "mytown-civic-v22-hero-balance", "service-worker cache revision")
     require(sw, "ui-home-v4.js", "v4 runtime precache")
     require(sw, "ui-home-v5.css", "v5 polish precache")
     require(sw, "map-nearby.js", "nearby map runtime precache")
