@@ -108,9 +108,9 @@ def normalized_price_token(token: str) -> tuple[str, int | None, str | None]:
 
 
 def normalize_numeric_spacing(text: str) -> str:
-    """Join grouping digits split by HTML layout, e.g. ``1, 000円``."""
+    """Join grouping digits split by HTML layout, e.g. ``1 , 000円``."""
     normalized = clean_text(text)
-    normalized = re.sub(r"(?<=\d),\s+(?=\d)", ",", normalized)
+    normalized = re.sub(r"(?<=\d)\s*,\s*(?=\d{3}(?:\D|$))", ",", normalized)
     normalized = re.sub(r"(?<=\d)\s+(?=\d{3}(?:\D|$))", "", normalized)
     return normalized
 
@@ -147,11 +147,9 @@ def deadline_text_candidates(text: str) -> list[str]:
     candidates: list[str] = []
     label_pattern = "|".join(re.escape(label) for label in DEADLINE_LABELS)
 
-    # Label first: 「申込期限：8月31日」
     for match in re.finditer(rf"(?:{label_pattern})\s*[|:：]?\s*(.{{0,50}})", normalized):
         candidates.append(match.group(1))
 
-    # Date first: 「8/31(月)申込締切」
     date_pattern = r"(?:(?:20\d{2})[年/.\-])?\d{1,2}(?:月|/|\.\-)\d{1,2}日?"
     for match in re.finditer(rf"({date_pattern})(?:\([^)]*\)|（[^）]*）)?\s*(?:{label_pattern})", normalized):
         candidates.append(match.group(1))
@@ -277,7 +275,7 @@ def refine_payload(
         if source_url.startswith("https://"):
             try:
                 source_text = parse_html(fetcher(source_url)).text
-            except Exception as error:  # keep last synchronized facts; do not invent replacements
+            except Exception as error:
                 fetch_warnings.append({
                     "eventId": event.get("id", ""),
                     "sourceUrl": source_url,
