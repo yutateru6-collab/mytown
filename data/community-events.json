@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-03T20:09:55.989715+09:00",
+  "generatedAt": "2026-09-03T21:52:10.314475+09:00",
   "events": [
     {
       "id": "community-aeon-mall-nogata-296b5ad847d0",
@@ -20,7 +20,7 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00",
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00",
       "occurrences": [
         "2026-09-04",
         "2026-09-23",
@@ -49,7 +49,7 @@
       "tags": [
         "music"
       ],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00",
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00",
       "money": "前売1,000円／当日1,500円",
       "editoriallyReviewed": true
     },
@@ -73,7 +73,7 @@
       "tags": [
         "family"
       ],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00",
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00",
       "editoriallyReviewed": true
     },
     {
@@ -97,7 +97,7 @@
         "sports",
         "culture"
       ],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00",
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00",
       "editoriallyReviewed": true
     },
     {
@@ -121,7 +121,7 @@
         "health",
         "participation"
       ],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00",
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00",
       "editoriallyReviewed": true
     },
     {
@@ -142,7 +142,7 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00"
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00"
     },
     {
       "id": "community-nogata-shakyo-c80e3f7dac5e",
@@ -165,7 +165,7 @@
         "health",
         "community"
       ],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00",
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00",
       "money": "200円",
       "reservationRequired": true,
       "applicationDeadline": "2026-09-16",
@@ -191,7 +191,7 @@
       "tags": [
         "music"
       ],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00"
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00"
     },
     {
       "id": "community-nogata-shakyo-9291129b4c37",
@@ -214,7 +214,7 @@
         "learn",
         "free"
       ],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00",
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00",
       "occurrences": [
         "2026-09-26",
         "2026-10-03",
@@ -242,7 +242,7 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00"
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00"
     },
     {
       "id": "community-ongagawa-mizubekan-9c7dfe892a10",
@@ -267,7 +267,7 @@
         "outdoor"
       ],
       "recurrence": "毎月最後の日曜日",
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00",
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00",
       "editoriallyReviewed": true
     },
     {
@@ -288,7 +288,7 @@
       "statusLabel": "申込締切 10月20日",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00",
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00",
       "money": "000円",
       "applicationDeadline": "2026-10-20"
     },
@@ -315,7 +315,7 @@
         "family",
         "outdoor"
       ],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00",
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00",
       "occurrences": [
         "2026-11-17",
         "2026-11-18",
@@ -349,7 +349,7 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-03T20:09:55.989715+09:00"
+      "lastCheckedAt": "2026-09-03T21:52:10.314475+09:00"
     }
   ],
   "sourceHealth": [
@@ -357,25 +357,25 @@
       "id": "nogata-shakyo",
       "name": "直方市社会福祉協議会",
       "status": "ok",
-      "checkedAt": "2026-09-03T20:09:55.989715+09:00"
+      "checkedAt": "2026-09-03T21:52:10.314475+09:00"
     },
     {
       "id": "nogata-kankoh",
       "name": "直方市観光物産振興協会",
       "status": "ok",
-      "checkedAt": "2026-09-03T20:09:55.989715+09:00"
+      "checkedAt": "2026-09-03T21:52:10.314475+09:00"
     },
     {
       "id": "aeon-mall-nogata",
       "name": "イオンモール直方",
       "status": "ok",
-      "checkedAt": "2026-09-03T20:09:55.989715+09:00"
+      "checkedAt": "2026-09-03T21:52:10.314475+09:00"
     },
     {
       "id": "ongagawa-mizubekan",
       "name": "NPO法人直方川づくりの会",
       "status": "ok",
-      "checkedAt": "2026-09-03T20:09:55.989715+09:00"
+      "checkedAt": "2026-09-03T21:52:10.314475+09:00"
     }
   ]
 }
