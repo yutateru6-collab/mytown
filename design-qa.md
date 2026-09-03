@@ -1,49 +1,54 @@
-# Design QA: トップ文言とイベント操作欄
+# Design QA: 市政タブの市長・市議会ランディング
 
 ## Evidence
 
-- Source visual truth: `/workspace/scratch/24506b1a6a50/upload/IMG_8930.png` (946 × 2048, iPhone browser screenshot). The user marked the narrow, one-character-per-line event actions as the defect and requested removal of the home hero wording `よく見る地域：直方`.
-- Browser-rendered implementation screenshot: `/workspace/scratch/mytown-event-actions-fixed-crop-390.jpg` (390 × 844).
-- Combined comparison: `/workspace/scratch/mytown-event-actions-comparison.png` (780 × 844). The source was downsampled to 390 × 844 and placed beside the 390 × 844 browser capture; no density-dependent judgment was made.
-- Local URL checked: `http://terminal.local:4173/`
-- Viewports checked: 390 × 844 and 360 × 780 CSS px inside the responsive browser harness.
-- State: event listing with the first event action group visible; home hero checked separately.
+- Source visual truth: `/workspace/scratch/24506b1a6a50/upload/IMG_8932.jpeg` (710 × 1536). The black photo-viewer controls are outside the app design and were excluded from fidelity findings.
+- Browser-rendered implementation: `/workspace/scratch/mytown-politics-reference-crop-390.jpg` (390 × 844).
+- Side-by-side comparison: `/workspace/scratch/mytown-politics-comparison-route-fix.jpg` (780 × 844).
+- Local URL checked: `http://terminal.local:4173/?qa=politics-reference#politics` through a 390 × 844 responsive harness.
+- Responsive viewports: 390 × 844 and 360 × 780 CSS px. Browser density was 1 CSS px per captured pixel.
+- State: the bottom navigation's `市政` destination immediately shows the mayor/council overview.
 
 ## Full-view comparison evidence
 
-- The source screenshot shows each Japanese character forced onto a separate line inside a 56px grid column.
-- The revised browser capture shows the action group spanning the full card width, with `保存する`, `カレンダー`, and `当日の変更を確認` rendered horizontally.
-- The responsive harness adds desktop scrollbar chrome that is not present on the user's iPhone; this was treated as a harness artifact rather than app layout drift.
+- The implementation follows the source order: `市政トップへ`, compact title block, `30秒でわかる`, two-column mayor/council comparison, three-step budget flow, pink next-council card, and `知りたいことから`.
+- Mint mayor surface, pale-blue council surface, dark-green typography, pink meeting surface, rounded outlines, and fixed bottom navigation match the selected direction.
+- The source is a photo-viewer screenshot with dark editor/download overlays; the implementation correctly omits those non-app controls.
 
-## Focused region comparison evidence
+## Focused-region comparison evidence
 
-- The action region was measured directly. At 390px, the group is 321px wide; its three controls are 96px, 90px, and 144px wide, use `writing-mode: horizontal-tb`, and use `white-space: nowrap`.
-- At 360px, the group is 291px wide and retains the same horizontal control widths and 42px control height without character stacking.
-- The home hero contains no `.v2-tagline` and no exact `よく見る地域：直方` text.
+- The mayor panel uses the watercolor human illustration, `市長`, `大塚進弘`, the role explanation, and `2期目` in the same hierarchy as the source.
+- The council panel uses the watercolor meeting illustration, `市議会`, `19人`, the role explanation, and `議長 田代文也` in the same hierarchy as the source.
+- The three-step budget strip and the next-council card remain readable above the fixed navigation at 390px.
+- At 360px, document `scrollWidth` equals the available document width (345px after the test harness scrollbar), so no horizontal app overflow was found.
 
 ## Required fidelity surfaces
 
-- Fonts and typography: passed. Existing Japanese font stack, weights, line heights, and button type scale are preserved; action labels no longer wrap character by character.
-- Spacing and layout rhythm: passed. The action group spans both card grid columns and wraps controls by whole button, preserving 8px gaps and the dashed separator.
-- Colors and visual tokens: passed. No palette or semantic-color changes were introduced.
-- Image quality and asset fidelity: passed. No image or icon assets were changed.
-- Copy and content: passed. Only the requested home hero line was removed; event labels and source information are unchanged.
+- Fonts and typography: passed. Japanese sans-serif fallback, dark-green hierarchy, compact labels, large role/name numerals, and centered panel copy follow the source without clipping.
+- Spacing and layout rhythm: passed. Header, comparison card, process strip, meeting card, and following section maintain the source's compact vertical sequence.
+- Colors and visual tokens: passed. Mint, sky blue, blush pink, deep green, and blue role colors match the selected mock direction.
+- Image quality and asset fidelity: passed. Both mayor and council use supplied transparent watercolor raster assets; no placeholder, emoji, CSS drawing, or handcrafted replacement is used for the people illustrations.
+- Copy and content: passed. The visible role, person, seat count, chair, process, and meeting labels match the selected screen. Dynamic meeting dates remain sourced from current data.
+- Icons: passed. Existing image assets are used consistently for the header, budget flow, and meeting card.
+- Accessibility: passed. Mayor, council, meeting, and navigation destinations are semantic buttons with visible labels and practical tap targets.
 
 ## Comparison history
 
-- Earlier P1: event actions were auto-placed in the card's 56px icon grid column, producing vertical one-character labels.
-- Fix: `.ca-event-actions` and `.ca-card-quality-warning` now span `grid-column: 1 / -1`; controls use `flex: 0 0 auto` and `white-space: nowrap`.
-- Post-fix evidence: 390px and 360px browser measurements show full-width horizontal action groups; the combined screenshot shows the visible correction.
+- Earlier P1: the requested mayor/council screen existed one level behind the generic civic portal, so tapping the bottom `市政` navigation did not show the selected design.
+- Fix: `市政`, `市政をもっと知る`, and direct `#politics` routing now open the `people` overview first. `市政トップへ` still opens the broader civic portal, preserving access to budgets, decisions, and works.
+- Post-fix evidence: from the home screen, tapping the exact bottom-nav `市政` button produced the `市長・市議会を知る` heading; reloading `#politics` produced the same screen.
 
 ## Interaction and runtime checks
 
-- Primary interaction tested: first event `保存する` changes to `保存済み` and receives the saved state class.
-- Console checked: no application-origin errors; only unrelated Chrome extension metadata errors were present.
+- Bottom `きょう` → bottom `市政`: passed; the selected overview opens immediately.
+- Mayor panel → mayor details → `市長・市議会へ`: passed.
+- `市政トップへ` → broader civic portal: passed.
+- Console: no application-origin errors.
+- `node --check civic-portal.js`
+- `python scripts/verify_ux_contract.py`
 - `node scripts/test_event_ui.js`
 - `node scripts/test_community_ui.js`
 - `node scripts/test_garbage_ui.js`
-- `node --check civic-actions.js`
-- `python scripts/test_event_quality.py`
 - `npm run build`
 - `git diff --check`
 

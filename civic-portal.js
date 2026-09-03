@@ -166,7 +166,7 @@
     }
     if (action === "decision" || action === "council") {
       v2CloseSheet(false);
-      state.politicsSection = "home";
+      state.politicsSection = "people";
       return v2SetRoute({ tab: "politics", page: null, hash: "#politics" });
     }
     if (action === "money") {
@@ -179,7 +179,7 @@
   const civicHandleNavBase = v2HandleNav;
   v2HandleNav = function handleCivicNav(nav) {
     if (nav === "civic") {
-      state.politicsSection = "home";
+      state.politicsSection = "people";
       return v2SetRoute({ tab: "politics", page: null, hash: "#politics" });
     }
     return civicHandleNavBase(nav);
@@ -194,7 +194,7 @@
   const civicApplyHashRouteBase = v2ApplyHashRoute;
   v2ApplyHashRoute = function applyCivicHashRoute() {
     const hash = location.hash.replace("#", "");
-    if (["politics", "works", "nearby", "money"].includes(hash)) {
+    if (["politics", "people", "civic", "works", "nearby", "money"].includes(hash)) {
       state.tab = "politics";
       state.v2Page = null;
       state.selectedId = null;
@@ -204,7 +204,9 @@
         state.politicsSection = "home";
       } else {
         state.view = "tab";
-        state.politicsSection = hash === "works" || hash === "nearby" ? "works" : "home";
+        if (hash === "works" || hash === "nearby") state.politicsSection = "works";
+        else if (hash === "civic") state.politicsSection = "home";
+        else state.politicsSection = "people";
       }
       return;
     }
