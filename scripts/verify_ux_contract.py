@@ -43,14 +43,14 @@ def main() -> None:
     require(index, "./ui-v2.js?v=20", "versioned citizen-first runtime")
     require(index, "./app-runtime.js?v=3", "versioned data-load recovery runtime")
     require(index, "./ui-v2.css?v=18", "versioned citizen-first styles")
-    require(index, "./app.js?v=18", "daily visit state runtime")
-    require(index, "./ui-home-v4.js?v=20", "event-led home runtime")
-    require(index, "./ui-home-v4.css?v=17", "event-led home styles")
+    require(index, "./app.js?v=19", "daily visit state runtime")
+    require(index, "./ui-home-v4.js?v=21", "event-led home runtime")
+    require(index, "./ui-home-v4.css?v=18", "event-led home styles")
     require(index, "./map-nearby.js?v=3", "nearby map runtime")
     require(index, "./map-nearby.css?v=2", "nearby map styles")
     require(index, "./bulletin-reader.js?v=2", "bulletin reader runtime")
     require(index, "./bulletin-reader.css?v=1", "bulletin reader styles")
-    require(index, "./ui-home-v5.css?v=26", "versioned home polish styles")
+    require(index, "./ui-home-v5.css?v=27", "versioned home polish styles")
     forbid(index, "reference-ui.css", "static mockup stylesheet")
     forbid(index, "reference-ui.js", "static mockup runtime")
     forbid(index, ">提案する</span>", "misleading proposal label")
@@ -84,13 +84,17 @@ def main() -> None:
 
     for token in (
         "直方のイベント",
+        "市・地域団体・施設の情報を、近い日から3件。",
+        "すべてのイベントを見る",
+        "地域団体",
+        "市・地域の公開情報から掲載",
         "v4-bento-grid",
         "暮らしから探す",
         "市報を読む",
         "次の市議会",
         "イベント・体験を探す",
         "掲載について",
-        "すべてのイベントを掲載しているわけではありません",
+        "すべてのイベントを網羅しているわけではありません",
         "イベント掲載",
         "ボランティア",
         "準備中",
@@ -104,6 +108,10 @@ def main() -> None:
         "収集エリアを設定",
     ):
         require(home_ui, token, "event-led bento home contract")
+
+    community_data = read("data/community-events.json")
+    require(community_data, "地域団体・NPO", "NPO/community event source label")
+    require(community_data, "NPO法人直方川づくりの会", "reviewed NPO event source")
 
     forbid(home_ui, "350m", "unverified distance on home")
     forbid(home_ui, "まだ間に合う", "unverified home deadline claim")
@@ -176,7 +184,7 @@ def main() -> None:
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v24-garbage-schedule", "service-worker cache revision")
+    require(sw, "mytown-civic-v25-community-events", "service-worker cache revision")
     require(sw, "data/changes.json", "change-log precache")
     require(sw, "ui-home-v4.js", "v4 runtime precache")
     require(sw, "ui-home-v5.css", "v5 polish precache")
@@ -185,6 +193,7 @@ def main() -> None:
     require(sw, "bulletin-reader.js", "bulletin reader runtime precache")
     require(sw, "bulletin-reader.css", "bulletin reader style precache")
     require(sw, "event-festival.svg", "event illustration precache")
+    require(sw, "data/community-events.json", "community event data precache")
     for token in (
         "card-nearby.svg",
         "card-deadline.svg",

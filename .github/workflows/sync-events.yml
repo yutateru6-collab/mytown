@@ -1,0 +1,69 @@
+name: Sync Nogata community events
+
+on:
+  schedule:
+    - cron: "43 */6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "data/event-sources.json"
+      - "scripts/sync_events.py"
+      - "scripts/test_event_pipeline.py"
+      - ".github/workflows/sync-events.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-nogata-community-events
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate sources and parsers
+        run: |
+          python scripts/sync_events.py --check
+          python scripts/test_event_pipeline.py
+
+      - name: Sync reviewed event sources
+        run: python scripts/sync_events.py
+
+      - name: Validate generated data
+        run: python -m json.tool data/community-events.json > /dev/null
+
+      - name: Commit changes safely
+        run: |
+          if git diff --quiet -- data/community-events.json; then
+            echo "No event changes"
+            exit 0
+          fi
+
+          git fetch origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "Main advanced during this sync; skipping stale generated-data commit"
+            exit 0
+          fi
+
+          git config user.name "mytown-event-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/community-events.json
+          git commit -m "data: sync Nogata community events"
+
+          if ! git push origin HEAD:main; then
+            echo "Main advanced before push; the next scheduled run will regenerate event data"
+            exit 0
+          fi

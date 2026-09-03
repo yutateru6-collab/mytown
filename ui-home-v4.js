@@ -26,26 +26,104 @@
   }
 
   function v4AllItems() {
-    if (typeof combinedSearchItems === "function") return combinedSearchItems();
-    const featured = Array.isArray(state.data?.featured) ? state.data.featured : [];
-    const latest = Array.isArray(state.data?.latest)
-      ? state.data.latest.map((item, index) => ({
-          id: `latest-${index}`,
-          ...item,
-          sourceUrl: item.url,
-          published: item.date,
-          summary: "直方市が公開した新着情報です。",
-          category: typeof classifyTitle === "function" ? classifyTitle(item.title || "") : "その他",
-        }))
-      : [];
-    return [...featured, ...latest];
+    let official = [];
+    if (typeof combinedSearchItems === "function") official = combinedSearchItems();
+    else {
+      const featured = Array.isArray(state.data?.featured) ? state.data.featured : [];
+      const latest = Array.isArray(state.data?.latest)
+        ? state.data.latest.map((item, index) => ({
+            id: `latest-${index}`,
+            ...item,
+            sourceUrl: item.url,
+            published: item.date,
+            summary: "直方市が公開した新着情報です。",
+            category: typeof classifyTitle === "function" ? classifyTitle(item.title || "") : "その他",
+          }))
+        : [];
+      official = [...featured, ...latest];
+    }
+    const community = Array.isArray(state.data?.communityEvents?.events) ? state.data.communityEvents.events : [];
+    return [...community, ...official];
   }
 
   function v4IsEvent(item = {}) {
     const text = v4Text(item);
     if (!item.title || V4_EVENT_EXCLUDE_PATTERN.test(text)) return false;
+    if (["community", "tourism", "commercial", "cultural"].includes(item.sourceType)) return true;
     if (/観光・イベント|健康・スポーツ/.test(item.category || "")) return true;
     return V4_EVENT_PATTERN.test(text);
+  }
+
+  function v4EventDateKeys(item = {}) {
+    if (Array.isArray(item.occurrences) && item.occurrences.length) {
+      return item.occurrences.filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)).sort();
+    }
+    const explicit = [item.startDate, item.endDate].filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value));
+    if (explicit.length) return [...new Set(explicit)].sort();
+    const text = String(item.when || "");
+    const full = text.match(/(20\d{2})年(\d{1,2})月(\d{1,2})日/);
+    const short = text.match(/(\d{1,2})月(\d{1,2})日/);
+    const year = full ? Number(full[1]) : Number(v4TokyoDateKey().slice(0, 4));
+    const month = Number(full ? full[2] : short?.[1]);
+    const day = Number(full ? full[3] : short?.[2]);
+    if (!month || !day) return [];
+    return [`${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`];
+  }
+
+  function v4EventHappensOn(item, dateKey) {
+    const occurrences = Array.isArray(item.occurrences) ? item.occurrences : [];
+    if (occurrences.length) return occurrences.includes(dateKey);
+    const dates = v4EventDateKeys(item);
+    if (!dates.length) return false;
+    const start = item.startDate || dates[0];
+    const end = item.endDate || dates.at(-1) || start;
+    return dateKey >= start && dateKey <= end;
+  }
+
+  function v4EventNextDate(item, today = v4TokyoDateKey()) {
+    const occurrences = Array.isArray(item.occurrences) ? item.occurrences.filter((value) => value >= today).sort() : [];
+    if (occurrences.length) return occurrences[0];
+    const dates = v4EventDateKeys(item);
+    if (!dates.length) return "";
+    const start = item.startDate || dates[0];
+    const end = item.endDate || dates.at(-1) || start;
+    if (end < today) return "";
+    return start < today ? today : start;
+  }
+
+  function v4WeekendKeys(today = v4TokyoDateKey()) {
+    const dayNumber = v4IsoDayNumber(today);
+    if (dayNumber === null) return [];
+    const weekday = new Date(dayNumber * 86400000).getUTCDay();
+    const untilSaturday = (6 - weekday + 7) % 7;
+    const saturday = v4DateKeyOffset(today, untilSaturday);
+    return [saturday, v4DateKeyOffset(saturday, 1)];
+  }
+
+  function v4IsCommunityEvent(item = {}) {
+    return ["community", "tourism"].includes(item.sourceType);
+  }
+
+  function v4EventSourceLabel(item = {}) {
+    if (item.sourceLabel) return item.sourceLabel;
+    if (item.sourceType === "commercial") return "商業施設";
+    if (item.sourceType === "community") return "地域団体";
+    if (item.sourceType === "tourism") return "観光・地域";
+    return "直方市";
+  }
+
+  function v4EventSourceKey(item = {}) {
+    // 主催者が別でも、同じ施設・媒体から届いた情報は同じ掲載元として扱う。
+    // ホームの3件を一つの掲載元だけで埋めないためのキー。
+    return item.publisherName || item.organizerName || item.sourceType || "直方市";
+  }
+
+  function v4NormalizedEventTitle(item = {}) {
+    return String(item.title || "")
+      .normalize("NFKC")
+      .toLowerCase()
+      .replace(/20\d{2}年|\d{1,2}月\d{1,2}日/g, "")
+      .replace(/[^\p{L}\p{N}]+/gu, "");
   }
 
   function v4EventScore(item = {}) {
@@ -58,20 +136,31 @@
     if (item.location) score += 6;
     if (item.when) score += 6;
     if (item.sourceUrl || item.url) score += 3;
+    if (v4IsCommunityEvent(item)) score += 8;
     return score;
   }
 
   function v4EventItems() {
     const seen = new Set();
+    const today = v4TokyoDateKey();
     return v4AllItems()
       .filter(v4IsEvent)
       .filter((item) => {
-        const key = `${item.title || ""}|${item.sourceUrl || item.url || ""}`;
+        const dates = v4EventDateKeys(item);
+        if (!dates.length) return true;
+        return Boolean(v4EventNextDate(item, today));
+      })
+      .filter((item) => {
+        const key = `${v4NormalizedEventTitle(item)}|${v4EventNextDate(item, today) || "date-unknown"}`;
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
       })
       .sort((a, b) => {
+        const aDate = v4EventNextDate(a, today) || "9999-12-31";
+        const bDate = v4EventNextDate(b, today) || "9999-12-31";
+        const dateDiff = aDate.localeCompare(bDate);
+        if (dateDiff) return dateDiff;
         const scoreDiff = v4EventScore(b) - v4EventScore(a);
         if (scoreDiff) return scoreDiff;
         return String(b.published || b.date || "").localeCompare(String(a.published || a.date || ""));
@@ -245,25 +334,77 @@
 
   function v4EventFeature() {
     const events = v4EventItems();
-    const primary = events[0] || null;
-    const countLabel = events.length ? `${events.length}件掲載中` : "更新中";
-    const title = primary ? primary.title : "イベント情報を更新しています";
-    const summary = primary
-      ? v4Short(primary.summary || "詳しい内容は市のページで確認できます。", 74)
-      : "イベント・教室・体験をまとめて探せます。";
-    const chips = [primary?.status, primary?.location ? v4Short(primary.location, 22) : ""].filter(Boolean);
+    const selected = v4HomeEventItems(events);
+    const quickFilters = v4EventFilterDefinitions(events).filter((filter) => ["today", "weekend", "family", "participate"].includes(filter.id));
 
     return `<section class="v4-event-feature" aria-labelledby="v4-event-feature-title">
-      <div class="v4-event-art" aria-hidden="true"><img src="${V4_ASSETS.event}" alt="" decoding="async" fetchpriority="high"></div>
-      <div class="v4-event-copy">
-        <div class="v4-event-topline"><span>直方のイベント</span><small>${esc(countLabel)}</small></div>
-        <h2 id="v4-event-feature-title">直方で、なにする？</h2>
-        <h3>${esc(v4Short(title, 44))}</h3>
-        <p>${esc(summary)}</p>
-        ${chips.length ? `<div class="v4-event-chips">${chips.map((chip) => `<span>${esc(chip)}</span>`).join("")}</div>` : ""}
-        <button class="v4-primary-cta" type="button" data-v2-action="events">イベントを見る <span aria-hidden="true">→</span></button>
+      <div class="v4-event-feature-head">
+        <div class="v4-event-copy">
+          <div class="v4-event-topline"><span>直方のイベント</span><small>${events.length ? `${events.length}件掲載中` : "更新中"}</small></div>
+          <h2 id="v4-event-feature-title">直方で、なにする？</h2>
+          <p>市・地域団体・施設の情報を、近い日から3件。</p>
+        </div>
+        <div class="v4-event-art" aria-hidden="true"><img src="${V4_ASSETS.event}" alt="" decoding="async" fetchpriority="high"></div>
       </div>
+      <div class="v4-event-quick-filters" aria-label="イベントをすぐに絞る">
+        ${quickFilters.map((filter) => `<button type="button" data-v4-home-event-filter="${esc(filter.id)}" ${filter.count ? "" : "disabled"}>${esc(filter.label)} <span>${filter.count}</span></button>`).join("")}
+      </div>
+      <div class="v4-home-event-list">
+        ${selected.length ? selected.map(v4HomeEventCard).join("") : `<p class="v4-home-event-empty">現在、日付を確認できるイベントはありません。</p>`}
+      </div>
+      <button class="v4-primary-cta" type="button" data-v2-action="events">すべてのイベントを見る${events.length ? `　全${events.length}件` : ""} <span aria-hidden="true">→</span></button>
     </section>`;
+  }
+
+  function v4HomeEventItems(events) {
+    const selected = [];
+    const selectedIds = new Set();
+    const usedSources = new Set();
+    const add = (item) => {
+      if (!item || selectedIds.has(item.id || item.sourceUrl || item.title)) return;
+      const identity = item.id || item.sourceUrl || item.title;
+      selected.push(item);
+      selectedIds.add(identity);
+      usedSources.add(v4EventSourceKey(item));
+    };
+    const today = v4TokyoDateKey();
+    const tomorrow = v4DateKeyOffset(today, 1);
+    add(events.find((item) => v4EventHappensOn(item, today) || v4EventHappensOn(item, tomorrow)) || events[0]);
+    add(events.find((item) => v4IsCommunityEvent(item) && !usedSources.has(v4EventSourceKey(item))));
+    add(events.find((item) => !usedSources.has(v4EventSourceKey(item))));
+    events.forEach((item) => {
+      if (selected.length < 3 && !usedSources.has(v4EventSourceKey(item))) add(item);
+    });
+    events.forEach((item) => {
+      if (selected.length < 3) add(item);
+    });
+    return selected.slice(0, 3).sort((a, b) => (v4EventNextDate(a) || "9999-12-31").localeCompare(v4EventNextDate(b) || "9999-12-31"));
+  }
+
+  function v4EventReason(item) {
+    const today = v4TokyoDateKey();
+    const tomorrow = v4DateKeyOffset(today, 1);
+    if (v4EventHappensOn(item, today)) return "今日開催";
+    if (v4EventHappensOn(item, tomorrow)) return "明日開催";
+    if (v4WeekendKeys(today).some((dateKey) => v4EventHappensOn(item, dateKey))) return "今週末";
+    if (v4IsCommunityEvent(item)) return "地域から";
+    if (/親子|子ども|こども|家族/.test(v4Text(item))) return "親子向け";
+    const nextDate = v4EventNextDate(item, today);
+    if (nextDate) {
+      const [, month, day] = nextDate.split("-").map(Number);
+      return `${month}/${day}開催`;
+    }
+    return "新着イベント";
+  }
+
+  function v4HomeEventCard(item) {
+    const meta = [item.when ? v4Short(item.when, 25) : "", item.location ? v4Short(item.location, 24) : ""].filter(Boolean).join("｜");
+    return `<button type="button" class="v4-home-event-card" data-v2-action="events">
+      <span class="v4-home-event-date">${esc(v4EventReason(item))}</span>
+      <span class="v4-home-event-main"><strong>${esc(v4Short(item.title || "イベント情報", 42))}</strong>${meta ? `<small>${esc(meta)}</small>` : ""}</span>
+      <span class="v4-home-event-source">${esc(v4EventSourceLabel(item))}</span>
+      <b aria-hidden="true">›</b>
+    </button>`;
   }
 
   function v4BentoCard({ action, tone, icon, kicker, title, note }) {
@@ -400,14 +541,20 @@
       ${v4ParticipationTeaser()}
       ${v4AskBar()}
       ${v2LifeAndLatest()}
-      <p class="v2-disclaimer">のおがた日和は、直方市の公開情報をもとにした非公式アプリです。掲載範囲は、現在取り込めた情報に限られます。手続き・期限・選挙は、直方市のページで最終確認してください。</p>
+      <p class="v2-disclaimer">のおがた日和は、直方市・地域団体・施設などの公開情報をもとにした非公式アプリです。掲載範囲は、現在取り込めた情報に限られます。手続き・期限・選挙は直方市、イベントは主催者または掲載元のページで最終確認してください。</p>
     </div></section>`;
   };
 
   function v4EventFilterDefinitions(items) {
+    const today = v4TokyoDateKey();
+    const weekend = v4WeekendKeys(today);
     const definitions = [
       { id: "all", label: "すべて", test: () => true },
-      { id: "family", label: "親子・子ども", test: (item) => /親子|子ども|こども|幼児|小学生|家族/.test(v4Text(item)) },
+      { id: "today", label: "今日", test: (item) => v4EventHappensOn(item, today) },
+      { id: "weekend", label: "今週末", test: (item) => weekend.some((dateKey) => v4EventHappensOn(item, dateKey)) },
+      { id: "family", label: "親子・子ども", test: (item) => item.tags?.includes("family") || /親子|子ども|こども|幼児|小学生|家族/.test(v4Text(item)) },
+      { id: "participate", label: "地域参加", test: (item) => item.tags?.includes("participation") || /ボランティア|清掃|献血|地域参加|意見募集/.test(v4Text(item)) },
+      { id: "free", label: "無料", test: (item) => item.tags?.includes("free") || /無料/.test(`${item.money || ""} ${v4Text(item)}`) },
       { id: "sports", label: "スポーツ・健康", test: (item) => /スポーツ|健康|体育|運動|ピラティス|ヨガ/.test(v4Text(item)) },
       { id: "learn", label: "体験・学び", test: (item) => /体験|学習|講座|教室|展示|アート|環境|ワークショップ/.test(v4Text(item)) },
     ];
@@ -420,17 +567,31 @@
       item.when ? `<span><b>日時</b>${esc(v4Short(item.when, 38))}</span>` : "",
       item.location ? `<span><b>場所</b>${esc(v4Short(item.location, 42))}</span>` : "",
       item.money ? `<span><b>費用</b>${esc(v4Short(item.money, 28))}</span>` : "",
+      item.organizerName ? `<span><b>主催</b>${esc(v4Short(item.organizerName, 38))}</span>` : item.publisherName ? `<span><b>掲載</b>${esc(v4Short(item.publisherName, 38))}</span>` : "",
     ].filter(Boolean);
+    const icon = /地域参加/.test(category) ? "🤝" : /親子|子ども/.test(category) ? "🎈" : /音楽|文化/.test(category) ? "🎵" : /スポーツ|健康/.test(category) ? "🏃" : /講座|体験|学/.test(v4Text(item)) ? "🎨" : "🎪";
+    const controlLabel = v4IsFeaturedItem(item) ? "30秒で見る" : item.sourceType ? "掲載元で確認" : "直方市のページで確認";
     return `<article class="v4-event-list-card">
-      <div class="v4-event-list-icon" aria-hidden="true">${/スポーツ|健康/.test(category) ? "🏃" : /講座|体験|学/.test(v4Text(item)) ? "🎨" : "🎪"}</div>
+      <div class="v4-event-list-icon" aria-hidden="true">${icon}</div>
       <div class="v4-event-list-copy">
-        <div class="v4-event-list-meta"><span>${esc(category)}</span>${item.status ? `<strong>${esc(item.status)}</strong>` : ""}</div>
+        <div class="v4-event-list-meta"><span>${esc(category)}</span><span class="is-source">${esc(v4EventSourceLabel(item))}</span>${item.statusLabel ? `<strong>${esc(item.statusLabel)}</strong>` : ""}</div>
         <h3>${esc(item.title || "イベント情報")}</h3>
-        <p>${esc(v4Short(item.summary || "詳しい内容は市のページで確認できます。", 104))}</p>
+        <p>${esc(v4Short(item.summary || "日時や場所など、確認できた情報を掲載しています。", 104))}</p>
         ${facts.length ? `<div class="v4-event-facts">${facts.join("")}</div>` : ""}
-        ${v4ItemControl(item, v4IsFeaturedItem(item) ? "30秒で見る" : "公式情報を見る", "what", "v4-event-card-cta")}
+        ${v4ItemControl(item, controlLabel, "what", "v4-event-card-cta")}
       </div>
     </article>`;
+  }
+
+  function v4EventDataNote() {
+    const community = state.data?.communityEvents || {};
+    const health = Array.isArray(community.sourceHealth) ? community.sourceHealth : [];
+    const failed = health.filter((source) => source.status !== "ok");
+    const updated = community.generatedAt && typeof formatDateTime === "function" ? formatDateTime(community.generatedAt) : "確認中";
+    if (failed.length) {
+      return `<div class="v4-event-data-note is-warning" role="status"><strong>一部の掲載元を更新できませんでした</strong><span>確認済みの情報は表示しています。開催前に掲載元でも確認してください。</span></div>`;
+    }
+    return `<div class="v4-event-data-note" role="status"><strong>市・地域の公開情報から掲載</strong><span>地域イベントの最終更新：${esc(updated)}</span></div>`;
   }
 
   function v4EventsView() {
@@ -443,13 +604,13 @@
     return `<section class="page v2-page v2-inner-page v4-events-page">
       <button class="back-button" type="button" data-v2-action="back-route">‹ 戻る</button>
       <div class="v4-events-hero">
-        <div><p class="eyebrow">直方のイベント</p><h1>イベント・体験を探す</h1><p>直方市が公開しているイベントを探せます。</p></div>
+        <div><p class="eyebrow">直方のイベント</p><h1>イベント・体験を探す</h1><p>市、地域団体、NPO、施設などが公開した情報をまとめています。</p></div>
         <img src="${V4_ASSETS.event}" alt="" aria-hidden="true" decoding="async">
       </div>
-      <div class="v2-sync-wrap v4-sync-wrap">${syncBanner()}</div>
-      <div class="v4-event-page-note"><strong>掲載について</strong><p>市内のすべてのイベントを掲載しているわけではありません。地域団体などの情報は、今後追加する予定です。</p></div>
+      ${v4EventDataNote()}
+      <div class="v4-event-page-note"><strong>掲載について</strong><p>日時・場所・主催者などを確認できた情報だけを掲載します。すべてのイベントを網羅しているわけではありません。</p></div>
       <div class="v4-event-filter-row" aria-label="イベントの種類で絞る">${filters.map((filter) => `<button type="button" class="${active === filter.id ? "is-active" : ""}" data-v4-event-filter="${esc(filter.id)}">${esc(filter.label)} <span>${filter.count}</span></button>`).join("")}</div>
-      <div class="v4-event-results-head"><h2>${esc(activeFilter.label)}</h2><span>${shown.length}件</span></div>
+      <div class="v4-event-results-head"><h2>${active === "all" ? "掲載中のイベント" : `${esc(activeFilter.label)}のイベント`}</h2><span>${shown.length}件</span></div>
       <div class="v4-event-list">${shown.length ? shown.map(v4EventListCard).join("") : emptyCard("この種類のイベントは見つかりませんでした。上の分類から別の種類を選んでください。")}</div>
       <section class="v4-event-contribute"><div><small>載っていないイベントがありますか？</small><h2>イベント情報の受付は準備中です</h2><p>主催者や市民からの情報受付は、確認方法と安全対策を整えてから始めます。</p></div><button type="button" data-v2-action="participate">準備中の内容を見る →</button></section>
     </section>`;
@@ -553,6 +714,12 @@
   };
 
   document.addEventListener("click", (event) => {
+    const quickFilter = event.target.closest("[data-v4-home-event-filter]");
+    if (quickFilter) {
+      event.preventDefault();
+      state.v4EventFilter = quickFilter.dataset.v4HomeEventFilter || "all";
+      return v2SetRoute({ tab: "today", page: "events", hash: "#events" });
+    }
     const filter = event.target.closest("[data-v4-event-filter]");
     if (!filter) return;
     event.preventDefault();

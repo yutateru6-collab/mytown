@@ -15,6 +15,12 @@ const FALLBACK_DATA = {
   latest: [],
   council: null,
   garbage: null,
+  communityEvents: {
+    schemaVersion: 1,
+    generatedAt: null,
+    events: [],
+    sourceHealth: []
+  },
   changes: {
     schemaVersion: 1,
     generatedAt: null,
@@ -108,6 +114,12 @@ function normalizeData(raw) {
     featured: Array.isArray(data.featured) ? data.featured : [],
     latest: Array.isArray(data.latest) ? data.latest : [],
     sourceHealth: Array.isArray(data.sourceHealth) ? data.sourceHealth : [],
+    communityEvents: {
+      ...FALLBACK_DATA.communityEvents,
+      ...(data.communityEvents || {}),
+      events: Array.isArray(data.communityEvents?.events) ? data.communityEvents.events : [],
+      sourceHealth: Array.isArray(data.communityEvents?.sourceHealth) ? data.communityEvents.sourceHealth : [],
+    },
     changes: {
       ...FALLBACK_DATA.changes,
       ...(data.changes || {}),
@@ -128,16 +140,18 @@ async function loadOfficialData() {
   state.loading = true;
   render();
   try {
-    const [response, bulletinResponse, changesResponse] = await Promise.all([
+    const [response, bulletinResponse, changesResponse, communityEventsResponse] = await Promise.all([
       fetch(`./data/latest.json?v=${Date.now()}`, { cache: "no-store" }),
       fetch(`./data/bulletin.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
       fetch(`./data/changes.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
+      fetch(`./data/community-events.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
     ]);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const latest = await response.json();
     const bulletin = bulletinResponse?.ok ? await bulletinResponse.json() : {};
     const changes = changesResponse?.ok ? await changesResponse.json() : FALLBACK_DATA.changes;
-    state.data = normalizeData({ ...latest, bulletin, changes });
+    const communityEvents = communityEventsResponse?.ok ? await communityEventsResponse.json() : FALLBACK_DATA.communityEvents;
+    state.data = normalizeData({ ...latest, bulletin, changes, communityEvents });
     state.loadError = false;
   } catch (error) {
     console.warn("Official data load failed", error);

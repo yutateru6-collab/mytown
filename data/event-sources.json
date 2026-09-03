@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "nogata-shakyo",
+      "name": "直方市社会福祉協議会",
+      "url": "https://nogatashakyo.org/",
+      "parser": "shakyo",
+      "sourceType": "community",
+      "sourceLabel": "地域団体",
+      "enabled": true
+    },
+    {
+      "id": "nogata-kankoh",
+      "name": "直方市観光物産振興協会",
+      "url": "https://nogata-kankoh.com/",
+      "parser": "tourism",
+      "sourceType": "tourism",
+      "sourceLabel": "観光・地域",
+      "enabled": true
+    },
+    {
+      "id": "aeon-mall-nogata",
+      "name": "イオンモール直方",
+      "url": "https://nogata.aeonmall.jp/event",
+      "parser": "aeon",
+      "sourceType": "commercial",
+      "sourceLabel": "商業施設",
+      "defaultLocation": "イオンモール直方",
+      "enabled": true
+    },
+    {
+      "id": "ongagawa-mizubekan",
+      "name": "NPO法人直方川づくりの会",
+      "url": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1564/_1567.html",
+      "parser": "last-sunday-cleanup",
+      "sourceType": "community",
+      "sourceLabel": "地域団体・NPO",
+      "enabled": true
+    }
+  ]
+}
