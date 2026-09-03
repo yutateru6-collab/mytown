@@ -19,6 +19,8 @@ def main() -> None:
     assert extract_money("参加費：1 ,000円 定員：15名") == ("1,000円", [])
     assert extract_money("参加費：1 , 000円 定員：15名") == ("1,000円", [])
     assert extract_money("チケット 前売1,000円／当日1,500円") == ("前売1,000円／当日1,500円", [])
+    assert extract_money("イベント当日、店で1,100円(税込み)お買い上げごとにノベルティをプレゼント") == ("", [])
+    assert extract_money("駐車料金 無料。イベントの参加方法は当日受付です") == ("", [])
     invalid_money, invalid_issues = extract_money("料金：000円")
     assert invalid_money == ""
     assert invalid_issues and "不自然" in invalid_issues[0]
@@ -51,6 +53,21 @@ def main() -> None:
     assert "受付中" not in refined_bus["title"]
     assert refined_bus["contentStatus"] == "verified"
 
+    cinna = {
+        "id": "community-aeon-cinna",
+        "title": "シナモロールがあそびにくるよ",
+        "startDate": "2026-09-05",
+        "endDate": "2026-09-05",
+        "money": "1,100円",
+        "sourceUrl": "https://example.org/cinna",
+        "editoriallyReviewed": True,
+    }
+    cinna_text = "イベント当日、Sanrio店舗で1,100円(税込み)お買い上げごとに、うちわをプレゼントします。"
+    refined_cinna = refine_event(cinna, cinna_text, date(2026, 9, 3))
+    assert "money" not in refined_cinna
+    assert refined_cinna["contentStatus"] == "verified"
+    assert any("商品購入額" in note for note in refined_cinna["contentNotes"])
+
     malformed = {
         "id": "community-source-bad",
         "title": "まち歩き",
@@ -64,16 +81,49 @@ def main() -> None:
     assert refined_malformed["contentStatus"] == "needs_review"
     assert any("不自然" in issue for issue in refined_malformed["contentIssues"])
 
+    walk_override = {
+        "sourceUrl": "https://nogata-kankoh.com/news/8273.html",
+        "set": {"money": "1,000円"},
+        "verifiedOn": "2026-09-03",
+        "evidenceUrls": [
+            "https://nogata-kankoh.com/news/8273.html",
+            "https://chikuho.keizai.biz/headline/330/",
+        ],
+        "note": "参加費は公開情報を突き合わせて確認しました。",
+    }
+    refined_walk = refine_event(
+        malformed,
+        "開催日 10月31日 参加費：000円",
+        date(2026, 9, 3),
+        override=walk_override,
+    )
+    assert refined_walk["money"] == "1,000円"
+    assert refined_walk["contentStatus"] == "verified"
+    assert refined_walk["reviewedOverride"]["fields"] == ["money"]
+
+    unavailable = refine_event(bus, "", date(2026, 9, 3), source_available=False)
+    assert unavailable["contentStatus"] == "needs_review"
+    assert any("再取得" in issue for issue in unavailable["contentIssues"])
+
     payload = {
         "schemaVersion": 1,
         "events": [bus],
         "sourceHealth": [{"id": "nogata-kankoh", "name": "観光協会", "status": "ok"}],
     }
-    output = refine_payload(payload, fetcher=lambda _url: bus_text, today=date(2026, 9, 3))
+    output = refine_payload(payload, fetcher=lambda _url: bus_text, today=date(2026, 9, 3), overrides={"overrides": []})
     assert output["events"][0]["contentStatus"] == "verified"
     assert output["sourceHealth"][0]["fetchStatus"] == "ok"
     assert output["sourceHealth"][0]["contentStatus"] == "verified"
     assert output["sourceHealth"][0]["contentIssueCount"] == 0
+
+    output_failed = refine_payload(
+        payload,
+        fetcher=lambda _url: (_ for _ in ()).throw(OSError("temporary failure")),
+        today=date(2026, 9, 3),
+        overrides={"overrides": []},
+    )
+    assert output_failed["events"][0]["contentStatus"] == "needs_review"
+    assert output_failed["qualityFetchWarnings"]
 
     ambiguous = {
         "id": "community-nogata-kankoh-ambiguous",

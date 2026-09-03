@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v26-community-directory";
+const CACHE = "mytown-civic-v27-civic-actions";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
