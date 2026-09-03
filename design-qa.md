@@ -1,42 +1,54 @@
-# のおがた日和 hero design QA
+# Design QA: トップ文言とイベント操作欄
 
-## Scope
+## Evidence
 
-- Changed only the home hero: app name, catchphrase hierarchy, accent color, trust note, and mascot balance.
-- Left every section below the hero unchanged.
-- Did not implement the unselected `昨日から変わったこと` module.
+- Source visual truth: `/workspace/scratch/24506b1a6a50/upload/IMG_8930.png` (946 × 2048, iPhone browser screenshot). The user marked the narrow, one-character-per-line event actions as the defect and requested removal of the home hero wording `よく見る地域：直方`.
+- Browser-rendered implementation screenshot: `/workspace/scratch/mytown-event-actions-fixed-crop-390.jpg` (390 × 844).
+- Combined comparison: `/workspace/scratch/mytown-event-actions-comparison.png` (780 × 844). The source was downsampled to 390 × 844 and placed beside the 390 × 844 browser capture; no density-dependent judgment was made.
+- Local URL checked: `http://terminal.local:4173/`
+- Viewports checked: 390 × 844 and 360 × 780 CSS px inside the responsive browser harness.
+- State: event listing with the first event action group visible; home hero checked separately.
 
-## Visual target and rendered evidence
+## Full-view comparison evidence
 
-- Selected source visual: `/workspace/scratch/7378e1883a5d/generated_images/exec-b419898c-3b1f-4c29-b1a1-8a4c8defbe33.png`.
-- Final rendered capture: `/workspace/scratch/nogata-hero-mobile-390-verified-1788422117255.jpg`.
-- Same-state comparison: `/workspace/scratch/nogata-hero-comparison-verified.png`.
-- Comparison viewport: 390 px wide, home route, default region setting, 9月3日(木).
-- Compact check: 320 px wide, home route, default region setting.
+- The source screenshot shows each Japanese character forced onto a separate line inside a 56px grid column.
+- The revised browser capture shows the action group spanning the full card width, with `保存する`, `カレンダー`, and `当日の変更を確認` rendered horizontally.
+- The responsive harness adds desktop scrollbar chrome that is not present on the user's iPhone; this was treated as a harness artifact rather than app layout drift.
 
-## Fidelity review
+## Focused region comparison evidence
 
-| Surface | Result |
-|---|---|
-| Composition | App name and catchphrase keep the selected centered-right balance while the mascot anchors the left side. |
-| Typography | `のおがた日和` is the primary mark; `知れば直方はもっとおもしろい！` is one level quieter and remains readable. |
-| Color | Deep green remains the base; only `日和` uses the restrained rose accent from the selected visual. |
-| Imagery | Existing watercolor scenery and mascot assets are preserved without stretching or replacement. |
-| Spacing and responsive behavior | 390 px and 320 px captures keep all hero text visible with no collision between the title, controls, mascot, and trust note. |
+- The action region was measured directly. At 390px, the group is 321px wide; its three controls are 96px, 90px, and 144px wide, use `writing-mode: horizontal-tb`, and use `white-space: nowrap`.
+- At 360px, the group is 291px wide and retains the same horizontal control widths and 42px control height without character stacking.
+- The home hero contains no `.v2-tagline` and no exact `よく見る地域：直方` text.
 
-## Iteration history
+## Required fidelity surfaces
 
-1. The first desktop pass let the mascot extend slightly above the hero. Its maximum width was reduced from 160 px to 140 px.
-2. The first mobile pass made the app name too quiet relative to the selected visual. The 390 px wordmark was raised to 2.05 rem while the catchphrase stayed at 1.1 rem.
-3. The first mobile pass placed the trust note behind the overlapping content sheet. Its stacking order was corrected so the entire note remains visible.
-4. The final 390 px source and implementation crops were placed side by side and reviewed together.
+- Fonts and typography: passed. Existing Japanese font stack, weights, line heights, and button type scale are preserved; action labels no longer wrap character by character.
+- Spacing and layout rhythm: passed. The action group spans both card grid columns and wraps controls by whole button, preserving 8px gaps and the dashed separator.
+- Colors and visual tokens: passed. No palette or semantic-color changes were introduced.
+- Image quality and asset fidelity: passed. No image or icon assets were changed.
+- Copy and content: passed. Only the requested home hero line was removed; event labels and source information are unchanged.
 
-## Interaction and regression checks
+## Comparison history
 
-- `新着を見る` opens the new-information screen.
-- The settings action opens the existing region and display-order settings screen.
-- No application console errors were observed; browser-extension errors were excluded.
-- JavaScript syntax, civic pipeline regression, source registry, election history, high-risk data, image density, UX contract, and `git diff --check` passed locally.
-- Natural Japanese lint reported 0 findings for the hero copy.
+- Earlier P1: event actions were auto-placed in the card's 56px icon grid column, producing vertical one-character labels.
+- Fix: `.ca-event-actions` and `.ca-card-quality-warning` now span `grid-column: 1 / -1`; controls use `flex: 0 0 auto` and `white-space: nowrap`.
+- Post-fix evidence: 390px and 360px browser measurements show full-width horizontal action groups; the combined screenshot shows the visible correction.
+
+## Interaction and runtime checks
+
+- Primary interaction tested: first event `保存する` changes to `保存済み` and receives the saved state class.
+- Console checked: no application-origin errors; only unrelated Chrome extension metadata errors were present.
+- `node scripts/test_event_ui.js`
+- `node scripts/test_community_ui.js`
+- `node scripts/test_garbage_ui.js`
+- `node --check civic-actions.js`
+- `python scripts/test_event_quality.py`
+- `npm run build`
+- `git diff --check`
+
+## Findings
+
+- No actionable P0/P1/P2 findings remain.
 
 final result: passed

@@ -96,7 +96,7 @@ function v2Hero() {
       <button type="button" class="v2-round-action" data-v2-nav="notifications" aria-label="新着を見る"><span aria-hidden="true">🔔</span><small>新着</small></button>
       <button type="button" class="v2-round-action" data-v2-action="settings" aria-label="地域と表示順の設定を開く"><span aria-hidden="true">⚙︎</span><small>設定</small></button>
     </div>
-    <div class="v2-hero-copy"><p class="v2-date">${esc(v2DateLabel())}</p><p class="v2-wordmark">のおがた<span class="v2-wordmark-accent">日和</span></p><h1 id="v2-home-title">知れば直方は<br>もっとおもしろい！</h1>${district ? `<p class="v2-tagline">よく見る地域：${esc(district)}</p>` : ""}</div>
+    <div class="v2-hero-copy"><p class="v2-date">${esc(v2DateLabel())}</p><p class="v2-wordmark">のおがた<span class="v2-wordmark-accent">日和</span></p><h1 id="v2-home-title">知れば直方は<br>もっとおもしろい！</h1></div>
     <p class="v2-data-note">非公式｜直方市の公開情報をもとに掲載</p>
     ${v2Mascot("チューリップと石炭をモチーフにした、のおがた日和の案内役まちナビ")}
   </section>`;
