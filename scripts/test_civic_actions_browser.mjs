@@ -87,7 +87,10 @@ try {
   assert.match(reportText, /テスト公園の入口近く/);
   assert.match(reportText, /子どもが触ると危ない/);
   assert.match(reportText, /33\.743600/);
-  assert.match(await page.locator("#ca-dialog-body").innerText(), /請願・陳情/);
+  const councilDetails = page.locator(".ca-council-details");
+  assert.match(await councilDetails.locator("summary").innerText(), /市議会へ正式に要望/);
+  await councilDetails.locator("summary").click();
+  assert.match(await councilDetails.innerText(), /請願・陳情/);
   await page.screenshot({ path: path.join(outputDir, "civic-report-routing.png"), fullPage: false, scale: "css" });
   report.checks.push("photo, geolocation and official civic routing");
   await page.locator(".ca-dialog-close").click();
