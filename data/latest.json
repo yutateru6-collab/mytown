@@ -119,13 +119,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-445bc72a3510",
-      "category": "その他",
-      "title": "就職に役立つセミナーも同時開催  ～合同会社説明会2026～",
+      "id": "rss-e23f225cd382",
+      "category": "観光・イベント",
+      "title": "筑豊炭田遺跡群オンラインシンポジウム「産炭地を比較する‐閉山後の福岡・筑豊と北海道・空知‐」を開催します！",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-02",
+      "published": "2026-09-03",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_7488/_17263.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html"
     }
   ],
   "council": {
@@ -144,6 +144,11 @@
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310.html"
   },
   "latest": [
+    {
+      "date": "2026-09-03",
+      "title": "筑豊炭田遺跡群オンラインシンポジウム「産炭地を比較する‐閉山後の福岡・筑豊と北海道・空知‐」を開催します！",
+      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html"
+    },
     {
       "date": "2026-09-02",
       "title": "就職に役立つセミナーも同時開催  ～合同会社説明会2026～",
@@ -198,11 +203,6 @@
       "date": "2026-09-01",
       "title": "遠賀川水系河川整備計画【変更原案】について地元説明会を開催します",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3986/_17266.html"
-    },
-    {
-      "date": "2026-09-01",
-      "title": "ハーバリウムづくり体験～のおがたSDGsフェスタ2026 in イオンモール直方～",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17212.html"
     }
   ],
   "sourceHealth": [
@@ -253,5 +253,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-02T18:32:11Z"
+  "generatedAt": "2026-09-03T06:35:13Z"
 }
