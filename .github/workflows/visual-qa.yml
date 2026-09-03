@@ -10,6 +10,7 @@ on:
       - "assets/**"
       - "data/**"
       - "scripts/capture_visual_qa.mjs"
+      - "scripts/test_civic_actions_browser.mjs"
       - ".github/workflows/visual-qa.yml"
   workflow_run:
     workflows: ["Deploy MYTOWN to GitHub Pages"]
@@ -70,6 +71,12 @@ jobs:
           VISUAL_QA_URL: https://yutateru6-collab.github.io/mytown/
           VISUAL_QA_DIR: visual-qa-output
         run: node scripts/capture_visual_qa.mjs
+
+      - name: Test event and civic-reporting flows
+        env:
+          VISUAL_QA_URL: ${{ github.event_name == 'workflow_run' && 'https://yutateru6-collab.github.io/mytown/' || 'http://127.0.0.1:4173/' }}
+          VISUAL_QA_DIR: visual-qa-output
+        run: node scripts/test_civic_actions_browser.mjs
 
       - name: Upload screenshots and density report
         if: always()
