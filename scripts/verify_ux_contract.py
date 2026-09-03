@@ -127,7 +127,7 @@ def main() -> None:
         "data/civic-report-routes.json",
     ):
         require(civic_ui, token, "event follow-through and civic reporting contract")
-    for token in (".ca-lifecycle", ".ca-dialog", ".ca-report-photo"):
+    for token in (".ca-lifecycle", ".ca-dialog", ".ca-photo-preview"):
         require(civic_css, token, "civic actions styling")
     for token in (
         '"id": "road"',
