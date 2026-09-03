@@ -9,7 +9,9 @@ on:
     paths:
       - "data/event-sources.json"
       - "scripts/sync_events.py"
+      - "scripts/refine_event_quality.py"
       - "scripts/test_event_pipeline.py"
+      - "scripts/test_event_quality.py"
       - ".github/workflows/sync-events.yml"
 
 permissions:
@@ -34,13 +36,18 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Validate sources and parsers
+      - name: Validate sources, parsers and content checks
         run: |
           python scripts/sync_events.py --check
+          python scripts/refine_event_quality.py --check
           python scripts/test_event_pipeline.py
+          python scripts/test_event_quality.py
 
       - name: Sync reviewed event sources
         run: python scripts/sync_events.py
+
+      - name: Re-check prices, deadlines and application states
+        run: python scripts/refine_event_quality.py
 
       - name: Validate generated data
         run: python -m json.tool data/community-events.json > /dev/null
@@ -61,7 +68,7 @@ jobs:
           git config user.name "mytown-event-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/community-events.json
-          git commit -m "data: sync Nogata community events"
+          git commit -m "data: sync and validate Nogata community events"
 
           if ! git push origin HEAD:main; then
             echo "Main advanced before push; the next scheduled run will regenerate event data"
