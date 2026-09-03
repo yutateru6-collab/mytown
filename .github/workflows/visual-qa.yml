@@ -31,7 +31,7 @@ jobs:
   screenshots:
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - name: Checkout tested revision
         uses: actions/checkout@v4
@@ -105,11 +105,20 @@ jobs:
           VISUAL_QA_DIR: visual-qa-output
         run: node scripts/test_civic_actions_browser.mjs
 
+      - name: Capture temporary full-product audit
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          VISUAL_QA_URL: http://127.0.0.1:4173/
+          FULL_AUDIT_DIR: full-product-audit
+        run: node scripts/capture_full_product_audit.mjs
+
       - name: Upload screenshots and diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mytown-visual-qa-${{ github.run_id }}-${{ github.event_name }}
-          path: visual-qa-output
+          path: |
+            visual-qa-output
+            full-product-audit
           if-no-files-found: warn
           retention-days: 30
