@@ -1,0 +1,24 @@
+name: Temporary latest-main export
+
+on:
+  push:
+    branches: ["tmp/export-main-20260904"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mytown-latest-main-${{ github.sha }}
+          path: |
+            .
+            !.git
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
