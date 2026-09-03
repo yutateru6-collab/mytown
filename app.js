@@ -15,6 +15,11 @@ const FALLBACK_DATA = {
   latest: [],
   council: null,
   garbage: null,
+  changes: {
+    schemaVersion: 1,
+    generatedAt: null,
+    changes: []
+  },
   sourceHealth: [],
   bulletin: {
     archiveUrl: "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16195.html",
@@ -26,6 +31,27 @@ const FALLBACK_DATA = {
   }
 };
 
+const VISIT_STORAGE_KEY = "mytown-last-visit-v1";
+
+function readPriorVisitAt() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(VISIT_STORAGE_KEY) || "{}");
+    const parsed = new Date(saved.seenAt || "");
+    return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
+  } catch (error) {
+    console.warn("Previous visit could not be read", error);
+    return null;
+  }
+}
+
+function recordSuccessfulVisit() {
+  try {
+    localStorage.setItem(VISIT_STORAGE_KEY, JSON.stringify({ seenAt: new Date().toISOString() }));
+  } catch (error) {
+    console.warn("Visit could not be saved", error);
+  }
+}
+
 const state = {
   tab: "today",
   view: "tab",
@@ -36,6 +62,7 @@ const state = {
   data: FALLBACK_DATA,
   loading: true,
   loadError: false,
+  priorVisitAt: readPriorVisitAt(),
 };
 
 const main = document.querySelector("#main");
@@ -81,6 +108,11 @@ function normalizeData(raw) {
     featured: Array.isArray(data.featured) ? data.featured : [],
     latest: Array.isArray(data.latest) ? data.latest : [],
     sourceHealth: Array.isArray(data.sourceHealth) ? data.sourceHealth : [],
+    changes: {
+      ...FALLBACK_DATA.changes,
+      ...(data.changes || {}),
+      changes: Array.isArray(data.changes?.changes) ? data.changes.changes : [],
+    },
     bulletin: {
       ...FALLBACK_DATA.bulletin,
       ...(data.bulletin || {}),
@@ -96,14 +128,16 @@ async function loadOfficialData() {
   state.loading = true;
   render();
   try {
-    const [response, bulletinResponse] = await Promise.all([
+    const [response, bulletinResponse, changesResponse] = await Promise.all([
       fetch(`./data/latest.json?v=${Date.now()}`, { cache: "no-store" }),
       fetch(`./data/bulletin.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
+      fetch(`./data/changes.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
     ]);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const latest = await response.json();
     const bulletin = bulletinResponse?.ok ? await bulletinResponse.json() : {};
-    state.data = normalizeData({ ...latest, bulletin });
+    const changes = changesResponse?.ok ? await changesResponse.json() : FALLBACK_DATA.changes;
+    state.data = normalizeData({ ...latest, bulletin, changes });
     state.loadError = false;
   } catch (error) {
     console.warn("Official data load failed", error);
@@ -112,6 +146,7 @@ async function loadOfficialData() {
   } finally {
     state.loading = false;
     render();
+    if (!state.loadError) recordSuccessfulVisit();
   }
 }
 

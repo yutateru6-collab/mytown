@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v22-hero-balance";
+const CACHE = "mytown-civic-v23-daily-briefing";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -34,6 +34,7 @@ const STATIC_ASSETS = [
   "./assets/illustrations/card-decision.svg?v=16",
   "./assets/illustrations/card-bulletin.svg?v=17",
   "./data/latest.json",
+  "./data/changes.json",
   "./data/bulletin.json",
   "./data/politics.json",
   "./data/election-2023.json"
@@ -73,6 +74,7 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   const isSyncedData = url.pathname.endsWith("/data/latest.json") ||
+    url.pathname.endsWith("/data/changes.json") ||
     url.pathname.endsWith("/data/bulletin.json") ||
     url.pathname.endsWith("/data/politics.json") ||
     url.pathname.endsWith("/data/election-2023.json");

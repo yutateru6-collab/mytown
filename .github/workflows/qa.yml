@@ -70,6 +70,7 @@ jobs:
       - name: JSON validity
         run: |
           python -m json.tool data/latest.json > /dev/null
+          python -m json.tool data/changes.json > /dev/null
           python -m json.tool data/meetings.json > /dev/null
           python -m json.tool data/sources.json > /dev/null
           python -m json.tool data/politics.json > /dev/null
@@ -108,7 +109,7 @@ jobs:
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
           grep -q '>さがす</span>' index.html
-          grep -q 'mytown-civic-v22-hero-balance' sw.js
+          grep -q 'mytown-civic-v23-daily-briefing' sw.js
 
       - name: Required citizen-first UX wiring
         run: |

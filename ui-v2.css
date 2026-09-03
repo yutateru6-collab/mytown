@@ -450,6 +450,14 @@ body.ui-v2 small { font-size: .8125rem; }
 .v2-sheet-list b { color: #7a817c; font-size: 1.3rem; }
 .v2-sheet-open { overflow: hidden; }
 
+.v2-changes-group {
+  padding: 16px;
+  border: 1px solid rgba(55, 113, 72, .2);
+  border-radius: 20px;
+  background: linear-gradient(140deg, #eef8ed, #fffdf8);
+  box-shadow: 0 8px 22px rgba(63, 83, 66, .07);
+}
+
 /* Existing detail and politics pages share the same visual language. */
 .ui-v2 .detail-hero,
 .ui-v2 .politics-hero,

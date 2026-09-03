@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -18,9 +18,139 @@ import sync_nogata as legacy
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "data" / "latest.json"
+CHANGES_PATH = ROOT / "data" / "changes.json"
 MEETINGS_PATH = ROOT / "data" / "meetings.json"
 NOW = legacy.NOW
 TODAY = legacy.TODAY
+
+
+def iso_utc(value: datetime) -> str:
+    return value.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def read_change_log() -> dict:
+    if not CHANGES_PATH.exists():
+        return {"schemaVersion": 1, "generatedAt": None, "changes": []}
+    try:
+        data = json.loads(CHANGES_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {"schemaVersion": 1, "generatedAt": None, "changes": []}
+    return {
+        "schemaVersion": 1,
+        "generatedAt": data.get("generatedAt"),
+        "changes": data.get("changes") if isinstance(data.get("changes"), list) else [],
+    }
+
+
+def user_visible_changes(old: dict, new: dict, detected_at: str) -> list[dict[str, str]]:
+    """Return source-linked changes without inferring what an official update means."""
+    if not old:
+        return []
+
+    changes: list[dict[str, str]] = []
+    seen_urls: set[str] = set()
+
+    old_latest = {item.get("url"): item for item in old.get("latest", []) if item.get("url")}
+    for item in new.get("latest", []):
+        url = item.get("url")
+        if not url:
+            continue
+        previous = old_latest.get(url)
+        if previous is None:
+            changes.append({
+                "id": f"latest:{url}",
+                "kind": "new",
+                "title": str(item.get("title") or "直方市の新着情報"),
+                "sourceUrl": str(url),
+                "sourcePublished": str(item.get("date") or ""),
+                "detectedAt": detected_at,
+            })
+            seen_urls.add(str(url))
+        elif any(previous.get(key) != item.get(key) for key in ("title", "date")):
+            changes.append({
+                "id": f"latest-update:{url}",
+                "kind": "updated",
+                "title": str(item.get("title") or "直方市の情報が更新されました"),
+                "sourceUrl": str(url),
+                "sourcePublished": str(item.get("date") or ""),
+                "detectedAt": detected_at,
+            })
+            seen_urls.add(str(url))
+
+    old_featured = {item.get("id"): item for item in old.get("featured", []) if item.get("id")}
+    fields = ("title", "summary", "status", "when", "location", "sourceUpdated", "applicationStarts", "applicationDeadline")
+    for item in new.get("featured", []):
+        item_id = item.get("id")
+        url = str(item.get("sourceUrl") or "")
+        if not item_id or not url or url in seen_urls:
+            continue
+        previous = old_featured.get(item_id)
+        if previous is None:
+            continue
+        if any(previous.get(key) != item.get(key) for key in fields):
+            changes.append({
+                "id": f"featured-update:{item_id}:{detected_at}",
+                "kind": "updated",
+                "title": str(item.get("title") or "直方市の情報が更新されました"),
+                "sourceUrl": url,
+                "sourcePublished": str(item.get("sourceUpdated") or item.get("published") or ""),
+                "detectedAt": detected_at,
+            })
+            seen_urls.add(url)
+
+    for key, title in (("council", "市議会の日程が更新されました"), ("garbage", "ごみ収集の案内が更新されました")):
+        current = new.get(key) or {}
+        previous = old.get(key) or {}
+        url = str(current.get("sourceUrl") or "")
+        if not previous or not url or url in seen_urls:
+            continue
+        comparable_current = {name: value for name, value in current.items() if name != "summary"}
+        comparable_previous = {name: value for name, value in previous.items() if name != "summary"}
+        if comparable_current != comparable_previous:
+            changes.append({
+                "id": f"{key}-update:{detected_at}",
+                "kind": "updated",
+                "title": title,
+                "sourceUrl": url,
+                "sourcePublished": str(current.get("sourceUpdated") or ""),
+                "detectedAt": detected_at,
+            })
+
+    return changes
+
+
+def update_change_log(old: dict, new: dict, detected_at: str) -> None:
+    log = read_change_log()
+    additions = user_visible_changes(old, new, detected_at)
+    if not additions:
+        return
+
+    cutoff = NOW.astimezone(timezone.utc) - timedelta(days=45)
+    recent: list[dict[str, str]] = []
+    for item in additions + log["changes"]:
+        try:
+            detected = datetime.fromisoformat(str(item.get("detectedAt") or "").replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if detected.tzinfo is None:
+            detected = detected.replace(tzinfo=timezone.utc)
+        if detected < cutoff:
+            continue
+        recent.append(item)
+
+    deduplicated: list[dict[str, str]] = []
+    seen_ids: set[str] = set()
+    for item in recent:
+        item_id = str(item.get("id") or "")
+        if not item_id or item_id in seen_ids:
+            continue
+        seen_ids.add(item_id)
+        deduplicated.append(item)
+        if len(deduplicated) >= 100:
+            break
+
+    payload = {"schemaVersion": 1, "generatedAt": detected_at, "changes": deduplicated}
+    CHANGES_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def parse_rss(xml_text: str) -> list[dict[str, str]]:
@@ -211,12 +341,14 @@ def main() -> int:
         print("No semantic data changes")
         return 0
 
+    detected_at = iso_utc(NOW)
     payload = {
         **core_payload,
-        "generatedAt": NOW.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        "generatedAt": detected_at,
     }
     DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
     DATA_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    update_change_log(old, payload, detected_at)
     print(f"Wrote {DATA_PATH.relative_to(ROOT)} with {len(latest)} latest items")
     return 0
 

@@ -17,6 +17,7 @@ on:
       - "scripts/verify_politics.py"
       - "scripts/test_data_pipeline.py"
       - "data/sources.json"
+      - "data/changes.json"
       - "data/politics.json"
       - "data/bulletin.json"
       - ".github/workflows/sync-nogata.yml"
@@ -70,6 +71,7 @@ jobs:
       - name: Validate JSON
         run: |
           python -m json.tool data/latest.json > /dev/null
+          python -m json.tool data/changes.json > /dev/null
           python -m json.tool data/meetings.json > /dev/null
           python -m json.tool data/sources.json > /dev/null
           python -m json.tool data/politics.json > /dev/null
@@ -77,7 +79,7 @@ jobs:
 
       - name: Commit changes safely
         run: |
-          if git diff --quiet -- data/latest.json data/meetings.json data/politics.json data/bulletin.json; then
+          if git diff --quiet -- data/latest.json data/changes.json data/meetings.json data/politics.json data/bulletin.json; then
             echo "No data changes"
             exit 0
           fi
@@ -93,7 +95,7 @@ jobs:
 
           git config user.name "mytown-data-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/latest.json data/meetings.json data/politics.json data/bulletin.json
+          git add data/latest.json data/changes.json data/meetings.json data/politics.json data/bulletin.json
           git commit -m "data: sync Nogata official information"
 
           if ! git push origin HEAD:main; then

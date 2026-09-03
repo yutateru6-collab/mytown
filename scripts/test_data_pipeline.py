@@ -37,6 +37,36 @@ class FeedParserTests(unittest.TestCase):
         )
         self.assertEqual(data["asOf"], "2026年（令和8年）8月末")
 
+    def test_change_log_records_only_new_or_changed_official_items(self) -> None:
+        detected_at = "2026-09-03T08:00:00Z"
+        old = {
+            "latest": [
+                {"date": "2026-09-02", "title": "前からある情報", "url": "https://www.city.nogata.fukuoka.jp/existing.html"}
+            ],
+            "featured": [],
+        }
+        new = {
+            "latest": [
+                {"date": "2026-09-03", "title": "新しい情報", "url": "https://www.city.nogata.fukuoka.jp/new.html"},
+                {"date": "2026-09-02", "title": "前からある情報", "url": "https://www.city.nogata.fukuoka.jp/existing.html"},
+            ],
+            "featured": [],
+        }
+        changes = sync_nogata_v2.user_visible_changes(old, new, detected_at)
+        self.assertEqual(len(changes), 1)
+        self.assertEqual(changes[0]["kind"], "new")
+        self.assertEqual(changes[0]["title"], "新しい情報")
+        self.assertEqual(changes[0]["detectedAt"], detected_at)
+
+    def test_change_log_does_not_turn_initial_import_into_updates(self) -> None:
+        new = {
+            "latest": [
+                {"date": "2026-09-03", "title": "新しい情報", "url": "https://www.city.nogata.fukuoka.jp/new.html"}
+            ],
+            "featured": [],
+        }
+        self.assertEqual(sync_nogata_v2.user_visible_changes({}, new, "2026-09-03T08:00:00Z"), [])
+
 
 class MeetingParserTests(unittest.TestCase):
     def test_official_schedule_table_is_normalized(self) -> None:

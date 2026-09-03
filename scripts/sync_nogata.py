@@ -343,6 +343,8 @@ def build_featured(latest: list[dict[str, str]]) -> list[dict]:
             "summary": "直方市体育館で全10回のピラティス教室を開催。市内在住・在勤の18歳以上が対象で、申込期間は9月22日から10月5日です。",
             "published": "2026-09-01",
             "status": pilates_status(),
+            "applicationStarts": "2026-09-22",
+            "applicationDeadline": "2026-10-05",
             "when": "10月9日〜12月18日の指定金曜日・全10回",
             "location": "直方市体育館（直方市大字直方674-25）",
             "why": "直方市公式ページでは、インナーマッスルや体幹を鍛え、筋力不足や姿勢の改善にもつながる教室として案内されています。",

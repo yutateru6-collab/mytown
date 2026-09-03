@@ -94,6 +94,106 @@
     return "";
   }
 
+  function v4TokyoDateKey(value = new Date()) {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Tokyo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(value);
+    const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+    return `${values.year}-${values.month}-${values.day}`;
+  }
+
+  function v4ChangesSinceLastVisit() {
+    if (typeof v2ChangesSinceLastVisit === "function") return v2ChangesSinceLastVisit();
+    const prior = state.priorVisitAt ? new Date(state.priorVisitAt) : null;
+    if (!prior || Number.isNaN(prior.getTime())) return [];
+    return (state.data?.changes?.changes || []).filter((item) => {
+      const detected = new Date(item.detectedAt || "");
+      return !Number.isNaN(detected.getTime()) && detected > prior;
+    });
+  }
+
+  function v4IsoDayNumber(value) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || ""));
+    if (!match) return null;
+    return Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])) / 86400000;
+  }
+
+  function v4DeadlineNote(item) {
+    if (!item || item.needsReview) return item?.status || "受付状況と期限は公式ページで確認";
+    const today = v4IsoDayNumber(v4TokyoDateKey());
+    const starts = v4IsoDayNumber(item.applicationStarts);
+    const deadline = v4IsoDayNumber(item.applicationDeadline);
+    if (today === null || deadline === null) return item.status ? `掲載状態：${item.status}` : "受付状況と期限は公式ページで確認";
+    if (starts !== null && today < starts) return `受付開始まであと${starts - today}日`;
+    if (today > deadline) return "受付期間は終了";
+    if (today === deadline) return "申込期限は今日";
+    return `締切まであと${deadline - today}日`;
+  }
+
+  function v4DailyBriefItem({ tone, icon, kicker, title, note, action, href }) {
+    const inner = `<span class="v4-daily-icon" aria-hidden="true">${esc(icon)}</span><span class="v4-daily-copy"><small>${esc(kicker)}</small><strong>${esc(title)}</strong><span>${esc(note)}</span></span><b aria-hidden="true">${href ? "↗" : "›"}</b>`;
+    if (href) return `<a class="v4-daily-item tone-${esc(tone)}" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${inner}</a>`;
+    const route = action === "notifications" ? `data-v2-nav="notifications"` : `data-v2-action="${esc(action)}"`;
+    return `<button class="v4-daily-item tone-${esc(tone)}" type="button" ${route}>${inner}</button>`;
+  }
+
+  function v4TodayBriefing() {
+    if (state.loadError) {
+      return `<section class="v4-daily-briefing" aria-labelledby="v4-daily-title"><div class="v4-daily-heading"><div><p>自分に関係する情報から</p><h2 id="v4-daily-title">今日、見ておくこと</h2></div></div><div class="v4-daily-error" role="status"><strong>市の情報を読み込めませんでした</strong><span>確認できていない内容は表示しません。</span><button type="button" data-v2-action="reload">もう一度読み込む</button></div></section>`;
+    }
+    const changes = v4ChangesSinceLastVisit();
+    const today = v4TokyoDateKey();
+    const todaysLatest = (state.data?.latest || []).filter((item) => item.date === today);
+    const newest = changes[0] || todaysLatest[0] || (state.data?.latest || [])[0] || null;
+    const deadline = (typeof v2FindDeadlines === "function" ? v2FindDeadlines() : [])[0] || null;
+    const garbage = state.data?.garbage || null;
+    const hasPriorVisit = Boolean(state.priorVisitAt);
+
+    const updateTitle = hasPriorVisit
+      ? changes.length ? `${changes.length}件の追加・更新` : "新しい追加はありません"
+      : todaysLatest.length ? `${todaysLatest.length}件届いています` : "市の新着情報を見る";
+    const updateNote = newest?.title
+      ? v4Short(newest.title, 46)
+      : "直方市が公開した情報を確認できます。";
+
+    const items = [
+      {
+        tone: "mint",
+        icon: changes.length ? "✨" : "🔔",
+        kicker: hasPriorVisit ? "前回見たあと" : "今日の新着",
+        title: updateTitle,
+        note: updateNote,
+        action: "notifications",
+      },
+      {
+        tone: "pink",
+        icon: "⏳",
+        kicker: "申し込み・募集",
+        title: deadline ? v4Short(deadline.title, 40) : "締切のある情報を探す",
+        note: v4DeadlineNote(deadline),
+        action: "deadline",
+      },
+      {
+        tone: "yellow",
+        icon: "🗑️",
+        kicker: "ごみ収集",
+        title: "地区別の収集日を確認",
+        note: "地域ごとの日程を直方市のページで確認",
+        action: "settings",
+        href: garbage?.sourceUrl || "",
+      },
+    ];
+
+    return `<section class="v4-daily-briefing" aria-labelledby="v4-daily-title">
+      <div class="v4-daily-heading"><div><p>自分に関係する情報から</p><h2 id="v4-daily-title">今日、見ておくこと</h2></div><span>${items.length}件</span></div>
+      <div class="v4-daily-list">${items.map(v4DailyBriefItem).join("")}</div>
+      <p class="v4-daily-note">日程や時刻を確認できない情報は表示しません。</p>
+    </section>`;
+  }
+
   function v4EventFeature() {
     const events = v4EventItems();
     const primary = events[0] || null;
@@ -181,11 +281,11 @@
   }
 
   function v4LifeStrip() {
-    const garbage = state.data?.garbage || null;
+    const bus = (state.data?.featured || []).find((item) => /バス|路線と時刻表/.test(v4Text(item)));
     return `<div class="v4-life-strip" aria-label="暮らしの確認">
-      ${garbage?.sourceUrl
-        ? `<a href="${esc(garbage.sourceUrl)}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">🗑️</span><div><small>ごみ</small><strong>ごみ収集日を見る</strong></div><b aria-hidden="true">↗</b></a>`
-        : `<button type="button" data-v2-query="ごみ"><span aria-hidden="true">🗑️</span><div><small>ごみ</small><strong>ごみ情報を探す</strong></div><b aria-hidden="true">›</b></button>`}
+      ${bus
+        ? `<button type="button" data-v2-detail-id="${esc(bus.id)}" data-v2-detail-section="what"><span aria-hidden="true">🚌</span><div><small>公共交通</small><strong>バスの時刻表・変更を見る</strong></div><b aria-hidden="true">›</b></button>`
+        : `<button type="button" data-v2-query="バス 時刻表"><span aria-hidden="true">🚌</span><div><small>公共交通</small><strong>バス情報を探す</strong></div><b aria-hidden="true">›</b></button>`}
       <button type="button" data-v2-action="settings"><span aria-hidden="true">📍</span><div><small>地域を設定</small><strong>${state.v2Preferences?.district ? `よく見る地域：${esc(state.v2Preferences.district)}` : "よく見る地域を選ぶ"}</strong></div><b aria-hidden="true">›</b></button>
     </div>`;
   }
@@ -199,7 +299,7 @@
 
     return `<section class="v4-civic-layer" aria-labelledby="v4-civic-title">
       <div class="v4-section-heading v4-civic-heading">
-        <div><p>暮らしに関わる</p><h2 id="v4-civic-title"><span aria-hidden="true">🌱</span> 市の動き</h2></div>
+        <div><p>知ると景色が変わる</p><h2 id="v4-civic-title"><span aria-hidden="true">🌱</span> 今日の直方を1つ知る</h2></div>
         <button type="button" data-v2-action="decision">市長・市議会を知る</button>
       </div>
       <div class="v4-civic-grid">
@@ -229,9 +329,9 @@
   }
 
   function v4ParticipationTeaser() {
-    return `<section class="v4-participation-teaser" aria-label="まちに参加する入口">
-      <div><small>まちに参加</small><strong>イベント掲載・ボランティア</strong><span>情報受付の仕組みを準備中です。</span></div>
-      <button type="button" data-v2-action="participate">準備中の内容を見る <span aria-hidden="true">›</span></button>
+    return `<section class="v4-participation-teaser" aria-labelledby="v4-participation-title">
+      <div><small>まちに関わるきっかけ</small><strong id="v4-participation-title">今日から、直方に関わる</strong><span>参加できる催しや、公開中の募集を探せます。</span></div>
+      <div class="v4-participation-actions"><button type="button" data-v2-action="events">イベントを見る</button><button type="button" data-v2-query="ボランティア 意見募集">地域参加を探す</button></div>
     </section>`;
   }
 
@@ -242,11 +342,13 @@
   todayV2View = function todayHomeV4() {
     if (state.loading) return v4HomeLoading();
     return `<section class="page v2-page v2-home-page">${v2Hero()}<div class="v2-content v4-home-content">
+      ${v4TodayBriefing()}
       ${v4EventFeature()}
       ${v4BentoOverview()}
       ${v4LifeStrip()}
       <div class="v2-sync-wrap v4-sync-wrap">${syncBanner()}</div>
       ${state.v2Preferences?.civicDigest === "off" ? "" : v4CivicLayer()}
+      ${v4ParticipationTeaser()}
       ${v4AskBar()}
       ${v2LifeAndLatest()}
       <p class="v2-disclaimer">のおがた日和は、直方市の公開情報をもとにした非公式アプリです。掲載範囲は、現在取り込めた情報に限られます。手続き・期限・選挙は、直方市のページで最終確認してください。</p>

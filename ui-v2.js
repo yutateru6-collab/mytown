@@ -234,12 +234,25 @@ function v2NotificationGroups() {
   return { life: items.filter((item) => !civicPattern.test(item.title || "")), civic: items.filter((item) => civicPattern.test(item.title || "")) };
 }
 
+function v2ChangesSinceLastVisit() {
+  const prior = state.priorVisitAt ? new Date(state.priorVisitAt) : null;
+  if (!prior || Number.isNaN(prior.getTime())) return [];
+  return (state.data?.changes?.changes || []).filter((item) => {
+    const detected = new Date(item.detectedAt || "");
+    return !Number.isNaN(detected.getTime()) && detected > prior;
+  });
+}
+
 function v2NotificationsView() {
   const { life, civic } = v2NotificationGroups();
+  const changes = v2ChangesSinceLastVisit();
+  const changedSection = changes.length
+    ? `<section class="v2-notification-group v2-changes-group"><div class="section-head"><div><h2>前回見たあと</h2><p>追加・更新された公式情報</p></div><span>${changes.length}件</span></div><div class="latest-list">${changes.map((item) => latestRow({ date: item.kind === "new" ? "追加" : "更新", title: item.title, url: item.sourceUrl })).join("")}</div></section>`
+    : "";
   const lifeSection = `<section class="v2-notification-group"><div class="section-head"><div><h2>暮らしのお知らせ</h2><p>防災・施設・イベント・手続きなど</p></div><span>${life.length}件</span></div><div class="latest-list">${life.length ? life.map(latestRow).join("") : emptyCard("現在、暮らしに分類できる新着はありません。")}</div></section>`;
   const civicSection = `<section class="v2-notification-group"><div class="section-head"><div><h2>市の動き</h2><p>議会・計画・予算など</p></div><span>${civic.length}件</span></div><div class="latest-list">${civic.length ? civic.map(latestRow).join("") : emptyCard("現在、市政に分類できる新着はありません。")}</div></section>`;
   const ordered = state.v2Preferences.lifeNotifications ? `${lifeSection}${civicSection}` : `${civicSection}${lifeSection}`;
-  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">新着</p><h1>暮らしと市の動き</h1><p>「暮らしのお知らせ」と「市の動き」に分けて表示します。</p></div></div>${syncBanner()}${ordered}</section>`;
+  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">新着</p><h1>暮らしと市の動き</h1><p>「暮らしのお知らせ」と「市の動き」に分けて表示します。</p></div></div>${syncBanner()}${changedSection}${ordered}</section>`;
 }
 
 function v2MeetingView() {
