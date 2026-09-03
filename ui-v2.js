@@ -112,7 +112,7 @@ function v2CapabilityOverview() {
   const services = v2FindServices();
   const council = state.data.council || null;
   const capabilities = [
-    { action: "nearby", tone: "mint", kicker: "工事・施設・イベント", title: "地図から探す", note: nearby ? "場所を確認できる情報があります" : "場所を確認できる情報を探す" },
+    { action: "works", tone: "mint", kicker: "予算・議会・工事", title: "市政を見る", note: nearby ? "暮らしに関わる市の情報があります" : "直方の今を知る" },
     { action: "deadline", tone: "pink", kicker: "申し込み・募集", title: "締切のある情報", note: deadlines.length ? `${deadlines.length}件を確認できます` : "募集情報を探す" },
     { action: "services", tone: "yellow", kicker: "補助・手続き", title: "制度・手続きを探す", note: services.length ? `${services.length}件の条件を確認` : "対象条件から探す" },
     { action: "decision", tone: "blue", kicker: "市の動き", title: "どうやって決まった？", note: council ? "市長・市議会の役割を見る" : "市の情報を見る" },
@@ -203,7 +203,7 @@ function v2SearchIntro() {
   const deadlines = v2FindDeadlines().slice(0, 2);
   const bulletin = v2CurrentBulletin();
   return `<div class="v2-search-intro"><section class="v2-popular-search" aria-labelledby="v2-popular-title"><h2 id="v2-popular-title">検索の例</h2><div class="v2-query-chips">${["バス", "ごみ", "子育て", "学校", "工事"].map((q) => `<button type="button" data-v2-query="${q}">${q}</button>`).join("")}</div></section>
-    <section class="v2-search-groups" aria-label="探し方"><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><span>${deadlines.length ? `${deadlines.length}件を確認` : "募集情報を探す"}</span></button><button type="button" data-v2-query="子育て 学校"><strong>暮らし</strong><span>制度・手続き・学校</span></button><button type="button" data-v2-action="nearby"><strong>地図</strong><span>場所を確認できる情報</span></button><button type="button" data-v2-action="decision"><strong>市の動き</strong><span>議会・選挙・決まり方</span></button>${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報</strong><span>${esc(bulletin.title || "最新号")}</span></button>` : ""}</section><p class="v2-search-note">現在取り込んでいる市の公開情報から検索します。</p></div>`;
+    <section class="v2-search-groups" aria-label="探し方"><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><span>${deadlines.length ? `${deadlines.length}件を確認` : "募集情報を探す"}</span></button><button type="button" data-v2-query="子育て 学校"><strong>暮らし</strong><span>制度・手続き・学校</span></button><button type="button" data-v2-action="works"><strong>工事情報</strong><span>市の公開資料から確認</span></button><button type="button" data-v2-action="decision"><strong>市政</strong><span>予算・議会・決まったこと</span></button>${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報</strong><span>${esc(bulletin.title || "最新号")}</span></button>` : ""}</section><p class="v2-search-note">現在取り込んでいる市の公開情報から検索します。</p></div>`;
 }
 
 function v2SearchHubView() {
@@ -262,12 +262,12 @@ function v2MeetingView() {
 }
 
 function v2MenuView() {
-  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">メニュー</p><h1>知りたいところから</h1><p>未完成の機能は、現在の状態が分かる名前で表示します。</p></div></div><div class="v2-menu-grid"><button type="button" data-v2-action="decision"><strong>市長・市議会</strong><small>役割・議員・選挙</small></button><button type="button" data-v2-action="ask"><strong>まちナビに聞く</strong><small>市の資料から答えを探す</small></button><button type="button" data-v2-action="glossary"><strong>役所ことば図鑑</strong><small>難しい言葉をやさしく</small></button><button type="button" data-v2-action="settings"><strong>地域と表示順</strong><small>このブラウザだけに保存</small></button><button type="button" data-v2-action="nearby"><strong>地図から探す</strong><small>位置を確認できる情報</small></button><button type="button" data-v2-action="money"><strong>直方市の予算</strong><small>市の資料と照合した数字だけ</small></button></div><div class="v2-menu-note card info-card"><h2>のおがた日和の約束</h2><p>公開資料で確認できないことは、推測で補いません。人物の評価や採点はしません。大切な情報には、確認に使った直方市のページへのリンクを付けます。</p></div></section>`;
+  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">メニュー</p><h1>知りたいところから</h1><p>未完成の機能は、現在の状態が分かる名前で表示します。</p></div></div><div class="v2-menu-grid"><button type="button" data-v2-action="decision"><strong>市政</strong><small>予算・市長・市議会</small></button><button type="button" data-v2-action="ask"><strong>まちナビに聞く</strong><small>市の資料から答えを探す</small></button><button type="button" data-v2-action="glossary"><strong>役所ことば図鑑</strong><small>難しい言葉をやさしく</small></button><button type="button" data-v2-action="settings"><strong>地域と表示順</strong><small>このブラウザだけに保存</small></button><button type="button" data-v2-action="works"><strong>工事情報</strong><small>市の公開資料から確認</small></button><button type="button" data-v2-action="money"><strong>直方市の予算</strong><small>市の資料と照合した数字だけ</small></button></div><div class="v2-menu-note card info-card"><h2>のおがた日和の約束</h2><p>公開資料で確認できないことは、推測で補いません。人物の評価や採点はしません。大切な情報には、確認に使った直方市のページへのリンクを付けます。</p></div></section>`;
 }
 
 function v2SettingsView() {
   const preferences = state.v2Preferences;
-  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">設定</p><h1>地域と表示順を設定</h1><p>会員登録は不要です。設定は、このブラウザだけに保存されます。</p></div></div><form id="v2-preferences-form" class="v2-preferences-form"><fieldset><legend>ごみ収集エリア</legend><label class="v2-field"><span>お住まいの区域</span><select name="garbageArea"><option value="">選択してください</option><option value="east" ${preferences.garbageArea === "east" ? "selected" : ""}>市東部（月・木）</option><option value="west" ${preferences.garbageArea === "west" ? "selected" : ""}>市西部（火・金）</option></select><small>公式日程は、遠賀川・彦山川の東西で分かれています。感田や下境などは町名だけでは決まらないため、自宅が川のどちら側かで選んでください。</small></label></fieldset><fieldset><legend>よく見る地域（任意）</legend><label class="v2-field"><span>町名・駅名・よく行く場所</span><input type="text" name="district" value="${esc(preferences.district)}" placeholder="例：植木、感田、直方駅周辺" maxlength="30"><small>入力した地名が掲載情報に含まれるとき、ホームの「地図から探す」に表示します。位置情報は使いません。</small></label></fieldset><fieldset><legend>表示の設定</legend><label class="v2-check-row"><input type="checkbox" name="lifeNotifications" ${preferences.lifeNotifications ? "checked" : ""}><span><strong>「新着」で暮らしの情報を先に表示</strong><small>オフにすると、「市の動き」が上になります。</small></span></label><label class="v2-field"><span>ホームに市の動きを表示</span><select name="civicDigest"><option value="weekly" ${preferences.civicDigest !== "off" ? "selected" : ""}>表示する</option><option value="off" ${preferences.civicDigest === "off" ? "selected" : ""}>表示しない</option></select><small>この設定はホームの表示だけを変えます。スマホには通知しません。</small></label></fieldset><button class="primary-button v2-save-button" type="submit">設定を保存</button></form><div class="card info-card v2-about-card"><h2>このアプリについて</h2><p>のおがた日和は試験公開中の非公式アプリです。直方市の公式アプリではありません。市の公開情報を約6時間ごとに確認します。</p></div></section>`;
+  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">設定</p><h1>地域と表示順を設定</h1><p>会員登録は不要です。設定は、このブラウザだけに保存されます。</p></div></div><form id="v2-preferences-form" class="v2-preferences-form"><fieldset><legend>ごみ収集エリア</legend><label class="v2-field"><span>お住まいの区域</span><select name="garbageArea"><option value="">選択してください</option><option value="east" ${preferences.garbageArea === "east" ? "selected" : ""}>市東部（月・木）</option><option value="west" ${preferences.garbageArea === "west" ? "selected" : ""}>市西部（火・金）</option></select><small>公式日程は、遠賀川・彦山川の東西で分かれています。感田や下境などは町名だけでは決まらないため、自宅が川のどちら側かで選んでください。</small></label></fieldset><fieldset><legend>よく見る地域（任意）</legend><label class="v2-field"><span>町名・駅名・よく行く場所</span><input type="text" name="district" value="${esc(preferences.district)}" placeholder="例：植木、感田、直方駅周辺" maxlength="30"><small>入力した地名が掲載情報に含まれるとき、市政ページの工事情報に表示します。位置情報は使いません。</small></label></fieldset><fieldset><legend>表示の設定</legend><label class="v2-check-row"><input type="checkbox" name="lifeNotifications" ${preferences.lifeNotifications ? "checked" : ""}><span><strong>「新着」で暮らしの情報を先に表示</strong><small>オフにすると、「市の動き」が上になります。</small></span></label><label class="v2-field"><span>ホームに市の動きを表示</span><select name="civicDigest"><option value="weekly" ${preferences.civicDigest !== "off" ? "selected" : ""}>表示する</option><option value="off" ${preferences.civicDigest === "off" ? "selected" : ""}>表示しない</option></select><small>この設定はホームの表示だけを変えます。スマホには通知しません。</small></label></fieldset><button class="primary-button v2-save-button" type="submit">設定を保存</button></form><div class="card info-card v2-about-card"><h2>このアプリについて</h2><p>のおがた日和は試験公開中の非公式アプリです。直方市の公式アプリではありません。市の公開情報を約6時間ごとに確認します。</p></div></section>`;
 }
 
 settingsView = v2SettingsView;
@@ -278,7 +278,7 @@ function v2EnsureActionSheet() {
   wrapper.id = "v2-action-sheet";
   wrapper.className = "v2-sheet";
   wrapper.setAttribute("aria-hidden", "true");
-  wrapper.innerHTML = `<button class="v2-sheet-backdrop" type="button" data-v2-sheet-close aria-label="閉じる"></button><section class="v2-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="v2-sheet-title"><div class="v2-sheet-handle" aria-hidden="true"></div><div class="v2-sheet-head"><div>${v2Mascot("")}</div><div><small>のおがた日和</small><h2 id="v2-sheet-title">何を調べる？</h2></div><button type="button" data-v2-sheet-close aria-label="閉じる">×</button></div><div class="v2-sheet-list"><button type="button" data-v2-action="nearby"><div><strong>地図から探す</strong><small>位置を確認できる市の情報</small></div><b>›</b></button><button type="button" data-v2-action="services"><div><strong>制度・手続きを探す</strong><small>補助・支援・手続き</small></div><b>›</b></button><button type="button" data-v2-action="money"><div><strong>直方市の予算</strong><small>現在は準備中</small></div><b>›</b></button><button type="button" data-v2-action="decision"><div><strong>市長・市議会を知る</strong><small>役割・議員・選挙</small></div><b>›</b></button><button type="button" data-v2-action="ask"><div><strong>まちナビに聞く</strong><small>市の資料から答えを探す</small></div><b>›</b></button></div></section>`;
+  wrapper.innerHTML = `<button class="v2-sheet-backdrop" type="button" data-v2-sheet-close aria-label="閉じる"></button><section class="v2-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="v2-sheet-title"><div class="v2-sheet-handle" aria-hidden="true"></div><div class="v2-sheet-head"><div>${v2Mascot("")}</div><div><small>のおがた日和</small><h2 id="v2-sheet-title">何を調べる？</h2></div><button type="button" data-v2-sheet-close aria-label="閉じる">×</button></div><div class="v2-sheet-list"><button type="button" data-v2-action="works"><div><strong>工事情報を見る</strong><small>直方市の公開資料から確認</small></div><b>›</b></button><button type="button" data-v2-action="services"><div><strong>制度・手続きを探す</strong><small>補助・支援・手続き</small></div><b>›</b></button><button type="button" data-v2-action="money"><div><strong>直方市の予算</strong><small>使い道と金額を見る</small></div><b>›</b></button><button type="button" data-v2-action="decision"><div><strong>市政を見る</strong><small>予算・市長・市議会</small></div><b>›</b></button><button type="button" data-v2-action="ask"><div><strong>まちナビに聞く</strong><small>市の資料から答えを探す</small></div><b>›</b></button></div></section>`;
   document.body.appendChild(wrapper);
 }
 
@@ -324,7 +324,7 @@ function v2HandleAction(action) {
     document.querySelector("#ask-input")?.focus();
     return;
   }
-  if (action === "nearby") return v2SetRoute({ tab: "nearby", page: null, hash: "#nearby" });
+  if (action === "nearby" || action === "works") { state.politicsSection = "works"; return v2SetRoute({ tab: "politics", page: null, hash: "#works" }); }
   if (action === "services") return v2SetRoute({ tab: "today", page: "services", hash: "#services" });
   if (action === "deadline") return v2SetRoute({ tab: "today", page: "deadline", hash: "#deadline" });
   if (action === "meeting") return v2SetRoute({ tab: "today", page: "meeting", hash: "#meeting" });
@@ -337,7 +337,7 @@ function v2HandleAction(action) {
 
 function v2HandleNav(nav) {
   if (nav === "home") return v2HandleAction("home");
-  if (nav === "nearby") return v2HandleAction("nearby");
+  if (nav === "civic") { state.politicsSection = "home"; return v2SetRoute({ tab: "politics", page: null, hash: "#politics" }); }
   if (nav === "search") return v2SetRoute({ tab: "discover", page: null, hash: "#search" });
   if (nav === "action") return v2OpenSheet();
   if (nav === "notifications") return v2SetRoute({ tab: "today", page: "notifications", hash: "#notifications" });
@@ -346,8 +346,8 @@ function v2HandleNav(nav) {
 
 function v2ActiveNav() {
   if (state.v2Page === "notifications") return "notifications";
-  if (state.v2Page === "menu" || state.tab === "politics" || state.view === "settings" || state.view === "money") return "menu";
-  if (state.tab === "nearby") return "nearby";
+  if (state.tab === "politics" || state.view === "money") return "civic";
+  if (state.v2Page === "menu" || state.view === "settings") return "menu";
   if (state.tab === "discover") return "search";
   return "home";
 }
@@ -357,7 +357,7 @@ function v2SyncNav() {
   document.querySelectorAll("[data-v2-nav]").forEach((button) => {
     const isActive = button.dataset.v2Nav === active;
     button.classList.toggle("is-active", isActive);
-    if (["home", "nearby", "search", "notifications", "menu"].includes(button.dataset.v2Nav)) button.setAttribute("aria-current", isActive ? "page" : "false");
+    if (["home", "civic", "search", "notifications", "menu"].includes(button.dataset.v2Nav)) button.setAttribute("aria-current", isActive ? "page" : "false");
   });
 }
 
@@ -432,7 +432,7 @@ function v2ApplyHashRoute() {
   else if (hash === "menu") { state.tab = "today"; state.v2Page = "menu"; }
   else if (hash === "politics") state.tab = "politics";
   else if (hash === "ask") state.tab = "ask";
-  else if (hash === "nearby") state.tab = "nearby";
+  else if (hash === "nearby" || hash === "works") { state.tab = "politics"; state.politicsSection = "works"; }
   else if (hash === "money") { state.tab = "today"; state.view = "money"; }
   else if (hash === "settings") { state.tab = "today"; state.view = "settings"; }
   else state.tab = "today";

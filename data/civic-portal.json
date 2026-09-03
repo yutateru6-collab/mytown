@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "city": "直方市",
+  "verifiedOn": "2026-09-03",
+  "budget": {
+    "fiscalYear": "2026年度",
+    "kind": "当初予算",
+    "generalAccountYen": 33080000000,
+    "generalAccountLabel": "330億8,000万円",
+    "sourceUpdated": "2026-03-13",
+    "sourcePageUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1236/_12739/_16616.html",
+    "sourcePdfUrl": "https://www.city.nogata.fukuoka.jp/library/R8tousyoyosansankou.pdf",
+    "categories": [
+      {
+        "friendly": "子育て・福祉",
+        "official": "民生費",
+        "amountLabel": "161億7,265万1千円",
+        "share": 48.9
+      },
+      {
+        "friendly": "学校・教育",
+        "official": "教育費",
+        "amountLabel": "47億903万8千円",
+        "share": 14.2
+      },
+      {
+        "friendly": "市の運営",
+        "official": "総務費",
+        "amountLabel": "33億3,621万3千円",
+        "share": 10.1
+      },
+      {
+        "friendly": "借りたお金の返済",
+        "official": "公債費",
+        "amountLabel": "24億4,961万円",
+        "share": 7.4
+      },
+      {
+        "friendly": "道路・公園",
+        "official": "土木費",
+        "amountLabel": "19億4,752万円",
+        "share": 5.9
+      },
+      {
+        "friendly": "健康・ごみ",
+        "official": "衛生費",
+        "amountLabel": "17億2,767万4千円",
+        "share": 5.2
+      }
+    ]
+  },
+  "works": [
+    {
+      "id": "kanda-205-20260819",
+      "title": "感田205号線道路整備工事",
+      "location": "直方市大字感田",
+      "status": "入札結果を確認",
+      "bidDate": "2026年8月19日",
+      "plannedPeriod": "2026年8月31日～11月30日",
+      "plannedContractAmount": "440万2,200円",
+      "winningBidder": "エイシン開発",
+      "winningBidPretax": "400万2,000円",
+      "sourcePageUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17189.html",
+      "sourcePdfUrl": "https://www.city.nogata.fukuoka.jp/library/keiyaku/R7_nyusatutyousho/R80819_nyuusatutyousyo2.pdf",
+      "outlookPageUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_3088.html",
+      "note": "市が公表した契約予定額と予定工期です。工事の進み具合や交通への影響は、この資料だけでは確認できません。"
+    }
+  ]
+}

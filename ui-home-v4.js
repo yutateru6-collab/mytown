@@ -430,12 +430,12 @@
 
     const cards = [
       {
-        action: "nearby",
+        action: "works",
         tone: "mint",
-        icon: V4_ASSETS.nearby,
-        kicker: "施設・イベント・工事",
-        title: "地図から探す",
-        note: localMatch ? v4Short(localMatch.title, 26) : locationItems.length ? `場所を確認できる情報 ${locationItems.length}件` : "場所を確認できる情報を見る",
+        icon: V4_ASSETS.decision,
+        kicker: "予算・市議会・工事",
+        title: "市政・工事を見る",
+        note: localMatch ? v4Short(localMatch.title, 26) : "直方で何が動いているか",
       },
       {
         action: "deadline",
@@ -491,7 +491,7 @@
     return `<section class="v4-civic-layer" aria-labelledby="v4-civic-title">
       <div class="v4-section-heading v4-civic-heading">
         <div><p>知ると景色が変わる</p><h2 id="v4-civic-title"><span aria-hidden="true">🌱</span> 今日の直方を1つ知る</h2></div>
-        <button type="button" data-v2-action="decision">市長・市議会を知る</button>
+        <button type="button" data-v2-action="decision">市政をもっと知る</button>
       </div>
       <div class="v4-civic-grid">
         <article class="v4-civic-card tone-mint">
@@ -713,14 +713,14 @@
     const eventCount = v4EventItems().length;
     const bulletin = typeof v2CurrentBulletin === "function" ? v2CurrentBulletin() : null;
     return `<div class="v2-search-intro"><section class="v2-popular-search" aria-labelledby="v2-popular-title"><h2 id="v2-popular-title">検索の例</h2><div class="v2-query-chips">${["イベント", "バス", "ごみ", "子育て", "学校"].map((query) => `<button type="button" data-v2-query="${esc(query)}">${esc(query)}</button>`).join("")}</div></section>
-      <section class="v2-search-groups" aria-label="探し方"><button type="button" data-v2-action="events"><strong>イベント</strong><span>${eventCount ? `${eventCount}件掲載中` : "イベント・体験を探す"}</span></button><button type="button" data-v2-action="participate"><strong>地域活動</strong><span>こども食堂・ボランティア</span></button><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><span>${deadlines.length ? `${deadlines.length}件掲載中` : "募集・申し込みを探す"}</span></button><button type="button" data-v2-action="services"><strong>制度・手続き</strong><span>子育て・暮らしの手続き</span></button><button type="button" data-v2-action="nearby"><strong>地図</strong><span>場所を確認できる情報</span></button><button type="button" data-v2-action="decision"><strong>市長・市議会</strong><span>役割・議員・選挙</span></button>${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報</strong><span>${esc(bulletin.title || "最新号")}</span></button>` : ""}</section><p class="v2-search-note">現在取り込んでいる市・地域の公開情報から検索します。</p></div>`;
+      <section class="v2-search-groups" aria-label="探し方"><button type="button" data-v2-action="events"><strong>イベント</strong><span>${eventCount ? `${eventCount}件掲載中` : "イベント・体験を探す"}</span></button><button type="button" data-v2-action="participate"><strong>地域活動</strong><span>こども食堂・ボランティア</span></button><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><span>${deadlines.length ? `${deadlines.length}件掲載中` : "募集・申し込みを探す"}</span></button><button type="button" data-v2-action="services"><strong>制度・手続き</strong><span>子育て・暮らしの手続き</span></button><button type="button" data-v2-action="works"><strong>工事情報</strong><span>直方市の公開資料から確認</span></button><button type="button" data-v2-action="decision"><strong>市政</strong><span>予算・議会・決まったこと</span></button>${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報</strong><span>${esc(bulletin.title || "最新号")}</span></button>` : ""}</section><p class="v2-search-note">現在取り込んでいる市・地域の公開情報から検索します。</p></div>`;
   };
 
   v2MenuView = function v4MenuView() {
     const eventCount = v4EventItems().length;
     const communityCount = v4CommunityRecords().length;
     const bulletin = typeof v2CurrentBulletin === "function" ? v2CurrentBulletin() : null;
-    return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">メニュー</p><h1>やりたいことから選ぶ</h1><p>イベント、暮らし、市の動きをまとめて探せます。</p></div></div><div class="v2-menu-grid v4-menu-grid"><button type="button" data-v2-action="events"><strong>イベント・おでかけ</strong><small>${eventCount ? `${eventCount}件掲載中` : "体験・教室も探す"}</small></button><button type="button" data-v2-action="nearby"><strong>地図から探す</strong><small>施設・イベント・工事など</small></button><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><small>申し込み・募集・意見募集</small></button><button type="button" data-v2-action="services"><strong>制度・手続き</strong><small>子育て・暮らしから</small></button>${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報のおがた</strong><small>${esc(bulletin.title || "最新号")}</small></button>` : ""}<button type="button" data-v2-action="decision"><strong>市長・市議会</strong><small>役割・議員・選挙</small></button><button type="button" data-v2-action="ask"><strong>まちナビに聞く</strong><small>市の資料から答えを探す</small></button><button type="button" data-v2-action="participate"><strong>地域活動・ボランティア</strong><small>${communityCount ? `${communityCount}件掲載中` : "団体・活動を探す"}</small></button><button type="button" data-v2-action="settings"><strong>地域と表示順を設定</strong><small>このブラウザだけに保存</small></button><button type="button" data-v2-action="glossary"><strong>役所ことば図鑑</strong><small>難しい言葉をやさしく</small></button><button type="button" data-v2-action="money"><strong>直方市の予算</strong><small>市の資料と照合した数字だけ</small></button></div><div class="v2-menu-note card info-card"><h2>のおがた日和の約束</h2><p>公開資料で確認できないことは、推測で補いません。人物の評価や採点はしません。大切な情報には、確認に使った直方市のページへのリンクを付けます。</p></div></section>`;
+    return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">メニュー</p><h1>やりたいことから選ぶ</h1><p>イベント、暮らし、市の動きをまとめて探せます。</p></div></div><div class="v2-menu-grid v4-menu-grid"><button type="button" data-v2-action="events"><strong>イベント・おでかけ</strong><small>${eventCount ? `${eventCount}件掲載中` : "体験・教室も探す"}</small></button><button type="button" data-v2-action="works"><strong>工事情報</strong><small>直方市の公開資料から</small></button><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><small>申し込み・募集・意見募集</small></button><button type="button" data-v2-action="services"><strong>制度・手続き</strong><small>子育て・暮らしから</small></button>${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報のおがた</strong><small>${esc(bulletin.title || "最新号")}</small></button>` : ""}<button type="button" data-v2-action="decision"><strong>市政</strong><small>予算・市長・市議会</small></button><button type="button" data-v2-action="ask"><strong>まちナビに聞く</strong><small>市の資料から答えを探す</small></button><button type="button" data-v2-action="participate"><strong>地域活動・ボランティア</strong><small>${communityCount ? `${communityCount}件掲載中` : "団体・活動を探す"}</small></button><button type="button" data-v2-action="settings"><strong>地域と表示順を設定</strong><small>このブラウザだけに保存</small></button><button type="button" data-v2-action="glossary"><strong>役所ことば図鑑</strong><small>難しい言葉をやさしく</small></button><button type="button" data-v2-action="money"><strong>直方市の予算</strong><small>市の資料と照合した数字だけ</small></button></div><div class="v2-menu-note card info-card"><h2>のおがた日和の約束</h2><p>公開資料で確認できないことは、推測で補いません。人物の評価や採点はしません。大切な情報には、確認に使った直方市のページへのリンクを付けます。</p></div></section>`;
   };
 
   function v4PatchActionSheet() {

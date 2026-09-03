@@ -1,0 +1,12 @@
+{
+  "name": "nogata-biyori",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/build-static.mjs"
+  },
+  "devDependencies": {
+    "vite": "^7.1.4"
+  }
+}

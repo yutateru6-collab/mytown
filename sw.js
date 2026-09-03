@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v27-civic-actions";
+const CACHE = "mytown-civic-v27-civic-portal";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -9,23 +9,22 @@ const STATIC_ASSETS = [
   "./ui-v2.css",
   "./ui-home-v4.css",
   "./ui-home-v5.css",
-  "./map-nearby.css",
   "./bulletin-reader.css",
   "./civic-actions.css",
+  "./civic-portal.css",
   "./app.js",
   "./app-runtime.js",
   "./politics.js",
   "./election-history.js",
   "./ui-v2.js",
   "./ui-home-v4.js",
-  "./map-nearby.js",
   "./bulletin-reader.js",
   "./civic-actions.js",
+  "./civic-portal.js",
   "./manifest.webmanifest",
   "./icon.svg",
   "./assets/hero/nogata-watercolor.webp?v=13",
   "./assets/mascot/machinavi.webp?v=13",
-  "./assets/icons/nearby.webp?v=13",
   "./assets/icons/services.webp?v=13",
   "./assets/icons/deadline.webp?v=13",
   "./assets/icons/decision.webp?v=13",
@@ -35,6 +34,9 @@ const STATIC_ASSETS = [
   "./assets/illustrations/card-services.svg?v=16",
   "./assets/illustrations/card-decision.svg?v=16",
   "./assets/illustrations/card-bulletin.svg?v=17",
+  "./assets/illustrations/civic-budget.webp?v=3",
+  "./assets/illustrations/civic-bus.webp?v=3",
+  "./assets/illustrations/civic-roadwork.webp?v=3",
   "./data/latest.json",
   "./data/community-events.json",
   "./data/community.json",
@@ -42,7 +44,8 @@ const STATIC_ASSETS = [
   "./data/bulletin.json",
   "./data/politics.json",
   "./data/election-2023.json",
-  "./data/civic-report-routes.json"
+  "./data/civic-report-routes.json",
+  "./data/civic-portal.json"
 ];
 
 self.addEventListener("install", (event) => {
@@ -85,7 +88,8 @@ self.addEventListener("fetch", (event) => {
     url.pathname.endsWith("/data/bulletin.json") ||
     url.pathname.endsWith("/data/politics.json") ||
     url.pathname.endsWith("/data/election-2023.json") ||
-    url.pathname.endsWith("/data/civic-report-routes.json");
+    url.pathname.endsWith("/data/civic-report-routes.json") ||
+    url.pathname.endsWith("/data/civic-portal.json");
 
   if (isSyncedData || event.request.mode === "navigate") {
     event.respondWith(networkFirst(event.request).catch(() => caches.match("./index.html")));
