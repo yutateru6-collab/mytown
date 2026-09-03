@@ -107,10 +107,18 @@ def normalized_price_token(token: str) -> tuple[str, int | None, str | None]:
     return f"{value:,}円", value, None
 
 
-def extract_money(text: str) -> tuple[str, list[str]]:
+def normalize_numeric_spacing(text: str) -> str:
+    """Join grouping digits split by HTML layout, e.g. ``1, 000円``."""
     normalized = clean_text(text)
+    normalized = re.sub(r"(?<=\d),\s+(?=\d)", ",", normalized)
+    normalized = re.sub(r"(?<=\d)\s+(?=\d{3}(?:\D|$))", "", normalized)
+    return normalized
+
+
+def extract_money(text: str) -> tuple[str, list[str]]:
+    normalized = normalize_numeric_spacing(text)
     segment = labelled_value(normalized, MONEY_LABELS, limit=180)
-    search_area = segment or normalized
+    search_area = normalize_numeric_spacing(segment or normalized)
 
     free_match = re.search(r"(?:参加費|参加料|料金|費用|お値段|受講料)\s*[|:：]?\s*無料", search_area)
     if free_match:
@@ -139,9 +147,11 @@ def deadline_text_candidates(text: str) -> list[str]:
     candidates: list[str] = []
     label_pattern = "|".join(re.escape(label) for label in DEADLINE_LABELS)
 
+    # Label first: 「申込期限：8月31日」
     for match in re.finditer(rf"(?:{label_pattern})\s*[|:：]?\s*(.{{0,50}})", normalized):
         candidates.append(match.group(1))
 
+    # Date first: 「8/31(月)申込締切」
     date_pattern = r"(?:(?:20\d{2})[年/.\-])?\d{1,2}(?:月|/|\.\-)\d{1,2}日?"
     for match in re.finditer(rf"({date_pattern})(?:\([^)]*\)|（[^）]*）)?\s*(?:{label_pattern})", normalized):
         candidates.append(match.group(1))
@@ -267,7 +277,7 @@ def refine_payload(
         if source_url.startswith("https://"):
             try:
                 source_text = parse_html(fetcher(source_url)).text
-            except Exception as error:
+            except Exception as error:  # keep last synchronized facts; do not invent replacements
                 fetch_warnings.append({
                     "eventId": event.get("id", ""),
                     "sourceUrl": source_url,
