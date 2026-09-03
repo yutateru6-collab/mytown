@@ -11,6 +11,7 @@ const STATIC_ASSETS = [
   "./ui-home-v5.css",
   "./map-nearby.css",
   "./bulletin-reader.css",
+  "./civic-actions.css",
   "./app.js",
   "./app-runtime.js",
   "./politics.js",
@@ -19,6 +20,7 @@ const STATIC_ASSETS = [
   "./ui-home-v4.js",
   "./map-nearby.js",
   "./bulletin-reader.js",
+  "./civic-actions.js",
   "./manifest.webmanifest",
   "./icon.svg",
   "./assets/hero/nogata-watercolor.webp?v=13",
@@ -38,7 +40,8 @@ const STATIC_ASSETS = [
   "./data/changes.json",
   "./data/bulletin.json",
   "./data/politics.json",
-  "./data/election-2023.json"
+  "./data/election-2023.json",
+  "./data/civic-report-routes.json"
 ];
 
 self.addEventListener("install", (event) => {
@@ -79,7 +82,8 @@ self.addEventListener("fetch", (event) => {
     url.pathname.endsWith("/data/changes.json") ||
     url.pathname.endsWith("/data/bulletin.json") ||
     url.pathname.endsWith("/data/politics.json") ||
-    url.pathname.endsWith("/data/election-2023.json");
+    url.pathname.endsWith("/data/election-2023.json") ||
+    url.pathname.endsWith("/data/civic-report-routes.json");
 
   if (isSyncedData || event.request.mode === "navigate") {
     event.respondWith(networkFirst(event.request).catch(() => caches.match("./index.html")));
