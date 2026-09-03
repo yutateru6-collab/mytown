@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#F8F4EA" />
-  <meta name="description" content="直方のイベント・暮らし・市の動きを、まとめて探せる非公式アプリ。" />
+  <meta name="description" content="直方のイベント・暮らし・市の動きを、まとめて探せるアプリ。" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="./styles.css" />
@@ -71,5 +71,33 @@
   <script src="./bulletin-reader.js?v=2" defer></script>
   <script src="./civic-actions.js?v=1" defer></script>
   <script src="./civic-portal.js?v=3" defer></script>
+  <script>
+    (() => {
+      const trimHomeLabels = () => {
+        document.querySelector('.v2-hero-actions [data-v2-nav="notifications"]')?.remove();
+        document.querySelector('.v2-data-note')?.remove();
+
+        const daily = document.querySelector('.v4-daily-briefing');
+        if (daily) {
+          daily.removeAttribute('aria-labelledby');
+          daily.setAttribute('aria-label', '今日の生活情報');
+          daily.querySelector('.v4-daily-heading')?.remove();
+          daily.querySelector('.v4-daily-note')?.remove();
+        }
+
+        const eventFeature = document.querySelector('.v4-event-feature');
+        if (eventFeature) {
+          eventFeature.removeAttribute('aria-labelledby');
+          eventFeature.setAttribute('aria-label', '直方のイベント');
+          eventFeature.querySelector('#v4-event-feature-title')?.remove();
+        }
+      };
+
+      const main = document.querySelector('#main');
+      if (!main) return;
+      trimHomeLabels();
+      new MutationObserver(trimHomeLabels).observe(main, { childList: true, subtree: true });
+    })();
+  </script>
 </body>
 </html>
