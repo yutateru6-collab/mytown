@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-09-03",
+  "overrides": [
+    {
+      "sourceUrl": "https://nogata.aeonmall.jp/event/560fd47c-9d5b-4cb8-9d48-7e8cb6b7dbe5",
+      "removeFields": [
+        "money"
+      ],
+      "verifiedOn": "2026-09-03",
+      "evidenceUrls": [
+        "https://nogata.aeonmall.jp/event/560fd47c-9d5b-4cb8-9d48-7e8cb6b7dbe5"
+      ],
+      "note": "掲載されている1,100円は店舗での商品購入額であり、イベント参加費ではないため料金欄から外しました。"
+    },
+    {
+      "sourceUrl": "https://nogata-kankoh.com/news/8273.html",
+      "set": {
+        "money": "1,000円"
+      },
+      "verifiedOn": "2026-09-03",
+      "evidenceUrls": [
+        "https://nogata-kankoh.com/news/8273.html",
+        "https://chikuho.keizai.biz/headline/330/"
+      ],
+      "note": "公式掲載ページのHTML抽出では金額の先頭数字が欠落したため、主催者・日程・内容が一致する公開記事と照合し、参加費1,000円を確認しました。"
+    }
+  ]
+}
