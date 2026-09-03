@@ -43,9 +43,9 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install pinned Playwright
+      - name: Install pinned browser audit tools
         run: |
-          npm install --no-save --no-package-lock playwright@1.55.0
+          npm install --no-save --no-package-lock playwright@1.55.0 axe-core@4.10.2
           npx playwright install --with-deps chromium
 
       - name: Refine source-preview event data
@@ -111,6 +111,13 @@ jobs:
           VISUAL_QA_URL: http://127.0.0.1:4173/
           FULL_AUDIT_DIR: full-product-audit
         run: node scripts/capture_full_product_audit.mjs
+
+      - name: Run temporary WCAG audit
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          VISUAL_QA_URL: http://127.0.0.1:4173/
+          FULL_AUDIT_DIR: full-product-audit
+        run: node scripts/axe_product_audit.mjs
 
       - name: Upload screenshots and diagnostics
         if: always()
