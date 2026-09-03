@@ -3,6 +3,20 @@
   "reviewedOn": "2026-09-03",
   "overrides": [
     {
+      "sourceUrl": "https://nogata-kankoh.com/news/8238.html",
+      "set": {
+        "money": "5,000円",
+        "applicationDeadline": "2026-08-31",
+        "applicationStatus": "closed",
+        "statusLabel": "受付終了（申込期限 8月31日）"
+      },
+      "verifiedOn": "2026-09-03",
+      "evidenceUrls": [
+        "https://nogata-kankoh.com/news/8238.html"
+      ],
+      "note": "掲載ページで参加費5,000円、申込期限8月31日を確認しました。9月3日時点では申込受付終了として表示します。"
+    },
+    {
       "sourceUrl": "https://nogata.aeonmall.jp/event/560fd47c-9d5b-4cb8-9d48-7e8cb6b7dbe5",
       "removeFields": [
         "money"
