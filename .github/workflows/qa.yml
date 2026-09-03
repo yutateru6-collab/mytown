@@ -56,9 +56,11 @@ jobs:
           node --check ui-v2.js
           node --check ui-home-v4.js
           node --check civic-actions.js
+          node --check civic-portal.js
           node scripts/test_garbage_ui.js
           node scripts/test_event_ui.js
           node scripts/test_community_ui.js
+          node scripts/test_p0_core_ui.js
           node --check map-nearby.js
           node --check bulletin-reader.js
           node --check reference-top-1.js
@@ -96,6 +98,7 @@ jobs:
           python -m json.tool data/community-sources.json > /dev/null
           python -m json.tool data/community.json > /dev/null
           python -m json.tool data/civic-report-routes.json > /dev/null
+          python -m json.tool data/civic-portal.json > /dev/null
 
       - name: Official source registry
         run: python scripts/verify_sources.py
@@ -134,7 +137,7 @@ jobs:
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
           grep -q '>さがす</span>' index.html
-          grep -q 'mytown-civic-v27-civic-actions' sw.js
+          grep -q 'mytown-p0-v28' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
@@ -174,7 +177,9 @@ jobs:
           grep -q 'data-v2-nav="nearby"' index.html
           grep -q 'data-v2-nav="search"' index.html
           ! grep -q 'data-v2-nav="action"' index.html
-          grep -q 'data-v2-nav="notifications"' index.html
+          grep -q 'data-v2-nav="saved"' index.html
+          ! grep -q 'data-v2-nav="notifications"' index.html
+          ! grep -q 'data-v2-nav="civic"' index.html
           grep -q 'data-v2-nav="menu"' index.html
           grep -q 'politics.js' index.html
           grep -q 'politics.css' index.html
