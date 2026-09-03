@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "nogata-volunteer-directory",
+      "name": "直方市のボランティア団体一覧",
+      "description": "直方市が公開している分野別のボランティア団体情報です。",
+      "url": "https://www.city.nogata.fukuoka.jp/yukari/_1510.html",
+      "parser": "volunteer-directory",
+      "kind": "volunteer",
+      "enabled": true,
+      "fallbackOrganizations": [
+        { "name": "認知症サポーターを広める会", "category": "高齢者・障がい者・福祉" },
+        { "name": "認知症の人と家族の会直方", "category": "高齢者・障がい者・福祉" },
+        { "name": "学生団体ふーぷ", "category": "高齢者・障がい者・福祉" },
+        { "name": "おもちゃ図書館のおがたスタッフ会", "category": "高齢者・障がい者・福祉" },
+        { "name": "やまぼうしの会", "category": "高齢者・障がい者・福祉" },
+        { "name": "さざなみ会", "category": "高齢者・障がい者・福祉" },
+        { "name": "直方市身体障がい者福祉協会", "category": "高齢者・障がい者・福祉" },
+        { "name": "王子遊ぼう会", "category": "高齢者・障がい者・福祉" },
+        { "name": "直方歩け歩け会", "category": "高齢者・障がい者・福祉" },
+        { "name": "直方市ボランティア連絡協議会青年部", "category": "高齢者・障がい者・福祉" },
+        { "name": "直方市シニアクラブ連合会", "category": "高齢者・障がい者・福祉" },
+        { "name": "特定非営利活動法人わらしべの会", "category": "高齢者・障がい者・福祉" },
+        { "name": "古高取を伝える会", "category": "文化・歴史・芸術" },
+        { "name": "歴史ボランティア・直方を語る会「とおれんじ」", "category": "文化・歴史・芸術" },
+        { "name": "のおがた子育てネットワーク「すくすく」", "category": "子育て" },
+        { "name": "直方市立図書館ブックスタートボランティア", "category": "子育て" },
+        { "name": "おもちゃ病院のおがた", "category": "子育て" },
+        { "name": "れろの会", "category": "子育て" },
+        { "name": "麦のこ", "category": "子育て" },
+        { "name": "NPO法人直方川づくりの会（遠賀川水辺館）", "category": "環境" },
+        { "name": "直方マジッククラブ", "category": "地域づくり" },
+        { "name": "Dream Messenger", "category": "地域づくり" },
+        { "name": "NPO法人BOTA山プランニング", "category": "地域づくり" },
+        { "name": "末次通訳事務所・慈善事業活動部", "category": "国際交流" },
+        { "name": "ゴールFP事務所", "category": "社会教育" }
+      ],
+      "categories": [
+        { "name": "高齢者・障がい者・福祉", "url": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1511.html" },
+        { "name": "文化・歴史・芸術", "url": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1537.html" },
+        { "name": "子育て", "url": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1543.html" },
+        { "name": "環境", "url": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1564.html" },
+        { "name": "地域づくり", "url": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1569.html" },
+        { "name": "国際交流", "url": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1587.html" },
+        { "name": "社会教育", "url": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1579.html" }
+      ]
+    },
+    {
+      "id": "nogata-child-cafeterias",
+      "name": "こども食堂情報",
+      "description": "市内のこども食堂や、こども食堂を支える活動の情報です。",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1208/houzinkensyu.html",
+      "detailUrl": "https://nogatashakyo.org/pages/26/",
+      "documentUrl": "https://nogatashakyo.org/files/libs/2014/202607131741523024.pdf",
+      "parser": "reviewed-activities",
+      "kind": "children",
+      "dataAsOf": "令和8年6月時点",
+      "enabled": true,
+      "activities": [
+        { "name": "こどもの居場所いろり", "activityType": "child-cafeteria" },
+        { "name": "こども食堂ハピネス", "activityType": "child-cafeteria" },
+        { "name": "わたしの秘密基地こども食堂", "activityType": "child-cafeteria" },
+        { "name": "食堂天竺こども食堂", "activityType": "child-cafeteria" },
+        { "name": "居酒屋和こども食堂", "activityType": "child-cafeteria" },
+        { "name": "わんぱく食堂", "activityType": "child-cafeteria" },
+        { "name": "ななえでごはん", "activityType": "child-cafeteria" },
+        { "name": "こども宅食 みんなのごはん", "activityType": "child-support" },
+        { "name": "こども食堂サポーター", "activityType": "child-cafeteria" },
+        { "name": "森の縁 つながる堂", "activityType": "child-cafeteria" },
+        { "name": "おんが川こども福祉研究会", "activityType": "child-support" }
+      ]
+    },
+    {
+      "id": "nogata-sdgs-partners",
+      "name": "のおがたSDGs推進パートナー一覧",
+      "description": "直方市と地域課題の解決に向けてSDGsを推進する企業・団体の登録一覧です。",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11920/_12228.html",
+      "parser": "sdgs-partners",
+      "kind": "sdgs",
+      "enabled": true
+    },
+    {
+      "id": "nogata-shakyo-volunteer-center",
+      "name": "直方市社会福祉協議会ボランティアセンター",
+      "description": "ボランティアの相談、登録、紹介と、現在の募集情報を確認できます。",
+      "url": "https://nogatashakyo.org/pages/65/",
+      "parser": "shakyo-volunteer",
+      "kind": "volunteer",
+      "enabled": true
+    }
+  ]
+}

@@ -21,6 +21,14 @@ const FALLBACK_DATA = {
     events: [],
     sourceHealth: []
   },
+  community: {
+    schemaVersion: 1,
+    generatedAt: null,
+    organizations: [],
+    activities: [],
+    sourceHubs: [],
+    sourceHealth: []
+  },
   changes: {
     schemaVersion: 1,
     generatedAt: null,
@@ -120,6 +128,14 @@ function normalizeData(raw) {
       events: Array.isArray(data.communityEvents?.events) ? data.communityEvents.events : [],
       sourceHealth: Array.isArray(data.communityEvents?.sourceHealth) ? data.communityEvents.sourceHealth : [],
     },
+    community: {
+      ...FALLBACK_DATA.community,
+      ...(data.community || {}),
+      organizations: Array.isArray(data.community?.organizations) ? data.community.organizations : [],
+      activities: Array.isArray(data.community?.activities) ? data.community.activities : [],
+      sourceHubs: Array.isArray(data.community?.sourceHubs) ? data.community.sourceHubs : [],
+      sourceHealth: Array.isArray(data.community?.sourceHealth) ? data.community.sourceHealth : [],
+    },
     changes: {
       ...FALLBACK_DATA.changes,
       ...(data.changes || {}),
@@ -140,18 +156,20 @@ async function loadOfficialData() {
   state.loading = true;
   render();
   try {
-    const [response, bulletinResponse, changesResponse, communityEventsResponse] = await Promise.all([
+    const [response, bulletinResponse, changesResponse, communityEventsResponse, communityResponse] = await Promise.all([
       fetch(`./data/latest.json?v=${Date.now()}`, { cache: "no-store" }),
       fetch(`./data/bulletin.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
       fetch(`./data/changes.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
       fetch(`./data/community-events.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
+      fetch(`./data/community.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
     ]);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const latest = await response.json();
     const bulletin = bulletinResponse?.ok ? await bulletinResponse.json() : {};
     const changes = changesResponse?.ok ? await changesResponse.json() : FALLBACK_DATA.changes;
     const communityEvents = communityEventsResponse?.ok ? await communityEventsResponse.json() : FALLBACK_DATA.communityEvents;
-    state.data = normalizeData({ ...latest, bulletin, changes, communityEvents });
+    const community = communityResponse?.ok ? await communityResponse.json() : FALLBACK_DATA.community;
+    state.data = normalizeData({ ...latest, bulletin, changes, communityEvents, community });
     state.loadError = false;
   } catch (error) {
     console.warn("Official data load failed", error);

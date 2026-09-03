@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v25-community-events";
+const CACHE = "mytown-civic-v26-community-directory";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -37,6 +37,7 @@ const STATIC_ASSETS = [
   "./assets/illustrations/card-bulletin.svg?v=17",
   "./data/latest.json",
   "./data/community-events.json",
+  "./data/community.json",
   "./data/changes.json",
   "./data/bulletin.json",
   "./data/politics.json",
@@ -79,6 +80,7 @@ self.addEventListener("fetch", (event) => {
 
   const isSyncedData = url.pathname.endsWith("/data/latest.json") ||
     url.pathname.endsWith("/data/community-events.json") ||
+    url.pathname.endsWith("/data/community.json") ||
     url.pathname.endsWith("/data/changes.json") ||
     url.pathname.endsWith("/data/bulletin.json") ||
     url.pathname.endsWith("/data/politics.json") ||

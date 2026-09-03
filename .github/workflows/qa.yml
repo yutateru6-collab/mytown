@@ -23,7 +23,7 @@ on:
       - ".github/workflows/qa.yml"
       - ".github/workflows/pages.yml"
   workflow_run:
-    workflows: ["Sync Nogata official data", "Sync Nogata community events"]
+    workflows: ["Sync Nogata official data", "Sync Nogata community events", "Sync Nogata community directory"]
     types: [completed]
   workflow_dispatch:
 
@@ -52,6 +52,7 @@ jobs:
           node --check ui-home-v4.js
           node scripts/test_garbage_ui.js
           node scripts/test_event_ui.js
+          node scripts/test_community_ui.js
           node --check map-nearby.js
           node --check bulletin-reader.js
           node --check reference-top-1.js
@@ -65,6 +66,7 @@ jobs:
           python -m py_compile scripts/sync_meetings.py
           python -m py_compile scripts/sync_bulletin.py
           python -m py_compile scripts/sync_events.py
+          python -m py_compile scripts/sync_community.py
           python -m py_compile scripts/pdf_tools.py
           python -m py_compile scripts/verify_sources.py
           python -m py_compile scripts/verify_high_risk.py
@@ -81,6 +83,8 @@ jobs:
           python -m json.tool data/bulletin.json > /dev/null
           python -m json.tool data/event-sources.json > /dev/null
           python -m json.tool data/community-events.json > /dev/null
+          python -m json.tool data/community-sources.json > /dev/null
+          python -m json.tool data/community.json > /dev/null
 
       - name: Official source registry
         run: python scripts/verify_sources.py
@@ -89,6 +93,7 @@ jobs:
         run: |
           python scripts/test_data_pipeline.py
           python scripts/test_event_pipeline.py
+          python scripts/test_community_pipeline.py
 
       - name: Historical election consistency
         run: python scripts/verify_election_history.py
@@ -116,7 +121,7 @@ jobs:
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
           grep -q '>さがす</span>' index.html
-          grep -q 'mytown-civic-v25-community-events' sw.js
+          grep -q 'mytown-civic-v26-community-directory' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
@@ -138,6 +143,8 @@ jobs:
           grep -q 'bulletin-reader-frame' bulletin-reader.js
           grep -q 'wholePdfUrl' bulletin-reader.js
           grep -q '直方のイベント' ui-home-v4.js
+          grep -q '地域活動・ボランティアを探す' ui-home-v4.js
+          grep -q 'data/community.json' app.js
           grep -q '次の市議会' ui-home-v4.js
           grep -q 'card-nearby.svg' ui-home-v5.css
           grep -q 'card-deadline.svg' ui-home-v5.css
