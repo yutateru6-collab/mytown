@@ -9,6 +9,13 @@ const POLITICS_FALLBACK = {
   glossary: [],
 };
 
+const POLITICS_ASSETS = Object.freeze({
+  mayor: "./assets/illustrations/politics-mayor-person.webp?v=1",
+  council: "./assets/illustrations/politics-council-people.webp?v=1",
+  civic: "./assets/illustrations/card-decision.svg?v=16",
+  budget: "./assets/illustrations/civic-budget.webp?v=3",
+});
+
 state.politics = POLITICS_FALLBACK;
 state.politicsLoading = true;
 state.politicsLoadError = false;
@@ -38,9 +45,9 @@ function guideBubble(message, note = "") {
 function politicsDataBanner() {
   const p = state.politics;
   if (state.politicsLoadError) {
-    return `<div class="sync-banner is-warning"><strong>市長・市議会の情報を読み込めませんでした</strong><button class="text-button" type="button" data-politics-reload>もう一度読み込む</button><a href="https://www.city.nogata.fukuoka.jp/sigikai/" target="_blank" rel="noopener noreferrer">直方市議会のページを開く ↗</a></div>`;
+    return `<div class="politics-source-stamp is-warning"><strong>市長・市議会の情報を読み込めませんでした</strong><button class="text-button" type="button" data-politics-reload>もう一度読み込む</button></div>`;
   }
-  return `<div class="sync-banner"><div><span class="official-badge">市の資料から</span><strong>市長・市議会の情報</strong></div><span>最終確認：${esc(p.verifiedOn || "確認中")}</span></div>`;
+  return `<div class="politics-source-stamp"><img src="${POLITICS_ASSETS.civic}" alt="" aria-hidden="true"><span>直方市の公開資料をもとに掲載</span><small>確認 ${esc(p.verifiedOn || "確認中")}</small></div>`;
 }
 
 function politicsBackButton() {
@@ -59,40 +66,74 @@ function politicsJapaneseDate(value = "") {
   return `${Number(match[1])}年${Number(match[2])}月${Number(match[3])}日`;
 }
 
+function politicsMeetingDate(value = "") {
+  const match = String(value).match(/^(\d{1,2})\/(\d{1,2})(.*)$/);
+  if (!match) return value || "日程を確認中";
+  return `${Number(match[1])}月${Number(match[2])}日${match[3] || ""}`;
+}
+
 function politicsHome() {
   const p = state.politics;
   if (state.politicsLoading) return `<section class="page"><div class="hero"><p class="eyebrow">市長・議会</p><h1>市長・市議会を知る</h1><p>公式資料を読み込んでいます。</p></div><div class="card info-card"><div class="loading-line"></div><div class="loading-line short"></div></div></section>`;
   const mayor = p.mayor || {};
+  const council = p.council || {};
+  const nextMeeting = state.data?.council || {};
+  const seatCount = Number(council.seats || 19);
   return `<section class="page politics-page">
-    <div class="hero politics-hero"><p class="eyebrow">🏛 市長・議会</p><h1>市長・市議会を知る</h1><p>市長や議員の役割、会派、選挙などを、直方市の資料をもとに案内します。</p></div>
-    ${politicsDataBanner()}
-    ${guideBubble("役割、議員、会派、選挙など、知りたいところから見られます。")}
+    <div class="politics-overview">
+      <header class="politics-overview-hero">
+        <img src="${POLITICS_ASSETS.civic}" alt="" aria-hidden="true">
+        <div><p class="eyebrow">市長・議会</p><h1>市長・市議会を知る</h1><p>直方では、だれが何を決めている？</p></div>
+      </header>
 
-    <div class="politics-stats" aria-label="直方の市長と議会の概要">
-      <button type="button" class="stat-card" data-politics-section="mayor"><span>市長</span><strong>${esc(mayor.name || "確認中")}</strong><small>${esc(mayor.term || "")}</small></button>
-      <button type="button" class="stat-card" data-politics-section="members"><span>市議会</span><strong>${Number(p.council?.seats || 19)}人</strong><small>議長 ${esc(p.council?.chair || "")}</small></button>
-      <button type="button" class="stat-card" data-politics-section="factions"><span>会派</span><strong>${Number(p.factions?.count || 0)}グループ</strong><small>所属情報の日付に注意</small></button>
-      <button type="button" class="stat-card" data-politics-section="elections"><span>次の選挙</span><strong>2027年</strong><small>投票日は未発表</small></button>
+      <section class="politics-role-explainer" aria-labelledby="politics-role-title">
+        <h2 id="politics-role-title">30秒でわかる</h2>
+        <div class="politics-role-grid">
+          <button type="button" class="politics-role-panel is-mayor" data-politics-section="mayor">
+            <img src="${POLITICS_ASSETS.mayor}" alt="" aria-hidden="true">
+            <span class="politics-role-label">市長</span>
+            <strong>${esc(mayor.name || "確認中")}</strong>
+            <span class="politics-role-copy">市の仕事を進める責任者</span>
+            <small>${esc(mayor.term || "確認中")}</small>
+          </button>
+          <button type="button" class="politics-role-panel is-council" data-politics-section="members">
+            <img src="${POLITICS_ASSETS.council}" alt="" aria-hidden="true">
+            <span class="politics-role-label">市議会</span>
+            <strong>${seatCount}人</strong>
+            <span class="politics-role-copy">予算や条例を話し合い、決める</span>
+            <small>議長 ${esc(council.chair || "確認中")}</small>
+          </button>
+        </div>
+        <div class="politics-process-strip" aria-label="予算が実行されるまでの基本的な流れ">
+          <div><img src="${POLITICS_ASSETS.budget}" alt="" aria-hidden="true"><strong>予算案</strong></div>
+          <span aria-hidden="true">→</span>
+          <div><img src="${POLITICS_ASSETS.council}" alt="" aria-hidden="true"><strong>話し合う・決める</strong></div>
+          <span aria-hidden="true">→</span>
+          <div><img src="${POLITICS_ASSETS.civic}" alt="" aria-hidden="true"><strong>市が実行</strong></div>
+        </div>
+        <p class="politics-process-note">予算の場合の基本的な流れです。</p>
+      </section>
+
+      ${nextMeeting.title ? `<button type="button" class="politics-next-meeting" data-politics-section="upcoming">
+        <span class="politics-meeting-copy"><small>次の市議会</small><strong>${esc(politicsMeetingDate(nextMeeting.nextDateLabel))}</strong><b>${esc(nextMeeting.title)}</b><span>${esc(nextMeeting.status || "予定・変更の場合あり")}</span></span>
+        <img src="${POLITICS_ASSETS.council}" alt="" aria-hidden="true">
+        <i aria-hidden="true">見る</i>
+      </button>` : ""}
+
+      <section class="politics-entry-section" aria-labelledby="politics-entry-title">
+        <h2 id="politics-entry-title">知りたいことから</h2>
+        <div class="politics-entry-grid">
+          <button type="button" class="politics-entry-button is-people" data-politics-section="members"><img src="${POLITICS_ASSETS.mayor}" alt="" aria-hidden="true"><strong>市長・議員</strong><span aria-hidden="true">見る</span></button>
+          <button type="button" class="politics-entry-button is-system" data-politics-section="committees"><img src="${POLITICS_ASSETS.civic}" alt="" aria-hidden="true"><strong>議会のしくみ</strong><span aria-hidden="true">見る</span></button>
+        </div>
+        <details class="politics-more-menu">
+          <summary>お金・選挙を見る</summary>
+          <div><button type="button" data-politics-section="money">議員活動に使うお金</button><button type="button" data-politics-section="elections">次の選挙</button><button type="button" data-politics-section="glossary">議会ことば図鑑</button></div>
+        </details>
+      </section>
+
+      ${politicsDataBanner()}
     </div>
-
-    ${state.data?.council ? councilPreview(state.data.council) : ""}
-
-    <div class="section">
-      <div class="section-head"><div><h2>何を見たい？</h2><p>知りたいことから選べます</p></div></div>
-      <div class="politics-menu-grid">
-        <button type="button" class="politics-menu-card" data-politics-section="mayor"><span>👤</span><strong>市長って誰？</strong><small>任期・経歴を見る</small></button>
-        <button type="button" class="politics-menu-card" data-politics-section="members"><span>👥</span><strong>議員19人を見る</strong><small>所属委員会・質問テーマ</small></button>
-        <button type="button" class="politics-menu-card" data-politics-section="factions"><span>🤝</span><strong>会派って何？</strong><small>議会の中のグループ</small></button>
-        <button type="button" class="politics-menu-card" data-politics-section="committees"><span>🔎</span><strong>委員会って何？</strong><small>分野ごとの担当</small></button>
-        <button type="button" class="politics-menu-card" data-politics-section="money"><span>💰</span><strong>議員活動に使うお金</strong><small>政務活動費を分かりやすく</small></button>
-        <button type="button" class="politics-menu-card wide" data-politics-section="glossary"><span>📚</span><strong>役所・議会ことば図鑑</strong><small>難しい言葉をやさしく</small></button>
-      </div>
-    </div>
-
-    <details class="quiz-card">
-      <summary>🦖 10秒クイズ：市長が提案すれば、何でもすぐ決まる？</summary>
-      <div><strong>答え：すぐに決まるとは限りません。</strong><p>予算や条例は、市議会の決定が必要な場合があります。のおがた日和では、市長側の提案と市議会の決定を分けて表示します。</p></div>
-    </details>
   </section>`;
 }
 

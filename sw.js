@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v27-civic-portal";
+const CACHE = "mytown-civic-v32-politics-visual";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -37,6 +37,8 @@ const STATIC_ASSETS = [
   "./assets/illustrations/civic-budget.webp?v=3",
   "./assets/illustrations/civic-bus.webp?v=3",
   "./assets/illustrations/civic-roadwork.webp?v=3",
+  "./assets/illustrations/politics-mayor-person.webp?v=1",
+  "./assets/illustrations/politics-council-people.webp?v=1",
   "./data/latest.json",
   "./data/community-events.json",
   "./data/community.json",
