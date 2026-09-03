@@ -1,0 +1,43 @@
+name: MYTOWN Event State QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/event-quality-overrides.json"
+      - "data/community-events.json"
+      - "scripts/finalize_event_state.py"
+      - "scripts/test_event_state.py"
+      - ".github/workflows/event-state-qa.yml"
+      - ".github/workflows/sync-events.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/event-quality-overrides.json"
+      - "data/community-events.json"
+      - "scripts/finalize_event_state.py"
+      - "scripts/test_event_state.py"
+      - ".github/workflows/event-state-qa.yml"
+      - ".github/workflows/sync-events.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  event-state:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate reviewed deadlines and derived states
+        run: |
+          python -m json.tool data/event-quality-overrides.json > /dev/null
+          python -m py_compile scripts/finalize_event_state.py
+          python scripts/finalize_event_state.py --check
+          python scripts/test_event_state.py
