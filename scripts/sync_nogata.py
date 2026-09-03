@@ -33,6 +33,58 @@ SCHOOL_URL = "https://city.nogata.fukuoka.jp/kyoikubunka/_1214/_1974/_10365.html
 PILATES_URL = "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
 COUNCIL_URL = "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
 GARBAGE_URL = "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310.html"
+GARBAGE_BURNABLE_URL = "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310/_1313.html"
+GARBAGE_MONTHLY_URL = "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310/_3712.html"
+GARBAGE_HOLIDAY_URL = "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_7328.html"
+GARBAGE_MONTHLY_PDF_URL = "https://www.city.nogata.fukuoka.jp/library/R7.11.20.2.pdf"
+
+# Normalized from Nogata City's 2026 collection calendar. The source pages are
+# checked on every sync; the app stops calculating dates if their update dates
+# no longer match this reviewed snapshot.
+GARBAGE_SOURCE_VERSIONS = {
+    "overview": "2026-03-04",
+    "burnable": "2025-04-24",
+    "monthly": "2025-12-01",
+    "holiday": "2026-03-04",
+}
+GARBAGE_SOURCE_URLS = {
+    "overview": GARBAGE_URL,
+    "burnable": GARBAGE_BURNABLE_URL,
+    "monthly": GARBAGE_MONTHLY_URL,
+    "holiday": GARBAGE_HOLIDAY_URL,
+}
+GARBAGE_COLLECTION_AREAS = {
+    "east": {
+        "label": "市東部",
+        "description": "遠賀川と彦山川の東側",
+        "burnableWeekdays": [1, 4],
+        "cansAndBottles": [
+            "2026-01-07", "2026-02-04", "2026-03-04", "2026-04-01",
+            "2026-05-06", "2026-06-03", "2026-07-01", "2026-08-05",
+            "2026-09-02", "2026-10-07", "2026-11-04", "2026-12-02",
+        ],
+        "nonBurnable": [
+            "2026-01-14", "2026-02-11", "2026-03-11", "2026-04-08",
+            "2026-05-13", "2026-06-10", "2026-07-08", "2026-08-12",
+            "2026-09-09", "2026-10-14", "2026-11-11", "2026-12-09",
+        ],
+    },
+    "west": {
+        "label": "市西部",
+        "description": "遠賀川と彦山川の西側",
+        "burnableWeekdays": [2, 5],
+        "cansAndBottles": [
+            "2026-01-21", "2026-02-18", "2026-03-18", "2026-04-15",
+            "2026-05-20", "2026-06-17", "2026-07-15", "2026-08-19",
+            "2026-09-16", "2026-10-21", "2026-11-18", "2026-12-16",
+        ],
+        "nonBurnable": [
+            "2026-01-28", "2026-02-25", "2026-03-25", "2026-04-22",
+            "2026-05-27", "2026-06-24", "2026-07-22", "2026-08-26",
+            "2026-09-30", "2026-10-28", "2026-11-25", "2026-12-23",
+        ],
+    },
+}
 
 HEADERS = {
     "User-Agent": "MYTOWN-Nogata/1.0 (+https://github.com/yutateru6-collab/mytown; public-data-sync)"
@@ -134,6 +186,41 @@ def official_update_date(text: str, anchor: str = "") -> str | None:
     if not m:
         return None
     return f"{int(m.group(1)):04d}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+
+
+def build_garbage_data(source_dates: dict[str, str], old_garbage: dict | None = None) -> dict:
+    """Build only the dates reviewed against the city's published calendar."""
+    old_garbage = old_garbage or {}
+    old_versions = (old_garbage.get("schedule") or {}).get("sourceVersions") or {}
+    source_versions = {
+        key: source_dates.get(url) or old_versions.get(key) or GARBAGE_SOURCE_VERSIONS[key]
+        for key, url in GARBAGE_SOURCE_URLS.items()
+    }
+    needs_review = any(
+        source_versions.get(key) != expected
+        for key, expected in GARBAGE_SOURCE_VERSIONS.items()
+    )
+    schedule = {
+        "status": "needs_review" if needs_review else "verified",
+        "validFrom": "2026-01-01",
+        "validThrough": "2026-12-31",
+        "putOutBy": "08:30",
+        "burnableRunsOnHolidays": True,
+        "yearEndNeedsSeparateNotice": True,
+        "sourceVersions": source_versions,
+        "monthlyPdfUrl": GARBAGE_MONTHLY_PDF_URL,
+        "areas": GARBAGE_COLLECTION_AREAS,
+    }
+    summary = "市東部・市西部の収集日程を、アプリ内で確認できます。"
+    if needs_review:
+        summary = "公式ページの更新を検知しました。収集日程を確認し直しています。"
+    return {
+        "title": "ごみ・資源リサイクルの収集日",
+        "summary": summary,
+        "sourceUpdated": source_versions["overview"],
+        "sourceUrl": GARBAGE_URL,
+        "schedule": schedule,
+    }
 
 
 def parse_population(text: str, old: dict) -> dict:
@@ -414,6 +501,9 @@ def main() -> int:
         ("ピラティス教室", PILATES_URL, "ピラティス教室参加者募集"),
         ("市議会日程", COUNCIL_URL, "令和8年9月定例会日程"),
         ("ごみ収集案内", GARBAGE_URL, "ごみ・資源リサイクルの収集日"),
+        ("もやせるごみ区域", GARBAGE_BURNABLE_URL, "燃やせるごみ"),
+        ("カン・ビン・もやせないごみ日程", GARBAGE_MONTHLY_URL, "燃やせないごみ、カン・ビン"),
+        ("祝日のごみ収集", GARBAGE_HOLIDAY_URL, "祝日のごみ収集"),
     ]
     source_dates: dict[str, str] = {}
     for name, url, anchor in fixed_sources:
@@ -443,16 +533,7 @@ def main() -> int:
             item.pop("moneyNote", None)
             item["bullets"] = []
 
-    garbage_updated = source_dates.get(GARBAGE_URL, old.get("garbage", {}).get("sourceUpdated", "2026-03-04"))
-    garbage_summary = "2026年（令和8年）1月からの『もやせるごみ』『カン・ビン、もやせないごみ』『資源リサイクル』の収集日程が案内されています。地域ごとの日程は公式ページから確認できます。"
-    if garbage_updated > "2026-03-04":
-        garbage_summary = "ごみ収集の公式ページが更新されています。地域ごとの最新日程は公式ページで確認してください。"
-    garbage = {
-        "title": "ごみ・資源リサイクルの収集日",
-        "summary": garbage_summary,
-        "sourceUpdated": garbage_updated,
-        "sourceUrl": GARBAGE_URL,
-    }
+    garbage = build_garbage_data(source_dates, old.get("garbage"))
 
     council = council_data()
     if council and COUNCIL_URL in source_dates:

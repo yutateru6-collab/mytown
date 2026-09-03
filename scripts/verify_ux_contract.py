@@ -40,12 +40,12 @@ def main() -> None:
     require(index, ">地図</span>", "dedicated map navigation")
     require(index, ">さがす</span>", "search center-nav label")
     require(index, "aria-label=\"直方の情報をさがす\"", "search accessible name")
-    require(index, "./ui-v2.js?v=19", "versioned citizen-first runtime")
+    require(index, "./ui-v2.js?v=20", "versioned citizen-first runtime")
     require(index, "./app-runtime.js?v=3", "versioned data-load recovery runtime")
     require(index, "./ui-v2.css?v=18", "versioned citizen-first styles")
     require(index, "./app.js?v=18", "daily visit state runtime")
-    require(index, "./ui-home-v4.js?v=19", "event-led home runtime")
-    require(index, "./ui-home-v4.css?v=16", "event-led home styles")
+    require(index, "./ui-home-v4.js?v=20", "event-led home runtime")
+    require(index, "./ui-home-v4.css?v=17", "event-led home styles")
     require(index, "./map-nearby.js?v=3", "nearby map runtime")
     require(index, "./map-nearby.css?v=2", "nearby map styles")
     require(index, "./bulletin-reader.js?v=2", "bulletin reader runtime")
@@ -67,6 +67,7 @@ def main() -> None:
         "data-v2-action=\"meeting\"",
         "data-v2-action=\"back-route\"",
         "V2_PREFERENCES_KEY",
+        "garbageArea",
         "v2ChangesSinceLastVisit",
         "hasVerifiedConditions",
         "appShell.inert = true",
@@ -97,7 +98,10 @@ def main() -> None:
         "前回見たあと",
         "今日の直方を1つ知る",
         "今日から、直方に関わる",
-        "日程や時刻を確認できない情報は表示しません。",
+        "確認できた情報だけを表示しています。",
+        "今日：${todayTypes.join(\"・\")}",
+        "明日：${tomorrowTypes.join(\"・\")}",
+        "収集エリアを設定",
     ):
         require(home_ui, token, "event-led bento home contract")
 
@@ -164,12 +168,15 @@ def main() -> None:
     require(app, "市の資料で確認できた流れ", "decision evidence timeline")
     require(data, '"decisionTimeline"', "verified bus decision timeline data")
     require(data, '"decisionUnknowns"', "explicit decision unknowns")
+    require(data, '"burnableWeekdays": [', "in-app garbage weekday data")
+    require(data, '"cansAndBottles": [', "in-app cans and bottles dates")
+    require(data, '"nonBurnable": [', "in-app non-burnable dates")
     require(changes, '"changes"', "change-log data file")
     require(politics, "質問に合わない基本情報", "mayor false-match guard")
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v23-daily-briefing", "service-worker cache revision")
+    require(sw, "mytown-civic-v24-garbage-schedule", "service-worker cache revision")
     require(sw, "data/changes.json", "change-log precache")
     require(sw, "ui-home-v4.js", "v4 runtime precache")
     require(sw, "ui-home-v5.css", "v5 polish precache")

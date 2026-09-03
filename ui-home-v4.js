@@ -133,6 +133,58 @@
     return `締切まであと${deadline - today}日`;
   }
 
+  function v4DateKeyOffset(dateKey, offset) {
+    const day = v4IsoDayNumber(dateKey);
+    if (day === null) return "";
+    return new Date((day + offset) * 86400000).toISOString().slice(0, 10);
+  }
+
+  function v4GarbageTypesForDate(schedule, area, dateKey) {
+    if (!schedule || !area || dateKey < schedule.validFrom || dateKey > schedule.validThrough) return [];
+    const [year, month, day] = dateKey.split("-").map(Number);
+    if (schedule.yearEndNeedsSeparateNotice && ((month === 12 && day >= 29) || (month === 1 && day <= 3))) return [];
+    const weekday = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+    const types = [];
+    if ((area.burnableWeekdays || []).includes(weekday)) types.push("もやせるごみ");
+    if ((area.cansAndBottles || []).includes(dateKey)) types.push("カン・ビン");
+    if ((area.nonBurnable || []).includes(dateKey)) types.push("もやせないごみ");
+    return types;
+  }
+
+  function v4GarbageBrief(garbage) {
+    const areaId = state.v2Preferences?.garbageArea || "";
+    const schedule = garbage?.schedule || null;
+    const area = schedule?.areas?.[areaId] || null;
+    if (!areaId) {
+      return { kicker: "ごみ収集", title: "収集エリアを設定", note: "設定後は、ここに今日・明日の収集を表示", action: "settings" };
+    }
+    if (!schedule || schedule.status !== "verified" || !area) {
+      return { kicker: "ごみ収集", title: "収集日程を確認中", note: "公式日程の更新を確認しています", action: "settings" };
+    }
+
+    const today = v4TokyoDateKey();
+    const tomorrow = v4DateKeyOffset(today, 1);
+    const todayTypes = v4GarbageTypesForDate(schedule, area, today);
+    const tomorrowTypes = v4GarbageTypesForDate(schedule, area, tomorrow);
+    const cutoff = schedule.putOutBy || "08:30";
+    if (todayTypes.length) {
+      const tomorrowNote = tomorrowTypes.length ? `／明日：${tomorrowTypes.join("・")}` : "";
+      return { kicker: `${area.label}のごみ`, title: `今日：${todayTypes.join("・")}`, note: `${cutoff}まで${tomorrowNote}`, action: "settings" };
+    }
+    if (tomorrowTypes.length) {
+      return { kicker: `${area.label}のごみ`, title: `明日：${tomorrowTypes.join("・")}`, note: `${cutoff}までに指定の場所へ`, action: "settings" };
+    }
+
+    for (let offset = 2; offset <= 35; offset += 1) {
+      const nextDate = v4DateKeyOffset(today, offset);
+      const nextTypes = v4GarbageTypesForDate(schedule, area, nextDate);
+      if (!nextTypes.length) continue;
+      const [, month, day] = nextDate.split("-").map(Number);
+      return { kicker: `${area.label}のごみ`, title: `次回 ${month}/${day}：${nextTypes.join("・")}`, note: `${cutoff}までに指定の場所へ`, action: "settings" };
+    }
+    return { kicker: `${area.label}のごみ`, title: "次の収集日を確認中", note: "公開済みの日程内では確認できません", action: "settings" };
+  }
+
   function v4DailyBriefItem({ tone, icon, kicker, title, note, action, href }) {
     const inner = `<span class="v4-daily-icon" aria-hidden="true">${esc(icon)}</span><span class="v4-daily-copy"><small>${esc(kicker)}</small><strong>${esc(title)}</strong><span>${esc(note)}</span></span><b aria-hidden="true">${href ? "↗" : "›"}</b>`;
     if (href) return `<a class="v4-daily-item tone-${esc(tone)}" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${inner}</a>`;
@@ -150,6 +202,7 @@
     const newest = changes[0] || todaysLatest[0] || (state.data?.latest || [])[0] || null;
     const deadline = (typeof v2FindDeadlines === "function" ? v2FindDeadlines() : [])[0] || null;
     const garbage = state.data?.garbage || null;
+    const garbageBrief = v4GarbageBrief(garbage);
     const hasPriorVisit = Boolean(state.priorVisitAt);
 
     const updateTitle = hasPriorVisit
@@ -179,18 +232,14 @@
       {
         tone: "yellow",
         icon: "🗑️",
-        kicker: "ごみ収集",
-        title: "地区別の収集日を確認",
-        note: "地域ごとの日程を直方市のページで確認",
-        action: "settings",
-        href: garbage?.sourceUrl || "",
+        ...garbageBrief,
       },
     ];
 
     return `<section class="v4-daily-briefing" aria-labelledby="v4-daily-title">
-      <div class="v4-daily-heading"><div><p>自分に関係する情報から</p><h2 id="v4-daily-title">今日、見ておくこと</h2></div><span>${items.length}件</span></div>
+      <div class="v4-daily-heading"><h2 id="v4-daily-title">今日、見ておくこと</h2><span>${items.length}件</span></div>
       <div class="v4-daily-list">${items.map(v4DailyBriefItem).join("")}</div>
-      <p class="v4-daily-note">日程や時刻を確認できない情報は表示しません。</p>
+      <p class="v4-daily-note">確認できた情報だけを表示しています。</p>
     </section>`;
   }
 

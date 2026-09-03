@@ -16,6 +16,7 @@ on:
       - "scripts/verify_high_risk.py"
       - "scripts/verify_politics.py"
       - "scripts/test_data_pipeline.py"
+      - "scripts/test_garbage_ui.js"
       - "data/sources.json"
       - "data/changes.json"
       - "data/politics.json"
@@ -51,7 +52,9 @@ jobs:
         run: python scripts/verify_sources.py
 
       - name: Run offline pipeline regression tests
-        run: python scripts/test_data_pipeline.py
+        run: |
+          python scripts/test_data_pipeline.py
+          node scripts/test_garbage_ui.js
 
       - name: Sync official council meetings
         run: python scripts/sync_meetings.py

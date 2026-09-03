@@ -266,6 +266,9 @@ def main() -> int:
         ("就学時健康診断", legacy.SCHOOL_URL, "小学校入学予定者の就学時健康診断を実施します"),
         ("ピラティス教室", legacy.PILATES_URL, "ピラティス教室参加者募集"),
         ("ごみ収集案内", legacy.GARBAGE_URL, "ごみ・資源リサイクルの収集日"),
+        ("もやせるごみ区域", legacy.GARBAGE_BURNABLE_URL, "燃やせるごみ"),
+        ("カン・ビン・もやせないごみ日程", legacy.GARBAGE_MONTHLY_URL, "燃やせないごみ、カン・ビン"),
+        ("祝日のごみ収集", legacy.GARBAGE_HOLIDAY_URL, "祝日のごみ収集"),
     ]
     if council_url:
         fixed_sources.append(("市議会日程", council_url, f"{meeting_data.get('seriesTitle', '')}日程"))
@@ -298,17 +301,7 @@ def main() -> int:
             item.pop("moneyNote", None)
             item["bullets"] = []
 
-    old_garbage = old.get("garbage") or {}
-    garbage_updated = source_dates.get(legacy.GARBAGE_URL, old_garbage.get("sourceUpdated", ""))
-    garbage_summary = "2026年（令和8年）1月からの『もやせるごみ』『カン・ビン、もやせないごみ』『資源リサイクル』の収集日程が案内されています。地域ごとの日程は公式ページから確認できます。"
-    if old_garbage.get("sourceUpdated") and garbage_updated > old_garbage.get("sourceUpdated", ""):
-        garbage_summary = "ごみ収集の公式ページが更新されています。地域ごとの最新日程は公式ページで確認してください。"
-    garbage = {
-        "title": "ごみ・資源リサイクルの収集日",
-        "summary": garbage_summary,
-        "sourceUpdated": garbage_updated,
-        "sourceUrl": legacy.GARBAGE_URL,
-    }
+    garbage = legacy.build_garbage_data(source_dates, old.get("garbage"))
 
     if council and council_url:
         page_updated = source_dates.get(council_url)

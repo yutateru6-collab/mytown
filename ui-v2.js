@@ -15,7 +15,7 @@ const V2_ASSETS = Object.freeze({
 });
 
 const V2_PREFERENCES_KEY = "mytown-preferences-v1";
-const V2_DEFAULT_PREFERENCES = Object.freeze({ district: "", interests: [], lifeNotifications: true, civicDigest: "weekly" });
+const V2_DEFAULT_PREFERENCES = Object.freeze({ district: "", garbageArea: "", interests: [], lifeNotifications: true, civicDigest: "weekly" });
 const V2_INTERESTS = ["子育て", "学校", "高齢者", "公共交通", "ごみ", "防災", "イベント", "税金・予算"];
 let v2SheetReturnFocus = null;
 
@@ -31,7 +31,8 @@ function v2LoadPreferences() {
   try {
     const saved = JSON.parse(localStorage.getItem(V2_PREFERENCES_KEY) || "{}");
     const civicDigest = saved.civicDigest === "off" ? "off" : "weekly";
-    return { ...V2_DEFAULT_PREFERENCES, ...saved, civicDigest, interests: [] };
+    const garbageArea = ["east", "west"].includes(saved.garbageArea) ? saved.garbageArea : "";
+    return { ...V2_DEFAULT_PREFERENCES, ...saved, garbageArea, civicDigest, interests: [] };
   } catch (error) {
     console.warn("Preference load failed", error);
     return { ...V2_DEFAULT_PREFERENCES };
@@ -266,7 +267,7 @@ function v2MenuView() {
 
 function v2SettingsView() {
   const preferences = state.v2Preferences;
-  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">設定</p><h1>よく見る地域と表示順を設定</h1><p>会員登録は不要です。設定は、このブラウザだけに保存されます。</p></div></div><form id="v2-preferences-form" class="v2-preferences-form"><fieldset><legend>よく見る地域（任意）</legend><label class="v2-field"><span>町名・駅名・よく行く場所</span><input type="text" name="district" value="${esc(preferences.district)}" placeholder="例：植木、感田、直方駅周辺" maxlength="30"><small>入力した地名が掲載情報に含まれるとき、ホームの「地図から探す」に表示します。位置情報は使いません。</small></label></fieldset><fieldset><legend>表示の設定</legend><label class="v2-check-row"><input type="checkbox" name="lifeNotifications" ${preferences.lifeNotifications ? "checked" : ""}><span><strong>「新着」で暮らしの情報を先に表示</strong><small>オフにすると、「市の動き」が上になります。</small></span></label><label class="v2-field"><span>ホームに市の動きを表示</span><select name="civicDigest"><option value="weekly" ${preferences.civicDigest !== "off" ? "selected" : ""}>表示する</option><option value="off" ${preferences.civicDigest === "off" ? "selected" : ""}>表示しない</option></select><small>この設定はホームの表示だけを変えます。スマホには通知しません。</small></label></fieldset><button class="primary-button v2-save-button" type="submit">設定を保存</button></form><div class="card info-card v2-about-card"><h2>このアプリについて</h2><p>のおがた日和は試験公開中の非公式アプリです。直方市の公式アプリではありません。市の公開情報を約6時間ごとに確認し、直方市のページへのリンクを付けます。</p></div></section>`;
+  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">設定</p><h1>地域と表示順を設定</h1><p>会員登録は不要です。設定は、このブラウザだけに保存されます。</p></div></div><form id="v2-preferences-form" class="v2-preferences-form"><fieldset><legend>ごみ収集エリア</legend><label class="v2-field"><span>お住まいの区域</span><select name="garbageArea"><option value="">選択してください</option><option value="east" ${preferences.garbageArea === "east" ? "selected" : ""}>市東部（月・木）</option><option value="west" ${preferences.garbageArea === "west" ? "selected" : ""}>市西部（火・金）</option></select><small>公式日程は、遠賀川・彦山川の東西で分かれています。感田や下境などは町名だけでは決まらないため、自宅が川のどちら側かで選んでください。</small></label></fieldset><fieldset><legend>よく見る地域（任意）</legend><label class="v2-field"><span>町名・駅名・よく行く場所</span><input type="text" name="district" value="${esc(preferences.district)}" placeholder="例：植木、感田、直方駅周辺" maxlength="30"><small>入力した地名が掲載情報に含まれるとき、ホームの「地図から探す」に表示します。位置情報は使いません。</small></label></fieldset><fieldset><legend>表示の設定</legend><label class="v2-check-row"><input type="checkbox" name="lifeNotifications" ${preferences.lifeNotifications ? "checked" : ""}><span><strong>「新着」で暮らしの情報を先に表示</strong><small>オフにすると、「市の動き」が上になります。</small></span></label><label class="v2-field"><span>ホームに市の動きを表示</span><select name="civicDigest"><option value="weekly" ${preferences.civicDigest !== "off" ? "selected" : ""}>表示する</option><option value="off" ${preferences.civicDigest === "off" ? "selected" : ""}>表示しない</option></select><small>この設定はホームの表示だけを変えます。スマホには通知しません。</small></label></fieldset><button class="primary-button v2-save-button" type="submit">設定を保存</button></form><div class="card info-card v2-about-card"><h2>このアプリについて</h2><p>のおがた日和は試験公開中の非公式アプリです。直方市の公式アプリではありません。市の公開情報を約6時間ごとに確認します。</p></div></section>`;
 }
 
 settingsView = v2SettingsView;
@@ -396,7 +397,8 @@ document.addEventListener("submit", (event) => {
   if (event.target.id !== "v2-preferences-form") return;
   event.preventDefault();
   const formData = new FormData(event.target);
-  state.v2Preferences = { ...V2_DEFAULT_PREFERENCES, district: String(formData.get("district") || "").trim(), interests: [], lifeNotifications: formData.get("lifeNotifications") === "on", civicDigest: String(formData.get("civicDigest") || "weekly") };
+  const garbageArea = String(formData.get("garbageArea") || "");
+  state.v2Preferences = { ...V2_DEFAULT_PREFERENCES, district: String(formData.get("district") || "").trim(), garbageArea: ["east", "west"].includes(garbageArea) ? garbageArea : "", interests: [], lifeNotifications: formData.get("lifeNotifications") === "on", civicDigest: String(formData.get("civicDigest") || "weekly") };
   try {
     localStorage.setItem(V2_PREFERENCES_KEY, JSON.stringify(state.v2Preferences));
     showToast("設定を保存しました");

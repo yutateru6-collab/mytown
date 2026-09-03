@@ -67,6 +67,27 @@ class FeedParserTests(unittest.TestCase):
         }
         self.assertEqual(sync_nogata_v2.user_visible_changes({}, new, "2026-09-03T08:00:00Z"), [])
 
+    def test_garbage_schedule_matches_reviewed_official_dates(self) -> None:
+        source_dates = {
+            url: sync_nogata_v2.legacy.GARBAGE_SOURCE_VERSIONS[key]
+            for key, url in sync_nogata_v2.legacy.GARBAGE_SOURCE_URLS.items()
+        }
+        garbage = sync_nogata_v2.legacy.build_garbage_data(source_dates)
+        self.assertEqual(garbage["schedule"]["status"], "verified")
+        self.assertEqual(garbage["schedule"]["areas"]["east"]["burnableWeekdays"], [1, 4])
+        self.assertIn("2026-09-09", garbage["schedule"]["areas"]["east"]["nonBurnable"])
+        self.assertIn("2026-09-16", garbage["schedule"]["areas"]["west"]["cansAndBottles"])
+
+    def test_garbage_schedule_stops_when_an_official_page_changes(self) -> None:
+        source_dates = {
+            url: sync_nogata_v2.legacy.GARBAGE_SOURCE_VERSIONS[key]
+            for key, url in sync_nogata_v2.legacy.GARBAGE_SOURCE_URLS.items()
+        }
+        source_dates[sync_nogata_v2.legacy.GARBAGE_MONTHLY_URL] = "2026-09-03"
+        garbage = sync_nogata_v2.legacy.build_garbage_data(source_dates)
+        self.assertEqual(garbage["schedule"]["status"], "needs_review")
+        self.assertIn("確認し直しています", garbage["summary"])
+
 
 class MeetingParserTests(unittest.TestCase):
     def test_official_schedule_table_is_normalized(self) -> None:

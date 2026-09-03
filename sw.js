@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v23-daily-briefing";
+const CACHE = "mytown-civic-v24-garbage-schedule";
 const STATIC_ASSETS = [
   "./",
   "./index.html",

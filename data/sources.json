@@ -99,6 +99,42 @@
       "publishPolicy": "verified_summary"
     },
     {
+      "id": "nogata-garbage-burnable",
+      "name": "もやせるごみの収集区域",
+      "type": "html",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310/_1313.html",
+      "refreshHours": 6,
+      "riskLevel": "high",
+      "publishPolicy": "source_verified_only"
+    },
+    {
+      "id": "nogata-garbage-monthly",
+      "name": "カン・ビン、もやせないごみの収集日程",
+      "type": "html",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_1310/_3712.html",
+      "refreshHours": 6,
+      "riskLevel": "high",
+      "publishPolicy": "source_verified_only"
+    },
+    {
+      "id": "nogata-garbage-holiday",
+      "name": "祝日のごみ収集",
+      "type": "html",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16566/_7328.html",
+      "refreshHours": 6,
+      "riskLevel": "high",
+      "publishPolicy": "source_verified_only"
+    },
+    {
+      "id": "nogata-garbage-calendar-2026",
+      "name": "2026年カン・ビン、もやせないごみ収集日程表",
+      "type": "pdf",
+      "url": "https://www.city.nogata.fukuoka.jp/library/R7.11.20.2.pdf",
+      "refreshHours": 24,
+      "riskLevel": "high",
+      "publishPolicy": "source_verified_only"
+    },
+    {
       "id": "nogata-bulletin",
       "name": "市報のおがた",
       "type": "bulletin-index",
