@@ -572,3 +572,37 @@ body.ui-v2 small { font-size: .8125rem; }
   .v2-sheet-panel,
   .v2-sheet-backdrop { transition: none !important; }
 }
+
+
+/* P0: returning visits, reliable touch targets, active navigation contrast. */
+.ui-v2 .app-shell { padding-bottom: calc(124px + env(safe-area-inset-bottom)); }
+.ui-v2 .main { scroll-padding-bottom: calc(116px + env(safe-area-inset-bottom)); }
+.v2-hero-actions { justify-content: flex-end; }
+.v2-hero.is-returning { min-height: 154px; }
+.v2-hero.is-returning .v2-hero-copy { top: 18px; left: 24%; }
+.v2-hero.is-returning .v2-wordmark { font-size: clamp(1.45rem, 4.6vw, 2rem); }
+.v2-hero.is-returning h1 { margin-top: 6px; font-size: 1rem; }
+.v2-hero.is-returning > .v2-mascot { width: clamp(76px, 18%, 104px); bottom: 8px; }
+.ui-v2 .bottom-nav .nav-item.is-active { color: #98324b; }
+.ui-v2 .filter-chip,
+.v2-query-chips button,
+.v2-search-groups button,
+.v2-wide-button,
+.v2-save-button,
+.ui-v2 .back-button { min-height: 44px; }
+.v2-search-box { align-items: stretch; }
+.v2-search-box input { min-height: 52px; font-size: 16px; }
+.v2-search-box button { min-height: 52px; }
+.v2-fieldset-note { margin: -4px 0 12px; color: var(--v2-muted); font-size: .875rem; line-height: 1.5; }
+.v2-interest-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.v2-interest-option { display: flex; min-height: 48px; align-items: center; gap: 9px; padding: 10px 12px; border: 1px solid var(--v2-line); border-radius: 14px; background: #fff; color: var(--v2-ink); font-weight: 800; }
+.v2-interest-option input { width: 21px; height: 21px; flex: 0 0 auto; }
+.v2-interest-option:has(input:checked) { border-color: #4f9270; background: #edf8f1; }
+@media (max-width: 380px) {
+  .v2-hero.is-returning { min-height: 142px; }
+  .v2-interest-grid { grid-template-columns: 1fr; }
+}
+
+.ui-v2 .filter-row { flex-wrap: wrap; overflow: visible; }
+.ui-v2 .suggestion-chip { min-height: 44px; }
+.ui-v2 button:focus-visible, .ui-v2 a:focus-visible, .ui-v2 input:focus-visible, .ui-v2 select:focus-visible, .ui-v2 textarea:focus-visible { outline: 3px solid rgba(32, 112, 78, .36); outline-offset: 2px; }

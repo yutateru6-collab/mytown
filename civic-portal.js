@@ -47,7 +47,7 @@
     const bus = civicFeatured(/コミュニティバス|路線と時刻表/);
     const work = state.civicPortal.works?.[0] || null;
     const budget = state.civicPortal.budget || {};
-    const council = state.data?.council || {};
+    const council = typeof currentCouncilSchedule === "function" ? currentCouncilSchedule() : (state.data?.council || {});
 
     const cards = [
       {
@@ -102,7 +102,7 @@
       <section class="civic-works" aria-labelledby="civic-works-title">
         <div class="civic-section-heading"><div><p>ページの下で、必要なときに</p><h2 id="civic-works-title">暮らしに関わる工事</h2></div><button type="button" data-politics-section="works">一覧を見る</button></div>
         ${work ? `<article class="civic-work-card"><img src="${CIVIC_ASSETS.works}" alt="" aria-hidden="true"><div><span>${esc(work.status)}</span><h3>${esc(work.title)}</h3><p>${esc(work.location)}・予定工期 ${esc(work.plannedPeriod)}</p><button type="button" data-politics-section="works">内容と資料を見る <b aria-hidden="true">›</b></button></div></article>` : `<div class="card info-card"><p>確認できた工事情報はありません。</p></div>`}
-        <p class="civic-works-note">直方市などの公開資料から確認できた工事だけを掲載します。</p>
+        <p class="civic-works-note">現在整理できている工事は${state.civicPortal.works?.length || 0}件です。市内のすべての工事を網羅していません。</p>
       </section>
     </section>`;
   }
@@ -112,7 +112,7 @@
   }
 
   function civicUpcomingView() {
-    const council = state.data?.council || {};
+    const council = typeof currentCouncilSchedule === "function" ? currentCouncilSchedule() : (state.data?.council || {});
     return `<section class="page civic-page civic-subpage">${civicBackButton()}<header class="civic-sub-hero"><p class="civic-eyebrow">これから決まる</p><h1>これからの市議会</h1><p>予定として公表された日程を表示しています。</p></header>${civicOfficialBanner()}<article class="civic-focus-card"><span>次の予定</span><h2>${esc(council.title || "市議会の日程")}</h2><strong>${esc(council.nextDateLabel || "日程を確認中")}</strong><p>${esc(council.nextSummary || council.summary || "直方市の公開資料を確認しています。")}</p>${council.sourceUrl ? sourceLink(council.sourceUrl, "直方市議会の日程を見る") : ""}</article><div class="civic-caution"><strong>「予定」と「決定」は分けて表示します</strong><p>日程や内容は変更されることがあります。決まった内容は、公開された議決結果や実施案内で確認します。</p></div></section>`;
   }
 
@@ -131,13 +131,15 @@
 
   function civicWorksView() {
     const works = state.civicPortal.works || [];
-    return `<section class="page civic-page civic-subpage">${civicBackButton()}<header class="civic-sub-hero civic-works-hero"><div><p class="civic-eyebrow">暮らしに関わる工事</p><h1>公開資料で確認できた工事</h1><p>地図ではなく、工事名・場所・予定工期から探せます。</p></div><img src="${CIVIC_ASSETS.works}" alt="" aria-hidden="true"></header>${civicOfficialBanner()}<div class="civic-caution"><strong>すべての工事を載せた一覧ではありません</strong><p>市の発注見通しは原則として設計額400万円を超える工事が対象です。緊急工事など、掲載されない工事もあります。</p></div><div class="civic-work-list">${works.map((work) => `<article class="civic-work-detail"><div class="civic-work-detail-head"><span>${esc(work.status)}</span><small>${esc(work.location)}</small></div><h2>${esc(work.title)}</h2><dl><div><dt>入札日</dt><dd>${esc(work.bidDate)}</dd></div><div><dt>予定工期</dt><dd>${esc(work.plannedPeriod)}</dd></div><div><dt>契約予定額</dt><dd>${esc(work.plannedContractAmount)}</dd></div><div><dt>落札者</dt><dd>${esc(work.winningBidder)}</dd></div><div><dt>落札額</dt><dd>${esc(work.winningBidPretax)}（税抜）</dd></div></dl><p>${esc(work.note)}</p><div class="civic-source-links">${sourceLink(work.sourcePageUrl, "入札結果の一覧を見る")}${sourceLink(work.sourcePdfUrl, "入札調書PDFを開く")}${sourceLink(work.outlookPageUrl, "工事発注見通しを見る")}</div></article>`).join("")}</div></section>`;
+    return `<section class="page civic-page civic-subpage">${civicBackButton()}<header class="civic-sub-hero civic-works-hero"><div><p class="civic-eyebrow">暮らしに関わる工事</p><h1>公開資料で確認できた工事</h1><p>地図ではなく、工事名・場所・予定工期から探せます。</p></div><img src="${CIVIC_ASSETS.works}" alt="" aria-hidden="true"></header>${civicOfficialBanner()}<div class="civic-caution"><strong>現在整理できている工事：${works.length}件</strong><p>市の発注見通しは原則として設計額400万円を超える工事が対象です。緊急工事など、掲載されない工事もあります。</p></div><div class="civic-work-list">${works.map((work) => `<article class="civic-work-detail"><div class="civic-work-detail-head"><span>${esc(work.status)}</span><small>${esc(work.location)}</small></div><h2>${esc(work.title)}</h2><dl><div><dt>入札日</dt><dd>${esc(work.bidDate)}</dd></div><div><dt>予定工期</dt><dd>${esc(work.plannedPeriod)}</dd></div><div><dt>契約予定額</dt><dd>${esc(work.plannedContractAmount)}</dd></div><div><dt>落札者</dt><dd>${esc(work.winningBidder)}</dd></div><div><dt>落札額</dt><dd>${esc(work.winningBidPretax)}（税抜）</dd></div></dl><p>${esc(work.note)}</p><div class="civic-source-links">${sourceLink(work.sourcePageUrl, "入札結果の一覧を見る")}${sourceLink(work.sourcePdfUrl, "入札調書PDFを開く")}${sourceLink(work.outlookPageUrl, "工事発注見通しを見る")}</div></article>`).join("")}</div></section>`;
   }
 
   function civicMoneyView() {
     const budget = state.civicPortal.budget || {};
     const categories = budget.categories || [];
-    return `<section class="page civic-page civic-subpage civic-budget-page">${civicBackButton()}<header class="civic-sub-hero civic-budget-hero"><div><p class="civic-eyebrow">直方のお金</p><h1>${esc(budget.fiscalYear || "2026年度")}の当初予算</h1><p>最初に決めた使い道を、暮らしの言葉で見ます。</p></div><img src="${CIVIC_ASSETS.budget}" alt="" aria-hidden="true"></header>${civicOfficialBanner()}<article class="civic-budget-total"><small>一般会計・${esc(budget.kind || "当初予算")}</small><strong>${esc(budget.generalAccountLabel || "確認中")}</strong><p>年度の初めに予定した金額です。実際に使った金額は決算で確認します。</p></article><section class="civic-budget-breakdown" aria-labelledby="civic-budget-title"><div class="civic-section-heading"><div><p>金額が大きい順</p><h2 id="civic-budget-title">何に使う予定？</h2></div></div><div class="civic-budget-rows">${categories.map((item) => `<article><div><strong>${esc(item.friendly)}</strong><small>正式名称：${esc(item.official)}</small></div><div class="civic-budget-amount"><span>${esc(item.amountLabel)}</span><small>${Number(item.share).toFixed(1)}%</small></div><div class="civic-budget-bar"><i style="width:${Math.max(2, Number(item.share))}%"></i></div></article>`).join("")}</div></section><div class="civic-budget-terms"><article><strong>当初予算</strong><p>年度初めの予定</p></article><article><strong>補正予算</strong><p>途中で増減した予定</p></article><article><strong>契約金額</strong><p>業者と契約した金額</p></article><article><strong>決算</strong><p>実際に使った金額</p></article></div><div class="civic-source-links">${sourceLink(budget.sourcePageUrl, "令和8年度予算の公式ページ")}${sourceLink(budget.sourcePdfUrl, "予算参考資料PDFを開く")}</div></section>`;
+    const shownShare = categories.reduce((sum, item) => sum + (Number(item.share) || 0), 0);
+    const otherShare = Math.max(0, 100 - shownShare);
+    return `<section class="page civic-page civic-subpage civic-budget-page">${civicBackButton()}<header class="civic-sub-hero civic-budget-hero"><div><p class="civic-eyebrow">直方のお金</p><h1>${esc(budget.fiscalYear || "2026年度")}の当初予算</h1><p>最初に決めた使い道を、暮らしの言葉で見ます。</p></div><img src="${CIVIC_ASSETS.budget}" alt="" aria-hidden="true"></header>${civicOfficialBanner()}<article class="civic-budget-total"><small>一般会計・${esc(budget.kind || "当初予算")}</small><strong>${esc(budget.generalAccountLabel || "確認中")}</strong><p>年度の初めに予定した金額です。実際に使った金額は決算で確認します。</p></article><section class="civic-budget-breakdown" aria-labelledby="civic-budget-title"><div class="civic-section-heading"><div><p>金額が大きい順</p><h2 id="civic-budget-title">何に使う予定？</h2></div></div><div class="civic-budget-rows">${categories.map((item) => `<article><div><strong>${esc(item.friendly)}</strong><small>正式名称：${esc(item.official)}</small></div><div class="civic-budget-amount"><span>${esc(item.amountLabel)}</span><small>${Number(item.share).toFixed(1)}%</small></div><div class="civic-budget-bar"><i style="width:${Math.max(2, Number(item.share))}%"></i></div></article>`).join("")}</div><p class="civic-budget-scope">上位${categories.length}項目で${shownShare.toFixed(1)}％。その他は${otherShare.toFixed(1)}％です。</p></section><div class="civic-budget-terms"><article><strong>当初予算</strong><p>年度初めの予定</p></article><article><strong>補正予算</strong><p>途中で増減した予定</p></article><article><strong>契約金額</strong><p>業者と契約した金額</p></article><article><strong>決算</strong><p>実際に使った金額</p></article></div><div class="civic-source-links">${sourceLink(budget.sourcePageUrl, "令和8年度予算の公式ページ")}${sourceLink(budget.sourcePdfUrl, "予算参考資料PDFを開く")}</div></section>`;
   }
 
   const civicPoliticsRouterBase = politicsRouter;
@@ -159,7 +161,7 @@
 
   const civicHandleActionBase = v2HandleAction;
   v2HandleAction = function handleCivicAction(action) {
-    if (action === "nearby" || action === "works") {
+    if (action === "works") {
       v2CloseSheet(false);
       state.politicsSection = "works";
       return v2SetRoute({ tab: "politics", page: null, hash: "#works" });
@@ -187,14 +189,14 @@
 
   const civicActiveNavBase = v2ActiveNav;
   v2ActiveNav = function activeCivicNav() {
-    if (state.tab === "politics" || state.view === "money") return "civic";
+    if (state.tab === "politics" || state.view === "money") return "menu";
     return civicActiveNavBase();
   };
 
   const civicApplyHashRouteBase = v2ApplyHashRoute;
   v2ApplyHashRoute = function applyCivicHashRoute() {
     const hash = location.hash.replace("#", "");
-    if (["politics", "works", "nearby", "money"].includes(hash)) {
+    if (["politics", "works", "money"].includes(hash)) {
       state.tab = "politics";
       state.v2Page = null;
       state.selectedId = null;
@@ -204,7 +206,7 @@
         state.politicsSection = "home";
       } else {
         state.view = "tab";
-        state.politicsSection = hash === "works" || hash === "nearby" ? "works" : "home";
+        state.politicsSection = hash === "works" ? "works" : "home";
       }
       return;
     }

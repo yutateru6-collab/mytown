@@ -14,6 +14,13 @@ const FALLBACK_DATA = {
   featured: [],
   latest: [],
   council: null,
+  meetings: {
+    schemaVersion: 1,
+    verifiedOn: null,
+    seriesTitle: "",
+    source: {},
+    meetings: []
+  },
   garbage: null,
   communityEvents: {
     schemaVersion: 1,
@@ -122,6 +129,12 @@ function normalizeData(raw) {
     featured: Array.isArray(data.featured) ? data.featured : [],
     latest: Array.isArray(data.latest) ? data.latest : [],
     sourceHealth: Array.isArray(data.sourceHealth) ? data.sourceHealth : [],
+    meetings: {
+      ...FALLBACK_DATA.meetings,
+      ...(data.meetings || {}),
+      source: { ...FALLBACK_DATA.meetings.source, ...(data.meetings?.source || {}) },
+      meetings: Array.isArray(data.meetings?.meetings) ? data.meetings.meetings : [],
+    },
     communityEvents: {
       ...FALLBACK_DATA.communityEvents,
       ...(data.communityEvents || {}),
@@ -156,12 +169,13 @@ async function loadOfficialData() {
   state.loading = true;
   render();
   try {
-    const [response, bulletinResponse, changesResponse, communityEventsResponse, communityResponse] = await Promise.all([
+    const [response, bulletinResponse, changesResponse, communityEventsResponse, communityResponse, meetingsResponse] = await Promise.all([
       fetch(`./data/latest.json?v=${Date.now()}`, { cache: "no-store" }),
       fetch(`./data/bulletin.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
       fetch(`./data/changes.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
       fetch(`./data/community-events.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
       fetch(`./data/community.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
+      fetch(`./data/meetings.json?v=${Date.now()}`, { cache: "no-store" }).catch(() => null),
     ]);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const latest = await response.json();
@@ -169,7 +183,8 @@ async function loadOfficialData() {
     const changes = changesResponse?.ok ? await changesResponse.json() : FALLBACK_DATA.changes;
     const communityEvents = communityEventsResponse?.ok ? await communityEventsResponse.json() : FALLBACK_DATA.communityEvents;
     const community = communityResponse?.ok ? await communityResponse.json() : FALLBACK_DATA.community;
-    state.data = normalizeData({ ...latest, bulletin, changes, communityEvents, community });
+    const meetings = meetingsResponse?.ok ? await meetingsResponse.json() : FALLBACK_DATA.meetings;
+    state.data = normalizeData({ ...latest, bulletin, changes, communityEvents, community, meetings });
     state.loadError = false;
   } catch (error) {
     console.warn("Official data load failed", error);
@@ -180,6 +195,66 @@ async function loadOfficialData() {
     render();
     if (!state.loadError) recordSuccessfulVisit();
   }
+}
+
+function tokyoDateKey(value = new Date()) {
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function dateKeyOffset(dateKey, offset) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateKey || ""));
+  if (!match) return "";
+  return new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]) + offset)).toISOString().slice(0, 10);
+}
+
+function meetingDateKey(meeting = {}) {
+  const start = String(meeting.start || "");
+  return /^\d{4}-\d{2}-\d{2}/.test(start) ? start.slice(0, 10) : "";
+}
+
+function currentCouncilSchedule(now = new Date()) {
+  const fallback = state.data?.council || {};
+  const schedule = state.data?.meetings || {};
+  const today = tokyoDateKey(now);
+  const meetings = (Array.isArray(schedule.meetings) ? schedule.meetings : [])
+    .filter((meeting) => meetingDateKey(meeting))
+    .sort((a, b) => String(a.start || "").localeCompare(String(b.start || "")));
+  const next = meetings.find((meeting) => meetingDateKey(meeting) >= today);
+  if (next) {
+    const dateKey = meetingDateKey(next);
+    const [, month, day] = dateKey.split("-").map(Number);
+    const time = String(next.start || "").match(/T(\d{2}:\d{2})/)?.[1] || "";
+    const dayLabel = dateKey === today ? "今日" : dateKey === dateKeyOffset(today, 1) ? "明日" : `${month}/${day}`;
+    return {
+      ...fallback,
+      title: schedule.seriesTitle || fallback.title || "直方市議会",
+      status: dateKey === today ? "本日予定" : "予定・変更の場合あり",
+      nextDateKey: dateKey,
+      nextDateLabel: `${dayLabel}${time ? ` ${time}` : ""}`,
+      nextSummary: `${next.title || next.meetingType || "会議"}が予定されています。日程・開会時間は変更されることがあります。`,
+      meetingTitle: next.title || "",
+      sourceUrl: next.sourceUrl || schedule.source?.sourceUrl || fallback.sourceUrl || "",
+      sourceUpdated: schedule.source?.sourceUpdated || fallback.sourceUpdated || "",
+    };
+  }
+  return {
+    ...fallback,
+    title: schedule.seriesTitle || fallback.title || "直方市議会",
+    status: "次回日程を確認中",
+    nextDateKey: "",
+    nextDateLabel: "次回日程を確認中",
+    nextSummary: "公表済みの日程は終了しました。次の開催日が公表され次第、更新します。",
+    sourceUrl: schedule.source?.sourceUrl || fallback.sourceUrl || "",
+  };
 }
 
 function syncBanner() {
@@ -341,43 +416,190 @@ function populationMini(pop) {
 }
 
 function nearbyView() {
-  const items = state.data.featured.filter((x) => x.location);
+  const items = combinedSearchItems().filter((item) => item.location);
   return `<section class="page">
-    <div class="hero"><p class="eyebrow">地図</p><h1>地図から情報を探す</h1><p>直方市の公開情報のうち、場所を確認できたものを地図と一覧で表示します。</p></div>
+    <div class="hero"><p class="eyebrow">近く</p><h1>場所から情報を探す</h1><p>イベント・施設・工事など、場所を確認できた情報をまとめます。</p></div>
     ${syncBanner()}
-    <div class="card info-card"><h2>地図は準備中</h2><p>場所を正確に確認できた情報から、今後地図に追加します。現在は一覧で確認できます。</p></div>
-    <div class="section"><div class="section-head"><h2>場所が確認できる情報</h2><p>${items.length}件</p></div><div class="stack">${items.length ? items.map(realCard).join("") : emptyCard("場所を確認できる情報は、まだありません。")}</div></div>
+    <div class="card info-card"><h2>位置を確認できた情報だけ地図に表示</h2><p>住所だけ確認できた情報は一覧に、緯度経度まで確認できた情報は地図にも表示します。</p></div>
+    <div class="section"><div class="section-head"><h2>場所が確認できる情報</h2><p>${items.length}件</p></div><div class="stack">${items.length ? items.slice(0, 40).map(realCard).join("") : emptyCard("場所を確認できる情報は、まだありません。")}</div></div>
   </section>`;
 }
 
-const discoverCategories = ["交通", "学校・教育", "健康・スポーツ", "議会", "ごみ", "観光・イベント", "防災", "その他"];
+const discoverCategories = ["交通", "学校・教育", "健康・スポーツ", "ごみ", "観光・イベント", "地域活動", "工事・道路", "税金・予算", "市長・市議会", "防災", "市報", "その他"];
+
+function searchableCommunityItems() {
+  const events = (state.data?.communityEvents?.events || []).map((item) => ({
+    ...item,
+    url: item.sourceUrl,
+    published: item.startDate || item.lastCheckedAt || "",
+    category: item.category || "観光・イベント",
+    sourceKind: "イベント",
+    publisherName: item.publisherName || item.organizerName || "地域・施設",
+  }));
+  const activities = (state.data?.community?.activities || []).map((item) => ({
+    ...item,
+    url: item.sourceUrl,
+    published: item.lastCheckedAt || "",
+    category: item.category || "地域活動",
+    sourceKind: "地域活動",
+    publisherName: item.sourceName || "地域団体",
+  }));
+  const organizations = (state.data?.community?.organizations || []).map((item) => ({
+    id: item.id,
+    title: item.name,
+    summary: item.summary || "直方で活動する団体です。",
+    category: item.category || "地域団体",
+    sourceUrl: item.sourceUrl,
+    url: item.sourceUrl,
+    published: item.lastCheckedAt || "",
+    sourceKind: "団体",
+    publisherName: item.sourceName || "公開団体一覧",
+  }));
+  return [...events, ...activities, ...organizations];
+}
+
+function searchableCivicItems() {
+  const portal = state.civicPortal || {};
+  const works = (portal.works || []).map((work) => ({
+    id: `civic-work-${work.id || work.title}`,
+    title: work.title,
+    summary: `${work.location || ""}　予定工期 ${work.plannedPeriod || "確認中"}`.trim(),
+    category: "工事・道路",
+    location: work.location || "",
+    status: work.status || "",
+    sourceUrl: work.sourcePageUrl || work.sourcePdfUrl || "",
+    url: work.sourcePageUrl || work.sourcePdfUrl || "",
+    sourceKind: "工事",
+    publisherName: "直方市",
+  }));
+  const budget = portal.budget?.generalAccountLabel ? [{
+    id: `civic-budget-${portal.budget.fiscalYear || "current"}`,
+    title: `${portal.budget.fiscalYear || ""} 直方市の当初予算`.trim(),
+    summary: `一般会計 ${portal.budget.generalAccountLabel}`,
+    category: "税金・予算",
+    status: portal.budget.kind || "当初予算",
+    sourceUrl: portal.budget.sourcePageUrl || portal.budget.sourcePdfUrl || "",
+    url: portal.budget.sourcePageUrl || portal.budget.sourcePdfUrl || "",
+    sourceKind: "予算",
+    publisherName: "直方市",
+  }] : [];
+  const politics = state.politics || {};
+  const mayor = politics.mayor?.name ? [{
+    id: `politics-mayor-${politics.mayor.name}`,
+    title: `直方市長 ${politics.mayor.name}`,
+    summary: `${politics.mayor.term || ""}。公式資料で確認できた経歴を掲載しています。`,
+    category: "市長・市議会",
+    sourceUrl: politics.mayor.sources?.[0]?.url || "",
+    url: politics.mayor.sources?.[0]?.url || "",
+    sourceKind: "市長",
+    publisherName: "直方市",
+  }] : [];
+  const members = (politics.council?.members || []).map((member) => ({
+    id: `politician-${member.name}`,
+    title: `市議会議員 ${member.name}`,
+    summary: `${member.committee || "委員会確認中"}${member.recentQuestions?.length ? `。最近確認できた一般質問 ${member.recentQuestions.length}件` : ""}`,
+    category: "市長・市議会",
+    sourceUrl: politics.council?.membersSourceUrl || "",
+    url: politics.council?.membersSourceUrl || "",
+    sourceKind: "議員",
+    publisherName: "直方市議会",
+  }));
+  return [...works, ...budget, ...mayor, ...members];
+}
 
 function combinedSearchItems() {
-  const featured = state.data.featured.map((x) => ({ ...x, url: x.sourceUrl, date: x.published }));
-  const latest = state.data.latest.map((x, i) => ({ id: `latest-${i}`, ...x, sourceUrl: x.url, published: x.date, summary: "直方市公式サイトの新着情報です。", category: classifyTitle(x.title) }));
-  const bulletin = bulletinItems();
+  const featured = (state.data?.featured || []).map((item) => ({ ...item, url: item.sourceUrl, date: item.published, sourceKind: item.sourceKind || "市の情報", publisherName: item.publisherName || "直方市" }));
+  const latest = (state.data?.latest || []).map((item, index) => ({ id: `latest-${index}`, ...item, sourceUrl: item.url, published: item.date, summary: item.summary || "直方市が公開した新着情報です。", category: item.category || classifyTitle(item.title), sourceKind: "市の新着", publisherName: "直方市" }));
+  const bulletin = bulletinItems().map((item) => ({ ...item, category: item.category || "市報", sourceKind: "市報", publisherName: "直方市" }));
   const seen = new Set();
-  return [...featured, ...latest, ...bulletin].filter((x) => {
-    const key = `${x.title}|${x.sourceUrl || x.url || ""}`;
+  return [...featured, ...latest, ...bulletin, ...searchableCommunityItems(), ...searchableCivicItems()].filter((item) => {
+    if (!item?.title) return false;
+    const key = `${normalizeQuery(item.title)}|${causalSourceKey(item)}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
 }
 
+function causalSourceKey(item = {}) {
+  return item.sourceUrl || item.url || item.id || item.publisherName || "";
+}
+
 function classifyTitle(title = "") {
   if (/バス|交通|路線|時刻/.test(title)) return "交通";
   if (/学校|小学校|中学校|教育|就学|給食/.test(title)) return "学校・教育";
   if (/健康|スポーツ|体育|ピラティス|講習/.test(title)) return "健康・スポーツ";
-  if (/議会|定例会|会議録|議案/.test(title)) return "議会";
+  if (/議会|定例会|会議録|議案|市長|議員/.test(title)) return "市長・市議会";
+  if (/予算|決算|財政|税/.test(title)) return "税金・予算";
+  if (/工事|道路|舗装/.test(title)) return "工事・道路";
   if (/ごみ|廃棄|リサイクル/.test(title)) return "ごみ";
   if (/消防|災害|防災|火災|避難/.test(title)) return "防災";
-  if (/観光|キャンプ|イベント|まつり|シンポジウム|マンホール/.test(title)) return "観光・イベント";
+  if (/観光|キャンプ|イベント|まつり|シンポジウム|マンホール|講座|教室/.test(title)) return "観光・イベント";
+  if (/団体|ボランティア|地域活動|こども食堂/.test(title)) return "地域活動";
   return "その他";
 }
 
-function normalizeQuery(q = "") {
-  return q.trim().replaceAll("ゴミ", "ごみ").replaceAll("子供", "子ども").toLowerCase();
+const SEARCH_SYNONYM_GROUPS = [
+  ["ごみ", "ゴミ", "廃棄", "資源"],
+  ["子ども", "こども", "子供", "子育て"],
+  ["高齢者", "シニア", "介護"],
+  ["イベント", "催し", "講座", "教室", "体験"],
+  ["助成", "補助", "給付", "支援"],
+  ["道路", "道", "舗装"],
+  ["バス", "公共交通", "路線"],
+  ["議会", "市議会", "定例会"],
+  ["工事", "工事情報", "道路工事"],
+  ["ボランティア", "地域活動", "手伝い"],
+];
+
+function normalizeQuery(value = "") {
+  return String(value || "")
+    .normalize("NFKC")
+    .replaceAll("ゴミ", "ごみ")
+    .replaceAll("子供", "子ども")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function searchTermsFor(token) {
+  const normalized = normalizeQuery(token);
+  const group = SEARCH_SYNONYM_GROUPS.find((items) => items.some((item) => normalizeQuery(item) === normalized));
+  return (group || [normalized]).map(normalizeQuery);
+}
+
+function searchTextFor(item = {}) {
+  return normalizeQuery([
+    item.title,
+    item.summary,
+    item.category,
+    item.location,
+    item.publisherName,
+    item.organizerName,
+    item.sourceKind,
+    ...(item.tags || []),
+  ].filter(Boolean).join(" "));
+}
+
+function matchesSearchQuery(item, query) {
+  const normalized = normalizeQuery(query);
+  if (!normalized) return true;
+  const text = searchTextFor(item);
+  return normalized.split(/\s+/).every((token) => searchTermsFor(token).some((term) => text.includes(term)));
+}
+
+function searchResultScore(item, query) {
+  const title = normalizeQuery(item.title);
+  const text = searchTextFor(item);
+  const interestBoost = typeof v2MatchesPreferences === "function" && v2MatchesPreferences(item) ? 8 : 0;
+  const district = normalizeQuery(state.v2Preferences?.district || "");
+  const districtBoost = district && text.includes(district) ? 8 : 0;
+  return normalizeQuery(query).split(/\s+/).reduce((score, token) => {
+    const terms = searchTermsFor(token);
+    if (terms.some((term) => title.includes(term))) return score + 20;
+    if (terms.some((term) => text.includes(term))) return score + 5;
+    return score;
+  }, (item.location ? 1 : 0) + interestBoost + districtBoost);
 }
 
 function discoverView() {
@@ -401,9 +623,9 @@ function discoverView() {
 
 function askView(answer = "") {
   return `<section class="page">
-    <div class="hero"><p class="eyebrow">市の資料から答えを探します</p><h1>ふだんの言葉で聞く</h1><p>現在取り込んでいる市の資料から、答えを探します。</p></div>
+    <div class="hero"><p class="eyebrow">よくある質問と関連情報</p><h1>ふだんの言葉で探す</h1><p>確認済みの定型回答と、現在取り込んでいる公開情報から関連項目を探します。</p></div>
     ${syncBanner()}
-    <div class="ask-panel"><h2>何が気になる？</h2><p>見つからないときは、推測せず「確認できません」と伝えます。</p><form class="ask-form" id="ask-form"><input id="ask-input" type="text" placeholder="10月からバスどう変わる？" autocomplete="off" aria-label="直方について質問"><button class="primary-button" type="submit">答えを探す</button></form><div class="suggestion-list"><button class="suggestion-chip" type="button" data-question="10月からバスどう変わる？">10月からバスどう変わる？</button><button class="suggestion-chip" type="button" data-question="今度の市議会いつ？">今度の市議会いつ？</button><button class="suggestion-chip" type="button" data-question="ごみの収集日は？">ごみの収集日は？</button><button class="suggestion-chip" type="button" data-question="直方の人口は？">直方の人口は？</button></div></div>
+    <div class="ask-panel"><h2>何が気になる？</h2><p>定型回答で確認できない質問は、答えを作らず関連情報として表示します。</p><form class="ask-form" id="ask-form"><input id="ask-input" type="text" placeholder="例：子ども向けイベント" autocomplete="off" aria-label="直方について質問"><button class="primary-button" type="submit">関連情報を探す</button></form><div class="suggestion-list"><button class="suggestion-chip" type="button" data-question="バスはどう変わる？">バスはどう変わる？</button><button class="suggestion-chip" type="button" data-question="今度の市議会いつ？">今度の市議会いつ？</button><button class="suggestion-chip" type="button" data-question="ごみの収集日は？">ごみの収集日は？</button><button class="suggestion-chip" type="button" data-question="子ども向けイベント">子ども向けイベント</button></div></div>
     ${answer}
   </section>`;
 }
@@ -417,8 +639,9 @@ function answerFor(question) {
   const bus = d.featured.find((x) => /バス|路線と時刻表/.test(x.title));
   if (/バス|路線|時刻|バス停/.test(q) && /変|どう|いつ|路線|時刻|バス停|運行/.test(q) && bus) {
     answer = { title: "10月1日からコミュニティバスが変わります", body: bus.summary, url: bus.sourceUrl };
-  } else if (/議会|定例会|市議会/.test(q) && /いつ|日程|次|何|内容|予定/.test(q) && d.council) {
-    answer = { title: d.council.title, body: `${d.council.nextDateLabel || ""} ${d.council.nextSummary || d.council.summary || ""}`.trim(), url: d.council.sourceUrl };
+  } else if (/議会|定例会|市議会/.test(q) && /いつ|日程|次|何|内容|予定/.test(q)) {
+    const council = currentCouncilSchedule();
+    answer = { title: council.title, body: `${council.nextDateLabel || ""} ${council.nextSummary || ""}`.trim(), url: council.sourceUrl };
   } else if (/ごみ|収集|カン|ビン|燃や/.test(q) && /いつ|日|曜日|捨て|出す|収集/.test(q) && d.garbage) {
     answer = { title: "ごみ・資源リサイクルの収集日", body: d.garbage.summary, url: d.garbage.sourceUrl };
   } else if (/人口|何人|世帯/.test(q)) {
@@ -432,10 +655,17 @@ function answerFor(question) {
   }
 
   if (!answer) {
-    return `<div class="card answer-card" role="status"><span class="pill">確認できませんでした</span><h3>現在取り込んでいる市の資料では、答えを確認できませんでした</h3><p>聞き方を変えて、もう一度試してください。急ぐときは直方市のページや窓口で確認してください。</p><div class="source-stack"><button class="text-button" type="button" data-v2-action="retry-question">聞き方を変える</button>${sourceLink("https://www.city.nogata.fukuoka.jp/", "直方市のサイトを開く")}</div><p class="muted">入力した質問：${esc(question)}</p></div>`;
+    const related = combinedSearchItems()
+      .filter((item) => matchesSearchQuery(item, q))
+      .sort((a, b) => searchResultScore(b, q) - searchResultScore(a, q))
+      .slice(0, 5);
+    if (related.length) {
+      return `<div class="card answer-card ca-related-answer" role="status"><span class="pill">関連情報</span><h3>この質問への確定回答は作れませんが、関連する公開情報が見つかりました</h3><p>内容と対象時期を確認して選んでください。</p><div class="stack">${related.map(realCard).join("")}</div><p class="muted">入力した質問：${esc(question)}</p></div>`;
+    }
+    return `<div class="card answer-card" role="status"><span class="pill">確認できませんでした</span><h3>現在取り込んでいる情報では、答えも関連項目も確認できませんでした</h3><p>言葉を短くしてもう一度探すか、直方市の公式サイトを確認してください。</p><div class="source-stack"><button class="text-button" type="button" data-v2-action="retry-question">聞き方を変える</button>${sourceLink("https://www.city.nogata.fukuoka.jp/", "直方市のサイトを開く")}</div><p class="muted">入力した質問：${esc(question)}</p></div>`;
   }
 
-  return `<div class="card answer-card" role="status"><span class="pill verified">直方市の資料で確認</span><h3>${esc(answer.title)}</h3><p>${esc(answer.body)}</p>${sourceLink(answer.url, "直方市のページを見る")}</div>`;
+  return `<div class="card answer-card" role="status"><span class="pill verified">確認済みの定型回答</span><h3>${esc(answer.title)}</h3><p>${esc(answer.body)}</p>${sourceLink(answer.url, "根拠のページを見る")}</div>`;
 }
 
 function detailView(item) {
@@ -475,23 +705,25 @@ function renderDetailSection(item, section) {
       item.location ? `場所：${item.location}` : "",
       ...bullets,
     ].filter(Boolean);
-    const sourceDate = item.sourceUpdated || item.published || "確認できず";
+    const sourceDate = item.sourceUpdated || item.published || item.lastCheckedAt || "確認できず";
+    const publisher = item.publisherName || item.organizerName || (item.sourceType ? "掲載元" : "直方市");
+    const sourceLabel = publisher === "直方市" ? "直方市の資料" : "掲載元の情報";
     return `<div class="detail-layers">
       <div class="card info-card detail-layer"><span class="detail-layer-label">30秒で読む</span><h2>まず、これだけ</h2><p>${esc(item.summary || "")}</p></div>
       <div class="card info-card detail-layer"><span class="detail-layer-label">くわしく見る</span><h2>背景・費用・決まり方</h2>
-        <h3>市の資料で確認できたこと</h3>${confirmed.length ? `<ul class="plain-list">${confirmed.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p>この項目について、追加で確認できた事実はまだありません。</p>`}
-        <h3>なぜ？</h3><p>${esc(item.why || "今回確認した直方市のページでは、理由を確認できませんでした。推測では補いません。")}</p>
-        <h3>お金</h3>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>今回確認した直方市のページでは、費用や予算額を確認できませんでした。</p>`}
+        <h3>公開情報で確認できたこと</h3>${confirmed.length ? `<ul class="plain-list">${confirmed.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p>この項目について、追加で確認できた事実はまだありません。</p>`}
+        <h3>なぜ？</h3><p>${esc(item.why || "今回確認した公開ページでは、理由を確認できませんでした。推測では補いません。")}</p>
+        <h3>お金</h3>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>今回確認した公開ページでは、費用や予算額を確認できませんでした。</p>`}
         <h3>決まり方</h3><p>${esc(item.decision || "今回確認した資料では、決定までの流れを確認できませんでした。推測では補いません。")}</p>${renderDecisionEvidence(item)}
       </div>
-      <div class="card info-card detail-layer source-layer"><span class="detail-layer-label">直方市の資料</span><h2>確認に使った資料</h2><dl class="source-facts"><div><dt>公開元</dt><dd>直方市</dd></div><div><dt>市のページの公開・更新日</dt><dd>${esc(sourceDate)}</dd></div><div><dt>のおがた日和で確認した日</dt><dd>${esc(state.data.verifiedOn || formatDateTime(state.data.generatedAt) || "確認中")}</dd></div></dl>${sourceLink(item.sourceUrl, "直方市のページを見る")}${item.pdfUrl ? sourceLink(item.pdfUrl, "市報PDFを開く") : ""}</div>
+      <div class="card info-card detail-layer source-layer"><span class="detail-layer-label">${esc(sourceLabel)}</span><h2>確認に使った資料</h2><dl class="source-facts"><div><dt>公開元</dt><dd>${esc(publisher)}</dd></div><div><dt>公開・更新日</dt><dd>${esc(sourceDate)}</dd></div><div><dt>のおがた日和で確認した日</dt><dd>${esc(item.lastCheckedAt || state.data.verifiedOn || formatDateTime(state.data.generatedAt) || "確認中")}</dd></div></dl>${sourceLink(item.sourceUrl, `${publisher}のページを見る`)}${item.pdfUrl ? sourceLink(item.pdfUrl, "PDFを開く") : ""}</div>
     </div>`;
   }
   if (section === "why") {
-    return `<div class="card info-card"><h2>なんで？</h2><p>${esc(item.why || "今回確認した直方市のページでは、理由を確認できませんでした。推測では補いません。")}</p>${sourceLink(item.sourceUrl)}</div>`;
+    return `<div class="card info-card"><h2>なんで？</h2><p>${esc(item.why || "今回確認した公開ページでは、理由を確認できませんでした。推測では補いません。")}</p>${sourceLink(item.sourceUrl)}</div>`;
   }
   if (section === "money") {
-    return `<div class="card info-card"><h2>いくら？</h2>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>今回確認した直方市のページでは、費用や予算額を確認できませんでした。</p>`}${sourceLink(item.sourceUrl)}</div>`;
+    return `<div class="card info-card"><h2>いくら？</h2>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>今回確認した公開ページでは、費用や予算額を確認できませんでした。</p>`}${sourceLink(item.sourceUrl)}</div>`;
   }
   return `<div class="card info-card"><h2>決まり方</h2><p>${esc(item.decision || "今回確認した資料では、決定までの流れを確認できませんでした。推測では補いません。")}</p>${renderDecisionEvidence(item)}${sourceLink(item.sourceUrl, "変更案内の市のページ")}</div>`;
 }

@@ -157,7 +157,9 @@ try {
 
   await page.locator('.v4-primary-cta[data-v2-action="events"]').click();
   await page.locator(".v4-events-page").waitFor({ state: "visible", timeout: 20_000 });
-  const lifecycleText = await page.locator(".ca-lifecycle").innerText();
+  const lifecycle = page.locator(".ca-lifecycle");
+  await lifecycle.locator("summary").click();
+  const lifecycleText = await lifecycle.innerText();
   for (const label of ["見つける", "自分向けか判断", "保存", "締切を忘れない", "カレンダー", "当日の変更確認", "次の場所・活動へ"]) {
     assert.match(lifecycleText, new RegExp(label));
   }
@@ -181,29 +183,51 @@ try {
   assert.match(walkText, /1,000円/);
   report.checks.push("event status, reviewed price and merchandise-price suppression");
 
+  const eventCards = page.locator(".v4-event-list-card");
+  for (let index = 0; index < Math.min(await eventCards.count(), 5); index += 1) {
+    const card = eventCards.nth(index);
+    assert.equal(await card.locator(".v4-event-list-copy > .ca-event-actions").count(), 1, "event action must be inside content column");
+    const box = await card.boundingBox();
+    assert.ok(box && box.height < 520, `event card ${index} is unexpectedly tall`);
+  }
+
   const firstSave = page.locator("[data-ca-save-event-id]").first();
   await firstSave.click();
   await page.locator(".v4-events-page").waitFor({ state: "visible" });
   await page.locator("[data-ca-save-event-id].is-saved").first().waitFor({ state: "visible" });
 
+  await page.locator('[data-v2-nav="saved"]').click();
+  await page.locator(".ca-saved-page .ca-saved-card").first().waitFor({ state: "visible" });
+  assert.match(await page.locator(".ca-saved-page").innerText(), /当日の変更を確認/);
+  assert.match(await page.locator(".ca-saved-page").innerText(), /参加した/);
+
   const downloadPromise = page.waitForEvent("download", { timeout: 15_000 });
-  await page.locator("[data-ca-calendar-event-id]").first().click();
+  await page.locator(".ca-saved-page [data-ca-calendar-id]").first().click();
   const download = await downloadPromise;
   assert.match(download.suggestedFilename(), /\.ics$/);
-  report.checks.push("save and iCalendar download");
-
-  await page.locator("[data-ca-open-saved]").first().click();
-  await page.locator(".ca-saved-card").first().waitFor({ state: "visible" });
-  assert.match(await page.locator("#ca-dialog-body").innerText(), /当日の変更を確認/);
-  assert.match(await page.locator("#ca-dialog-body").innerText(), /参加した/);
+  report.checks.push("save, saved page and iCalendar download");
   await page.screenshot({ path: path.join(outputDir, "civic-saved-events.png"), fullPage: false, scale: "css" });
   report.checks.push("saved-event follow-through");
 
-  const dialogOverflow = await page.locator(".ca-dialog").evaluate((dialog) => ({
-    scrollWidth: dialog.scrollWidth,
-    clientWidth: dialog.clientWidth,
-  }));
-  assert.ok(dialogOverflow.scrollWidth <= dialogOverflow.clientWidth + 1, "saved-events dialog has horizontal overflow");
+  const savedOverflow = await page.locator(".ca-saved-page").evaluate((element) => ({ scrollWidth: element.scrollWidth, clientWidth: element.clientWidth }));
+  assert.ok(savedOverflow.scrollWidth <= savedOverflow.clientWidth + 1, "saved-events page has horizontal overflow");
+
+  await page.locator('[data-v2-nav="nearby"]').click();
+  await page.locator(".mytown-map-card").waitFor({ state: "visible", timeout: 20_000 });
+  assert.match(await page.locator("#main").innerText(), /場所から情報を探す/);
+  report.checks.push("nearby navigation and map wiring");
+
+  await page.locator('[data-v2-nav="menu"]').click();
+  await page.locator('[data-v2-action="settings"]').first().click();
+  await page.locator('#v2-preferences-form input[value="イベント"]').check();
+  await page.locator('#v2-preferences-form input[value="公共交通"]').check();
+  await page.locator('#v2-preferences-form select[name="garbageArea"]').selectOption("east");
+  await page.locator('#v2-preferences-form button[type="submit"]').click();
+  const preferences = await page.evaluate(() => JSON.parse(localStorage.getItem("mytown-preferences-v1") || "{}"));
+  assert.deepEqual(preferences.interests.sort(), ["イベント", "公共交通"].sort());
+  assert.equal(preferences.garbageArea, "east");
+  assert.equal(await page.locator('#v2-preferences-form input[value="イベント"]:checked').count(), 1);
+  report.checks.push("interest and garbage-area preference persistence");
   assert.deepEqual(report.pageErrors, [], "browser page errors during civic-action flow");
   assert.deepEqual(report.consoleErrors, [], "browser console errors during civic-action flow");
   assert.deepEqual(criticalFailures(), [], "same-origin resource failures during civic-action flow");

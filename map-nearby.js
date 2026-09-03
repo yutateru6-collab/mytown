@@ -28,19 +28,31 @@
     if (!location) return null;
     const normalized = normalizedLocation(location);
     const verified = VERIFIED_LOCATION_POINTS.find((point) => point.pattern.test(normalized));
-    if (!verified) return null;
+    const explicitCoordinates = item.locationVerified === true && Number.isFinite(Number(item.longitude)) && Number.isFinite(Number(item.latitude))
+      ? { lng: Number(item.longitude), lat: Number(item.latitude) }
+      : null;
+    const coordinates = explicitCoordinates || verified;
+    if (!coordinates) return null;
     return {
       id: item.id || "",
       title: item.title || "場所が確認できる情報",
       category: item.category || "直方市情報",
       location,
-      lng: verified.lng,
-      lat: verified.lat,
+      lng: coordinates.lng,
+      lat: coordinates.lat,
     };
   }
 
   function currentMapPoints() {
-    return (state.data?.featured || []).map(mapPointForItem).filter(Boolean);
+    const items = typeof combinedSearchItems === "function" ? combinedSearchItems() : (state.data?.featured || []);
+    const seen = new Set();
+    return items.map(mapPointForItem).filter((point) => {
+      if (!point) return false;
+      const key = `${point.lat}|${point.lng}|${point.title}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   }
 
   function markerIcon(category = "") {
@@ -201,7 +213,7 @@
   const baseNearbyViewForMap = nearbyView;
   nearbyView = function nearbyViewWithRealMap() {
     const html = baseNearbyViewForMap();
-    const placeholder = `<div class="card info-card"><h2>地図は準備中</h2><p>場所を正確に確認できた情報から、今後地図に追加します。現在は一覧で確認できます。</p></div>`;
+    const placeholder = `<div class="card info-card"><h2>位置を確認できた情報だけ地図に表示</h2><p>住所だけ確認できた情報は一覧に、緯度経度まで確認できた情報は地図にも表示します。</p></div>`;
     return html.includes(placeholder) ? html.replace(placeholder, mapCardMarkup()) : html;
   };
 

@@ -383,3 +383,14 @@
     right: 6px;
   }
 }
+
+
+/* P0: event filters must wrap and remain keyboard reachable. */
+.v4-event-quick-filters { flex-wrap: wrap; overflow: visible; }
+.v4-event-quick-filters button { min-height: 44px; }
+.v4-event-filter-row { flex-wrap: wrap; overflow: visible; margin-inline: 0; padding-inline: 0; }
+.v4-event-filter-row button { min-height: 44px; }
+@media (max-width: 460px) {
+  .v4-event-feature-head { grid-template-columns: minmax(0, 1fr) 62px; }
+  .v4-event-copy > p { max-width: 27ch; }
+}

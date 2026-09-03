@@ -77,7 +77,7 @@ function politicsHome() {
   if (state.politicsLoading) return `<section class="page"><div class="hero"><p class="eyebrow">市長・議会</p><h1>市長・市議会を知る</h1><p>公式資料を読み込んでいます。</p></div><div class="card info-card"><div class="loading-line"></div><div class="loading-line short"></div></div></section>`;
   const mayor = p.mayor || {};
   const council = p.council || {};
-  const nextMeeting = state.data?.council || {};
+  const nextMeeting = typeof currentCouncilSchedule === "function" ? currentCouncilSchedule() : (state.data?.council || {});
   const seatCount = Number(council.seats || 19);
   return `<section class="page politics-page">
     <div class="politics-overview">

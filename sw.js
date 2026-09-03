@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v32-politics-visual";
+const CACHE = "mytown-p0-v28";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -7,6 +7,7 @@ const STATIC_ASSETS = [
   "./politics.css",
   "./election-history.css",
   "./ui-v2.css",
+  "./map-nearby.css",
   "./ui-home-v4.css",
   "./ui-home-v5.css",
   "./bulletin-reader.css",
@@ -18,6 +19,7 @@ const STATIC_ASSETS = [
   "./election-history.js",
   "./ui-v2.js",
   "./ui-home-v4.js",
+  "./map-nearby.js",
   "./bulletin-reader.js",
   "./civic-actions.js",
   "./civic-portal.js",
@@ -40,6 +42,7 @@ const STATIC_ASSETS = [
   "./assets/illustrations/politics-mayor-person.webp?v=1",
   "./assets/illustrations/politics-council-people.webp?v=1",
   "./data/latest.json",
+  "./data/meetings.json",
   "./data/community-events.json",
   "./data/community.json",
   "./data/changes.json",
@@ -84,6 +87,7 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   const isSyncedData = url.pathname.endsWith("/data/latest.json") ||
+    url.pathname.endsWith("/data/meetings.json") ||
     url.pathname.endsWith("/data/community-events.json") ||
     url.pathname.endsWith("/data/community.json") ||
     url.pathname.endsWith("/data/changes.json") ||

@@ -369,3 +369,5 @@
   .civic-menu-card,
   .civic-menu-card.is-loading { animation: none; transition: none; }
 }
+
+.civic-budget-scope { margin: 13px 0 0; color: #5b655f; font-size: .86rem; line-height: 1.55; }

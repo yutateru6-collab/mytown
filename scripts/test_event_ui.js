@@ -64,10 +64,10 @@ vm.createContext(context);
 vm.runInContext(source, context, { filename: "ui-home-v4.js" });
 
 const home = context.todayV2View();
-assert.equal((home.match(/class="v4-home-event-card"/g) || []).length, 3, "home must show exactly three event cards");
+assert.equal((home.match(/class="v4-home-event-card"/g) || []).length, 2, "home must show exactly two event cards");
 const homeSources = [...home.matchAll(/class="v4-home-event-source">([^<]+)</g)].map((match) => match[1]);
-assert.equal(homeSources.length, 3, "every home event must show its source type");
-assert.equal(new Set(homeSources).size, 3, "the three home events must come from different publishers");
+assert.equal(homeSources.length, 2, "every home event must show its source type");
+assert.equal(new Set(homeSources).size, 2, "the two home events must come from different publishers");
 assert.ok(homeSources.includes("商業施設"), "home should include a nearby facility event when available");
 assert.ok(
   homeSources.some((label) => ["地域団体", "地域団体・NPO", "観光・地域"].includes(label)),

@@ -475,7 +475,17 @@
       }).join("")}</div>`;
   }
 
+  function caSavedEventsPage() {
+    const saved = caSyncSavedEvents();
+    const count = saved.length;
+    return `<section class="page v2-page v2-inner-page ca-saved-page"><div class="v2-inner-hero ca-saved-hero"><div><p class="eyebrow">保存</p><h1>保存したイベント</h1><p>締切、開催日、変更をまとめて確認できます。</p></div><strong>${count}件</strong></div>${caSavedEventsMarkup()}</section>`;
+  }
+
   function caOpenSavedEvents() {
+    if (typeof v2SetRoute === "function") {
+      v2SetRoute({ tab: "today", page: "saved", hash: "#saved" });
+      return;
+    }
     caOpenDialog("保存したイベント", caSavedEventsMarkup(), "ca-dialog-wide");
   }
 
@@ -731,7 +741,7 @@
       ["6", "当日の変更確認"],
       ["7", "次の場所・活動へ"],
     ];
-    return `<section class="ca-lifecycle" aria-labelledby="ca-lifecycle-title"><div><small>見つけて終わりにしない</small><h2 id="ca-lifecycle-title">参加まで、参加した後まで</h2></div><ol>${steps.map(([number, label]) => `<li><span>${number}</span><b>${caEscape(label)}</b></li>`).join("")}</ol></section>`;
+    return `<details class="ca-lifecycle"><summary><span><small>使い方</small><strong>見つけた後の流れを見る</strong></span><b aria-hidden="true">＋</b></summary><ol>${steps.map(([number, label]) => `<li><span>${number}</span><b>${caEscape(label)}</b></li>`).join("")}</ol></details>`;
   }
 
   function caEnhanceEventsPage() {
@@ -739,10 +749,9 @@
     if (!page || page.dataset.caEnhanced === "true") return;
     page.dataset.caEnhanced = "true";
 
-    const hero = page.querySelector(".v4-events-hero");
-    hero?.insertAdjacentHTML("afterend", caLifecycleMarkup());
-
     const resultHead = page.querySelector(".v4-event-results-head");
+    resultHead?.insertAdjacentHTML("beforebegin", caLifecycleMarkup());
+
     if (resultHead) {
       resultHead.insertAdjacentHTML("beforeend", `<button class="ca-saved-header-button" type="button" data-ca-open-saved>🔖 保存したイベント</button>`);
     }
@@ -751,9 +760,10 @@
       const event = caFindEventForCard(card);
       if (!event) return;
       const saved = caIsSaved(event);
-      card.insertAdjacentHTML("beforeend", `<div class="ca-event-actions"><button type="button" data-ca-save-event-id="${caEscape(caEventId(event))}" class="${saved ? "is-saved" : ""}">${saved ? "✓ 保存済み" : "🔖 保存する"}</button><button type="button" data-ca-calendar-event-id="${caEscape(caEventId(event))}">カレンダー</button>${event.sourceUrl ? `<a href="${caEscape(event.sourceUrl)}" target="_blank" rel="noopener noreferrer">当日の変更を確認 ↗</a>` : ""}</div>`);
+      const copy = card.querySelector(".v4-event-list-copy") || card;
+      copy.insertAdjacentHTML("beforeend", `<div class="ca-event-actions"><button type="button" data-ca-save-event-id="${caEscape(caEventId(event))}" class="${saved ? "is-saved" : ""}" aria-pressed="${saved ? "true" : "false"}">${saved ? "✓ 保存済み" : "🔖 保存する"}</button></div>`);
       if (event.contentStatus === "needs_review" || (event.contentIssues || []).length) {
-        card.insertAdjacentHTML("beforeend", `<p class="ca-card-quality-warning">⚠ 日時・料金・申込状況の一部を再確認中です。掲載元で最終確認してください。</p>`);
+        copy.insertAdjacentHTML("beforeend", `<p class="ca-card-quality-warning">⚠ 日時・料金・申込状況の一部を再確認中です。掲載元で最終確認してください。</p>`);
       }
     });
 
@@ -830,6 +840,13 @@
 
   const caBaseRender = render;
   render = function renderWithCivicActions() {
+    if (state.view === "tab" && state.tab === "today" && state.v2Page === "saved") {
+      main.innerHTML = caSavedEventsPage();
+      window.scrollTo({ top: 0, behavior: "auto" });
+      v2SyncNav();
+      requestAnimationFrame(caEnhancePage);
+      return;
+    }
     const result = caBaseRender();
     requestAnimationFrame(caEnhancePage);
     return result;
@@ -861,8 +878,13 @@
       event.preventDefault();
       const item = caEventById(saveButton.dataset.caSaveEventId);
       if (!item) return caToast("イベント情報を確認できませんでした");
-      caSaveEvent(item);
-      caToast("イベントを保存しました");
+      if (caIsSaved(item)) {
+        caRemoveSavedEvent(caEventId(item));
+        caToast("保存から外しました");
+      } else {
+        caSaveEvent(item);
+        caToast("イベントを保存しました");
+      }
       render();
       return;
     }
@@ -889,6 +911,7 @@
       caRemoveSavedEvent(removeButton.dataset.caRemoveId);
       caToast("保存から外しました");
       caRefreshSavedDialog();
+      if (state.v2Page === "saved") render();
       return;
     }
     const ackButton = event.target.closest("[data-ca-ack-id]");
@@ -897,6 +920,7 @@
       caAcknowledgeSavedEvent(ackButton.dataset.caAckId);
       caToast("変更を確認済みにしました");
       caRefreshSavedDialog();
+      if (state.v2Page === "saved") render();
       return;
     }
     const attendedButton = event.target.closest("[data-ca-attended-id]");
@@ -905,6 +929,7 @@
       caMarkAttended(attendedButton.dataset.caAttendedId);
       caToast("参加済みにしました");
       caRefreshSavedDialog();
+      if (state.v2Page === "saved") render();
       return;
     }
     if (event.target.closest("[data-ca-get-location]")) {
