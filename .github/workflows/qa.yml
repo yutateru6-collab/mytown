@@ -23,7 +23,7 @@ on:
       - ".github/workflows/qa.yml"
       - ".github/workflows/pages.yml"
   workflow_run:
-    workflows: ["Sync Nogata official data"]
+    workflows: ["Sync Nogata official data", "Sync Nogata community events"]
     types: [completed]
   workflow_dispatch:
 
