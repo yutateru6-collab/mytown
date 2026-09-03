@@ -39,7 +39,12 @@ try {
     await page.goto(baseURL, { waitUntil: "networkidle", timeout: 60_000 });
     await page.locator(".v2-hero").waitFor({ state: "visible", timeout: 20_000 });
     await page.evaluate(async () => {
-      await Promise.all([...document.images].map((image) => image.decode().catch(() => undefined)));
+      const images = [...document.images];
+      images.forEach((image) => { image.loading = "eager"; });
+      await Promise.race([
+        Promise.all(images.map((image) => image.decode().catch(() => undefined))),
+        new Promise((resolve) => setTimeout(resolve, 10_000)),
+      ]);
     });
     await page.addStyleTag({ content: "*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}" });
 
