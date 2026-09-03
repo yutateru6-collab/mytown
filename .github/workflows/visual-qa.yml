@@ -58,6 +58,24 @@ jobs:
           cat /tmp/mytown-http.log
           exit 1
 
+      - name: Wait for the deployed civic revision
+        if: ${{ github.event_name == 'workflow_run' }}
+        env:
+          DEPLOYED_URL: https://yutateru6-collab.github.io/mytown/
+        run: |
+          for attempt in {1..40}; do
+            cache_bust="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${attempt}"
+            html="$(curl --fail --silent --show-error --retry 2 --retry-all-errors "${DEPLOYED_URL}?deployQa=${cache_bust}" || true)"
+            civic="$(curl --fail --silent --show-error --retry 2 --retry-all-errors "${DEPLOYED_URL}civic-actions.js?v=2&deployQa=${cache_bust}" || true)"
+            if grep -q 'civic-actions.js?v=2' <<<"${html}" && grep -q 'このイベントも載せて' <<<"${civic}"; then
+              echo "The deployed civic revision is available."
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "GitHub Pages did not expose the tested civic revision."
+          exit 1
+
       - name: Capture source screenshots
         if: ${{ github.event_name != 'workflow_run' }}
         env:
@@ -78,11 +96,11 @@ jobs:
           VISUAL_QA_DIR: visual-qa-output
         run: node scripts/test_civic_actions_browser.mjs
 
-      - name: Upload screenshots and density report
+      - name: Upload screenshots and diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mytown-visual-qa-${{ github.run_id }}-${{ github.event_name }}
           path: visual-qa-output
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
