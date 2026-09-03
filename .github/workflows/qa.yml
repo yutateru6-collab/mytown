@@ -121,7 +121,7 @@ jobs:
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
           grep -q '>さがす</span>' index.html
-          grep -q 'mytown-civic-v34-people-first' sw.js
+          grep -q 'mytown-civic-v35-home-copy' sw.js
 
       - name: Required citizen-first UX wiring
         run: |

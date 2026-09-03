@@ -477,7 +477,7 @@
       ${bus
         ? `<button type="button" data-v2-detail-id="${esc(bus.id)}" data-v2-detail-section="what"><span aria-hidden="true">🚌</span><div><small>公共交通</small><strong>バスの時刻表・変更を見る</strong></div><b aria-hidden="true">›</b></button>`
         : `<button type="button" data-v2-query="バス 時刻表"><span aria-hidden="true">🚌</span><div><small>公共交通</small><strong>バス情報を探す</strong></div><b aria-hidden="true">›</b></button>`}
-      <button type="button" data-v2-action="settings"><span aria-hidden="true">📍</span><div><small>地域を設定</small><strong>${state.v2Preferences?.district ? `よく見る地域：${esc(state.v2Preferences.district)}` : "よく見る地域を選ぶ"}</strong></div><b aria-hidden="true">›</b></button>
+      <button type="button" data-v2-action="settings"><span aria-hidden="true">⚙️</span><div><small>表示の設定</small><strong>地域・ごみ収集を設定</strong></div><b aria-hidden="true">›</b></button>
     </div>`;
   }
 
