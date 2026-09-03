@@ -121,7 +121,7 @@ def main() -> None:
         "data-ca-calendar-event-id",
         "data-ca-open-report",
         "写真と位置情報はこのアプリのサーバーへ送信・保存しない",
-        "市議会へ正式に要望したい場合",
+        "市議会へ正式に要望する方法も見る",
         "navigator.geolocation",
         "navigator.share",
         "data/civic-report-routes.json",
