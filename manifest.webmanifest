@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "MYTOWN 直方",
-  "short_name": "MYTOWN",
-  "description": "直方のイベント・暮らし・市の動きを、まとめて探せる非公式アプリ。",
+  "name": "のおがた日和",
+  "short_name": "のおがた日和",
+  "description": "知れば直方はもっとおもしろい！直方のイベント・暮らし・市の動きを、まとめて探せる非公式アプリ。",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

@@ -59,7 +59,7 @@
         <div><span>市報のおがた</span><h2>${e(b?.title||'最新号を確認中')}</h2><p>最新号とページごとの見出しを公式情報から確認できます。</p></div>
         <button type="button" data-ref-action="bulletin">市報を読む <b>›</b></button>
       </article>
-      <p class="ref-disclaimer">MYTOWNは非公式アプリです。重要な手続き・期限・選挙情報はリンク先の直方市公式情報も確認してください。</p>
+      <p class="ref-disclaimer">のおがた日和は非公式アプリです。重要な手続き・期限・選挙情報はリンク先の直方市公式情報も確認してください。</p>
     </section>`;
   }
 

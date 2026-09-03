@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v20-copy-clarity";
+const CACHE = "mytown-civic-v21-nogata-biyori";
 const STATIC_ASSETS = [
   "./",
   "./index.html",

@@ -211,7 +211,7 @@ function todayView() {
   const d = state.data;
   const featured = d.featured.slice(0, 4);
   return `<section class="page">
-    <div class="hero"><p class="eyebrow">${japaneseDate()}</p><h1>今日の直方</h1><p>イベント、暮らし、市の動きをひとつに。</p></div>
+    <div class="hero"><p class="eyebrow">${japaneseDate()}</p><h1>のおがた日和</h1><p>知れば直方はもっとおもしろい！</p></div>
     ${syncBanner()}
 
     <div class="section">
@@ -249,7 +249,7 @@ function todayView() {
 }
 
 function loadingView() {
-  return `<section class="page"><div class="hero"><p class="eyebrow">${japaneseDate()}</p><h1>今日の直方</h1><p>公式情報を確認しています。</p></div><div class="card info-card"><div class="loading-line"></div><div class="loading-line short"></div><p class="muted">直方市公式サイトの同期データを読み込んでいます…</p></div></section>`;
+  return `<section class="page"><div class="hero"><p class="eyebrow">${japaneseDate()}</p><h1>のおがた日和</h1><p>知れば直方はもっとおもしろい！</p></div><div class="card info-card"><div class="loading-line"></div><div class="loading-line short"></div><p class="muted">直方市公式サイトの同期データを読み込んでいます…</p></div></section>`;
 }
 
 function councilPreview(council) {
@@ -417,7 +417,7 @@ function renderDetailSection(item, section) {
         <h3>お金</h3>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>今回確認した直方市のページでは、費用や予算額を確認できませんでした。</p>`}
         <h3>決まり方</h3><p>${esc(item.decision || "今回確認した資料では、決定までの流れを確認できませんでした。推測では補いません。")}</p>${renderDecisionEvidence(item)}
       </div>
-      <div class="card info-card detail-layer source-layer"><span class="detail-layer-label">直方市の資料</span><h2>確認に使った資料</h2><dl class="source-facts"><div><dt>公開元</dt><dd>直方市</dd></div><div><dt>市のページの公開・更新日</dt><dd>${esc(sourceDate)}</dd></div><div><dt>MYTOWNで確認した日</dt><dd>${esc(state.data.verifiedOn || formatDateTime(state.data.generatedAt) || "確認中")}</dd></div></dl>${sourceLink(item.sourceUrl, "直方市のページを見る")}${item.pdfUrl ? sourceLink(item.pdfUrl, "市報PDFを開く") : ""}</div>
+      <div class="card info-card detail-layer source-layer"><span class="detail-layer-label">直方市の資料</span><h2>確認に使った資料</h2><dl class="source-facts"><div><dt>公開元</dt><dd>直方市</dd></div><div><dt>市のページの公開・更新日</dt><dd>${esc(sourceDate)}</dd></div><div><dt>のおがた日和で確認した日</dt><dd>${esc(state.data.verifiedOn || formatDateTime(state.data.generatedAt) || "確認中")}</dd></div></dl>${sourceLink(item.sourceUrl, "直方市のページを見る")}${item.pdfUrl ? sourceLink(item.pdfUrl, "市報PDFを開く") : ""}</div>
     </div>`;
   }
   if (section === "why") {
@@ -434,7 +434,7 @@ function moneyView() {
 }
 
 function settingsView() {
-  return `<section class="page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="hero"><p class="eyebrow">設定</p><h1>よく見る情報を設定</h1><p>会員登録は不要です。設定は、このブラウザだけに保存されます。</p></div><div class="card info-card"><h2>このアプリについて</h2><p>MYTOWNは試験公開中の非公式アプリです。直方市の公式アプリではありません。市の公開情報を定期的に確認し、直方市のページへのリンクを付けます。</p><p class="fact-line"><strong>自動更新：</strong>約6時間ごと（実行時刻は前後することがあります）</p></div></section>`;
+  return `<section class="page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="hero"><p class="eyebrow">設定</p><h1>よく見る情報を設定</h1><p>会員登録は不要です。設定は、このブラウザだけに保存されます。</p></div><div class="card info-card"><h2>このアプリについて</h2><p>のおがた日和は試験公開中の非公式アプリです。直方市の公式アプリではありません。市の公開情報を定期的に確認し、直方市のページへのリンクを付けます。</p><p class="fact-line"><strong>自動更新：</strong>約6時間ごと（実行時刻は前後することがあります）</p></div></section>`;
 }
 
 function emptyCard(message) {

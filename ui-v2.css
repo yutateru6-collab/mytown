@@ -125,7 +125,7 @@ body.ui-v2 small { font-size: .8125rem; }
   font-weight: 900;
 }
 .v2-wordmark span { font-size: .7em; letter-spacing: .08em; }
-.v2-hero h1 { margin: 7px 0 0; color: #263f2f; font-size: clamp(1.55rem, 5vw, 2.25rem); line-height: 1.1; }
+.v2-hero h1 { margin: 7px 0 0; color: #263f2f; font-size: clamp(1.38rem, 4.5vw, 2rem); line-height: 1.12; }
 .v2-tagline {
   display: inline-block;
   margin: 9px auto 0;
@@ -476,7 +476,7 @@ body.ui-v2 small { font-size: .8125rem; }
   .v2-hero-copy { top: 25px; left: 28%; right: 13%; }
   .v2-date { font-size: .875rem; }
   .v2-wordmark { font-size: 1.48rem; }
-  .v2-hero h1 { font-size: 1.55rem; }
+  .v2-hero h1 { font-size: 1.4rem; }
   .v2-tagline { margin-top: 6px; font-size: .875rem; }
   .v2-hero > .v2-mascot { width: 105px; left: 2%; }
   .v2-content { margin-top: -13px; padding: 15px 12px 22px; }
@@ -510,7 +510,7 @@ body.ui-v2 small { font-size: .8125rem; }
 @media (max-width: 370px) {
   .v2-hero-copy { left: 31%; right: 15%; }
   .v2-wordmark { font-size: 1.25rem; }
-  .v2-hero h1 { font-size: 1.4rem; }
+  .v2-hero h1 { font-size: 1.15rem; }
   .v2-tagline { font-size: .8125rem; }
   .v2-overview-heading h2 { font-size: 1.12rem; }
   .v2-overview-heading small { display: none; }

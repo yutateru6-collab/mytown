@@ -91,7 +91,7 @@ function politicsHome() {
 
     <details class="quiz-card">
       <summary>🦖 10秒クイズ：市長が提案すれば、何でもすぐ決まる？</summary>
-      <div><strong>答え：すぐに決まるとは限りません。</strong><p>予算や条例は、市議会の決定が必要な場合があります。MYTOWNでは、市長側の提案と市議会の決定を分けて表示します。</p></div>
+      <div><strong>答え：すぐに決まるとは限りません。</strong><p>予算や条例は、市議会の決定が必要な場合があります。のおがた日和では、市長側の提案と市議会の決定を分けて表示します。</p></div>
     </details>
   </section>`;
 }

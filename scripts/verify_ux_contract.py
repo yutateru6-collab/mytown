@@ -39,10 +39,10 @@ def main() -> None:
     require(index, ">地図</span>", "dedicated map navigation")
     require(index, ">さがす</span>", "search center-nav label")
     require(index, "aria-label=\"直方の情報をさがす\"", "search accessible name")
-    require(index, "./ui-v2.js?v=16", "versioned citizen-first runtime")
+    require(index, "./ui-v2.js?v=17", "versioned citizen-first runtime")
     require(index, "./app-runtime.js?v=3", "versioned data-load recovery runtime")
-    require(index, "./ui-v2.css?v=15", "versioned citizen-first styles")
-    require(index, "./ui-home-v4.js?v=17", "event-led home runtime")
+    require(index, "./ui-v2.css?v=16", "versioned citizen-first styles")
+    require(index, "./ui-home-v4.js?v=18", "event-led home runtime")
     require(index, "./ui-home-v4.css?v=15", "event-led home styles")
     require(index, "./map-nearby.js?v=3", "nearby map runtime")
     require(index, "./map-nearby.css?v=2", "nearby map styles")
@@ -56,7 +56,8 @@ def main() -> None:
     forbid(index, ">提案する</span>", "misleading proposal label")
 
     for token in (
-        "今日の直方",
+        "のおがた日和",
+        "知れば直方は<br>もっとおもしろい！",
         "直方の情報を探す",
         "v2-capability-grid",
         "決まるまでの流れ",
@@ -157,7 +158,7 @@ def main() -> None:
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v20-copy-clarity", "service-worker cache revision")
+    require(sw, "mytown-civic-v21-nogata-biyori", "service-worker cache revision")
     require(sw, "ui-home-v4.js", "v4 runtime precache")
     require(sw, "ui-home-v5.css", "v5 polish precache")
     require(sw, "map-nearby.js", "nearby map runtime precache")
