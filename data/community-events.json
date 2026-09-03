@@ -1,15 +1,109 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-03T10:00:00+09:00",
+  "generatedAt": "2026-09-03T20:00:27.743515+09:00",
   "events": [
     {
-      "id": "community-aeon-sanrio-20260905",
-      "title": "シナモロールがあそびにくるよ",
-      "summary": "ステージショーは11時、13時、15時の3回です。着席観覧席には当日配布の整理券が必要です。",
+      "id": "community-aeon-mall-nogata-b120ab71430e",
+      "title": "イオンモールの超!COOOOOOL作戦 6月1日(月)~9月30日(水)",
+      "summary": "イオンモール直方が公開しているイベント情報です。場所はイオンモール直方 > 1F a.v.v前 1F 唐十前 2F サンリオ前 ■プロ女子バレーボールチーム『カノアラウレアーズ福岡』の選手おススメの過ごし方は コチラ ※全国のイオンモールの超COOOO…です。",
+      "startDate": "2026-06-01",
+      "endDate": "2026-09-30",
+      "when": "6月1日ほか全8日",
+      "location": "イオンモール直方 > 1F a.v.v前 1F 唐十前 2F サンリオ前 ■プロ女子バレーボールチーム『カノアラウレアーズ福岡』の選手おススメの過ごし方は コチラ ※全国のイオンモールの超COOOO…",
+      "organizerName": "",
+      "publisherName": "イオンモール直方",
+      "sourceUrl": "https://nogata.aeonmall.jp/event/f9bff903-5bd7-4e59-b447-9e8b1f94133f",
+      "sourceType": "commercial",
+      "sourceLabel": "商業施設",
+      "verificationLevel": "publisher",
+      "status": "scheduled",
+      "statusLabel": "開催予定",
+      "category": "親子・子ども",
+      "tags": [
+        "family",
+        "learn",
+        "music",
+        "sports"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00",
+      "occurrences": [
+        "2026-06-01",
+        "2026-09-30",
+        "2026-06-06",
+        "2026-06-07",
+        "2026-07-18",
+        "2026-08-16",
+        "2026-07-19",
+        "2026-07-20"
+      ]
+    },
+    {
+      "id": "community-aeon-mall-nogata-b5231cfea4b4",
+      "title": "イオンモールの超!COOOOOOLなハック術",
+      "summary": "イオンモール直方が公開しているイベント情報です。場所はイオンモール直方です。",
+      "startDate": "2026-07-02",
+      "endDate": "2026-09-30",
+      "when": "7月2日ほか全4日",
+      "location": "イオンモール直方",
+      "organizerName": "",
+      "publisherName": "イオンモール直方",
+      "sourceUrl": "https://nogata.aeonmall.jp/event/8fe09037-3c59-4b4a-a434-f041fc0d5203",
+      "sourceType": "commercial",
+      "sourceLabel": "商業施設",
+      "verificationLevel": "publisher",
+      "status": "scheduled",
+      "statusLabel": "開催予定",
+      "category": "親子・子ども",
+      "tags": [
+        "family",
+        "music"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00",
+      "occurrences": [
+        "2026-07-02",
+        "2026-09-30",
+        "2026-07-18",
+        "2026-07-20"
+      ]
+    },
+    {
+      "id": "community-aeon-mall-nogata-296b5ad847d0",
+      "title": "ポケモンしんかラリー",
+      "summary": "イオンモール直方が公開しているイベント情報です。場所はイオンモール直方です。",
+      "startDate": "2026-09-04",
+      "endDate": "2026-12-25",
+      "when": "9月4日ほか全5日",
+      "location": "イオンモール直方",
+      "organizerName": "",
+      "publisherName": "イオンモール直方",
+      "sourceUrl": "https://nogata.aeonmall.jp/event/1094363d-e0cd-43df-821b-c36bcd7f190b",
+      "sourceType": "commercial",
+      "sourceLabel": "商業施設",
+      "verificationLevel": "publisher",
+      "status": "scheduled",
+      "statusLabel": "開催予定",
+      "category": "親子・子ども",
+      "tags": [
+        "family",
+        "music"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00",
+      "occurrences": [
+        "2026-09-04",
+        "2026-09-27",
+        "2026-12-04",
+        "2026-12-25",
+        "2026-09-23"
+      ]
+    },
+    {
+      "id": "community-aeon-mall-nogata-eea6dbd21e63",
+      "title": "2026年サンリオキャラクター大賞応援ありがとうステージショー シナモロールがあそびにくるよ",
+      "summary": "イオンモール直方が公開しているイベント情報です。場所はイオンモール直方 1Fリリーコート 【整理券について】 ・着席観覧席をご希望のお客さまは、店舗開店前9:30より「1Fリリーコート入口」にて配布します。 ・予定枚数は各回40枚(1組最大4名さま)に…です。",
       "startDate": "2026-09-05",
       "endDate": "2026-09-05",
-      "when": "9月5日（土）11:00／13:00／15:00",
-      "location": "イオンモール直方 1階リリーコート",
+      "when": "9月5日 11:00／13:00／15:00",
+      "location": "イオンモール直方 1Fリリーコート 【整理券について】 ・着席観覧席をご希望のお客さまは、店舗開店前9:30より「1Fリリーコート入口」にて配布します。 ・予定枚数は各回40枚(1組最大4名さま)に…",
       "organizerName": "イオンモール直方",
       "publisherName": "イオンモール直方",
       "sourceUrl": "https://nogata.aeonmall.jp/event/560fd47c-9d5b-4cb8-9d48-7e8cb6b7dbe5",
@@ -19,38 +113,74 @@
       "status": "scheduled",
       "statusLabel": "開催予定",
       "category": "親子・子ども",
-      "tags": ["family"],
-      "lastCheckedAt": "2026-09-03T10:00:00+09:00"
+      "tags": [
+        "family",
+        "music"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00"
     },
     {
-      "id": "community-aeon-freedom-music-20260905",
-      "title": "Freedom Music Park ～Autumn Live～",
-      "summary": "ライブと特典会を行う催しです。チケットは前売1,000円、当日1,500円です。",
+      "id": "community-aeon-mall-nogata-3741d17d9149",
+      "title": "Freedom Music Park ~Autumn Live~",
+      "summary": "イオンモール直方が公開しているイベント情報です。場所は2F イオンホール イオンモール直方 イオンホールに人気アイドルが集結! ライブパフォーマンスと特典会をお楽しみいただけるスペシャルイベントを開催!ご家族やお友達とぜひご来場くださ…です。費用は前売:1,000円/当日:1,500円です。",
       "startDate": "2026-09-05",
       "endDate": "2026-09-05",
-      "when": "9月5日（土）13:00から",
-      "location": "イオンモール直方 2階イオンホール",
+      "when": "9月5日 13:00",
+      "location": "2F イオンホール イオンモール直方 イオンホールに人気アイドルが集結! ライブパフォーマンスと特典会をお楽しみいただけるスペシャルイベントを開催!ご家族やお友達とぜひご来場くださ…",
       "organizerName": "イオンモール直方",
       "publisherName": "イオンモール直方",
-      "money": "前売1,000円／当日1,500円",
+      "money": "前売:1,000円/当日:1,500円",
       "sourceUrl": "https://nogata.aeonmall.jp/event/3d84d407-44dd-4ca8-8655-5897ad088d8c",
       "sourceType": "commercial",
       "sourceLabel": "商業施設",
       "verificationLevel": "publisher",
       "status": "scheduled",
       "statusLabel": "開催予定",
-      "category": "音楽・文化",
-      "tags": ["music"],
-      "lastCheckedAt": "2026-09-03T10:00:00+09:00"
+      "category": "親子・子ども",
+      "tags": [
+        "family",
+        "music"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00"
     },
     {
-      "id": "community-aeon-fashion-20260906",
+      "id": "community-aeon-mall-nogata-f5b171c9ab2f",
+      "title": "イオンモールのSDGsアクション",
+      "summary": "イオンモール直方が公開しているイベント情報です。場所はイオンモール直方です。",
+      "startDate": "2026-09-05",
+      "endDate": "2026-10-04",
+      "when": "10月2日ほか全4日",
+      "location": "イオンモール直方",
+      "organizerName": "",
+      "publisherName": "イオンモール直方",
+      "sourceUrl": "https://nogata.aeonmall.jp/event/2f165560-0f82-4640-8ed2-564be56e7f56",
+      "sourceType": "commercial",
+      "sourceLabel": "商業施設",
+      "verificationLevel": "publisher",
+      "status": "scheduled",
+      "statusLabel": "開催予定",
+      "category": "親子・子ども",
+      "tags": [
+        "family",
+        "learn",
+        "music"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00",
+      "occurrences": [
+        "2026-10-02",
+        "2026-10-04",
+        "2026-09-23",
+        "2026-09-05"
+      ]
+    },
+    {
+      "id": "community-aeon-mall-nogata-54c5eca9539a",
       "title": "カノアラウレアーズ福岡 × ビースタッフ スペシャルファッションショー",
-      "summary": "女子バレーボールチームと美容の専門学校が協力するファッションショーです。",
+      "summary": "イオンモール直方が公開しているイベント情報です。場所はイオンモール直方 1F リリーコート 女子バレーボールチーム「カノアラウレアーズ福岡」と、メイク・美容のプロを目指す専門学校「ビースタッフ」がコラボレーションした特別なファッションショーを開催します…です。",
       "startDate": "2026-09-06",
       "endDate": "2026-09-06",
-      "when": "9月6日（日）15:00／16:10",
-      "location": "イオンモール直方 1階リリーコート",
+      "when": "9月6日 15:00／16:10",
+      "location": "イオンモール直方 1F リリーコート 女子バレーボールチーム「カノアラウレアーズ福岡」と、メイク・美容のプロを目指す専門学校「ビースタッフ」がコラボレーションした特別なファッションショーを開催します…",
       "organizerName": "イオンモール直方",
       "publisherName": "イオンモール直方",
       "sourceUrl": "https://nogata.aeonmall.jp/event/ffccfe72-cfc8-4d7e-a4ef-b60864afefb6",
@@ -59,19 +189,26 @@
       "verificationLevel": "publisher",
       "status": "scheduled",
       "statusLabel": "開催予定",
-      "category": "音楽・文化",
-      "tags": ["sports", "culture"],
-      "lastCheckedAt": "2026-09-03T10:00:00+09:00"
+      "category": "親子・子ども",
+      "tags": [
+        "family",
+        "music",
+        "sports"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00"
     },
     {
-      "id": "community-aeon-blood-donation-202609",
+      "id": "community-aeon-mall-nogata-7016a3a132b0",
       "title": "献血のご案内",
-      "summary": "福岡県赤十字血液センターによる献血です。9月6日と27日に実施されます。",
+      "summary": "イオンモール直方が公開しているイベント情報です。場所はイオンモール直方 カルディコーヒーファーム横通路 <福岡県赤十字血液センターからのお知らせ> 献血のご案内 ■日時 (1) 9月6日(日)10:00~12:00、13:15~16:00 (2) 9月…です。",
       "startDate": "2026-09-06",
       "endDate": "2026-09-27",
-      "occurrences": ["2026-09-06", "2026-09-27"],
-      "when": "9月6日・27日 10:00～12:00／13:15～16:00",
-      "location": "イオンモール直方 カルディコーヒーファーム横通路",
+      "occurrences": [
+        "2026-09-06",
+        "2026-09-27"
+      ],
+      "when": "9月6日～9月27日 10:00／12:00／13:15／16:00",
+      "location": "イオンモール直方 カルディコーヒーファーム横通路 <福岡県赤十字血液センターからのお知らせ> 献血のご案内 ■日時 (1) 9月6日(日)10:00~12:00、13:15~16:00 (2) 9月…",
       "organizerName": "福岡県赤十字血液センター",
       "publisherName": "イオンモール直方",
       "sourceUrl": "https://nogata.aeonmall.jp/event/207ab963-c2f9-478b-9a30-c857a5cf6160",
@@ -80,35 +217,166 @@
       "verificationLevel": "publisher",
       "status": "scheduled",
       "statusLabel": "開催予定",
-      "category": "健康",
-      "tags": ["health", "participation"],
-      "lastCheckedAt": "2026-09-03T10:00:00+09:00"
+      "category": "地域参加",
+      "tags": [
+        "family",
+        "participation",
+        "music"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00"
     },
     {
-      "id": "community-shakyo-koyori-20260919",
-      "title": "認知症カフェ『こより』",
-      "summary": "認知症カフェを通して、ゆったりした時間を過ごす催しです。定員は20人で、予約が必要です。",
+      "id": "community-nogata-kankoh-164950f6f312",
+      "title": "【9/11(金)~12(土)】北九州空港で直方市をPR",
+      "summary": "直方市観光物産振興協会が公開しているイベント情報です。場所は北九州空港ターミナルビル内 特設会場 直方のおいしい・たのしいを体験できる2日間です。ぜひお立ち寄りください。 一般社団法人 直方市観光物産振興協会 〒822-8501 直方市殿町…です。",
+      "startDate": "2026-09-11",
+      "endDate": "2026-09-11",
+      "when": "9月11日",
+      "location": "北九州空港ターミナルビル内 特設会場 直方のおいしい・たのしいを体験できる2日間です。ぜひお立ち寄りください。 一般社団法人 直方市観光物産振興協会 〒822-8501 直方市殿町…",
+      "organizerName": "",
+      "publisherName": "直方市観光物産振興協会",
+      "sourceUrl": "https://nogata-kankoh.com/news/8267.html",
+      "sourceType": "tourism",
+      "sourceLabel": "観光・地域",
+      "verificationLevel": "publisher",
+      "status": "scheduled",
+      "statusLabel": "開催予定",
+      "category": "親子・子ども",
+      "tags": [
+        "family",
+        "learn"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00"
+    },
+    {
+      "id": "community-aeon-mall-nogata-d158dd7efd33",
+      "title": "#カビゴンと眠活 presented by AEON",
+      "summary": "イオンモール直方が公開しているイベント情報です。場所はイオンモール直方 1F ライトオン前 吹き抜け 〇睡眠豆知識 睡眠の必要性や睡眠サイクルなど、知っているようで意外と知らない「睡眠豆知識」を紹介するポスターを館内3か所に展開! この機会に睡眠マスタ…です。",
+      "startDate": "2026-09-18",
+      "endDate": "2026-09-27",
+      "when": "9月18日～9月27日",
+      "location": "イオンモール直方 1F ライトオン前 吹き抜け 〇睡眠豆知識 睡眠の必要性や睡眠サイクルなど、知っているようで意外と知らない「睡眠豆知識」を紹介するポスターを館内3か所に展開! この機会に睡眠マスタ…",
+      "organizerName": "",
+      "publisherName": "イオンモール直方",
+      "sourceUrl": "https://nogata.aeonmall.jp/event/b1c0218f-89b0-4a5e-b493-547085e37463",
+      "sourceType": "commercial",
+      "sourceLabel": "商業施設",
+      "verificationLevel": "publisher",
+      "status": "scheduled",
+      "statusLabel": "開催予定",
+      "category": "親子・子ども",
+      "tags": [
+        "family",
+        "music",
+        "sports"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00"
+    },
+    {
+      "id": "community-aeon-mall-nogata-d7f6b2f6b62f",
+      "title": "イオンモールの秋休み",
+      "summary": "イオンモール直方が公開しているイベント情報です。場所はイオンモール直方 では、ちいかわアイテムが多数展開されています。 ポーチやぬいぐるみなどかわいいグッズ。 また、文房具や生活雑貨など、日々の生活が楽しくなるような商品が用意されています。 >>詳しく…です。",
+      "startDate": "2026-09-18",
+      "endDate": "2026-09-27",
+      "when": "9月18日～9月27日",
+      "location": "イオンモール直方 では、ちいかわアイテムが多数展開されています。 ポーチやぬいぐるみなどかわいいグッズ。 また、文房具や生活雑貨など、日々の生活が楽しくなるような商品が用意されています。 >>詳しく…",
+      "organizerName": "",
+      "publisherName": "イオンモール直方",
+      "sourceUrl": "https://nogata.aeonmall.jp/event/256df83c-7bdd-47d7-bf24-affe4398554a",
+      "sourceType": "commercial",
+      "sourceLabel": "商業施設",
+      "verificationLevel": "publisher",
+      "status": "scheduled",
+      "statusLabel": "開催予定",
+      "category": "親子・子ども",
+      "tags": [
+        "family",
+        "music"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00"
+    },
+    {
+      "id": "community-nogata-shakyo-c80e3f7dac5e",
+      "title": "認知症カフェ『こより』を開催します!",
+      "summary": "直方市社会福祉協議会が公開しているイベント情報です。場所は直方市保健福祉センターゆずりあ 2階 ミーティングスペース 直方市津田町7-25 ※駐車場ありです。費用は200円です。",
       "startDate": "2026-09-19",
       "endDate": "2026-09-19",
-      "when": "9月19日（土）13:30～15:30",
-      "location": "直方市保健福祉センターゆずりあ 2階ミーティングスペース",
-      "organizerName": "直方市社会福祉協議会",
+      "when": "9月19日 13時30分／15時30分",
+      "location": "直方市保健福祉センターゆずりあ 2階 ミーティングスペース 直方市津田町7-25 ※駐車場あり",
+      "organizerName": "",
       "publisherName": "直方市社会福祉協議会",
-      "money": "200円",
-      "reservationRequired": true,
-      "applicationDeadline": "2026-09-16",
-      "sourceUrl": "https://nogatashakyo.org/pages/25?b_id=119&detail=1&r_id=100",
+      "sourceUrl": "https://nogatashakyo.org/pages/25?detail=1&b_id=119&r_id=100#block119",
       "sourceType": "community",
       "sourceLabel": "地域団体",
       "verificationLevel": "publisher",
       "status": "scheduled",
-      "statusLabel": "予約が必要",
-      "category": "健康・交流",
-      "tags": ["health", "community"],
-      "lastCheckedAt": "2026-09-03T10:00:00+09:00"
+      "statusLabel": "開催予定",
+      "category": "地域参加",
+      "tags": [
+        "participation",
+        "volunteer"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00",
+      "money": "200円"
     },
     {
-      "id": "community-ongagawa-cleanup-20260927",
+      "id": "community-aeon-mall-nogata-6ab23dc895c5",
+      "title": "100万人のクラシックライブ",
+      "summary": "イオンモール直方が公開しているイベント情報です。場所はイオンモール直方 2F Nogata Terrace ー鑑賞無料ー 100万人のクラシックライブ 「音楽を通じて人と人がつながる」 100万人のクラシックライブの活動を応援しています。 シルバーウィ…です。",
+      "startDate": "2026-09-23",
+      "endDate": "2026-09-23",
+      "when": "9月23日 17:00／19:00",
+      "location": "イオンモール直方 2F Nogata Terrace ー鑑賞無料ー 100万人のクラシックライブ 「音楽を通じて人と人がつながる」 100万人のクラシックライブの活動を応援しています。 シルバーウィ…",
+      "organizerName": "",
+      "publisherName": "イオンモール直方",
+      "sourceUrl": "https://nogata.aeonmall.jp/event/4d78feef-5568-4d7f-9315-4c9733337ebc",
+      "sourceType": "commercial",
+      "sourceLabel": "商業施設",
+      "verificationLevel": "publisher",
+      "status": "scheduled",
+      "statusLabel": "開催予定",
+      "category": "親子・子ども",
+      "tags": [
+        "family",
+        "music",
+        "free"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00"
+    },
+    {
+      "id": "community-nogata-shakyo-9291129b4c37",
+      "title": "「介護未経験者向け入門研修」が開催されます。",
+      "summary": "直方市社会福祉協議会が公開しているイベント情報です。費用は無料です。",
+      "startDate": "2026-09-26",
+      "endDate": "2026-12-10",
+      "when": "9月26日ほか全5日",
+      "location": "",
+      "organizerName": "",
+      "publisherName": "直方市社会福祉協議会",
+      "sourceUrl": "https://nogatashakyo.org/pages/25?detail=1&b_id=119&r_id=91#block119",
+      "sourceType": "community",
+      "sourceLabel": "地域団体",
+      "verificationLevel": "publisher",
+      "status": "scheduled",
+      "statusLabel": "開催予定",
+      "category": "地域参加",
+      "tags": [
+        "participation",
+        "volunteer",
+        "free"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00",
+      "occurrences": [
+        "2026-09-26",
+        "2026-10-03",
+        "2026-11-07",
+        "2026-11-20",
+        "2026-12-10"
+      ],
+      "money": "無料"
+    },
+    {
+      "id": "community-ongagawa-mizubekan-9c7dfe892a10",
       "title": "春の小川まつり（遠賀川清掃活動）",
       "summary": "遠賀川河川敷をみんなで清掃する活動です。道具は用意され、1時間程度を予定しています。",
       "startDate": "2026-09-27",
@@ -124,14 +392,18 @@
       "status": "scheduled",
       "statusLabel": "開催前に確認",
       "category": "地域参加",
-      "tags": ["participation", "volunteer", "outdoor"],
+      "tags": [
+        "participation",
+        "volunteer",
+        "outdoor"
+      ],
       "recurrence": "毎月最後の日曜日",
-      "lastCheckedAt": "2026-09-03T10:00:00+09:00"
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00"
     },
     {
-      "id": "community-kankoh-tulip-volunteer-2026",
-      "title": "チューリップの球根植えボランティア",
-      "summary": "遠賀川河川敷で球根を植える活動です。作業は1回30分程度で、参加日を選べます。",
+      "id": "community-nogata-kankoh-ee5c047debff",
+      "title": "チューリップの球根植えボランティア大募集!!",
+      "summary": "直方市観光物産振興協会が公開しているイベント情報です。場所は遠賀川河川敷です。",
       "startDate": "2026-11-17",
       "endDate": "2026-12-04",
       "occurrences": [
@@ -145,7 +417,7 @@
         "2026-12-02",
         "2026-12-04"
       ],
-      "when": "11月17日～12月4日の指定日 10:00～15:00",
+      "when": "11月17日ほか全9日 10:00／15:00",
       "location": "遠賀川河川敷",
       "organizerName": "直方市観光物産振興協会",
       "publisherName": "直方市観光物産振興協会",
@@ -158,8 +430,35 @@
       "status": "scheduled",
       "statusLabel": "申込締切 10月9日",
       "category": "地域参加",
-      "tags": ["participation", "volunteer", "family", "outdoor"],
-      "lastCheckedAt": "2026-09-03T10:00:00+09:00"
+      "tags": [
+        "family",
+        "participation",
+        "volunteer"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00"
+    },
+    {
+      "id": "community-nogata-shakyo-576cad36495b",
+      "title": "「全国フットパスの集い」が開催されます!",
+      "summary": "直方市社会福祉協議会が公開しているイベント情報です。場所は北九州市立大学 北方キャンパス 福岡県北九州市小倉南区北方4-2-1 開催地域:北九州市・直方市・行橋市・築上町です。",
+      "startDate": "2026-11-21",
+      "endDate": "2026-11-22",
+      "when": "11月21日～11月22日",
+      "location": "北九州市立大学 北方キャンパス 福岡県北九州市小倉南区北方4-2-1 開催地域:北九州市・直方市・行橋市・築上町",
+      "organizerName": "",
+      "publisherName": "直方市社会福祉協議会",
+      "sourceUrl": "https://nogatashakyo.org/pages/25?detail=1&b_id=119&r_id=98#block119",
+      "sourceType": "community",
+      "sourceLabel": "地域団体",
+      "verificationLevel": "publisher",
+      "status": "scheduled",
+      "statusLabel": "開催予定",
+      "category": "地域参加",
+      "tags": [
+        "participation",
+        "volunteer"
+      ],
+      "lastCheckedAt": "2026-09-03T20:00:27.743515+09:00"
     }
   ],
   "sourceHealth": [
@@ -167,25 +466,25 @@
       "id": "nogata-shakyo",
       "name": "直方市社会福祉協議会",
       "status": "ok",
-      "checkedAt": "2026-09-03T10:00:00+09:00"
+      "checkedAt": "2026-09-03T20:00:27.743515+09:00"
     },
     {
       "id": "nogata-kankoh",
       "name": "直方市観光物産振興協会",
       "status": "ok",
-      "checkedAt": "2026-09-03T10:00:00+09:00"
+      "checkedAt": "2026-09-03T20:00:27.743515+09:00"
     },
     {
       "id": "aeon-mall-nogata",
       "name": "イオンモール直方",
       "status": "ok",
-      "checkedAt": "2026-09-03T10:00:00+09:00"
+      "checkedAt": "2026-09-03T20:00:27.743515+09:00"
     },
     {
       "id": "ongagawa-mizubekan",
       "name": "NPO法人直方川づくりの会",
       "status": "ok",
-      "checkedAt": "2026-09-03T10:00:00+09:00"
+      "checkedAt": "2026-09-03T20:00:27.743515+09:00"
     }
   ]
 }
