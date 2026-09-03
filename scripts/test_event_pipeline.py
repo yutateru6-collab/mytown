@@ -6,9 +6,14 @@ from datetime import datetime, timezone, timedelta
 
 from sync_events import (
     canonical_event_key,
+    canonical_source_url,
+    date_tokens,
     deduplicate,
+    event_location,
+    event_time,
     is_expired,
     last_sunday,
+    merge_reviewed_fields,
     parse_aeon,
     parse_last_sunday_cleanup,
     parse_shakyo,
@@ -99,6 +104,37 @@ def main() -> None:
     cleanup = parse_last_sunday_cleanup(cleanup_source, cleanup_html, lambda _url: "", NOW)
     assert cleanup[0]["startDate"] == "2026-09-27"
     assert last_sunday(2026, 9).isoformat() == "2026-09-27"
+
+    shorthand = date_tokens("開催日:9月11日(金)～12日(土)", 2026)
+    assert [value.isoformat() for value in shorthand] == ["2026-09-11", "2026-09-12"]
+    assert event_time("日時:9月6日(日) 10:00～12:00、13:15～16:00 場所:会場") == "10:00～12:00／13:15～16:00"
+    long_location = (
+        "場所:北九州空港ターミナルビル内 特設会場 直方のおいしい・たのしいを体験できる2日間です "
+        "ぜひお立ち寄りください 一般社団法人直方市観光物産振興協会からのお知らせを掲載しています"
+    )
+    assert event_location(long_location) == "北九州空港ターミナルビル内 特設会場"
+    assert canonical_source_url("https://example.org/event/?b=2&a=1#detail") == canonical_source_url(
+        "https://example.org/event?a=1&b=2"
+    )
+
+    reviewed = {
+        **aeon_events[0],
+        "summary": "編集者が確認した要約です。",
+        "location": "確認済み会場",
+        "category": "親子・子ども",
+        "tags": ["family"],
+        "editoriallyReviewed": True,
+    }
+    reparsed = {**aeon_events[0], "summary": "自動要約", "location": "長すぎる案内文", "category": "イベント", "tags": []}
+    merged = merge_reviewed_fields(reparsed, reviewed)
+    assert merged["summary"] == reviewed["summary"]
+    assert merged["location"] == reviewed["location"]
+    assert merged["editoriallyReviewed"] is True
+
+    next_year = {**reparsed, "startDate": "2027-09-05", "endDate": "2027-09-05"}
+    fresh = merge_reviewed_fields(next_year, reviewed)
+    assert fresh["summary"] == "自動要約"
+    assert "editoriallyReviewed" not in fresh
 
     duplicate = {**aeon_events[0], "sourceUrl": "https://example.org/same", "id": "duplicate"}
     assert canonical_event_key(aeon_events[0]) == canonical_event_key(duplicate)

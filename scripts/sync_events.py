@@ -19,7 +19,7 @@ from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Callable, Iterable
-from urllib.parse import urljoin, urlparse
+from urllib.parse import parse_qsl, urlencode, urljoin, urlparse, urlunparse
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,12 +34,13 @@ ALLOWED_PARSERS = {"shakyo", "tourism", "aeon", "last-sunday-cleanup"}
 ALLOWED_SOURCE_TYPES = {"community", "tourism", "commercial", "cultural"}
 NON_EVENT_PATTERN = re.compile(
     r"クーポン|値引|セール|FURNITURE\s*FAIR|LIMITED\s*STORE|POP\s*UP\s*STORE|"
-    r"キャンペーン|販売$|お得デー|応募作品|受賞作品|イベントスペース",
+    r"キャンペーン|販売$|お得デー|応募作品|受賞作品|イベントスペース|"
+    r"超!?C+OOL|ハック術|秋休み|SDGsアクション|眠活",
     re.IGNORECASE,
 )
 FAMILY_PATTERN = re.compile(r"親子|子ども|こども|幼児|小学生|家族|キッズ|キャラクター")
 PARTICIPATION_PATTERN = re.compile(r"ボランティア|清掃|地域活動|球根植え|献血|意見募集")
-LEARNING_PATTERN = re.compile(r"体験|学習|講座|教室|展示|アート|ワークショップ|観察")
+LEARNING_PATTERN = re.compile(r"体験|学習|講座|教室|研修|展示|アート|ワークショップ|観察")
 MUSIC_PATTERN = re.compile(r"音楽|ライブ|コンサート|演奏|Music", re.IGNORECASE)
 SPORTS_PATTERN = re.compile(r"スポーツ|健康|運動|ピラティス|ヨガ|バレー")
 
@@ -156,6 +157,32 @@ def date_tokens(text: str, year_hint: int) -> list[date]:
         if parsed and parsed not in found:
             found.append(parsed)
             previous_month = month
+
+    # 「9月11日～12日」「9/11～12」のように、終了側の月が省かれた表記を補う。
+    shorthand_patterns = (
+        re.compile(
+            r"(?:(?P<year>20\d{2})年)?(?P<month>\d{1,2})月(?P<start>\d{1,2})日"
+            r"(?:\([^)]*\)|（[^）]*）)?\s*[~〜～\-]\s*(?P<end>\d{1,2})日"
+        ),
+        re.compile(
+            r"(?:(?P<year>20\d{2})/)?(?P<month>\d{1,2})/(?P<start>\d{1,2})"
+            r"(?:\([^)]*\)|（[^）]*）)?\s*[~〜～\-]\s*(?P<end>\d{1,2})(?!\d)"
+        ),
+    )
+    for range_pattern in shorthand_patterns:
+        for match in range_pattern.finditer(text):
+            year = int(match.group("year") or year_hint)
+            month = int(match.group("month"))
+            for day in (int(match.group("start")), int(match.group("end"))):
+                parsed = safe_date(year, month, day)
+                if parsed and parsed not in found:
+                    found.append(parsed)
+
+    # 一覧見出しで使われる「9/5」も、時刻と混同しない範囲で拾う。
+    for match in re.finditer(r"(?<!\d)(?P<month>\d{1,2})/(?P<day>\d{1,2})(?!\d)", text):
+        parsed = safe_date(year_hint, int(match.group("month")), int(match.group("day")))
+        if parsed and parsed not in found:
+            found.append(parsed)
     return found
 
 
@@ -189,8 +216,14 @@ def event_time(text: str) -> str:
     )
     if not segment:
         return ""
-    times = re.findall(r"\d{1,2}(?::|時)\d{2}(?:分)?", segment)
-    unique = list(dict.fromkeys(times))
+    token = r"\d{1,2}(?::\d{2}|時\d{2}(?:分)?)"
+    ranges = re.findall(rf"{token}\s*(?:[~〜～\-]|から)\s*{token}", segment)
+    remainder = segment
+    for value in ranges:
+        remainder = remainder.replace(value, " ", 1)
+    singles = re.findall(token, remainder)
+    ranges = [re.sub(r"\s*(?:[~〜～\-]|から)\s*", "～", value) for value in ranges]
+    unique = list(dict.fromkeys([*ranges, *singles]))
     return "／".join(unique[:4])
 
 
@@ -202,8 +235,12 @@ def event_location(text: str, default: str = "") -> str:
         limit=180,
     )
     location = clean_text(segment).strip("|:： ")
-    if len(location) > 90:
-        location = location[:90].rstrip() + "…"
+    for marker in (" 【", " ■", " ※", " <", " お問い合わせ", " 開催にあたって"):
+        location = location.split(marker, 1)[0].strip()
+    location = location.split("。", 1)[0].strip()
+    if len(location) > 72:
+        venue = re.match(r"^(.{1,64}?(?:会場|館|センター|公園|広場|河川敷|ホール|体育館|キャンパス|駅))\b", location)
+        location = venue.group(1).strip() if venue else ""
     if default and location and default not in location:
         return f"{default} {location}"
     return location or default
@@ -261,7 +298,12 @@ def format_when(dates: list[date], time_text: str = "") -> str:
     if len(dates) == 1:
         base = f"{dates[0].month}月{dates[0].day}日"
     elif len(dates) == 2 and dates[0] != dates[1]:
-        base = f"{dates[0].month}月{dates[0].day}日～{dates[1].month}月{dates[1].day}日"
+        if dates[1] - dates[0] == timedelta(days=1):
+            base = f"{dates[0].month}月{dates[0].day}日～{dates[1].month}月{dates[1].day}日"
+        elif dates[0].month == dates[1].month:
+            base = f"{dates[0].month}月{dates[0].day}日・{dates[1].day}日"
+        else:
+            base = f"{dates[0].month}月{dates[0].day}日・{dates[1].month}月{dates[1].day}日"
     else:
         base = f"{dates[0].month}月{dates[0].day}日ほか全{len(dates)}日"
     return f"{base} {time_text}".strip()
@@ -277,21 +319,19 @@ def base_event(
     checked_at: str,
     default_location: str = "",
 ) -> dict:
-    category, tags = event_tags(title, text)
+    dates = sorted(set(dates))
+    category, tags = event_tags(title)
     time_text = event_time(text)
     location = event_location(text, default_location)
     money = event_money(text)
+    if money == "無料" and "free" not in tags:
+        tags.append("free")
     start_date = min(dates).isoformat()
     end_date = max(dates).isoformat()
-    summary_bits = [f"{source['name']}が公開しているイベント情報です。"]
-    if location:
-        summary_bits.append(f"場所は{location}です。")
-    if money:
-        summary_bits.append(f"費用は{money}です。")
     event = {
         "id": stable_id(source["id"], url, start_date),
         "title": clean_text(title),
-        "summary": "".join(summary_bits),
+        "summary": f"{source['name']}が公開しているイベント情報です。",
         "startDate": start_date,
         "endDate": end_date,
         "when": format_when(dates, time_text),
@@ -538,13 +578,39 @@ def load_existing() -> dict:
     return json.loads(EVENTS_PATH.read_text(encoding="utf-8"))
 
 
+def canonical_source_url(value: str) -> str:
+    parsed = urlparse(value or "")
+    query = urlencode(sorted(parse_qsl(parsed.query, keep_blank_values=True)))
+    return urlunparse((parsed.scheme.lower(), parsed.netloc.lower(), parsed.path.rstrip("/"), "", query, ""))
+
+
 def merge_reviewed_fields(event: dict, prior: dict | None) -> dict:
     if not prior:
         return event
-    merged = {**prior, **event}
-    for key in ("organizerName", "location", "money"):
+    merged = dict(event)
+    for key in ("organizerName", "location", "money", "when"):
         if not event.get(key) and prior.get(key):
             merged[key] = prior[key]
+    same_occurrence = event.get("startDate") == prior.get("startDate")
+    if prior.get("editoriallyReviewed") and (same_occurrence or prior.get("recurrence")):
+        reviewed_fields = (
+            "title",
+            "summary",
+            "location",
+            "organizerName",
+            "publisherName",
+            "money",
+            "reservationRequired",
+            "applicationDeadline",
+            "sourceLabel",
+            "category",
+            "tags",
+            "statusLabel",
+        )
+        for key in reviewed_fields:
+            if key in prior:
+                merged[key] = prior[key]
+        merged["editoriallyReviewed"] = True
     return merged
 
 
@@ -555,7 +621,7 @@ def sync_events(fetcher: Callable[[str], str] = fetch_text, now: datetime | None
     registry = json.loads(SOURCES_PATH.read_text(encoding="utf-8"))
     existing = load_existing()
     existing_events = existing.get("events", [])
-    prior_by_url = {item.get("sourceUrl"): item for item in existing_events if item.get("sourceUrl")}
+    prior_by_url = {canonical_source_url(item.get("sourceUrl")): item for item in existing_events if item.get("sourceUrl")}
     prior_by_source: dict[str, list[dict]] = {}
     for item in existing_events:
         source_id = next(
@@ -574,7 +640,7 @@ def sync_events(fetcher: Callable[[str], str] = fetch_text, now: datetime | None
         try:
             index_html = fetcher(source["url"])
             parsed = PARSERS[source["parser"]](source, index_html, fetcher, now)
-            parsed = [merge_reviewed_fields(item, prior_by_url.get(item.get("sourceUrl"))) for item in parsed]
+            parsed = [merge_reviewed_fields(item, prior_by_url.get(canonical_source_url(item.get("sourceUrl")))) for item in parsed]
             events.extend(parsed)
             health.append({"id": source["id"], "name": source["name"], "status": "ok", "checkedAt": now.isoformat()})
         except Exception as error:
