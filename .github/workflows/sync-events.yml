@@ -11,8 +11,10 @@ on:
       - "data/event-quality-overrides.json"
       - "scripts/sync_events.py"
       - "scripts/refine_event_quality.py"
+      - "scripts/finalize_event_state.py"
       - "scripts/test_event_pipeline.py"
       - "scripts/test_event_quality.py"
+      - "scripts/test_event_state.py"
       - ".github/workflows/sync-events.yml"
 
 permissions:
@@ -42,14 +44,19 @@ jobs:
           python -m json.tool data/event-quality-overrides.json > /dev/null
           python scripts/sync_events.py --check
           python scripts/refine_event_quality.py --check
+          python scripts/finalize_event_state.py --check
           python scripts/test_event_pipeline.py
           python scripts/test_event_quality.py
+          python scripts/test_event_state.py
 
       - name: Sync reviewed event sources
         run: python scripts/sync_events.py
 
       - name: Re-check prices, deadlines and application states
         run: python scripts/refine_event_quality.py
+
+      - name: Apply reviewed deadlines and derive current states
+        run: python scripts/finalize_event_state.py
 
       - name: Validate generated data
         run: python -m json.tool data/community-events.json > /dev/null
