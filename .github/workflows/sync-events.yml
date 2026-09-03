@@ -8,6 +8,7 @@ on:
     branches: [main]
     paths:
       - "data/event-sources.json"
+      - "data/event-quality-overrides.json"
       - "scripts/sync_events.py"
       - "scripts/refine_event_quality.py"
       - "scripts/test_event_pipeline.py"
@@ -38,6 +39,7 @@ jobs:
 
       - name: Validate sources, parsers and content checks
         run: |
+          python -m json.tool data/event-quality-overrides.json > /dev/null
           python scripts/sync_events.py --check
           python scripts/refine_event_quality.py --check
           python scripts/test_event_pipeline.py

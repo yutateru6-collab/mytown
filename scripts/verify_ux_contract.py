@@ -35,6 +35,9 @@ def main() -> None:
     map_css = read("map-nearby.css")
     bulletin_ui = read("bulletin-reader.js")
     bulletin_css = read("bulletin-reader.css")
+    civic_ui = read("civic-actions.js")
+    civic_css = read("civic-actions.css")
+    civic_routes = read("data/civic-report-routes.json")
     sw = read("sw.js")
 
     require(index, ">地図</span>", "dedicated map navigation")
@@ -50,6 +53,8 @@ def main() -> None:
     require(index, "./map-nearby.css?v=2", "nearby map styles")
     require(index, "./bulletin-reader.js?v=2", "bulletin reader runtime")
     require(index, "./bulletin-reader.css?v=1", "bulletin reader styles")
+    require(index, "./civic-actions.js?v=2", "versioned civic-actions runtime")
+    require(index, "./civic-actions.css?v=2", "versioned civic-actions styles")
     require(index, "./ui-home-v5.css?v=27", "versioned home polish styles")
     forbid(index, "reference-ui.css", "static mockup stylesheet")
     forbid(index, "reference-ui.js", "static mockup runtime")
@@ -108,6 +113,30 @@ def main() -> None:
         "収集エリアを設定",
     ):
         require(home_ui, token, "event-led bento home contract")
+
+    for token in (
+        "このイベントも載せて！",
+        "参加まで、参加した後まで",
+        "data-ca-save-event-id",
+        "data-ca-calendar-event-id",
+        "data-ca-open-report",
+        "写真と位置情報はこのアプリのサーバーへ送信・保存しない",
+        "市議会へ正式に要望する方法も見る",
+        "navigator.geolocation",
+        "navigator.share",
+        "data/civic-report-routes.json",
+    ):
+        require(civic_ui, token, "event follow-through and civic reporting contract")
+    for token in (".ca-lifecycle", ".ca-dialog", ".ca-photo-preview"):
+        require(civic_css, token, "civic actions styling")
+    for token in (
+        '"id": "road"',
+        '"id": "park"',
+        "道路緊急ダイヤル（#9910）",
+        "都市計画課 公園街路係",
+        "市議会への請願・陳情",
+    ):
+        require(civic_routes, token, "verified civic report route")
 
     community_data = read("data/community-events.json")
     require(community_data, "地域団体・NPO", "NPO/community event source label")
@@ -190,7 +219,7 @@ def main() -> None:
 
     require(css, "min-height: 44px", "minimum interactive target")
     require(css, "@media (max-width: 520px)", "single-column mobile breakpoint")
-    require(sw, "mytown-civic-v26-community-directory", "service-worker cache revision")
+    require(sw, "mytown-civic-v27-civic-actions", "service-worker cache revision")
     require(sw, "data/changes.json", "change-log precache")
     require(sw, "ui-home-v4.js", "v4 runtime precache")
     require(sw, "ui-home-v5.css", "v5 polish precache")
@@ -198,9 +227,12 @@ def main() -> None:
     require(sw, "map-nearby.css", "nearby map style precache")
     require(sw, "bulletin-reader.js", "bulletin reader runtime precache")
     require(sw, "bulletin-reader.css", "bulletin reader style precache")
+    require(sw, "civic-actions.js", "civic reporting runtime precache")
+    require(sw, "civic-actions.css", "civic reporting styles precache")
     require(sw, "event-festival.svg", "event illustration precache")
     require(sw, "data/community-events.json", "community event data precache")
     require(sw, "data/community.json", "community directory data precache")
+    require(sw, "data/civic-report-routes.json", "verified civic routes precache")
     for token in (
         "card-nearby.svg",
         "card-deadline.svg",
