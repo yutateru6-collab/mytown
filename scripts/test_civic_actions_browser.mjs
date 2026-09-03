@@ -177,7 +177,7 @@ try {
   const walkCard = page.locator(".v4-event-list-card").filter({ hasText: "筑豊高校生と巡る直方まち歩き" }).first();
   await walkCard.waitFor({ state: "visible" });
   const walkText = await walkCard.innerText();
-  assert.doesNotMatch(walkText, /(?:^|[^0-9])000円/);
+  assert.doesNotMatch(walkText, /(?:^|\s)000円(?:\s|$)/);
   assert.match(walkText, /1,000円/);
   report.checks.push("event status, reviewed price and merchandise-price suppression");
 
