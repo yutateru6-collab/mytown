@@ -6,15 +6,13 @@
       "sourceUrl": "https://nogata-kankoh.com/news/8238.html",
       "set": {
         "money": "5,000円",
-        "applicationDeadline": "2026-08-31",
-        "applicationStatus": "closed",
-        "statusLabel": "受付終了（申込期限 8月31日）"
+        "applicationDeadline": "2026-08-31"
       },
       "verifiedOn": "2026-09-03",
       "evidenceUrls": [
         "https://nogata-kankoh.com/news/8238.html"
       ],
-      "note": "掲載ページで参加費5,000円、申込期限8月31日を確認しました。9月3日時点では申込受付終了として表示します。"
+      "note": "掲載ページで参加費5,000円、申込期限8月31日を確認しました。受付状態は申込期限と現在日から毎回計算します。"
     },
     {
       "sourceUrl": "https://nogata.aeonmall.jp/event/560fd47c-9d5b-4cb8-9d48-7e8cb6b7dbe5",
@@ -38,6 +36,18 @@
         "https://chikuho.keizai.biz/headline/330/"
       ],
       "note": "公式掲載ページのHTML抽出では金額の先頭数字が欠落したため、主催者・日程・内容が一致する公開記事と照合し、参加費1,000円を確認しました。"
+    },
+    {
+      "sourceUrl": "https://nogata-kankoh.com/news/8291.html",
+      "set": {
+        "applicationDeadline": "2026-10-09",
+        "reservationRequired": true
+      },
+      "verifiedOn": "2026-09-03",
+      "evidenceUrls": [
+        "https://nogata-kankoh.com/news/8291.html"
+      ],
+      "note": "同期前のレビュー済み期限は10月9日でした。品質再検査が開催初日11月17日を期限として拾ったため、申込期限を10月9日に戻し、受付状態は現在日から毎回計算します。"
     }
   ]
 }
