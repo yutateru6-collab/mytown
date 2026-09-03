@@ -50,12 +50,11 @@ jobs:
           node scripts/test_p0_core_ui.js
           git diff --check
 
-      - name: Commit clean product change
+      - name: Commit product files
         run: |
-          rm -f .p0-patch.part-*
-          rm -f .github/workflows/p0-source-export.yml
+          git restore --source=HEAD -- .github/workflows/qa.yml .github/workflows/visual-qa.yml
           git config user.name "OpenAI Codex"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
+          git add app.js civic-actions.css civic-actions.js civic-portal.css civic-portal.js index.html map-nearby.js politics.js scripts/test_civic_actions_browser.mjs scripts/test_event_ui.js scripts/test_p0_core_ui.js scripts/verify_ux_contract.py sw.js ui-home-v4.js ui-home-v5.css ui-v2.css ui-v2.js
           git commit -m "Fix P0 app usability and reliability"
           git push origin HEAD:fix/p0-core-20260904
