@@ -12,6 +12,8 @@ on:
       - "scripts/capture_visual_qa.mjs"
       - "scripts/test_civic_actions_browser.mjs"
       - ".github/workflows/visual-qa.yml"
+  pull_request:
+    branches: [main]
   workflow_run:
     workflows: ["Deploy MYTOWN to GitHub Pages"]
     types: [completed]
