@@ -1,0 +1,46 @@
+name: Civic actions QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "civic-actions.js"
+      - "civic-actions.css"
+      - "data/civic-report-routes.json"
+      - "scripts/refine_event_quality.py"
+      - "scripts/test_event_quality.py"
+      - "sw.js"
+      - ".github/workflows/qa-civic-actions.yml"
+  workflow_dispatch:
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JavaScript syntax
+        run: node --check civic-actions.js
+
+      - name: Python syntax and event-quality regression
+        run: |
+          python -m py_compile scripts/refine_event_quality.py scripts/test_event_quality.py
+          python scripts/test_event_quality.py
+
+      - name: JSON validity
+        run: python -m json.tool data/civic-report-routes.json > /dev/null
+
+      - name: UI and offline wiring
+        run: |
+          grep -q 'civic-actions.css' index.html
+          grep -q 'civic-actions.js' index.html
+          grep -q 'civic-actions.css' sw.js
+          grep -q 'civic-actions.js' sw.js
+          grep -q 'data/civic-report-routes.json' sw.js
+          grep -q 'このイベントも載せて' civic-actions.js
+          grep -q 'data-ca-open-report' civic-actions.js
+          grep -q '#9910' data/civic-report-routes.json
+          grep -q '公園街路係' data/civic-report-routes.json
+          grep -q '請願・陳情' data/civic-report-routes.json
