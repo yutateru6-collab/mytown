@@ -47,6 +47,10 @@ jobs:
           npm install --no-save --no-package-lock playwright@1.55.0
           npx playwright install --with-deps chromium
 
+      - name: Refine source-preview event data
+        if: ${{ github.event_name != 'workflow_run' }}
+        run: python3 scripts/refine_event_quality.py
+
       - name: Start source preview
         if: ${{ github.event_name != 'workflow_run' }}
         run: |
