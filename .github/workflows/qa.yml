@@ -25,6 +25,8 @@ on:
       - ".github/workflows/pages.yml"
       - ".github/workflows/visual-qa.yml"
       - ".github/workflows/sync-events.yml"
+  pull_request:
+    branches: [main]
   workflow_run:
     workflows: ["Sync Nogata official data", "Sync Nogata community events", "Sync Nogata community directory"]
     types: [completed]
