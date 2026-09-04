@@ -14,9 +14,11 @@
   <link rel="stylesheet" href="./ui-v2.css?v=18" />
   <link rel="stylesheet" href="./ui-home-v4.css?v=19" />
   <link rel="stylesheet" href="./ui-home-v5.css?v=27" />
+  <link rel="stylesheet" href="./map-nearby.css?v=2" />
   <link rel="stylesheet" href="./bulletin-reader.css?v=1" />
   <link rel="stylesheet" href="./civic-actions.css?v=2" />
   <link rel="stylesheet" href="./civic-portal.css?v=2" />
+  <link rel="stylesheet" href="./p0-stability.css?v=1" />
   <title>のおがた日和｜知れば直方はもっとおもしろい！</title>
 </head>
 <body>
@@ -42,9 +44,9 @@
         <span class="nav-icon" aria-hidden="true">⌂</span>
         <span>きょう</span>
       </button>
-      <button type="button" data-v2-nav="civic" class="nav-item" aria-current="false">
-        <img class="nav-icon nav-icon-image" src="./assets/icons/decision.webp?v=13" alt="" aria-hidden="true" />
-        <span>市政</span>
+      <button type="button" data-v2-nav="nearby" class="nav-item" aria-current="false">
+        <img class="nav-icon nav-icon-image" src="./assets/icons/nearby.webp?v=13" alt="" aria-hidden="true" />
+        <span>近く</span>
       </button>
       <button type="button" data-v2-nav="search" class="nav-item is-center" aria-current="false" aria-label="直方の情報をさがす">
         <span class="nav-icon" aria-hidden="true">⌕</span>
@@ -68,36 +70,10 @@
   <script src="./election-history.js?v=3" defer></script>
   <script src="./ui-v2.js?v=21" defer></script>
   <script src="./ui-home-v4.js?v=23" defer></script>
+  <script src="./map-nearby.js?v=3" defer></script>
   <script src="./bulletin-reader.js?v=2" defer></script>
-  <script src="./civic-actions.js?v=1" defer></script>
+  <script src="./civic-actions.js?v=2" defer></script>
   <script src="./civic-portal.js?v=4" defer></script>
-  <script>
-    (() => {
-      const trimHomeLabels = () => {
-        document.querySelector('.v2-hero-actions [data-v2-nav="notifications"]')?.remove();
-        document.querySelector('.v2-data-note')?.remove();
-
-        const daily = document.querySelector('.v4-daily-briefing');
-        if (daily) {
-          daily.removeAttribute('aria-labelledby');
-          daily.setAttribute('aria-label', '今日の生活情報');
-          daily.querySelector('.v4-daily-heading')?.remove();
-          daily.querySelector('.v4-daily-note')?.remove();
-        }
-
-        const eventFeature = document.querySelector('.v4-event-feature');
-        if (eventFeature) {
-          eventFeature.removeAttribute('aria-labelledby');
-          eventFeature.setAttribute('aria-label', '直方のイベント');
-          eventFeature.querySelector('#v4-event-feature-title')?.remove();
-        }
-      };
-
-      const main = document.querySelector('#main');
-      if (!main) return;
-      trimHomeLabels();
-      new MutationObserver(trimHomeLabels).observe(main, { childList: true, subtree: true });
-    })();
-  </script>
+  <script src="./p0-stability.js?v=1" defer></script>
 </body>
 </html>
