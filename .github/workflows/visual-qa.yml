@@ -44,10 +44,20 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install pinned Playwright
+      - name: Install pinned Playwright package
+        run: npm install --no-save --no-package-lock playwright@1.55.0
+
+      - name: Resolve browser executable
+        shell: bash
         run: |
-          npm install --no-save --no-package-lock playwright@1.55.0
-          npx playwright install --with-deps chromium
+          browser="$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || true)"
+          if [ -z "$browser" ]; then
+            npx playwright install chromium
+            browser="$(node -e "const { chromium } = require('playwright'); console.log(chromium.executablePath())")"
+          fi
+          test -x "$browser"
+          echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$browser" >> "$GITHUB_ENV"
+          "$browser" --version
 
       - name: Refine source-preview event data
         if: ${{ github.event_name != 'workflow_run' }}
@@ -68,7 +78,7 @@ jobs:
           cat /tmp/mytown-http.log
           exit 1
 
-      - name: Wait for the deployed civic revision
+      - name: Wait for the deployed P0 revision
         if: ${{ github.event_name == 'workflow_run' }}
         env:
           DEPLOYED_URL: https://yutateru6-collab.github.io/mytown/
