@@ -11,6 +11,7 @@ on:
       - "data/**"
       - "scripts/capture_visual_qa.mjs"
       - "scripts/test_civic_actions_browser.mjs"
+      - "scripts/test_p0_browser.mjs"
       - "scripts/finalize_event_state.py"
       - ".github/workflows/visual-qa.yml"
   pull_request:
@@ -43,10 +44,20 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Install pinned Playwright
+      - name: Install pinned Playwright package
+        run: npm install --no-save --no-package-lock playwright@1.55.0
+
+      - name: Resolve browser executable
+        shell: bash
         run: |
-          npm install --no-save --no-package-lock playwright@1.55.0
-          npx playwright install --with-deps chromium
+          browser="$(command -v google-chrome-stable || command -v google-chrome || command -v chromium || true)"
+          if [ -z "$browser" ]; then
+            npx playwright install chromium
+            browser="$(node -e "const { chromium } = require('playwright'); console.log(chromium.executablePath())")"
+          fi
+          test -x "$browser"
+          echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$browser" >> "$GITHUB_ENV"
+          "$browser" --version
 
       - name: Refine source-preview event data
         if: ${{ github.event_name != 'workflow_run' }}
@@ -67,7 +78,7 @@ jobs:
           cat /tmp/mytown-http.log
           exit 1
 
-      - name: Wait for the deployed civic revision
+      - name: Wait for the deployed P0 revision
         if: ${{ github.event_name == 'workflow_run' }}
         env:
           DEPLOYED_URL: https://yutateru6-collab.github.io/mytown/
@@ -76,13 +87,13 @@ jobs:
             cache_bust="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${attempt}"
             html="$(curl --fail --silent --show-error --retry 2 --retry-all-errors "${DEPLOYED_URL}?deployQa=${cache_bust}" || true)"
             civic="$(curl --fail --silent --show-error --retry 2 --retry-all-errors "${DEPLOYED_URL}civic-actions.js?v=2&deployQa=${cache_bust}" || true)"
-            if grep -q 'civic-actions.js?v=2' <<<"${html}" && grep -q 'このイベントも載せて' <<<"${civic}"; then
-              echo "The deployed civic revision is available."
+            if grep -q 'civic-actions.js?v=2' <<<"${html}" && grep -q 'p0-stability.js?v=1' <<<"${html}" && grep -q 'このイベントも載せて' <<<"${civic}"; then
+              echo "The deployed P0 revision is available."
               exit 0
             fi
             sleep 3
           done
-          echo "GitHub Pages did not expose the tested civic revision."
+          echo "GitHub Pages did not expose the tested P0 revision."
           exit 1
 
       - name: Capture source screenshots
@@ -104,6 +115,12 @@ jobs:
           VISUAL_QA_URL: ${{ github.event_name == 'workflow_run' && 'https://yutateru6-collab.github.io/mytown/' || 'http://127.0.0.1:4173/' }}
           VISUAL_QA_DIR: visual-qa-output
         run: node scripts/test_civic_actions_browser.mjs
+
+      - name: Test P0 navigation and layout regressions
+        env:
+          VISUAL_QA_URL: ${{ github.event_name == 'workflow_run' && 'https://yutateru6-collab.github.io/mytown/' || 'http://127.0.0.1:4173/' }}
+          VISUAL_QA_DIR: visual-qa-output
+        run: node scripts/test_p0_browser.mjs
 
       - name: Upload screenshots and diagnostics
         if: always()

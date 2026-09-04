@@ -13,6 +13,9 @@ on:
       - "ui-home-v4.js"
       - "map-nearby.js"
       - "bulletin-reader.js"
+      - "civic-actions.js"
+      - "civic-portal.js"
+      - "p0-stability.js"
       - "reference-*.js"
       - "*.css"
       - "assets/**"
@@ -22,6 +25,8 @@ on:
       - "scripts/**"
       - ".github/workflows/qa.yml"
       - ".github/workflows/pages.yml"
+  pull_request:
+    branches: [main]
   workflow_run:
     workflows: ["Sync Nogata official data", "Sync Nogata community events", "Sync Nogata community directory"]
     types: [completed]
@@ -50,11 +55,14 @@ jobs:
           node --check election-history.js
           node --check ui-v2.js
           node --check ui-home-v4.js
+          node --check map-nearby.js
+          node --check bulletin-reader.js
+          node --check civic-actions.js
+          node --check civic-portal.js
+          node --check p0-stability.js
           node scripts/test_garbage_ui.js
           node scripts/test_event_ui.js
           node scripts/test_community_ui.js
-          node --check map-nearby.js
-          node --check bulletin-reader.js
           node --check reference-top-1.js
           node --check reference-top-2.js
           node --check reference-top-3.js
@@ -85,6 +93,8 @@ jobs:
           python -m json.tool data/community-events.json > /dev/null
           python -m json.tool data/community-sources.json > /dev/null
           python -m json.tool data/community.json > /dev/null
+          python -m json.tool data/civic-report-routes.json > /dev/null
+          python -m json.tool data/civic-portal.json > /dev/null
 
       - name: Official source registry
         run: python scripts/verify_sources.py
@@ -120,8 +130,10 @@ jobs:
           python scripts/verify_ux_contract.py
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
+          ! grep -q 'MutationObserver' index.html
+          grep -q '>近く</span>' index.html
           grep -q '>さがす</span>' index.html
-          grep -q 'mytown-civic-v35-home-copy' sw.js
+          grep -q 'mytown-civic-v36-p0-stability' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
@@ -130,31 +142,37 @@ jobs:
           grep -q 'ui-home-v4.js' index.html
           grep -q 'ui-home-v4.css' index.html
           grep -q 'ui-home-v5.css' index.html
+          grep -q 'map-nearby.js?v=3' index.html
+          grep -q 'map-nearby.css?v=2' index.html
+          grep -q 'p0-stability.js?v=1' index.html
+          grep -q 'p0-stability.css?v=1' index.html
           grep -q 'bulletin-reader.js' index.html
           grep -q 'bulletin-reader.css' index.html
+          grep -q 'civic-actions.js?v=2' index.html
           grep -q 'data-v2-action="bulletin"' bulletin-reader.js
           grep -q 'bulletin-reader-frame' bulletin-reader.js
           grep -q 'wholePdfUrl' bulletin-reader.js
           grep -q '直方のイベント' ui-home-v4.js
           grep -q '地域活動・ボランティアを探す' ui-home-v4.js
           grep -q 'data/community.json' app.js
-          grep -q '次の市議会' ui-home-v4.js
           grep -q 'card-nearby.svg' ui-home-v5.css
           grep -q 'card-deadline.svg' ui-home-v5.css
           grep -q 'card-services.svg' ui-home-v5.css
           grep -q 'card-bulletin.svg' ui-home-v5.css
           grep -q 'data-v2-nav="home"' index.html
-          grep -q 'data-v2-nav="civic"' index.html
+          grep -q 'data-v2-nav="nearby"' index.html
           grep -q 'data-v2-nav="search"' index.html
-          ! grep -q 'data-v2-nav="action"' index.html
           grep -q 'data-v2-nav="notifications"' index.html
           grep -q 'data-v2-nav="menu"' index.html
+          ! grep -q 'data-v2-nav="civic"' index.html
           grep -q 'politics.js' index.html
           grep -q 'politics.css' index.html
           grep -q 'civic-portal.js?v=4' index.html
           grep -q 'state.politicsSection = "people"' civic-portal.js
-          grep -q '2026年度' politics.js
-          grep -q '難しい言葉' politics.js
+          grep -q 'ALLOWED_INTERESTS' p0-stability.js
+          grep -q 'combinedSearchItemsAcrossMytown' p0-stability.js
+          grep -q 'p0NormalizeCouncilState' p0-stability.js
+          grep -q 'grid-column: 1 / -1' p0-stability.css
           grep -q '任期満了日' data/politics.json
           grep -q '政務活動費' data/politics.json
           grep -q '按分票' data/election-2023.json
