@@ -58,11 +58,21 @@ try {
   assert.ok(Math.abs(geometry.actionLeft - geometry.cardLeft) < 24, `event actions shifted into icon column: ${JSON.stringify(geometry)}`);
   await page.screenshot({ path: path.join(outputDir, "p0-events-list.png"), fullPage: false, scale: "css" });
 
-  // Dedicated nearby navigation must open the real map surface.
-  await page.locator('[data-v2-nav="nearby"]').click();
-  await page.locator(".mytown-map-card").waitFor({ state: "visible", timeout: 20_000 });
-  assert.match(await page.locator(".mytown-map-card").innerText(), /位置を確認できた情報/);
-  await page.screenshot({ path: path.join(outputDir, "p0-nearby.png"), fullPage: false, scale: "css" });
+  // The second bottom navigation item must open the mayor/council overview.
+  await page.locator('[data-v2-nav="civic"]').click();
+  await page.locator(".politics-page").waitFor({ state: "visible", timeout: 20_000 });
+  assert.match(await page.locator(".politics-page").innerText(), /市長・市議会を知る/);
+  assert.equal(await page.locator(".mytown-map-card").count(), 0, "civic navigation opened the nearby map");
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.locator(".politics-page").waitFor({ state: "visible", timeout: 20_000 });
+  assert.match(await page.locator(".politics-page").innerText(), /市長・市議会を知る/);
+  const legacyNearbyURL = new URL(baseURL);
+  legacyNearbyURL.hash = "#nearby";
+  await page.goto(legacyNearbyURL.href, { waitUntil: "domcontentloaded", timeout: 60_000 });
+  await page.locator(".politics-page").waitFor({ state: "visible", timeout: 20_000 });
+  assert.match(await page.locator(".politics-page").innerText(), /市長・市議会を知る/);
+  assert.equal(await page.locator(".mytown-map-card").count(), 0, "legacy nearby URL opened the nearby map");
+  await page.screenshot({ path: path.join(outputDir, "p0-civic-people.png"), fullPage: false, scale: "css" });
 
   // Interest preferences must render and survive a save.
   await page.evaluate(() => v2HandleAction("settings"));

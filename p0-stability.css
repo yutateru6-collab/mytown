@@ -119,13 +119,6 @@ body.p0-returning .v2-hero > .v2-mascot {
   font-weight: 800;
 }
 
-/* Map entry restored to bottom navigation. */
-.bottom-nav [data-v2-nav="nearby"] .nav-icon-image {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-}
-
 @media (max-width: 360px) {
   .p0-interest-grid {
     grid-template-columns: 1fr;

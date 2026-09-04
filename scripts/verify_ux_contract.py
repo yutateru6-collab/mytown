@@ -24,8 +24,6 @@ def main() -> None:
     app = read("app.js")
     ui = read("ui-v2.js")
     home_ui = read("ui-home-v4.js")
-    map_ui = read("map-nearby.js")
-    map_css = read("map-nearby.css")
     civic = read("civic-actions.js")
     civic_portal = read("civic-portal.js")
     p0_js = read("p0-stability.js")
@@ -35,41 +33,30 @@ def main() -> None:
     community = read("data/community.json")
     community_events = read("data/community-events.json")
 
-    # Bottom navigation: daily utility first. Civic content remains available from home/menu.
+    # Bottom navigation: the city tab opens the mayor/council overview directly.
     for token, label in (
         ('data-v2-nav="home"', "home nav"),
-        ('data-v2-nav="nearby"', "nearby nav"),
-        ('>近く</span>', "nearby label"),
+        ('data-v2-nav="civic"', "civic nav"),
+        ('>市政</span>', "civic label"),
         ('data-v2-nav="search"', "search nav"),
         ('data-v2-nav="notifications"', "updates nav"),
         ('data-v2-nav="menu"', "menu nav"),
         ('aria-label="直方の情報をさがす"', "search accessible name"),
     ):
         require(index, token, label)
-    forbid(index, 'data-v2-nav="civic"', "politics-first bottom navigation")
+    forbid(index, 'data-v2-nav="nearby"', "nearby bottom navigation")
 
-    # Real map wiring must be present, not only dead code in the repository.
+    # Active runtime wiring must keep the people-first civic route in place.
     for token in (
-        './map-nearby.css?v=2',
-        './map-nearby.js?v=3',
         './p0-stability.css?v=1',
-        './p0-stability.js?v=1',
+        './p0-stability.js?v=2',
         './civic-actions.js?v=2',
     ):
         require(index, token, "runtime wiring")
     forbid(index, "MutationObserver", "post-render label deletion observer")
 
-    # Verified-location map contract.
-    for token in (
-        "MapLibre",
-        "OPENFREEMAP_STYLE",
-        "VERIFIED_LOCATION_POINTS",
-        "mytown-nearby-map",
-        "Googleマップで開く",
-    ):
-        require(map_ui, token, "nearby map contract")
-    require(map_css, ".mytown-nearby-map", "map container styling")
-    require(map_css, ".mytown-map-marker", "map marker styling")
+    forbid(index, "map-nearby.css", "nearby map stylesheet wiring")
+    forbid(index, "map-nearby.js", "nearby map script wiring")
 
     # P0 audit findings must remain fixed.
     for token in (
@@ -77,7 +64,6 @@ def main() -> None:
         "grid-column: 1 / -1",
         "min-height: 44px",
         "body.p0-returning .v2-hero",
-        '.bottom-nav [data-v2-nav="nearby"]',
     ):
         require(p0_css, token, "P0 CSS regression guard")
 
@@ -94,11 +80,11 @@ def main() -> None:
         "資料横断の自由質問検索は準備中です",
         "ALLOWED_INTERESTS",
         "p0-interest-fieldset",
-        "p0GoNearby",
         "今日の新着",
         "最新の更新",
     ):
         require(p0_js, token, "P0 JS regression guard")
+    forbid(p0_js, "p0GoNearby", "nearby map route override")
 
     # Core daily-use features are still present.
     for token in (
@@ -136,19 +122,21 @@ def main() -> None:
 
     # Civic portal is still accessible from the app and remains people-first internally.
     require(civic_portal, 'state.politicsSection = "people"', "people-first civic destination")
+    require(civic_portal, 'if (hash === "works") state.politicsSection = "works";', "legacy nearby route migration")
+    forbid(civic_portal, 'hash === "works" || hash === "nearby"', "legacy nearby map destination")
     require(civic_portal, 'state.civicPortal', "civic data state")
 
     # Installed/offline app receives the same stabilized assets.
     for token in (
-        "mytown-civic-v36-p0-stability",
-        "map-nearby.css",
-        "map-nearby.js",
+        "mytown-civic-v37-people-nav",
         "p0-stability.css",
         "p0-stability.js",
         "data/community-events.json",
         "data/community.json",
     ):
         require(sw, token, "service worker stability contract")
+    forbid(sw, "map-nearby.css", "offline nearby map stylesheet")
+    forbid(sw, "map-nearby.js", "offline nearby map script")
 
     print("UX contract checks passed")
 

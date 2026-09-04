@@ -204,7 +204,7 @@
         state.politicsSection = "home";
       } else {
         state.view = "tab";
-        if (hash === "works" || hash === "nearby") state.politicsSection = "works";
+        if (hash === "works") state.politicsSection = "works";
         else if (hash === "civic") state.politicsSection = "home";
         else state.politicsSection = "people";
       }

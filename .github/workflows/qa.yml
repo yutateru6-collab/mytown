@@ -132,9 +132,9 @@ jobs:
           ! grep -q 'reference-ui' index.html
           ! grep -q '>提案する</span>' index.html
           ! grep -q 'MutationObserver' index.html
-          grep -q '>近く</span>' index.html
+          grep -q '>市政</span>' index.html
           grep -q '>さがす</span>' index.html
-          grep -q 'mytown-civic-v36-p0-stability' sw.js
+          grep -q 'mytown-civic-v37-people-nav' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
@@ -143,9 +143,9 @@ jobs:
           grep -q 'ui-home-v4.js' index.html
           grep -q 'ui-home-v4.css' index.html
           grep -q 'ui-home-v5.css' index.html
-          grep -q 'map-nearby.js?v=3' index.html
-          grep -q 'map-nearby.css?v=2' index.html
-          grep -q 'p0-stability.js?v=1' index.html
+          ! grep -q 'map-nearby.js' index.html
+          ! grep -q 'map-nearby.css' index.html
+          grep -q 'p0-stability.js?v=2' index.html
           grep -q 'p0-stability.css?v=1' index.html
           grep -q 'bulletin-reader.js' index.html
           grep -q 'bulletin-reader.css' index.html
@@ -161,14 +161,14 @@ jobs:
           grep -q 'card-services.svg' ui-home-v5.css
           grep -q 'card-bulletin.svg' ui-home-v5.css
           grep -q 'data-v2-nav="home"' index.html
-          grep -q 'data-v2-nav="nearby"' index.html
+          grep -q 'data-v2-nav="civic"' index.html
           grep -q 'data-v2-nav="search"' index.html
           grep -q 'data-v2-nav="notifications"' index.html
           grep -q 'data-v2-nav="menu"' index.html
-          ! grep -q 'data-v2-nav="civic"' index.html
+          ! grep -q 'data-v2-nav="nearby"' index.html
           grep -q 'politics.js' index.html
           grep -q 'politics.css' index.html
-          grep -q 'civic-portal.js?v=4' index.html
+          grep -q 'civic-portal.js?v=5' index.html
           grep -q 'state.politicsSection = "people"' civic-portal.js
           grep -q 'ALLOWED_INTERESTS' p0-stability.js
           grep -q 'combinedSearchItemsAcrossMytown' p0-stability.js

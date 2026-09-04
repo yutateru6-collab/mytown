@@ -168,56 +168,6 @@
     };
   }
 
-  function p0GoNearby() {
-    if (typeof v2CloseSheet === "function") v2CloseSheet(false);
-    state.tab = "nearby";
-    state.v2Page = null;
-    state.view = "tab";
-    state.detailSection = null;
-    state.selectedId = null;
-    history.pushState({ tab: "nearby", page: null, view: "tab", mytownRoute: true }, "", "#nearby");
-    render();
-  }
-
-  if (typeof v2HandleAction === "function") {
-    const baseHandleAction = v2HandleAction;
-    v2HandleAction = function handleP0Action(action) {
-      if (action === "nearby") return p0GoNearby();
-      return baseHandleAction(action);
-    };
-  }
-
-  if (typeof v2HandleNav === "function") {
-    const baseHandleNav = v2HandleNav;
-    v2HandleNav = function handleP0Nav(nav) {
-      if (nav === "nearby") return p0GoNearby();
-      return baseHandleNav(nav);
-    };
-  }
-
-  if (typeof v2ActiveNav === "function") {
-    const baseActiveNav = v2ActiveNav;
-    v2ActiveNav = function activeP0Nav() {
-      if (state.tab === "nearby") return "nearby";
-      return baseActiveNav();
-    };
-  }
-
-  if (typeof v2ApplyHashRoute === "function") {
-    const baseApplyHashRoute = v2ApplyHashRoute;
-    v2ApplyHashRoute = function applyP0HashRoute() {
-      if (location.hash.replace("#", "") === "nearby") {
-        state.tab = "nearby";
-        state.v2Page = null;
-        state.view = "tab";
-        state.selectedId = null;
-        state.detailSection = null;
-        return;
-      }
-      baseApplyHashRoute();
-    };
-  }
-
   function p0EnhanceSettings() {
     const form = document.querySelector("#v2-preferences-form");
     if (!form) return;

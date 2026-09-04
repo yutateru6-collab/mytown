@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v36-p0-stability";
+const CACHE = "mytown-civic-v37-people-nav";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -9,7 +9,6 @@ const STATIC_ASSETS = [
   "./ui-v2.css",
   "./ui-home-v4.css",
   "./ui-home-v5.css",
-  "./map-nearby.css",
   "./bulletin-reader.css",
   "./civic-actions.css",
   "./civic-portal.css",
@@ -20,7 +19,6 @@ const STATIC_ASSETS = [
   "./election-history.js",
   "./ui-v2.js",
   "./ui-home-v4.js",
-  "./map-nearby.js",
   "./bulletin-reader.js",
   "./civic-actions.js",
   "./civic-portal.js",
