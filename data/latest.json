@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "city": "直方市",
-  "verifiedOn": "2026-09-04",
+  "verifiedOn": "2026-09-05",
   "population": {
     "asOf": "2026年（令和8年）8月末",
     "total": 53847,
@@ -132,8 +132,8 @@
   ],
   "council": {
     "title": "令和8年9月定例会",
-    "status": "9/4予定",
-    "nextDateLabel": "9/4 10:00",
+    "status": "9/7予定",
+    "nextDateLabel": "9/7 10:00",
     "nextSummary": "本会議（一般質問）が予定されています。日程・開会時間は変更されることがあります。",
     "summary": "9月3日から9月25日までの日程が公表されています。",
     "sourceUpdated": "2026-09-01",
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-03T18:32:37Z"
+  "generatedAt": "2026-09-04T18:29:34Z"
 }
