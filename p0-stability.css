@@ -1,0 +1,133 @@
+/* P0 stability: repair audited layout/accessibility regressions without changing the visual language. */
+
+/* Event actions were falling into the 56px icon column of the card grid. */
+.v4-event-list-card > .ca-event-actions,
+.v4-event-list-card > .ca-card-quality-warning {
+  grid-column: 1 / -1;
+}
+
+.v4-event-list-card > .ca-event-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 2px;
+}
+
+/* The source/change check remains available in event detail/saved views. Keep the list compact. */
+.v4-event-list-card > .ca-event-actions > a {
+  display: none;
+}
+
+.v4-event-list-card > .ca-event-actions button {
+  width: 100%;
+  min-height: 44px;
+}
+
+/* Home should behave like a daily dashboard, not a full landing page. */
+.v4-home-event-list .v4-home-event-card:nth-child(n + 3) {
+  display: none;
+}
+
+body.p0-returning .v2-hero {
+  min-height: 150px;
+}
+body.p0-returning .v2-hero-copy {
+  top: 18px;
+}
+body.p0-returning .v2-hero h1 {
+  margin-top: 7px;
+  font-size: 1rem;
+}
+body.p0-returning .v2-hero > .v2-mascot {
+  bottom: 10px;
+  width: clamp(76px, 18%, 106px);
+}
+
+/* Fix small touch targets found by the audit. */
+.v4-event-quick-filters button,
+.v4-event-filter-row button,
+.suggestion-chip,
+.back-button,
+.v2-query-chips button,
+.filter-chip {
+  min-height: 44px;
+}
+
+.search-box input,
+.v2-search-box input,
+.ask-form input {
+  min-height: 48px;
+  font-size: 16px;
+}
+
+/* Stronger active-state contrast. */
+.bottom-nav .nav-item.is-active,
+.bottom-nav .nav-item.is-active span {
+  color: #1f5937;
+}
+
+/* Keyboard users must be able to focus horizontal guidance regions. */
+.ca-lifecycle ol:focus-visible,
+.v4-event-filter-row:focus-visible,
+.v4-event-quick-filters:focus-visible {
+  outline: 3px solid rgba(31, 89, 55, .32);
+  outline-offset: 3px;
+}
+
+/* Guided preference chips. */
+.p0-interest-fieldset,
+.p0-region-shortcuts {
+  margin-top: 0;
+}
+.p0-interest-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.p0-interest-grid label {
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border: 1px solid rgba(65, 92, 76, .16);
+  border-radius: 13px;
+  background: #fff;
+  font-weight: 750;
+}
+.p0-interest-grid input {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+}
+.p0-region-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 9px;
+}
+.p0-region-shortcuts button {
+  min-height: 40px;
+  padding: 7px 10px;
+  border: 1px solid rgba(65, 92, 76, .18);
+  border-radius: 999px;
+  background: #fff;
+  color: #315d4e;
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 800;
+}
+
+/* Map entry restored to bottom navigation. */
+.bottom-nav [data-v2-nav="nearby"] .nav-icon-image {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+@media (max-width: 360px) {
+  .p0-interest-grid {
+    grid-template-columns: 1fr;
+  }
+}
