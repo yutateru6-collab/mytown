@@ -25,6 +25,7 @@ on:
       - "scripts/**"
       - ".github/workflows/qa.yml"
       - ".github/workflows/pages.yml"
+      - ".github/workflows/visual-qa.yml"
   pull_request:
     branches: [main]
   workflow_run:
