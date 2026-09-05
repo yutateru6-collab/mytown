@@ -108,11 +108,11 @@ try {
   // Service and deadline child pages keep the discovery tab active and separate closed applications.
   await page.evaluate(() => v2HandleAction("services"));
   assert.match(await page.locator("#main").innerText(), /就学時健康診断/);
-  assert.equal(await page.locator('[data-v2-nav="search"]').getAttribute("aria-current"), "page");
+  assert.equal(await page.locator('[aria-label="直方の情報をさがす"]').getAttribute("aria-current"), "page");
   await page.evaluate(() => v2HandleAction("deadline"));
   assert.match(await page.locator("#main").innerText(), /受付前・受付中/);
   assert.match(await page.locator(".v2-closed-deadlines summary").innerText(), /受付が終了した情報/);
-  assert.equal(await page.locator('[data-v2-nav="search"]').getAttribute("aria-current"), "page");
+  assert.equal(await page.locator('[aria-label="直方の情報をさがす"]').getAttribute("aria-current"), "page");
 
   // A 30-second entry opens only the short layer until the user asks for more.
   await page.evaluate(() => v2HandleAction("home"));
