@@ -48,9 +48,9 @@ def main() -> None:
 
     # Active runtime wiring must keep the people-first civic route in place.
     for token in (
-        './p0-stability.css?v=1',
-        './p0-stability.js?v=2',
-        './civic-actions.js?v=2',
+        './p0-stability.css?v=2',
+        './p0-stability.js?v=3',
+        './civic-actions.js?v=3',
     ):
         require(index, token, "runtime wiring")
     forbid(index, "MutationObserver", "post-render label deletion observer")
@@ -64,6 +64,8 @@ def main() -> None:
         "grid-column: 1 / -1",
         "min-height: 44px",
         "body.p0-returning .v2-hero",
+        ".v2-closed-deadlines",
+        ".p0-install-help",
     ):
         require(p0_css, token, "P0 CSS regression guard")
 
@@ -82,6 +84,9 @@ def main() -> None:
         "p0-interest-fieldset",
         "今日の新着",
         "最新の更新",
+        'id: "utility-garbage"',
+        "p0EnhanceInstallHelp",
+        'setAttribute("aria-pressed"',
     ):
         require(p0_js, token, "P0 JS regression guard")
     forbid(p0_js, "p0GoNearby", "nearby map route override")
@@ -94,6 +99,8 @@ def main() -> None:
         "市報を読む",
         "地域活動・ボランティアを探す",
         "収集エリアを設定",
+        'data-v2-detail-id="${esc(item.id)}"',
+        'aria-pressed="${active === filter.id}"',
     ):
         require(home_ui, token, "home utility contract")
 
@@ -105,13 +112,28 @@ def main() -> None:
         "data-ca-calendar-event-id",
         "当日の変更を確認",
         "請願・陳情",
+        "caIcsTimeRange",
+        "caIcsEventBlock",
+        "occurrenceDates",
+        "場所の目印を入力するか、現在地を使ってください",
+        "共有先を選ぶ",
     ):
         require(civic, token, "civic action contract")
 
     # Search and answer safety remain source-bounded.
     require(app, "combinedSearchItems", "base search index")
-    require(app, "確認できませんでした", "safe unanswered state")
+    require(app, "このアプリでは未確認", "safe unanswered state")
+    require(app, "3分で詳しく読む", "progressive detail layer")
+    require(app, "itemSourceInfo", "source-aware detail")
     require(app, "推測", "no-inference wording")
+    for token in (
+        "v2DeadlineState",
+        "v2DeadlineItems",
+        "受付が終了した情報",
+        'aria-pressed="${!category}"',
+        "preferenceScore",
+    ):
+        require(ui, token, "trust UX contract")
 
     # Current data sources needed for cross-source discovery.
     require(data, '"council"', "council data")
@@ -122,13 +144,14 @@ def main() -> None:
 
     # Civic portal is still accessible from the app and remains people-first internally.
     require(civic_portal, 'state.politicsSection = "people"', "people-first civic destination")
+    require(civic_portal, "‹ 市政トップへ", "glossary back destination")
     require(civic_portal, 'if (hash === "works") state.politicsSection = "works";', "legacy nearby route migration")
     forbid(civic_portal, 'hash === "works" || hash === "nearby"', "legacy nearby map destination")
     require(civic_portal, 'state.civicPortal', "civic data state")
 
     # Installed/offline app receives the same stabilized assets.
     for token in (
-        "mytown-civic-v37-people-nav",
+        "mytown-civic-v38-trust-ux",
         "p0-stability.css",
         "p0-stability.js",
         "data/community-events.json",

@@ -102,11 +102,29 @@
       const works = Array.isArray(state.civicPortal?.works) ? state.civicPortal.works : [];
       const members = Array.isArray(state.politics?.council?.members) ? state.politics.council.members : [];
       const memberSource = state.politics?.council?.membersSourceUrl || "";
+      const garbage = state.data?.garbage || null;
+      const population = state.data?.population || null;
 
       const extras = [
+        ...(garbage?.sourceUrl ? [{
+          id: "utility-garbage",
+          title: "ごみ・資源リサイクルの収集日",
+          summary: garbage.summary || "地域ごとの収集日と分別方法を確認できます。",
+          category: "ごみ",
+          sourceUrl: garbage.sourceUrl,
+          searchTerms: "ごみの出し方 捨て方 分別 収集日 燃えるごみ もやせるごみ 粗大ごみ",
+        }] : []),
+        ...(population?.sourceUrl ? [{
+          id: "utility-population",
+          title: "直方市の人口と世帯数",
+          summary: `${population.asOf || "最新公表時点"}の人口は${Number(population.total || 0).toLocaleString("ja-JP")}人、世帯数は${Number(population.households || 0).toLocaleString("ja-JP")}世帯です。`,
+          category: "その他",
+          sourceUrl: population.sourceUrl,
+          searchTerms: "人口 何人 世帯数",
+        }] : []),
         ...communityEvents.map((item, index) => ({
           ...item,
-          id: p0SearchId("event", item, index),
+          id: item.id || p0SearchId("event", item, index),
           title: item.title || "地域イベント",
           summary: item.summary || [item.when, item.location, item.money].filter(Boolean).join("｜") || "地域で公開されているイベント情報です。",
           category: "観光・イベント",
@@ -118,7 +136,7 @@
           id: p0SearchId("activity", item, index),
           title: item.title || item.name || "地域活動",
           summary: item.summary || item.description || item.note || "地域団体が公開している活動情報です。",
-          category: "その他",
+          category: "地域活動",
           sourceUrl: p0NormalizeSearchUrl(item),
         })),
         ...communityOrganizations.map((item, index) => ({
@@ -126,7 +144,7 @@
           id: p0SearchId("organization", item, index),
           title: item.name || item.title || "地域団体",
           summary: item.summary || item.description || item.activity || "直方で活動している団体の公開情報です。",
-          category: "その他",
+          category: "地域活動",
           sourceUrl: p0NormalizeSearchUrl(item),
         })),
         ...works.map((item, index) => ({
@@ -134,7 +152,7 @@
           id: p0SearchId("work", item, index),
           title: item.title || "工事情報",
           summary: item.note || [item.location, item.plannedPeriod].filter(Boolean).join("｜"),
-          category: "その他",
+          category: "工事・道路",
           sourceUrl: item.sourcePageUrl || item.sourcePdfUrl || "",
           published: item.bidDate || "",
         })),
@@ -227,6 +245,23 @@
       const active = typeof v2ActiveNav === "function" ? v2ActiveNav() : "home";
       button.setAttribute("aria-current", button.dataset.v2Nav === active ? "page" : "false");
     });
+    document.querySelectorAll(".filter-chip, [data-v4-event-filter], [data-v4-community-filter]").forEach((button) => {
+      button.setAttribute("aria-pressed", button.classList.contains("is-active") ? "true" : "false");
+    });
+  }
+
+  function p0EnhanceInstallHelp() {
+    const menu = document.querySelector(".v4-menu-sections") || document.querySelector(".v4-menu-grid, .v2-menu-grid");
+    if (!menu || document.querySelector(".p0-install-help")) return;
+    const standalone = window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
+    if (standalone) return;
+    const isAppleMobile = /iPhone|iPad|iPod/.test(navigator.userAgent || "");
+    const details = document.createElement("details");
+    details.className = "p0-install-help card info-card";
+    details.innerHTML = isAppleMobile
+      ? "<summary>ホーム画面に追加する方法</summary><p>Safariでこのページを開き、共有ボタンから『ホーム画面に追加』を選びます。次からアプリのようにすぐ開けます。</p>"
+      : "<summary>ホーム画面に追加する方法</summary><p>ブラウザのメニューから『アプリをインストール』または『ホーム画面に追加』を選びます。</p>";
+    menu.insertAdjacentElement("afterend", details);
   }
 
   function p0UpdateCouncilLabels() {
@@ -244,6 +279,7 @@
     p0FixRemovedHomeLabels();
     p0EnhanceSettings();
     p0EnhanceAccessibility();
+    p0EnhanceInstallHelp();
     p0UpdateCouncilLabels();
   }
 

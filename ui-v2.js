@@ -32,7 +32,8 @@ function v2LoadPreferences() {
     const saved = JSON.parse(localStorage.getItem(V2_PREFERENCES_KEY) || "{}");
     const civicDigest = saved.civicDigest === "off" ? "off" : "weekly";
     const garbageArea = ["east", "west"].includes(saved.garbageArea) ? saved.garbageArea : "";
-    return { ...V2_DEFAULT_PREFERENCES, ...saved, garbageArea, civicDigest, interests: [] };
+    const interests = Array.isArray(saved.interests) ? saved.interests.filter((item) => V2_INTERESTS.includes(item)) : [];
+    return { ...V2_DEFAULT_PREFERENCES, ...saved, garbageArea, civicDigest, interests };
   } catch (error) {
     console.warn("Preference load failed", error);
     return { ...V2_DEFAULT_PREFERENCES };
@@ -63,21 +64,64 @@ function v2MatchesPreferences(item) {
 
 function v2FindServices() {
   return (state.data.featured || []).filter((item) => {
-    const hasVerifiedConditions = (Array.isArray(item.eligibility) && item.eligibility.length > 0) || item.eligibilitySummary || item.applicationConditions;
-    return item.sourceUrl && hasVerifiedConditions;
+    const text = `${item.title || ""} ${item.summary || ""}`;
+    const hasVerifiedConditions = (Array.isArray(item.eligibility) && item.eligibility.length > 0)
+      || item.eligibilitySummary
+      || item.applicationConditions
+      || /対象|在住|在勤|予定者/.test(text);
+    const isService = /補助|給付|助成|手続|健診|健康診断|就学|相談|支援/.test(text);
+    return item.sourceUrl && hasVerifiedConditions && isService;
   });
 }
 
-function v2FindDeadlines() {
+function v2TokyoDateKey(value = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(value);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function v2DeadlineItems() {
   if (typeof combinedSearchItems !== "function") return [];
-  return combinedSearchItems().filter((item) => /募集|申込|申し込み|応募|意見|パブリックコメント|受付|締切|期限/.test(`${item.title || ""} ${item.summary || ""}`));
+  return combinedSearchItems()
+    .filter((item) => /^\d{4}-\d{2}-\d{2}$/.test(item.applicationDeadline || ""))
+    .sort((a, b) => String(a.applicationDeadline).localeCompare(String(b.applicationDeadline)));
+}
+
+function v2DeadlineState(item, today = v2TokyoDateKey()) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(item?.applicationDeadline || "")) return "unknown";
+  if (item.applicationDeadline < today) return "closed";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(item.applicationStarts || "") && item.applicationStarts > today) return "upcoming";
+  return "open";
+}
+
+function v2DeadlineLabel(item) {
+  const stateName = v2DeadlineState(item);
+  const [, , month, day] = String(item.applicationDeadline || "").match(/^(\d{4})-(\d{2})-(\d{2})$/) || [];
+  const dateLabel = month ? `${Number(month)}月${Number(day)}日` : "期限未確認";
+  if (stateName === "closed") return `受付終了（申込期限 ${dateLabel}）`;
+  if (stateName === "upcoming") return `受付開始前（申込期限 ${dateLabel}）`;
+  return `申込締切 ${dateLabel}`;
+}
+
+function v2DeadlineCardItem(item) {
+  return { ...item, statusLabel: v2DeadlineLabel(item) };
+}
+
+function v2FindDeadlines() {
+  return v2DeadlineItems().filter((item) => v2DeadlineState(item) !== "closed").map(v2DeadlineCardItem);
 }
 
 function v2FindLocationItem() {
   const items = (state.data.featured || []).filter((item) => item.location);
   const district = (state.v2Preferences?.district || "").trim();
   if (district) {
-    const districtMatch = items.find((item) => `${item.location || ""} ${item.title || ""}`.includes(district));
+    const districtNeedle = district.replace(/(?:周辺|付近)$/, "") || district;
+    const districtMatch = items.find((item) => `${item.location || ""} ${item.title || ""}`.includes(districtNeedle));
     if (districtMatch) return districtMatch;
   }
   return items.find(v2MatchesPreferences) || items[0] || null;
@@ -211,22 +255,46 @@ function v2SearchHubView() {
   const q = normalizeQuery(state.discoverQuery);
   const category = state.discoverCategory;
   const hasSearch = Boolean(q || category);
-  const results = hasSearch ? all.filter((item) => {
-    const text = normalizeQuery(`${item.title} ${item.summary || ""} ${item.category || ""}`);
-    return (!q || q.split(/\s+/).every((token) => text.includes(token))) && (!category || (item.category || classifyTitle(item.title)) === category);
-  }) : [];
+  const aliasGroups = [
+    ["ごみ", "捨て方", "出し方", "収集", "分別", "粗大ごみ", "燃えるごみ", "もやせるごみ"],
+    ["バス", "交通", "路線", "時刻表", "バス停"],
+    ["子ども", "こども", "子育て", "出産", "生まれ", "保育", "児童"],
+    ["学校", "教育", "就学", "入学", "給食"],
+    ["工事", "道路", "通行", "工期"],
+  ];
+  const matchesQuery = (item) => {
+    const text = normalizeQuery(`${item.title} ${item.summary || ""} ${item.category || ""} ${item.searchTerms || ""}`);
+    if (!q || text.includes(q)) return true;
+    const aliasMatch = aliasGroups.some((group) => group.some((term) => q.includes(normalizeQuery(term))) && group.some((term) => text.includes(normalizeQuery(term))));
+    if (aliasMatch) return true;
+    const tokens = q.split(/[\s、。・,]+/).filter((token) => token.length > 1 && !/^(の|を|は|が|に|で|へ|と)$/.test(token));
+    return tokens.length > 0 && tokens.every((token) => text.includes(token));
+  };
+  const preferenceScore = (item) => {
+    const district = String(state.v2Preferences?.district || "").trim();
+    const districtNeedle = district.replace(/(?:周辺|付近)$/, "") || district;
+    const districtMatch = districtNeedle && `${item.title || ""} ${item.summary || ""} ${item.location || ""}`.includes(districtNeedle) ? 2 : 0;
+    return (v2MatchesPreferences(item) ? 4 : 0) + districtMatch;
+  };
+  const results = hasSearch ? all
+    .filter((item) => matchesQuery(item) && (!category || (item.category || classifyTitle(item.title)) === category))
+    .sort((a, b) => preferenceScore(b) - preferenceScore(a) || String(b.published || "").localeCompare(String(a.published || ""))) : [];
   const noResults = state.discoverQuery
-    ? `「${state.discoverQuery}」に合う情報は見つかりませんでした。キーワードを1語にするか、分類を「すべて」に戻してください。`
+    ? `「${state.discoverQuery}」に関する情報は、まだ取り込めていません。直方市に情報がない、という意味ではありません。`
     : "この分類に合う情報は見つかりませんでした。分類を「すべて」に戻してください。";
-  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">さがす</p><h1>直方の情報を探す</h1><p>制度名や担当課が分からなくても、「バス」「ごみ」のような言葉で探せます。</p></div></div>${syncBanner()}<form class="search-box v2-search-box" id="discover-form"><span aria-hidden="true">⌕</span><input id="discover-search" type="search" value="${esc(state.discoverQuery)}" placeholder="例：バス、学校、ごみ" aria-label="直方の情報を検索"><button>探す</button></form>${hasSearch ? `<div class="filter-row" aria-label="カテゴリで絞る"><button class="filter-chip ${!category ? "is-active" : ""}" type="button" data-category-filter="">すべて</button>${discoverCategories.map((x) => `<button class="filter-chip ${category === x ? "is-active" : ""}" type="button" data-category-filter="${esc(x)}">${esc(x)}</button>`).join("")}</div><div class="section"><div class="section-head"><h2>検索結果</h2><p>${results.length}件</p></div><div class="stack">${results.length ? results.slice(0, 30).map(realCard).join("") : emptyCard(noResults)}</div></div>` : v2SearchIntro()}</section>`;
+  return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">さがす</p><h1>直方の情報を探す</h1><p>制度名や担当課が分からなくても、「バス」「ごみ」のような言葉で探せます。</p></div></div>${syncBanner()}<form class="search-box v2-search-box" id="discover-form"><span aria-hidden="true">⌕</span><input id="discover-search" type="search" value="${esc(state.discoverQuery)}" placeholder="例：バス、学校、ごみ" aria-label="直方の情報を検索"><button>探す</button></form>${hasSearch ? `<div class="filter-row" aria-label="カテゴリで絞る"><button class="filter-chip ${!category ? "is-active" : ""}" type="button" data-category-filter="" aria-pressed="${!category}">すべて</button>${discoverCategories.map((x) => `<button class="filter-chip ${category === x ? "is-active" : ""}" type="button" data-category-filter="${esc(x)}" aria-pressed="${category === x}">${esc(x)}</button>`).join("")}</div><div class="section"><div class="section-head"><h2>検索結果</h2><p>${results.length}件</p></div><div class="stack">${results.length ? results.slice(0, 30).map(realCard).join("") : `${emptyCard(noResults)}<a class="v2-wide-button" href="https://www.city.nogata.fukuoka.jp/" target="_blank" rel="noopener noreferrer">直方市のサイトで確認する ↗</a>`}</div></div>` : v2SearchIntro()}</section>`;
 }
 
 function v2CollectionView(type) {
   const isServices = type === "services";
   const items = isServices ? v2FindServices() : v2FindDeadlines();
+  const closedItems = isServices ? [] : v2DeadlineItems().filter((item) => v2DeadlineState(item) === "closed").map(v2DeadlineCardItem);
   const title = isServices ? "制度・手続きを探す" : "締切のある情報";
-  const sub = isServices ? "補助・給付・暮らしの手続きを掲載しています。利用できる条件は、直方市のページで最終確認してください。" : "募集・申し込み・意見募集に関する情報です。受付中かどうかと期限は、直方市のページで最終確認してください。";
-  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-v2-action="back-route">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">暮らしから探す</p><h1>${title}</h1><p>${sub}</p></div></div>${syncBanner()}<div class="section"><div class="section-head"><h2>掲載中の情報</h2><p>${items.length}件</p></div><div class="stack">${items.length ? items.slice(0, 30).map(realCard).join("") : emptyCard(isServices ? "現在、対象条件まで確認できる制度情報はありません。ほかの言葉でも検索できます。" : "現在、募集・申し込み中の情報は見つかりませんでした。")}</div></div><button class="v2-wide-button" type="button" data-v2-nav="search">別の言葉で探す →</button></section>`;
+  const sub = isServices ? "対象条件まで確認できた情報だけを掲載します。該当するかどうかは、直方市のページで最終確認してください。" : "受付前・受付中と、終了した募集を分けて表示します。";
+  const serviceEmpty = `<div class="card info-card"><span class="pill">情報を追加中</span><h2>条件まで確認できる制度情報を準備しています</h2><p>直方市に制度がない、という意味ではありません。現在は、検索または直方市のページから確認してください。</p><div class="v2-query-chips"><button type="button" data-v2-query="子育て">子育て</button><button type="button" data-v2-query="学校">学校</button><button type="button" data-v2-query="ごみ">ごみ</button><button type="button" data-v2-query="高齢者">高齢者</button></div><a class="source-link" href="https://www.city.nogata.fukuoka.jp/" target="_blank" rel="noopener noreferrer">直方市のサイトで確認する <span aria-hidden="true">↗</span></a></div>`;
+  const activeHeading = isServices ? "条件を確認できた情報" : "受付前・受付中";
+  const closedSection = closedItems.length ? `<details class="v2-closed-deadlines"><summary>受付が終了した情報 ${closedItems.length}件</summary><div class="stack">${closedItems.map(realCard).join("")}</div></details>` : "";
+  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-v2-action="back-route">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">暮らしから探す</p><h1>${title}</h1><p>${sub}</p></div></div>${syncBanner()}<div class="section"><div class="section-head"><h2>${activeHeading}</h2><p>${items.length}件</p></div><div class="stack">${items.length ? items.slice(0, 30).map(realCard).join("") : isServices ? serviceEmpty : emptyCard("現在、受付前・受付中の情報はありません。")}</div></div>${closedSection}<button class="v2-wide-button" type="button" data-v2-nav="search">別の言葉で探す →</button></section>`;
 }
 
 function v2NotificationGroups() {
@@ -267,7 +335,7 @@ function v2MenuView() {
 
 function v2SettingsView() {
   const preferences = state.v2Preferences;
-  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-action="back">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">設定</p><h1>地域と表示順を設定</h1><p>会員登録は不要です。設定は、このブラウザだけに保存されます。</p></div></div><form id="v2-preferences-form" class="v2-preferences-form"><fieldset><legend>ごみ収集エリア</legend><label class="v2-field"><span>お住まいの区域</span><select name="garbageArea"><option value="">選択してください</option><option value="east" ${preferences.garbageArea === "east" ? "selected" : ""}>市東部（月・木）</option><option value="west" ${preferences.garbageArea === "west" ? "selected" : ""}>市西部（火・金）</option></select><small>公式日程は、遠賀川・彦山川の東西で分かれています。感田や下境などは町名だけでは決まらないため、自宅が川のどちら側かで選んでください。</small></label></fieldset><fieldset><legend>よく見る地域（任意）</legend><label class="v2-field"><span>町名・駅名・よく行く場所</span><input type="text" name="district" value="${esc(preferences.district)}" placeholder="例：植木、感田、直方駅周辺" maxlength="30"><small>入力した地名が掲載情報に含まれるとき、市政ページの工事情報に表示します。位置情報は使いません。</small></label></fieldset><fieldset><legend>表示の設定</legend><label class="v2-check-row"><input type="checkbox" name="lifeNotifications" ${preferences.lifeNotifications ? "checked" : ""}><span><strong>「新着」で暮らしの情報を先に表示</strong><small>オフにすると、「市の動き」が上になります。</small></span></label><label class="v2-field"><span>ホームに市の動きを表示</span><select name="civicDigest"><option value="weekly" ${preferences.civicDigest !== "off" ? "selected" : ""}>表示する</option><option value="off" ${preferences.civicDigest === "off" ? "selected" : ""}>表示しない</option></select><small>この設定はホームの表示だけを変えます。スマホには通知しません。</small></label></fieldset><button class="primary-button v2-save-button" type="submit">設定を保存</button></form><div class="card info-card v2-about-card"><h2>このアプリについて</h2><p>のおがた日和は試験公開中の非公式アプリです。直方市の公式アプリではありません。市の公開情報を約6時間ごとに確認します。</p></div></section>`;
+  return `<section class="page v2-page v2-inner-page"><button class="back-button" type="button" data-v2-action="back-route">‹ 戻る</button><div class="v2-inner-hero"><div><p class="eyebrow">設定</p><h1>地域と表示順を設定</h1><p>会員登録は不要です。設定は、このブラウザだけに保存されます。</p></div></div><form id="v2-preferences-form" class="v2-preferences-form"><fieldset><legend>ごみ収集エリア</legend><label class="v2-field"><span>お住まいの区域</span><select name="garbageArea"><option value="">選択してください</option><option value="east" ${preferences.garbageArea === "east" ? "selected" : ""}>市東部（月・木）</option><option value="west" ${preferences.garbageArea === "west" ? "selected" : ""}>市西部（火・金）</option></select><small>公式日程は、遠賀川・彦山川の東西で分かれています。感田や下境などは町名だけでは決まらないため、自宅が川のどちら側かで選んでください。</small></label></fieldset><fieldset><legend>よく見る地域（任意）</legend><label class="v2-field"><span>町名・駅名・よく行く場所</span><input type="text" name="district" value="${esc(preferences.district)}" placeholder="例：植木、感田、直方駅周辺" maxlength="30"><small>入力した地名が掲載情報に含まれるとき、市政ページの工事情報と検索結果で優先します。位置情報は使いません。</small></label></fieldset><fieldset><legend>表示の設定</legend><label class="v2-check-row"><input type="checkbox" name="lifeNotifications" ${preferences.lifeNotifications ? "checked" : ""}><span><strong>「新着」で暮らしの情報を先に表示</strong><small>オフにすると、「市の動き」が上になります。</small></span></label><label class="v2-field"><span>ホームに市の動きを表示</span><select name="civicDigest"><option value="weekly" ${preferences.civicDigest !== "off" ? "selected" : ""}>表示する</option><option value="off" ${preferences.civicDigest === "off" ? "selected" : ""}>表示しない</option></select><small>この設定はホームの表示だけを変えます。スマホには通知しません。</small></label></fieldset><button class="primary-button v2-save-button" type="submit">設定を保存</button></form><div class="card info-card v2-about-card"><h2>このアプリについて</h2><p>のおがた日和は試験公開中の非公式アプリです。直方市の公式アプリではありません。市の公開情報を約6時間ごとに確認します。</p></div></section>`;
 }
 
 settingsView = v2SettingsView;
@@ -346,9 +414,9 @@ function v2HandleNav(nav) {
 
 function v2ActiveNav() {
   if (state.v2Page === "notifications") return "notifications";
-  if (state.tab === "politics" || state.view === "money") return "civic";
+  if (state.tab === "politics" || state.view === "money" || state.v2Page === "meeting") return "civic";
   if (state.v2Page === "menu" || state.view === "settings") return "menu";
-  if (state.tab === "discover") return "search";
+  if (state.tab === "discover" || ["services", "deadline", "events"].includes(state.v2Page)) return "search";
   return "home";
 }
 

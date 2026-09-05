@@ -2,7 +2,7 @@
  * のおがた日和 — イベントの保存・確認と、写真付き「まちレポ」導線。
  *
  * このファイルは静的配信で安全に動く範囲だけを実装する。
- * - イベント情報提供は、URLだけを公開GitHub Issueへ渡す試験受付。
+ * - イベント情報提供は、公開GitHub IssueへURLを渡す試験受付。
  * - 締切通知は、アプリを開いた時の案内と .ics カレンダー通知。
  * - 写真と位置情報はこのアプリのサーバーへ送信・保存しない。
  * - 市役所や議会への送信先は、確認済みの公式窓口だけを案内する。
@@ -202,6 +202,7 @@
       money: String(event.money || ""),
       applicationDeadline: String(event.applicationDeadline || ""),
       statusLabel: String(event.statusLabel || event.status || ""),
+      occurrences: Array.isArray(event.occurrences) ? event.occurrences.filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)) : [],
     };
   }
 
@@ -313,14 +314,21 @@
   function caReminderFor(item = {}) {
     const today = caDayNumber(caTokyoDateKey());
     const deadline = caDayNumber(item.applicationDeadline);
-    const start = caDayNumber(item.startDate);
+    const occurrenceKeys = Array.isArray(item.occurrences) ? item.occurrences.filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)).sort() : [];
+    const nextOccurrence = occurrenceKeys.find((value) => caDayNumber(value) >= today);
+    const startKey = nextOccurrence || item.startDate;
+    const start = caDayNumber(startKey);
     if (today === null) return { tone: "neutral", label: "日程を確認", priority: 0 };
     if (deadline !== null) {
       const days = deadline - today;
-      if (days < 0) return { tone: "muted", label: `申込期限を${Math.abs(days)}日過ぎています`, priority: 1 };
       if (days === 0) return { tone: "danger", label: "申込期限は今日", priority: 100 };
       if (days <= 3) return { tone: "danger", label: `申込締切まであと${days}日`, priority: 90 - days };
       if (days <= 7) return { tone: "warning", label: `申込締切まであと${days}日`, priority: 70 - days };
+      if (days < 0 && start !== null && start >= today) {
+        const untilEvent = start - today;
+        const eventLabel = untilEvent === 0 ? "今日開催" : untilEvent === 1 ? "明日開催" : `${caDateLabel(startKey)}開催`;
+        return { tone: "muted", label: `受付終了・${eventLabel}`, priority: untilEvent <= 1 ? 50 : 10 };
+      }
     }
     if (start !== null) {
       const days = start - today;
@@ -345,20 +353,30 @@
   function caRelatedEvents(saved) {
     const now = caTokyoDateKey();
     const savedTags = new Set(saved.tags || []);
-    return caAllEvents()
+    const ranked = caAllEvents()
       .filter((event) => caEventId(event) !== saved.id)
       .filter((event) => !event.endDate || event.endDate >= now)
       .map((event) => {
         const tagScore = (event.tags || []).filter((tag) => savedTags.has(tag)).length * 4;
         const categoryScore = event.category && event.category === saved.category ? 3 : 0;
-        const publisherScore = event.publisherName && event.publisherName === saved.publisherName ? 2 : 0;
         const locationScore = event.location && saved.location && event.location.includes(saved.location) ? 2 : 0;
-        return { event, score: tagScore + categoryScore + publisherScore + locationScore };
+        return { event, score: tagScore + categoryScore + locationScore };
       })
       .filter((candidate) => candidate.score > 0)
-      .sort((a, b) => b.score - a.score || String(a.event.startDate || "").localeCompare(String(b.event.startDate || "")))
-      .slice(0, 3)
-      .map((candidate) => candidate.event);
+      .sort((a, b) => b.score - a.score || String(a.event.startDate || "").localeCompare(String(b.event.startDate || "")));
+    const selected = [];
+    const usedPublishers = new Set();
+    ranked.forEach((candidate) => {
+      const publisher = candidate.event.publisherName || candidate.event.organizerName || candidate.event.sourceUrl || "";
+      if (selected.length < 3 && !usedPublishers.has(publisher)) {
+        selected.push(candidate.event);
+        usedPublishers.add(publisher);
+      }
+    });
+    ranked.forEach((candidate) => {
+      if (selected.length < 3 && !selected.includes(candidate.event)) selected.push(candidate.event);
+    });
+    return selected.slice(0, 3);
   }
 
   function caEnsureDialog() {
@@ -422,12 +440,12 @@
   }
 
   function caEventTipForm(prefill = "") {
-    return `<div class="ca-intro-card"><span class="ca-intro-icon" aria-hidden="true">🎪</span><div><strong>URLだけで大丈夫です</strong><p>主催者の公式ページや公開SNSのURLを送ってください。日時・場所などは、公開情報を確認してから掲載候補にします。</p></div></div>
+    return `<div class="ca-intro-card"><span class="ca-intro-icon" aria-hidden="true">🎪</span><div><strong>現在はGitHubで試験受付中です</strong><p>主催者の公式ページや公開SNSのURLを送れます。日時・場所などは、公開情報を確認してから掲載候補にします。</p></div></div>
       <form id="ca-event-tip-form" class="ca-form">
         <label><span>イベントのURL</span><input name="eventUrl" type="url" inputmode="url" autocomplete="url" placeholder="https://…" value="${caEscape(prefill)}" required></label>
-        <button class="ca-primary-button" type="submit">送信画面へ進む</button>
+        <button class="ca-primary-button" type="submit">GitHubで送る</button>
       </form>
-      <div class="ca-note"><strong>現在は試験受付です</strong><p>送信先は公開GitHub Issueです。GitHubへのログインが必要で、送ったURLは公開されます。個人情報や非公開の写真は送らないでください。</p></div>
+      <div class="ca-note"><strong>GitHubアカウントが必要です</strong><p>送信先は公開GitHub Issueです。送ったURLも公開されます。個人情報や非公開の写真は送らないでください。</p></div>
       <button class="ca-secondary-button" type="button" data-ca-save-tip>この端末に下書き保存</button>`;
   }
 
@@ -491,10 +509,53 @@
     return String(dateKey || "").replaceAll("-", "");
   }
 
+  function caIcsTimeRange(value = "") {
+    const match = /(\d{1,2})[:時](\d{2})?\s*(?:〜|～|-|－|から)\s*(\d{1,2})[:時](\d{2})?/.exec(String(value));
+    if (!match) return null;
+    const startHour = Number(match[1]);
+    const startMinute = Number(match[2] || 0);
+    const endHour = Number(match[3]);
+    const endMinute = Number(match[4] || 0);
+    if (startHour > 23 || endHour > 23 || startMinute > 59 || endMinute > 59) return null;
+    return {
+      start: `${String(startHour).padStart(2, "0")}${String(startMinute).padStart(2, "0")}00`,
+      end: `${String(endHour).padStart(2, "0")}${String(endMinute).padStart(2, "0")}00`,
+    };
+  }
+
+  function caIcsEventBlock({ item, snapshot, dateKey, endDate, uid, nowStamp, description }) {
+    const timeRange = caIcsTimeRange(snapshot.when);
+    const dateLines = timeRange
+      ? [`DTSTART;TZID=Asia/Tokyo:${caIcsDate(dateKey)}T${timeRange.start}`, `DTEND;TZID=Asia/Tokyo:${caIcsDate(dateKey)}T${timeRange.end}`]
+      : [`DTSTART;VALUE=DATE:${caIcsDate(dateKey)}`, `DTEND;VALUE=DATE:${caIcsDate(caDateOffset(endDate || dateKey, 1))}`];
+    return [
+      "BEGIN:VEVENT",
+      `UID:${uid}@mytown-nogata`,
+      `DTSTAMP:${nowStamp}`,
+      ...dateLines,
+      `SUMMARY:${caIcsEscape(item.title || "直方のイベント")}`,
+      snapshot.location ? `LOCATION:${caIcsEscape(snapshot.location)}` : "",
+      description ? `DESCRIPTION:${caIcsEscape(description)}` : "",
+      item.sourceUrl ? `URL:${caIcsEscape(item.sourceUrl)}` : "",
+      "BEGIN:VALARM",
+      "TRIGGER:-P1D",
+      "ACTION:DISPLAY",
+      `DESCRIPTION:${caIcsEscape(`明日は「${item.title || "イベント"}」です。変更がないか掲載元を確認してください。`)}`,
+      "END:VALARM",
+      "END:VEVENT",
+    ].filter(Boolean);
+  }
+
   function caDownloadCalendar(item) {
     const snapshot = item.latestSnapshot || item.lastSnapshot || item;
+    const today = caTokyoDateKey();
+    const allOccurrenceDates = Array.isArray(snapshot.occurrences) && snapshot.occurrences.length
+      ? snapshot.occurrences.filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)).sort()
+      : Array.isArray(item.occurrences) ? item.occurrences.filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)).sort() : [];
+    const occurrenceDates = allOccurrenceDates.filter((value) => value >= today);
     const startDate = snapshot.startDate || item.startDate;
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate || "")) {
+    const dates = allOccurrenceDates.length ? occurrenceDates : (/^\d{4}-\d{2}-\d{2}$/.test(startDate || "") ? [startDate] : []);
+    if (!dates.length) {
       caToast("開催日を確認できないため、カレンダーを作れませんでした");
       return;
     }
@@ -513,24 +574,14 @@
       "PRODID:-//MYTOWN Nogata//Event Reminder//JA",
       "CALSCALE:GREGORIAN",
       "METHOD:PUBLISH",
-      "BEGIN:VEVENT",
-      `UID:${uidBase}@mytown-nogata`,
-      `DTSTAMP:${nowStamp}`,
-      `DTSTART;VALUE=DATE:${caIcsDate(startDate)}`,
-      `DTEND;VALUE=DATE:${caIcsDate(caDateOffset(endDate, 1))}`,
-      `SUMMARY:${caIcsEscape(item.title || "直方のイベント")}`,
-      snapshot.location ? `LOCATION:${caIcsEscape(snapshot.location)}` : "",
-      description ? `DESCRIPTION:${caIcsEscape(description)}` : "",
-      item.sourceUrl ? `URL:${caIcsEscape(item.sourceUrl)}` : "",
-      "BEGIN:VALARM",
-      "TRIGGER:-P1D",
-      "ACTION:DISPLAY",
-      `DESCRIPTION:${caIcsEscape(`明日は「${item.title || "イベント"}」です。変更がないか掲載元を確認してください。`)}`,
-      "END:VALARM",
-      "END:VEVENT",
     ].filter(Boolean);
 
-    if (/^\d{4}-\d{2}-\d{2}$/.test(snapshot.applicationDeadline || "")) {
+    dates.forEach((dateKey, index) => {
+      const eventEnd = occurrenceDates.length ? dateKey : endDate;
+      blocks.push(...caIcsEventBlock({ item, snapshot, dateKey, endDate: eventEnd, uid: `${uidBase}-${index + 1}`, nowStamp, description }));
+    });
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(snapshot.applicationDeadline || "") && snapshot.applicationDeadline >= today) {
       blocks.push(
         "BEGIN:VEVENT",
         `UID:${uidBase}-deadline@mytown-nogata`,
@@ -553,12 +604,12 @@
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = `nogata-event-${startDate}.ics`;
+    anchor.download = `nogata-event-${dates[0]}.ics`;
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    caToast("カレンダー用ファイルを作成しました");
+    caToast(dates.length > 1 ? `${dates.length}回分のカレンダーを作成しました` : "カレンダー用ファイルを作成しました");
   }
 
   function caReportForm() {
@@ -567,7 +618,7 @@
         <label><span>何が気になりますか？</span><select name="category" required><option value="park">公園・遊具・ベンチ・街路樹</option><option value="road">道路の穴・落下物・危険箇所</option><option value="publicFacility">公共施設・案内表示・その他の設備</option><option value="cityOpinion">市政への提案・改善アイデア</option></select></label>
         <label><span>写真（任意）</span><input id="ca-report-photo" name="photo" type="file" accept="image/*" capture="environment"><small>写真はこの端末内で確認するだけです。MYTOWNのサーバーには送信・保存しません。</small></label>
         <div id="ca-report-photo-preview" class="ca-photo-preview" hidden></div>
-        <label><span>場所の目印</span><input name="locationText" type="text" autocomplete="street-address" placeholder="例：○○公園の入口近く"></label>
+        <label><span>場所の目印</span><input name="locationText" type="text" autocomplete="street-address" placeholder="例：○○公園の入口近く"><small>場所の入力か「現在地を使う」の、どちらか一方が必要です。</small></label>
         <div class="ca-location-row"><button class="ca-secondary-button" type="button" data-ca-get-location>現在地を使う</button><span id="ca-location-status">位置情報は未使用です</span></div>
         <label><span>状況</span><textarea name="description" rows="5" maxlength="700" placeholder="例：ベンチの板が外れ、釘のような部分が出ています。子どもが触ると危ないです。" required></textarea></label>
         <label class="ca-check-row"><input name="danger" type="checkbox"><span>けがにつながる危険がある</span></label>
@@ -610,16 +661,19 @@
     const route = caSelectedRoute(category);
     const council = caSelectedRoute("council");
     const secondary = route.secondaryUrl ? `<a class="ca-secondary-button" href="${caEscape(route.secondaryUrl)}" target="_blank" rel="noopener noreferrer">直方市の担当窓口も開く ↗</a>` : "";
-    return `<div class="ca-route-summary"><span aria-hidden="true">📨</span><div><small>おすすめの届け先</small><h3>${caEscape(route.office)}</h3><p>${caEscape(route.note || "")}</p></div></div>
+    const danger = /【危険性】けがにつながる危険がある/.test(reportText)
+      ? `<div class="ca-emergency-note"><strong>今すぐ人がけがをしそうな場合</strong><p>この画面から自動通報はされません。事故・事件は110番、火災・救急は119番へ連絡してください。</p></div>`
+      : "";
+    return `${danger}<div class="ca-route-summary"><span aria-hidden="true">📨</span><div><small>おすすめの届け先</small><h3>${caEscape(route.office)}</h3><p>${caEscape(route.note || "")}</p></div></div>
       <label class="ca-report-copy"><span>そのまま使える文面</span><textarea id="ca-report-output" rows="10" readonly>${caEscape(reportText)}</textarea></label>
       <div class="ca-result-actions">
         <button class="ca-primary-button" type="button" data-ca-copy-report>文面をコピー</button>
-        <button class="ca-secondary-button" type="button" data-ca-share-report>写真と文面を共有</button>
+        <button class="ca-secondary-button" type="button" data-ca-share-report>共有先を選ぶ</button>
         <a class="ca-primary-link" href="${caEscape(route.primaryUrl)}" target="_blank" rel="noopener noreferrer">公式の届け先を開く ↗</a>
         ${secondary}
         ${route.phone ? `<a class="ca-phone-link" href="tel:${caEscape(route.phone.replace(/[^#0-9+]/g, ""))}">電話 ${caEscape(route.phone)}</a>` : ""}
       </div>
-      <div class="ca-transfer-note"><strong>写真の扱い</strong><p>${route.photoTransfer === "mlit-line" ? "道路緊急ダイヤルの公式ページからLINE通報へ進むと、写真と位置情報を送れる案内があります。" : "直方市の確認済みフォームには、写真添付欄があることを確認できていません。端末の共有機能で写真を別途送れる場合がありますが、MYTOWNから公式フォームへ自動添付はしません。"}</p></div>
+      <div class="ca-transfer-note"><strong>写真と共有先</strong><p>${route.photoTransfer === "mlit-line" ? "道路緊急ダイヤルの公式ページからLINE通報へ進むと、写真と位置情報を送れる案内があります。" : "共有ボタンを押した後、送信先は自分で選びます。直方市の確認済みフォームには写真添付欄があることを確認できないため、MYTOWNから自動送信はしません。"}</p></div>
       <details class="ca-council-details"><summary>市議会へ正式に要望する方法も見る</summary><p>設備の修繕依頼は、まず管理担当へ知らせるのが直接的です。行政対応や制度そのものについて議会へ正式に要望する場合は、誰でも陳情を提出できます。</p><a href="${caEscape(council.primaryUrl)}" target="_blank" rel="noopener noreferrer">請願・陳情の公式案内 ↗</a><span>議会事務局 ${caEscape(council.phone || "")}</span></details>
       <button class="ca-text-button" type="button" data-ca-report-again>内容を直す</button>`;
   }
@@ -751,7 +805,10 @@
       const event = caFindEventForCard(card);
       if (!event) return;
       const saved = caIsSaved(event);
-      card.insertAdjacentHTML("beforeend", `<div class="ca-event-actions"><button type="button" data-ca-save-event-id="${caEscape(caEventId(event))}" class="${saved ? "is-saved" : ""}">${saved ? "✓ 保存済み" : "🔖 保存する"}</button><button type="button" data-ca-calendar-event-id="${caEscape(caEventId(event))}">カレンダー</button>${event.sourceUrl ? `<a href="${caEscape(event.sourceUrl)}" target="_blank" rel="noopener noreferrer">当日の変更を確認 ↗</a>` : ""}</div>`);
+      const saveAction = saved
+        ? '<button type="button" data-ca-open-saved class="is-saved">✓ 保存済みを確認</button>'
+        : `<button type="button" data-ca-save-event-id="${caEscape(caEventId(event))}">🔖 保存する</button>`;
+      card.insertAdjacentHTML("beforeend", `<div class="ca-event-actions">${saveAction}<button type="button" data-ca-calendar-event-id="${caEscape(caEventId(event))}">カレンダー</button>${event.sourceUrl ? `<a href="${caEscape(event.sourceUrl)}" target="_blank" rel="noopener noreferrer">当日の変更を確認 ↗</a>` : ""}</div>`);
       if (event.contentStatus === "needs_review" || (event.contentIssues || []).length) {
         card.insertAdjacentHTML("beforeend", `<p class="ca-card-quality-warning">⚠ 日時・料金・申込状況の一部を再確認中です。掲載元で最終確認してください。</p>`);
       }
@@ -759,8 +816,21 @@
 
     const contribute = page.querySelector(".v4-event-contribute");
     if (contribute) {
-      contribute.innerHTML = `<div><small>載っていないイベントがありますか？</small><h2>このイベントも載せて！</h2><p>主催者の公式ページや公開SNSのURLだけ送れます。内容を確認後、掲載候補にします。</p></div><form id="ca-event-tip-inline" class="ca-inline-tip-form"><input name="eventUrl" type="url" inputmode="url" placeholder="https://…" aria-label="イベントのURL" required><button type="submit">URLを送る</button></form><button class="ca-saved-inline-button" type="button" data-ca-open-saved>保存したイベントを見る</button><small class="ca-public-note">試験受付：送信画面は公開GitHub Issueです。個人情報は送らないでください。</small>`;
+      contribute.innerHTML = `<div><small>載っていないイベントがありますか？</small><h2>このイベントも載せて！</h2><p>現在はGitHubでの試験受付です。主催者の公式ページや公開SNSのURLを送れます。</p></div><form id="ca-event-tip-inline" class="ca-inline-tip-form"><input name="eventUrl" type="url" inputmode="url" placeholder="https://…" aria-label="イベントのURL" required><button type="submit">GitHubで送る</button></form><button class="ca-saved-inline-button" type="button" data-ca-open-saved>保存したイベントを見る</button><small class="ca-public-note">GitHubアカウントが必要です。送信したURLは公開されるため、個人情報は送らないでください。</small>`;
     }
+  }
+
+  function caEnhanceEventDetail() {
+    if (state.view !== "detail") return;
+    const item = caEventById(state.selectedId || "");
+    if (!item || !isCommunityEventItem(item)) return;
+    const layer = document.querySelector(".detail-layers .detail-layer");
+    if (!layer || layer.querySelector(".ca-event-actions")) return;
+    const saved = caIsSaved(item);
+    const saveAction = saved
+      ? '<button type="button" data-ca-open-saved class="is-saved">✓ 保存済みを確認</button>'
+      : `<button type="button" data-ca-save-event-id="${caEscape(caEventId(item))}">🔖 保存する</button>`;
+    layer.insertAdjacentHTML("beforeend", `<div class="ca-event-actions">${saveAction}<button type="button" data-ca-calendar-event-id="${caEscape(caEventId(item))}">カレンダーに追加</button><button type="button" data-v2-action="events">イベント一覧を見る</button></div>`);
   }
 
   function caHomeSavedMarkup(summary) {
@@ -775,7 +845,7 @@
   }
 
   function caHomeToolsMarkup() {
-    return `<section class="ca-home-tools" aria-labelledby="ca-home-tools-title"><div><small>直方の情報を、みんなで見つける</small><h2 id="ca-home-tools-title">載せる・知らせる</h2></div><div><button type="button" data-ca-open-event-tip><span aria-hidden="true">🎪</span><b>このイベントも載せて！</b><small>URLだけ送る</small></button><button type="button" data-ca-open-report><span aria-hidden="true">📷</span><b>まちの気になる場所</b><small>写真・場所・状況を整理</small></button></div></section>`;
+    return `<section class="ca-home-tools" aria-labelledby="ca-home-tools-title"><div><small>直方の情報を、みんなで見つける</small><h2 id="ca-home-tools-title">載せる・知らせる</h2></div><div><button type="button" data-ca-open-event-tip><span aria-hidden="true">🎪</span><b>このイベントも載せて！</b><small>GitHubで提案</small></button><button type="button" data-ca-open-report><span aria-hidden="true">📷</span><b>まちの気になる場所</b><small>写真・場所・状況を整理</small></button></div></section>`;
   }
 
   function caEnhanceHome() {
@@ -802,6 +872,7 @@
     caSyncSavedEvents();
     caEnhanceHome();
     caEnhanceEventsPage();
+    caEnhanceEventDetail();
     caEnhanceNearby();
   }
 
@@ -979,6 +1050,12 @@
     if (event.target.id === "ca-report-form") {
       event.preventDefault();
       const formData = new FormData(event.target);
+      const locationText = String(formData.get("locationText") || "").trim();
+      if (!locationText && !caReportCoordinates) {
+        caToast("場所の目印を入力するか、現在地を使ってください");
+        event.target.querySelector('[name="locationText"]')?.focus();
+        return;
+      }
       const category = String(formData.get("category") || "publicFacility");
       const route = caSelectedRoute(category);
       const reportText = caReportText(formData, route);

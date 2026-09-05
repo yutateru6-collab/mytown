@@ -88,8 +88,8 @@ jobs:
           for attempt in {1..40}; do
             cache_bust="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${attempt}"
             html="$(curl --fail --silent --show-error --retry 2 --retry-all-errors "${DEPLOYED_URL}?deployQa=${cache_bust}" || true)"
-            civic="$(curl --fail --silent --show-error --retry 2 --retry-all-errors "${DEPLOYED_URL}civic-actions.js?v=2&deployQa=${cache_bust}" || true)"
-            if grep -q 'civic-actions.js?v=2' <<<"${html}" && grep -q 'p0-stability.js?v=2' <<<"${html}" && grep -q 'data-v2-nav="civic"' <<<"${html}" && grep -q 'このイベントも載せて' <<<"${civic}"; then
+            civic="$(curl --fail --silent --show-error --retry 2 --retry-all-errors "${DEPLOYED_URL}civic-actions.js?v=3&deployQa=${cache_bust}" || true)"
+            if grep -q 'civic-actions.js?v=3' <<<"${html}" && grep -q 'p0-stability.js?v=3' <<<"${html}" && grep -q 'data-v2-nav="civic"' <<<"${html}" && grep -q 'このイベントも載せて' <<<"${civic}"; then
               echo "The deployed P0 revision is available."
               exit 0
             fi

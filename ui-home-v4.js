@@ -358,6 +358,11 @@
   }
 
   function v4HomeEventItems(events) {
+    const preferred = events.slice().sort((a, b) => {
+      const preferenceDiff = (typeof v2MatchesPreferences === "function" && v2MatchesPreferences(b) ? 1 : 0)
+        - (typeof v2MatchesPreferences === "function" && v2MatchesPreferences(a) ? 1 : 0);
+      return preferenceDiff || (v4EventNextDate(a) || "9999-12-31").localeCompare(v4EventNextDate(b) || "9999-12-31");
+    });
     const selected = [];
     const selectedIds = new Set();
     const usedSources = new Set();
@@ -370,16 +375,20 @@
     };
     const today = v4TokyoDateKey();
     const tomorrow = v4DateKeyOffset(today, 1);
-    add(events.find((item) => v4EventHappensOn(item, today) || v4EventHappensOn(item, tomorrow)) || events[0]);
-    add(events.find((item) => v4IsCommunityEvent(item) && !usedSources.has(v4EventSourceKey(item))));
-    add(events.find((item) => !usedSources.has(v4EventSourceKey(item))));
-    events.forEach((item) => {
+    add(preferred.find((item) => v4EventHappensOn(item, today) || v4EventHappensOn(item, tomorrow)) || preferred[0]);
+    add(preferred.find((item) => v4IsCommunityEvent(item) && !usedSources.has(v4EventSourceKey(item))));
+    add(preferred.find((item) => !usedSources.has(v4EventSourceKey(item))));
+    preferred.forEach((item) => {
       if (selected.length < 3 && !usedSources.has(v4EventSourceKey(item))) add(item);
     });
-    events.forEach((item) => {
+    preferred.forEach((item) => {
       if (selected.length < 3) add(item);
     });
-    return selected.slice(0, 3).sort((a, b) => (v4EventNextDate(a) || "9999-12-31").localeCompare(v4EventNextDate(b) || "9999-12-31"));
+    return selected.slice(0, 3).sort((a, b) => {
+      const preferenceDiff = (typeof v2MatchesPreferences === "function" && v2MatchesPreferences(b) ? 1 : 0)
+        - (typeof v2MatchesPreferences === "function" && v2MatchesPreferences(a) ? 1 : 0);
+      return preferenceDiff || (v4EventNextDate(a) || "9999-12-31").localeCompare(v4EventNextDate(b) || "9999-12-31");
+    });
   }
 
   function v4EventReason(item) {
@@ -400,7 +409,7 @@
 
   function v4HomeEventCard(item) {
     const meta = [item.when ? v4Short(item.when, 25) : "", item.location ? v4Short(item.location, 24) : ""].filter(Boolean).join("｜");
-    return `<button type="button" class="v4-home-event-card" data-v2-action="events">
+    return `<button type="button" class="v4-home-event-card" data-v2-detail-id="${esc(item.id)}" data-v2-detail-section="what">
       <span class="v4-home-event-date">${esc(v4EventReason(item))}</span>
       <span class="v4-home-event-main"><strong>${esc(v4Short(item.title || "イベント情報", 42))}</strong>${meta ? `<small>${esc(meta)}</small>` : ""}</span>
       <span class="v4-home-event-source">${esc(v4EventSourceLabel(item))}</span>
@@ -421,8 +430,9 @@
   function v4BentoOverview() {
     const locationItems = (state.data?.featured || []).filter((item) => item.location);
     const district = String(state.v2Preferences?.district || "").trim();
+    const districtNeedle = district.replace(/(?:周辺|付近)$/, "") || district;
     const localMatch = district
-      ? locationItems.find((item) => `${item.location || ""} ${item.title || ""}`.includes(district))
+      ? locationItems.find((item) => `${item.location || ""} ${item.title || ""}`.includes(districtNeedle))
       : null;
     const deadlines = typeof v2FindDeadlines === "function" ? v2FindDeadlines() : [];
     const services = typeof v2FindServices === "function" ? v2FindServices() : [];
@@ -483,7 +493,8 @@
 
   function v4CivicLayer() {
     const featured = state.data?.featured || [];
-    const lifeItem = featured.find((item) => /バス|交通|ごみ|施設|学校|公園/.test(v4Text(item)) && !v4IsEvent(item))
+    const lifeItem = featured.find((item) => typeof v2MatchesPreferences === "function" && v2MatchesPreferences(item) && !v4IsEvent(item))
+      || featured.find((item) => /バス|交通|ごみ|施設|学校|公園/.test(v4Text(item)) && !v4IsEvent(item))
       || featured.find((item) => !v4IsEvent(item))
       || null;
     const council = state.data?.council || null;
@@ -592,7 +603,7 @@
     if (failed.length) {
       return `<div class="v4-event-data-note is-warning" role="status"><strong>一部の掲載元を更新できませんでした</strong><span>確認済みの情報は表示しています。開催前に掲載元でも確認してください。</span></div>`;
     }
-    return `<div class="v4-event-data-note" role="status"><strong>市・地域の公開情報から掲載</strong><span>地域イベントの最終更新：${esc(updated)}</span></div>`;
+    return `<div class="v4-event-data-note" role="status"><strong>市・地域の公開情報から掲載</strong><span>地域イベントの最終確認：${esc(updated)}</span></div>`;
   }
 
   function v4EventsView() {
@@ -610,7 +621,7 @@
       </div>
       ${v4EventDataNote()}
       <div class="v4-event-page-note"><strong>掲載について</strong><p>日時・場所・主催者などを確認できた情報だけを掲載します。すべてのイベントを網羅しているわけではありません。</p></div>
-      <div class="v4-event-filter-row" aria-label="イベントの種類で絞る">${filters.map((filter) => `<button type="button" class="${active === filter.id ? "is-active" : ""}" data-v4-event-filter="${esc(filter.id)}">${esc(filter.label)} <span>${filter.count}</span></button>`).join("")}</div>
+      <div class="v4-event-filter-row" aria-label="イベントの種類で絞る">${filters.map((filter) => `<button type="button" class="${active === filter.id ? "is-active" : ""}" data-v4-event-filter="${esc(filter.id)}" aria-pressed="${active === filter.id}">${esc(filter.label)} <span>${filter.count}</span></button>`).join("")}</div>
       <div class="v4-event-results-head"><h2>${active === "all" ? "掲載中のイベント" : `${esc(activeFilter.label)}のイベント`}</h2><span>${shown.length}件</span></div>
       <div class="v4-event-list">${shown.length ? shown.map(v4EventListCard).join("") : emptyCard("この種類のイベントは見つかりませんでした。上の分類から別の種類を選んでください。")}</div>
       <section class="v4-event-contribute"><div><small>載っていないイベントがありますか？</small><h2>イベント情報の受付は準備中です</h2><p>主催者や市民からの情報受付は、確認方法と安全対策を整えてから始めます。</p></div><button type="button" data-v2-action="participate">準備中の内容を見る →</button></section>
@@ -642,10 +653,9 @@
   function v4CommunitySourceHubs() {
     const hubs = Array.isArray(state.data?.community?.sourceHubs) ? state.data.community.sourceHubs : [];
     const icons = { volunteer: "🤝", children: "🍚", sdgs: "🌱" };
-    return `<section class="v4-community-sources" aria-labelledby="v4-community-sources-title">
-      <div class="v4-event-results-head"><h2 id="v4-community-sources-title">4つの掲載元から探す</h2><span>${hubs.length}件</span></div>
+    return `<details class="v4-community-sources"><summary id="v4-community-sources-title">掲載元の一覧を見る <span>${hubs.length}件</span></summary>
       <div class="v4-community-source-grid">${hubs.length ? hubs.map((hub) => `<a href="${esc(hub.url)}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">${icons[hub.kind] || "📌"}</span><div><strong>${esc(hub.name)}</strong><small>${esc(hub.description || "掲載元の情報を確認できます。")}${hub.dataAsOf ? ` ${esc(hub.dataAsOf)}。` : ""}</small></div><b aria-hidden="true">↗</b></a>`).join("") : emptyCard("掲載元の情報を読み込めませんでした。")}</div>
-    </section>`;
+    </details>`;
   }
 
   function v4CommunityDataNote() {
@@ -656,7 +666,7 @@
     if (failed.length) {
       return `<div class="v4-event-data-note is-warning" role="status"><strong>一部の掲載元を更新できませんでした</strong><span>確認済みの情報は残しています。参加前に掲載元で最新情報を確認してください。</span></div>`;
     }
-    return `<div class="v4-event-data-note" role="status"><strong>市・社会福祉協議会の公開情報から掲載</strong><span>地域活動の最終更新：${esc(updated)}</span></div>`;
+    return `<div class="v4-event-data-note" role="status"><strong>市・社会福祉協議会の公開情報から掲載</strong><span>地域活動の最終確認：${esc(updated)}</span></div>`;
   }
 
   function v4CommunityCard(item) {
@@ -668,6 +678,10 @@
       item.registrationNumber ? `<span class="is-source">登録 ${esc(item.registrationNumber)}</span>` : "",
     ].filter(Boolean).join("");
     const facts = [
+      item.when ? `<span><b>日時</b>${esc(item.when)}</span>` : "",
+      item.location ? `<span><b>場所</b>${esc(item.location)}</span>` : "",
+      item.money ? `<span><b>費用</b>${esc(item.money)}</span>` : "",
+      item.target ? `<span><b>対象</b>${esc(item.target)}</span>` : "",
       item.industry ? `<span><b>分野</b>${esc(item.industry)}</span>` : "",
       item.sourceName ? `<span><b>掲載</b>${esc(item.sourceName)}</span>` : "",
     ].filter(Boolean).join("");
@@ -699,10 +713,10 @@
       <button class="back-button" type="button" data-v2-action="back-route">‹ 戻る</button>
       <div class="v2-inner-hero v4-community-hero"><div><p class="eyebrow">まちに参加する</p><h1>地域活動・ボランティアを探す</h1><p>こども食堂、ボランティア団体、募集中の活動、SDGsパートナーをまとめています。</p></div><div class="v4-community-totals"><span><strong>${activityCount}</strong>活動・募集</span><span><strong>${organizationCount}</strong>団体・企業</span></div></div>
       ${v4CommunityDataNote()}
-      ${v4CommunitySourceHubs()}
-      <div class="v4-event-filter-row v4-community-filter-row" aria-label="地域活動の種類で絞る">${filters.map((filter) => `<button type="button" class="${active === filter.id ? "is-active" : ""}" data-v4-community-filter="${esc(filter.id)}">${esc(filter.label)} <span>${filter.count}</span></button>`).join("")}</div>
+      <div class="v4-event-filter-row v4-community-filter-row" aria-label="地域活動の種類で絞る">${filters.map((filter) => `<button type="button" class="${active === filter.id ? "is-active" : ""}" data-v4-community-filter="${esc(filter.id)}" aria-pressed="${active === filter.id}">${esc(filter.label)} <span>${filter.count}</span></button>`).join("")}</div>
       <div class="v4-event-results-head"><h2>${esc(activeFilter.label)}</h2><span>${shown.length}件</span></div>
       <div class="v4-community-list">${shown.length ? shown.map(v4CommunityCard).join("") : emptyCard("この種類の情報は、まだ取得できていません。掲載元のページも確認してください。")}</div>
+      ${v4CommunitySourceHubs()}
       <section class="v4-event-contribute"><div><small>この活動も載せて！</small><h2>URLでの情報提供は準備中です</h2><p>市民や主催者からURLを受け取り、日時・場所・主催者を確認してから掲載する仕組みを準備しています。</p></div><button type="button" data-v2-action="events">現在のイベントを見る →</button></section>
       <div class="card info-card v4-safety-card"><h2>参加前に掲載元で確認してください</h2><p>団体一覧は活動への参加を保証するものではありません。募集状況、開催日時、対象、費用、連絡方法は変わることがあります。</p></div>
     </section>`;
@@ -720,7 +734,12 @@
     const eventCount = v4EventItems().length;
     const communityCount = v4CommunityRecords().length;
     const bulletin = typeof v2CurrentBulletin === "function" ? v2CurrentBulletin() : null;
-    return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">メニュー</p><h1>やりたいことから選ぶ</h1><p>イベント、暮らし、市の動きをまとめて探せます。</p></div></div><div class="v2-menu-grid v4-menu-grid"><button type="button" data-v2-action="events"><strong>イベント・おでかけ</strong><small>${eventCount ? `${eventCount}件掲載中` : "体験・教室も探す"}</small></button><button type="button" data-v2-action="works"><strong>工事情報</strong><small>直方市の公開資料から</small></button><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><small>申し込み・募集・意見募集</small></button><button type="button" data-v2-action="services"><strong>制度・手続き</strong><small>子育て・暮らしから</small></button>${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報のおがた</strong><small>${esc(bulletin.title || "最新号")}</small></button>` : ""}<button type="button" data-v2-action="decision"><strong>市政</strong><small>予算・市長・市議会</small></button><button type="button" data-v2-action="ask"><strong>まちナビに聞く</strong><small>市の資料から答えを探す</small></button><button type="button" data-v2-action="participate"><strong>地域活動・ボランティア</strong><small>${communityCount ? `${communityCount}件掲載中` : "団体・活動を探す"}</small></button><button type="button" data-v2-action="settings"><strong>地域と表示順を設定</strong><small>このブラウザだけに保存</small></button><button type="button" data-v2-action="glossary"><strong>役所ことば図鑑</strong><small>難しい言葉をやさしく</small></button><button type="button" data-v2-action="money"><strong>直方市の予算</strong><small>市の資料と照合した数字だけ</small></button></div><div class="v2-menu-note card info-card"><h2>のおがた日和の約束</h2><p>公開資料で確認できないことは、推測で補いません。人物の評価や採点はしません。大切な情報には、確認に使った直方市のページへのリンクを付けます。</p></div></section>`;
+    return `<section class="page v2-page v2-inner-page"><div class="v2-inner-hero"><div><p class="eyebrow">メニュー</p><h1>やりたいことから選ぶ</h1><p>暮らし、地域参加、市政、設定に分けて探せます。</p></div></div><div class="v4-menu-sections">
+      <section><h2>暮らす・出かける</h2><div class="v2-menu-grid v4-menu-grid"><button type="button" data-v2-action="events"><strong>イベント・おでかけ</strong><small>${eventCount ? `${eventCount}件掲載中` : "体験・教室も探す"}</small></button><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><small>申し込み・募集・意見募集</small></button><button type="button" data-v2-action="services"><strong>制度・手続き</strong><small>子育て・暮らしから</small></button><button type="button" data-v2-action="ask"><strong>まちナビに聞く</strong><small>確認済みの質問から探す</small></button></div></section>
+      <section><h2>まちに参加する</h2><div class="v2-menu-grid v4-menu-grid"><button type="button" data-v2-action="participate"><strong>地域活動・ボランティア</strong><small>${communityCount ? `${communityCount}件の公開情報` : "団体・活動を探す"}</small></button><button type="button" data-ca-open-report><strong>まちの気になる場所</strong><small>写真・場所・状況を整理</small></button></div></section>
+      <section><h2>市政を知る</h2><div class="v2-menu-grid v4-menu-grid">${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報のおがた</strong><small>${esc(bulletin.title || "最新号")}</small></button>` : ""}<button type="button" data-v2-action="decision"><strong>市政</strong><small>予算・市長・市議会</small></button><button type="button" data-v2-action="works"><strong>工事情報</strong><small>直方市の公開資料から</small></button><button type="button" data-v2-action="money"><strong>直方市の予算</strong><small>市の資料と照合した数字だけ</small></button><button type="button" data-v2-action="glossary"><strong>役所ことば図鑑</strong><small>難しい言葉をやさしく</small></button></div></section>
+      <section><h2>設定・確認</h2><div class="v2-menu-grid v4-menu-grid"><button type="button" data-v2-action="settings"><strong>地域と表示順を設定</strong><small>このブラウザだけに保存</small></button></div></section>
+    </div><div class="v2-menu-note card info-card"><h2>のおがた日和の約束</h2><p>公開資料で確認できないことは、推測で補いません。人物の評価や採点はしません。大切な情報には、確認に使った資料や掲載元のページへのリンクを付けます。</p></div></section>`;
   };
 
   function v4PatchActionSheet() {

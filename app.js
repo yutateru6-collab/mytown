@@ -189,13 +189,49 @@ function syncBanner() {
   }
   return `<div class="sync-banner" role="status">
     <div><span class="official-badge">市の公開情報から</span><strong>直方市の情報を掲載</strong></div>
-    <span>最終更新：${generatedAt ? esc(formatDateTime(generatedAt)) : esc(verifiedOn || "確認済み")}</span>
+    <span>最終確認：${generatedAt ? esc(formatDateTime(generatedAt)) : esc(verifiedOn || "確認済み")}</span>
   </div>`;
 }
 
 function sourceLink(url, label = "直方市のページを見る") {
   if (!url) return "";
   return `<a class="source-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)} <span aria-hidden="true">↗</span></a>`;
+}
+
+function itemDisplayStatus(item = {}) {
+  const status = String(item.statusLabel || item.status || "").trim();
+  const translations = {
+    scheduled: "開催予定",
+    cancelled: "中止",
+    postponed: "延期",
+    completed: "終了",
+  };
+  return translations[status] || status;
+}
+
+function itemSourceInfo(item = {}) {
+  const url = item.sourceUrl || item.url || "";
+  let isCity = false;
+  try {
+    const host = new URL(url, location.href).hostname.toLowerCase();
+    isCity = host === "city.nogata.fukuoka.jp" || host.endsWith(".city.nogata.fukuoka.jp");
+  } catch (_error) {
+    isCity = false;
+  }
+  const name = item.publisherName || item.organizerName || item.sourceName || (isCity ? "直方市" : item.sourceLabel || "掲載元");
+  return {
+    name,
+    url,
+    heading: isCity ? "直方市の資料" : "掲載元の情報",
+    linkLabel: isCity ? "直方市のページを見る" : `${name}のページを見る`,
+    date: item.sourceUpdated || item.published || "確認できず",
+    checked: item.lastCheckedAt ? formatDateTime(item.lastCheckedAt) : state.data.verifiedOn || formatDateTime(state.data.generatedAt) || "確認中",
+  };
+}
+
+function isCommunityEventItem(item = {}) {
+  return ["community", "tourism", "commercial", "cultural"].includes(item.sourceType)
+    || Boolean(item.publisherName && Array.isArray(item.occurrences));
 }
 
 function categoryIcon(category = "") {
@@ -211,6 +247,7 @@ function categoryIcon(category = "") {
 }
 
 function realCard(item) {
+  const status = itemDisplayStatus(item);
   return `<article class="action-card real-card">
     <button class="card-open" type="button" data-real-id="${esc(item.id)}" aria-label="${esc(item.title)}の詳細を見る">
       <div class="card-row">
@@ -220,7 +257,7 @@ function realCard(item) {
           <h3 class="card-title">${esc(item.title)}</h3>
           <p class="card-copy">${esc(item.summary || "直方市が公開した情報です。")}</p>
           <div class="card-meta">
-            ${item.status ? `<span class="pill verified">${esc(item.status)}</span>` : ""}
+            ${status ? `<span class="pill verified">${esc(status)}</span>` : ""}
             ${item.published ? `<span class="pill">公開 ${esc(item.published)}</span>` : ""}
           </div>
         </div>
@@ -231,8 +268,10 @@ function realCard(item) {
 }
 
 function latestRow(item) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(item.date || ""));
+  const dateLabel = match ? `${Number(match[2])}/${Number(match[3])}` : item.date || "";
   return `<a class="latest-row" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">
-    <div><span>${esc(item.date || "")}</span><strong>${esc(item.title)}</strong></div><span aria-hidden="true">↗</span>
+    <div><span>${esc(dateLabel)}</span><strong>${esc(item.title)}</strong></div><span aria-hidden="true">↗</span>
   </a>`;
 }
 
@@ -350,7 +389,7 @@ function nearbyView() {
   </section>`;
 }
 
-const discoverCategories = ["交通", "学校・教育", "健康・スポーツ", "議会", "ごみ", "観光・イベント", "防災", "その他"];
+const discoverCategories = ["交通", "学校・教育", "健康・スポーツ", "議会", "ごみ", "観光・イベント", "地域活動", "工事・道路", "防災", "その他"];
 
 function combinedSearchItems() {
   const featured = state.data.featured.map((x) => ({ ...x, url: x.sourceUrl, date: x.published }));
@@ -416,7 +455,11 @@ function answerFor(question) {
 
   const bus = d.featured.find((x) => /バス|路線と時刻表/.test(x.title));
   if (/バス|路線|時刻|バス停/.test(q) && /変|どう|いつ|路線|時刻|バス停|運行/.test(q) && bus) {
-    answer = { title: "10月1日からコミュニティバスが変わります", body: bus.summary, url: bus.sourceUrl };
+    answer = {
+      title: "10月1日からコミュニティバスが変わります",
+      body: [bus.summary, ...(Array.isArray(bus.bullets) ? bus.bullets.slice(0, 4) : [])].filter(Boolean).join(" "),
+      url: bus.sourceUrl,
+    };
   } else if (/議会|定例会|市議会/.test(q) && /いつ|日程|次|何|内容|予定/.test(q) && d.council) {
     answer = { title: d.council.title, body: `${d.council.nextDateLabel || ""} ${d.council.nextSummary || d.council.summary || ""}`.trim(), url: d.council.sourceUrl };
   } else if (/ごみ|収集|カン|ビン|燃や/.test(q) && /いつ|日|曜日|捨て|出す|収集/.test(q) && d.garbage) {
@@ -432,7 +475,9 @@ function answerFor(question) {
   }
 
   if (!answer) {
-    return `<div class="card answer-card" role="status"><span class="pill">確認できませんでした</span><h3>現在取り込んでいる市の資料では、答えを確認できませんでした</h3><p>聞き方を変えて、もう一度試してください。急ぐときは直方市のページや窓口で確認してください。</p><div class="source-stack"><button class="text-button" type="button" data-v2-action="retry-question">聞き方を変える</button>${sourceLink("https://www.city.nogata.fukuoka.jp/", "直方市のサイトを開く")}</div><p class="muted">入力した質問：${esc(question)}</p></div>`;
+    const childCare = /子ども|こども|子育て|出産|生まれ|保育|児童/.test(q);
+    const heading = childCare ? "子育て制度は、まだ取り込み途中です" : "この分野は、まだ取り込めていません";
+    return `<div class="card answer-card" role="status"><span class="pill">このアプリでは未確認</span><h3>${heading}</h3><p>直方市に該当する情報がない、という意味ではありません。現在のおがた日和では、根拠を示して答えられる資料を確認できませんでした。</p><div class="source-stack">${sourceLink("https://www.city.nogata.fukuoka.jp/", "直方市のサイトで確認する")}</div><p class="muted">入力した質問：${esc(question)}</p></div>`;
   }
 
   return `<div class="card answer-card" role="status"><span class="pill verified">直方市の資料で確認</span><h3>${esc(answer.title)}</h3><p>${esc(answer.body)}</p>${sourceLink(answer.url, "直方市のページを見る")}</div>`;
@@ -441,16 +486,18 @@ function answerFor(question) {
 function detailView(item) {
   if (!item) return todayView();
   const section = state.detailSection;
+  const status = itemDisplayStatus(item);
+  const isEvent = isCommunityEventItem(item);
   const buttons = [
-    ["what", "まとめて見る", "概要から資料まで"],
+    ["what", "30秒で読む", "要点だけ"],
     ["why", "なんで？", "理由"],
     ["money", "いくら？", "お金"],
     ["decision", "決まり方", "資料でたどる"],
   ];
   return `<section class="page">
     <button class="back-button" type="button" data-action="back">‹ 戻る</button>
-    <div class="detail-hero"><div class="big-icon" aria-hidden="true">${categoryIcon(item.category)}</div><p class="eyebrow">${esc(item.category || "直方市情報")}</p><h1>${esc(item.title)}</h1><p>${esc(item.summary || "")}</p><div class="card-meta">${item.status ? `<span class="pill verified">${esc(item.status)}</span>` : ""}${item.published ? `<span class="pill">公開 ${esc(item.published)}</span>` : ""}</div></div>
-    <div class="question-grid" aria-label="詳しく見る">${buttons.map(([key, label, small]) => `<button class="question-button ${section === key ? "is-active" : ""}" type="button" data-section="${key}" aria-pressed="${section === key}"><span>${small}</span><strong>${label}</strong></button>`).join("")}</div>
+    <div class="detail-hero"><div class="big-icon" aria-hidden="true">${categoryIcon(item.category)}</div><p class="eyebrow">${esc(item.category || "直方市情報")}</p><h1>${esc(item.title)}</h1><div class="card-meta">${status ? `<span class="pill verified">${esc(status)}</span>` : ""}${item.published ? `<span class="pill">公開 ${esc(item.published)}</span>` : ""}</div></div>
+    ${isEvent ? "" : `<div class="question-grid" aria-label="詳しく見る">${buttons.map(([key, label, small]) => { const isActive = section === key || (!section && key === "what"); return `<button class="question-button ${isActive ? "is-active" : ""}" type="button" data-section="${key}" aria-pressed="${isActive}"><span>${small}</span><strong>${label}</strong></button>`; }).join("")}</div>`}
     ${renderDetailSection(item, section)}
   </section>`;
 }
@@ -468,24 +515,23 @@ function renderDecisionEvidence(item) {
 }
 
 function renderDetailSection(item, section) {
+  const source = itemSourceInfo(item);
+  if (isCommunityEventItem(item)) {
+    const facts = [
+      item.when ? `<div><dt>日時</dt><dd>${esc(item.when)}</dd></div>` : "",
+      item.location ? `<div><dt>場所</dt><dd>${esc(item.location)}</dd></div>` : "",
+      item.money ? `<div><dt>費用</dt><dd>${esc(item.money)}</dd></div>` : "",
+      item.applicationDeadline ? `<div><dt>申込期限</dt><dd>${esc(item.applicationDeadline)}</dd></div>` : "",
+    ].filter(Boolean).join("");
+    return `<div class="detail-layers"><div class="card info-card detail-layer"><span class="detail-layer-label">イベント情報</span><h2>確認できた内容</h2><p>${esc(item.summary || "掲載元が公開しているイベント情報です。")}</p>${facts ? `<dl class="source-facts">${facts}</dl>` : ""}</div><div class="card info-card detail-layer source-layer"><span class="detail-layer-label">${esc(source.heading)}</span><h2>最新情報を確認</h2><dl class="source-facts"><div><dt>掲載元</dt><dd>${esc(source.name)}</dd></div><div><dt>のおがた日和で確認した日</dt><dd>${esc(source.checked)}</dd></div></dl>${sourceLink(source.url, source.linkLabel)}</div></div>`;
+  }
   if (!section || section === "what") {
+    return `<div class="detail-layers"><div class="card info-card detail-layer"><span class="detail-layer-label">30秒で読む</span><h2>まず、これだけ</h2><p>${esc(item.summary || "")}</p><div class="source-stack"><button class="primary-button" type="button" data-section="details">3分で詳しく読む</button>${sourceLink(source.url, "原文を見る")}</div></div></div>`;
+  }
+  if (section === "details") {
     const bullets = Array.isArray(item.bullets) ? item.bullets : [];
-    const confirmed = [
-      item.when ? `時期・日程：${item.when}` : "",
-      item.location ? `場所：${item.location}` : "",
-      ...bullets,
-    ].filter(Boolean);
-    const sourceDate = item.sourceUpdated || item.published || "確認できず";
-    return `<div class="detail-layers">
-      <div class="card info-card detail-layer"><span class="detail-layer-label">30秒で読む</span><h2>まず、これだけ</h2><p>${esc(item.summary || "")}</p></div>
-      <div class="card info-card detail-layer"><span class="detail-layer-label">くわしく見る</span><h2>背景・費用・決まり方</h2>
-        <h3>市の資料で確認できたこと</h3>${confirmed.length ? `<ul class="plain-list">${confirmed.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p>この項目について、追加で確認できた事実はまだありません。</p>`}
-        <h3>なぜ？</h3><p>${esc(item.why || "今回確認した直方市のページでは、理由を確認できませんでした。推測では補いません。")}</p>
-        <h3>お金</h3>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>今回確認した直方市のページでは、費用や予算額を確認できませんでした。</p>`}
-        <h3>決まり方</h3><p>${esc(item.decision || "今回確認した資料では、決定までの流れを確認できませんでした。推測では補いません。")}</p>${renderDecisionEvidence(item)}
-      </div>
-      <div class="card info-card detail-layer source-layer"><span class="detail-layer-label">直方市の資料</span><h2>確認に使った資料</h2><dl class="source-facts"><div><dt>公開元</dt><dd>直方市</dd></div><div><dt>市のページの公開・更新日</dt><dd>${esc(sourceDate)}</dd></div><div><dt>のおがた日和で確認した日</dt><dd>${esc(state.data.verifiedOn || formatDateTime(state.data.generatedAt) || "確認中")}</dd></div></dl>${sourceLink(item.sourceUrl, "直方市のページを見る")}${item.pdfUrl ? sourceLink(item.pdfUrl, "市報PDFを開く") : ""}</div>
-    </div>`;
+    const confirmed = [item.when ? `時期・日程：${item.when}` : "", item.location ? `場所：${item.location}` : "", ...bullets].filter(Boolean);
+    return `<div class="detail-layers"><div class="card info-card detail-layer"><span class="detail-layer-label">3分で読む</span><h2>背景・費用・決まり方</h2><h3>確認できたこと</h3>${confirmed.length ? `<ul class="plain-list">${confirmed.map((fact) => `<li>${esc(fact)}</li>`).join("")}</ul>` : `<p>追加で確認できた事実は、まだありません。</p>`}<h3>なぜ？</h3><p>${esc(item.why || "今回確認した資料では、理由を確認できませんでした。推測では補いません。")}</p><h3>お金</h3>${item.money ? `<p class="money-value">${esc(item.money)}</p><p>${esc(item.moneyNote || "")}</p>` : `<p>今回確認した資料では、費用や予算額を確認できませんでした。</p>`}<h3>決まり方</h3><p>${esc(item.decision || "今回確認した資料では、決定までの流れを確認できませんでした。推測では補いません。")}</p>${renderDecisionEvidence(item)}</div><div class="card info-card detail-layer source-layer"><span class="detail-layer-label">${esc(source.heading)}</span><h2>確認に使った資料</h2><dl class="source-facts"><div><dt>公開元</dt><dd>${esc(source.name)}</dd></div><div><dt>公開・更新日</dt><dd>${esc(source.date)}</dd></div><div><dt>のおがた日和で確認した日</dt><dd>${esc(source.checked)}</dd></div></dl>${sourceLink(source.url, source.linkLabel)}${item.pdfUrl ? sourceLink(item.pdfUrl, "資料PDFを開く") : ""}</div></div>`;
   }
   if (section === "why") {
     return `<div class="card info-card"><h2>なんで？</h2><p>${esc(item.why || "今回確認した直方市のページでは、理由を確認できませんでした。推測では補いません。")}</p>${sourceLink(item.sourceUrl)}</div>`;
@@ -509,7 +555,9 @@ function emptyCard(message) {
 }
 
 function currentSelectedItem() {
-  return state.data.featured.find((x) => x.id === state.selectedId) || null;
+  return state.data.featured.find((x) => x.id === state.selectedId)
+    || (typeof combinedSearchItems === "function" ? combinedSearchItems().find((item) => item.id === state.selectedId) : null)
+    || null;
 }
 
 function parentTabForView() {
@@ -534,7 +582,10 @@ function showToast(message) {
   toast.textContent = message;
   toast.classList.add("is-visible");
   clearTimeout(showToast.timer);
-  showToast.timer = setTimeout(() => toast.classList.remove("is-visible"), 2600);
+  showToast.timer = setTimeout(() => {
+    toast.classList.remove("is-visible");
+    toast.textContent = "";
+  }, 2600);
 }
 
 function goTab(tab) {
@@ -559,7 +610,7 @@ document.addEventListener("click", (event) => {
   const real = event.target.closest("[data-real-id]");
   if (real) {
     state.selectedId = real.dataset.realId;
-    state.detailSection = null;
+    state.detailSection = "what";
     state.view = "detail";
     return render();
   }

@@ -42,6 +42,14 @@ try {
     if (dateKey === today) assert.match(councilState.current, /^本日/);
   }
 
+  // A home event card must open the selected event, not drop the user at the top of the list.
+  const homeEvent = page.locator(".v4-home-event-card").first();
+  const homeEventTitle = (await homeEvent.locator("strong").innerText()).trim();
+  await homeEvent.click();
+  assert.equal((await page.locator(".detail-hero h1").innerText()).trim(), homeEventTitle);
+  assert.match(await page.locator(".ca-event-actions").innerText(), /保存する|保存済み/);
+  await page.evaluate(() => v2HandleAction("home"));
+
   // Event actions must span the card, not fall into the old 56px icon column.
   await page.locator('.v4-primary-cta[data-v2-action="events"]').click();
   await page.locator(".v4-events-page").waitFor({ state: "visible" });
@@ -91,11 +99,40 @@ try {
   await page.locator("#discover-form button").click();
   assert.match(await page.locator("#main").innerText(), /直方川づくり/);
 
+  // The search example promised in the UI must work with an everyday phrase.
+  await page.locator("#discover-search").fill("ごみの出し方");
+  await page.locator("#discover-form button").click();
+  assert.match(await page.locator("#main").innerText(), /ごみ・資源リサイクルの収集日/);
+  assert.equal(await page.locator('.filter-chip[aria-pressed="true"]').count(), 1);
+
+  // Service and deadline child pages keep the discovery tab active and separate closed applications.
+  await page.evaluate(() => v2HandleAction("services"));
+  assert.match(await page.locator("#main").innerText(), /就学時健康診断/);
+  assert.equal(await page.locator('[data-v2-nav="search"]').getAttribute("aria-current"), "page");
+  await page.evaluate(() => v2HandleAction("deadline"));
+  assert.match(await page.locator("#main").innerText(), /受付前・受付中/);
+  assert.match(await page.locator(".v2-closed-deadlines summary").innerText(), /受付が終了した情報/);
+  assert.equal(await page.locator('[data-v2-nav="search"]').getAttribute("aria-current"), "page");
+
+  // A 30-second entry opens only the short layer until the user asks for more.
+  await page.evaluate(() => v2HandleAction("home"));
+  await page.locator('[data-v2-detail-id="community-bus-20261001"]').first().click();
+  assert.match(await page.locator("#main").innerText(), /3分で詳しく読む/);
+  assert.equal(await page.locator("#main").getByText("背景・費用・決まり方", { exact: true }).count(), 0);
+  await page.locator('[data-section="details"]').click();
+  assert.match(await page.locator("#main").innerText(), /背景・費用・決まり方/);
+
   // Ask surface must describe its actual capability, not imply free-form document RAG.
   await page.evaluate(() => v2HandleAction("ask"));
   const askText = await page.locator("#main").innerText();
   assert.match(askText, /よくある質問から探す/);
   assert.match(askText, /資料横断の自由質問検索は準備中/);
+  await page.locator("#ask-input").fill("子どもが生まれたら使える制度は？");
+  await page.locator("#ask-form button").click();
+  const unanswered = await page.locator(".answer-card").innerText();
+  assert.match(unanswered, /まだ取り込み途中/);
+  assert.match(unanswered, /情報がない、という意味ではありません/);
+  assert.doesNotMatch(unanswered, /聞き方を変えて/);
 
   console.log("P0 browser regression checks passed");
 } finally {

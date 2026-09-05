@@ -912,12 +912,35 @@
   line-height: 1.1;
 }
 
-.v4-community-sources { margin-top: 18px; }
+.v4-community-sources {
+  margin-top: 18px;
+  border: 1px solid rgba(71, 103, 78, .14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .72);
+}
+
+.v4-community-sources > summary {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 15px;
+  color: var(--v2-green-deep);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.v4-community-sources > summary span {
+  color: var(--v2-muted);
+  font-size: .8125rem;
+}
 
 .v4-community-source-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+  padding: 0 12px 12px;
 }
 
 .v4-community-source-grid > a {
@@ -948,7 +971,7 @@
 .v4-community-source-grid strong,
 .v4-community-source-grid small { display: block; }
 .v4-community-source-grid strong { font-size: .875rem; line-height: 1.4; }
-.v4-community-source-grid small { margin-top: 3px; color: var(--v2-muted); font-size: .72rem; line-height: 1.45; }
+.v4-community-source-grid small { margin-top: 3px; color: var(--v2-muted); font-size: .875rem; line-height: 1.5; }
 .v4-community-source-grid b { color: var(--v2-green-deep); }
 
 .v4-community-filter-row { margin-top: 20px; }
@@ -982,7 +1005,7 @@
 
 .v4-community-card-copy { min-width: 0; }
 .v4-community-card h3 { margin: 8px 0 5px; font-size: 1rem; line-height: 1.42; }
-.v4-community-card p { margin: 0; color: #58625c; font-size: .8125rem; line-height: 1.55; }
+.v4-community-card p { margin: 0; color: #58625c; font-size: .875rem; line-height: 1.55; }
 .v4-community-card .v4-event-facts { margin-top: 8px; }
 
 .v4-community-currentness {
@@ -1016,9 +1039,18 @@
 
 .v4-community-links a.is-secondary { background: #fff; }
 
-.v4-menu-grid button:first-child { background: #fff1f3; }
-.v4-menu-grid button:nth-child(5) { background: #edf7fb; }
-.v4-menu-grid button:nth-child(7) { background: #f1f8ee; }
+.v4-menu-sections { display: grid; gap: 20px; }
+.v4-menu-sections > section { display: grid; gap: 9px; }
+.v4-menu-sections > section > h2 {
+  margin: 0;
+  color: #53675f;
+  font-size: .875rem;
+  letter-spacing: .04em;
+}
+.v4-menu-sections > section:nth-child(1) .v4-menu-grid button { background: #fff7ee; }
+.v4-menu-sections > section:nth-child(2) .v4-menu-grid button { background: #f1f8ee; }
+.v4-menu-sections > section:nth-child(3) .v4-menu-grid button { background: #edf7fb; }
+.v4-menu-sections > section:nth-child(4) .v4-menu-grid button { background: #f7f4fb; }
 
 @media (max-width: 620px) {
   .v4-event-feature {

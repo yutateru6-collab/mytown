@@ -64,6 +64,7 @@ jobs:
           node scripts/test_garbage_ui.js
           node scripts/test_event_ui.js
           node scripts/test_community_ui.js
+          node scripts/test_trust_ux.js
           node --check reference-top-1.js
           node --check reference-top-2.js
           node --check reference-top-3.js
@@ -134,7 +135,7 @@ jobs:
           ! grep -q 'MutationObserver' index.html
           grep -q '>市政</span>' index.html
           grep -q '>さがす</span>' index.html
-          grep -q 'mytown-civic-v37-people-nav' sw.js
+          grep -q 'mytown-civic-v38-trust-ux' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
@@ -145,11 +146,11 @@ jobs:
           grep -q 'ui-home-v5.css' index.html
           ! grep -q 'map-nearby.js' index.html
           ! grep -q 'map-nearby.css' index.html
-          grep -q 'p0-stability.js?v=2' index.html
-          grep -q 'p0-stability.css?v=1' index.html
+          grep -q 'p0-stability.js?v=3' index.html
+          grep -q 'p0-stability.css?v=2' index.html
           grep -q 'bulletin-reader.js' index.html
           grep -q 'bulletin-reader.css' index.html
-          grep -q 'civic-actions.js?v=2' index.html
+          grep -q 'civic-actions.js?v=3' index.html
           grep -q 'data-v2-action="bulletin"' bulletin-reader.js
           grep -q 'bulletin-reader-frame' bulletin-reader.js
           grep -q 'wholePdfUrl' bulletin-reader.js
@@ -168,7 +169,7 @@ jobs:
           ! grep -q 'data-v2-nav="nearby"' index.html
           grep -q 'politics.js' index.html
           grep -q 'politics.css' index.html
-          grep -q 'civic-portal.js?v=5' index.html
+          grep -q 'civic-portal.js?v=6' index.html
           grep -q 'state.politicsSection = "people"' civic-portal.js
           grep -q 'ALLOWED_INTERESTS' p0-stability.js
           grep -q 'combinedSearchItemsAcrossMytown' p0-stability.js

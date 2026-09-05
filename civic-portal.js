@@ -152,6 +152,7 @@
 
   politicsBackButton = function politicsBackButtonToPeople() {
     if (state.politicsSection === "home") return "";
+    if (state.politicsSection === "glossary") return `<button class="back-button" type="button" data-politics-section="home">‹ 市政トップへ</button>`;
     return `<button class="back-button" type="button" data-politics-section="people">‹ 市長・市議会へ</button>`;
   };
 

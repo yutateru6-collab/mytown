@@ -111,7 +111,8 @@ try {
   await page.locator("#ca-dialog-title").waitFor({ state: "visible" });
   assert.equal((await page.locator("#ca-dialog-title").innerText()).trim(), "このイベントも載せて！");
   await page.locator('#ca-event-tip-form input[name="eventUrl"]').fill("https://example.org/nogata-event");
-  assert.match(await page.locator("#ca-dialog-body").innerText(), /URLだけで大丈夫です/);
+  assert.match(await page.locator("#ca-dialog-body").innerText(), /現在はGitHubで試験受付中です/);
+  assert.match(await page.locator("#ca-dialog-body").innerText(), /GitHubアカウントが必要です/);
   assert.match(await page.locator("#ca-dialog-body").innerText(), /公開GitHub Issue/);
   await page.screenshot({ path: path.join(outputDir, "civic-event-url-tip.png"), fullPage: false, scale: "css" });
   report.checks.push("URL-only event tip dialog");
@@ -142,6 +143,8 @@ try {
   await page.locator("#ca-report-output").waitFor({ state: "visible" });
   assert.equal((await page.locator("#ca-dialog-title").innerText()).trim(), "届け先と文面を確認");
   assert.match(await page.locator(".ca-route-summary").innerText(), /公園街路係/);
+  assert.match(await page.locator("#ca-dialog-body .ca-emergency-note").innerText(), /自動通報はされません/);
+  assert.equal((await page.locator("[data-ca-share-report]").innerText()).trim(), "共有先を選ぶ");
   const reportText = await page.locator("#ca-report-output").inputValue();
   assert.match(reportText, /テスト公園の入口近く/);
   assert.match(reportText, /子どもが触ると危ない/);
@@ -181,16 +184,25 @@ try {
   assert.match(walkText, /1,000円/);
   report.checks.push("event status, reviewed price and merchandise-price suppression");
 
-  const firstSave = page.locator("[data-ca-save-event-id]").first();
-  await firstSave.click();
+  const pokemonCard = page.locator(".v4-event-list-card").filter({ hasText: "ポケモンしんかラリー" }).first();
+  await pokemonCard.waitFor({ state: "visible" });
+  await pokemonCard.locator("[data-ca-save-event-id]").click();
   await page.locator(".v4-events-page").waitFor({ state: "visible" });
-  await page.locator("[data-ca-save-event-id].is-saved").first().waitFor({ state: "visible" });
+  await page.locator("[data-ca-open-saved].is-saved").first().waitFor({ state: "visible" });
 
   const downloadPromise = page.waitForEvent("download", { timeout: 15_000 });
-  await page.locator("[data-ca-calendar-event-id]").first().click();
+  await page.locator(".v4-event-list-card").filter({ hasText: "ポケモンしんかラリー" }).first().locator("[data-ca-calendar-event-id]").click();
   const download = await downloadPromise;
   assert.match(download.suggestedFilename(), /\.ics$/);
-  report.checks.push("save and iCalendar download");
+  const stream = await download.createReadStream();
+  let calendarText = "";
+  for await (const chunk of stream) calendarText += chunk.toString("utf8");
+  assert.equal((calendarText.match(/BEGIN:VEVENT/g) || []).length, 5, "future occurrences must be separate calendar events");
+  for (const date of ["20260911", "20260927", "20260928", "20261204", "20261225"]) {
+    assert.match(calendarText, new RegExp(`DTSTART;VALUE=DATE:${date}`));
+  }
+  assert.doesNotMatch(calendarText, /DTSTART;VALUE=DATE:20260904[\s\S]*DTEND;VALUE=DATE:20261226/);
+  report.checks.push("save and multi-occurrence iCalendar download");
 
   await page.locator("[data-ca-open-saved]").first().click();
   await page.locator(".ca-saved-card").first().waitFor({ state: "visible" });
