@@ -1,7 +1,39 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-07T00:41:05Z",
+  "generatedAt": "2026-09-07T06:38:13Z",
   "changes": [
+    {
+      "id": "latest-update:https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html",
+      "kind": "updated",
+      "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html",
+      "sourcePublished": "2026-09-07",
+      "detectedAt": "2026-09-07T06:38:13Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_17279.html",
+      "kind": "new",
+      "title": "保育士等就職支援補助金のご案内",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_17279.html",
+      "sourcePublished": "2026-09-07",
+      "detectedAt": "2026-09-07T06:38:13Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17179.html",
+      "kind": "new",
+      "title": "ユメニティのおがた大ホールの貸館を再開します",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17179.html",
+      "sourcePublished": "2026-09-07",
+      "detectedAt": "2026-09-07T06:38:13Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1206/_17250.html",
+      "kind": "new",
+      "title": "令和9年度コミュニティ助成事業（地域防災組織育成助成事業）",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1206/_17250.html",
+      "sourcePublished": "2026-09-07",
+      "detectedAt": "2026-09-07T06:38:13Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_1158/_17252.html",
       "kind": "new",
