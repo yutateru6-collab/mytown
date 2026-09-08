@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-329da38db46d",
+      "id": "rss-5338fa568d9c",
       "category": "観光・イベント",
-      "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
+      "title": "マンホールカードを配布します",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-07",
+      "published": "2026-09-08",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
     }
   ],
   "council": {
@@ -236,6 +236,11 @@
   },
   "latest": [
     {
+      "date": "2026-09-08",
+      "title": "マンホールカードを配布します",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
+    },
+    {
       "date": "2026-09-07",
       "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
       "url": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html"
@@ -289,11 +294,6 @@
       "date": "2026-09-01",
       "title": "災害情報・火災案内",
       "url": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
-    },
-    {
-      "date": "2026-09-01",
-      "title": "親子で楽しむ環境学習プログラム",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-07T18:32:25Z"
+  "generatedAt": "2026-09-08T00:40:12Z"
 }
