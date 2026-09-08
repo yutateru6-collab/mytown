@@ -1,7 +1,47 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-08T00:40:12Z",
+  "generatedAt": "2026-09-08T06:35:41Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_14323.html",
+      "kind": "new",
+      "title": "直方市省エネルギー設備導入費等補助金",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_14323.html",
+      "sourcePublished": "2026-09-08",
+      "detectedAt": "2026-09-08T06:35:41Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_17280.html",
+      "kind": "new",
+      "title": "保育実習生受入強化事業補助金のご案内",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_17280.html",
+      "sourcePublished": "2026-09-08",
+      "detectedAt": "2026-09-08T06:35:41Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_1158/_13211.html",
+      "kind": "new",
+      "title": "直方市高齢者保健福祉協議会を開催します",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_13211.html",
+      "sourcePublished": "2026-09-08",
+      "detectedAt": "2026-09-08T06:35:41Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17298.html",
+      "kind": "new",
+      "title": "建設工事入札結果【9月8日入札分】",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17298.html",
+      "sourcePublished": "2026-09-08",
+      "detectedAt": "2026-09-08T06:35:41Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3986/_17266.html",
+      "kind": "new",
+      "title": "遠賀川水系河川整備計画【変更原案】について地元説明会を開催します",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3986/_17266.html",
+      "sourcePublished": "2026-09-08",
+      "detectedAt": "2026-09-08T06:35:41Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html",
       "kind": "new",
