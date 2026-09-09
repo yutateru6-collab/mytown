@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-09T06:36:08Z",
+  "generatedAt": "2026-09-09T18:33:26Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html",
+      "kind": "new",
+      "title": "筑豊炭田遺跡群オンラインシンポジウム「産炭地を比較する‐閉山後の福岡・筑豊と北海道・空知‐」を開催します！",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html",
+      "sourcePublished": "2026-09-03",
+      "detectedAt": "2026-09-09T18:33:26Z"
+    },
+    {
+      "id": "council-update:2026-09-09T18:33:26Z",
+      "kind": "updated",
+      "title": "市議会の日程が更新されました",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html",
+      "sourcePublished": "2026-09-01",
+      "detectedAt": "2026-09-09T18:33:26Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_2913/_6116/_6557.html",
       "kind": "new",

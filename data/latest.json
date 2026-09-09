@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "city": "直方市",
-  "verifiedOn": "2026-09-09",
+  "verifiedOn": "2026-09-10",
   "population": {
     "asOf": "2026年（令和8年）8月末",
     "total": 53847,
@@ -132,9 +132,9 @@
   ],
   "council": {
     "title": "令和8年9月定例会",
-    "status": "9/9予定",
-    "nextDateLabel": "9/9 10:00",
-    "nextSummary": "本会議（一般質問）が予定されています。日程・開会時間は変更されることがあります。",
+    "status": "9/11予定",
+    "nextDateLabel": "9/11 10:00",
+    "nextSummary": "本会議（決算質疑）が予定されています。日程・開会時間は変更されることがあります。",
     "summary": "9月3日から9月25日までの日程が公表されています。",
     "sourceUpdated": "2026-09-01",
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
@@ -291,9 +291,9 @@
       "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_17252.html"
     },
     {
-      "date": "2026-09-07",
-      "title": "令和9年度コミュニティ助成事業（地域防災組織育成助成事業）",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1206/_17250.html"
+      "date": "2026-09-03",
+      "title": "筑豊炭田遺跡群オンラインシンポジウム「産炭地を比較する‐閉山後の福岡・筑豊と北海道・空知‐」を開催します！",
+      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-09T06:36:08Z"
+  "generatedAt": "2026-09-09T18:33:26Z"
 }
