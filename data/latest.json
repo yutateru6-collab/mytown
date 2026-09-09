@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-e5f46bc47409",
-      "category": "その他",
-      "title": "直方市省エネルギー設備導入費等補助金",
+      "id": "rss-e488ee1286b9",
+      "category": "健康・スポーツ",
+      "title": "「女性の健康と働き方フォーラム」を開催します！",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-08",
+      "published": "2026-09-09",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_14323.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_2913/_6116/_6557.html"
     }
   ],
   "council": {
@@ -236,6 +236,11 @@
   },
   "latest": [
     {
+      "date": "2026-09-09",
+      "title": "「女性の健康と働き方フォーラム」を開催します！",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_2913/_6116/_6557.html"
+    },
+    {
       "date": "2026-09-08",
       "title": "直方市省エネルギー設備導入費等補助金",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_14323.html"
@@ -289,11 +294,6 @@
       "date": "2026-09-07",
       "title": "令和9年度コミュニティ助成事業（地域防災組織育成助成事業）",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1206/_17250.html"
-    },
-    {
-      "date": "2026-09-03",
-      "title": "筑豊炭田遺跡群オンラインシンポジウム「産炭地を比較する‐閉山後の福岡・筑豊と北海道・空知‐」を開催します！",
-      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-08T18:33:57Z"
+  "generatedAt": "2026-09-09T06:36:08Z"
 }
