@@ -1,7 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-09T18:33:26Z",
+  "generatedAt": "2026-09-10T00:35:45Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_4287/_17155.html",
+      "kind": "new",
+      "title": "【ドローン体験～はじめの一歩～】参加者募集♪",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_4287/_17155.html",
+      "sourcePublished": "2026-09-10",
+      "detectedAt": "2026-09-10T00:35:45Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html",
       "kind": "new",

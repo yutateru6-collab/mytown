@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-e488ee1286b9",
-      "category": "健康・スポーツ",
-      "title": "「女性の健康と働き方フォーラム」を開催します！",
+      "id": "rss-9342ed4420d1",
+      "category": "その他",
+      "title": "【ドローン体験～はじめの一歩～】参加者募集♪",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-09",
+      "published": "2026-09-10",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_2913/_6116/_6557.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_4287/_17155.html"
     }
   ],
   "council": {
@@ -236,6 +236,11 @@
   },
   "latest": [
     {
+      "date": "2026-09-10",
+      "title": "【ドローン体験～はじめの一歩～】参加者募集♪",
+      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_4287/_17155.html"
+    },
+    {
       "date": "2026-09-09",
       "title": "「女性の健康と働き方フォーラム」を開催します！",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_2913/_6116/_6557.html"
@@ -289,11 +294,6 @@
       "date": "2026-09-07",
       "title": "シニア向け職場見学会（筑豊地区）",
       "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_17252.html"
-    },
-    {
-      "date": "2026-09-03",
-      "title": "筑豊炭田遺跡群オンラインシンポジウム「産炭地を比較する‐閉山後の福岡・筑豊と北海道・空知‐」を開催します！",
-      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-09T18:33:26Z"
+  "generatedAt": "2026-09-10T00:35:45Z"
 }
