@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-9342ed4420d1",
+      "id": "rss-2377f79a0a2f",
       "category": "その他",
-      "title": "【ドローン体験～はじめの一歩～】参加者募集♪",
+      "title": "職員採用試験合格者発表",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-09-10",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_4287/_17155.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_3493/_15497.html"
     }
   ],
   "council": {
@@ -237,6 +237,16 @@
   "latest": [
     {
       "date": "2026-09-10",
+      "title": "職員採用試験合格者発表",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_3493/_15497.html"
+    },
+    {
+      "date": "2026-09-10",
+      "title": "直方市高齢者保健福祉協議会を開催します",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_13211.html"
+    },
+    {
+      "date": "2026-09-10",
       "title": "【ドローン体験～はじめの一歩～】参加者募集♪",
       "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_4287/_17155.html"
     },
@@ -254,11 +264,6 @@
       "date": "2026-09-08",
       "title": "保育実習生受入強化事業補助金のご案内",
       "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_17280.html"
-    },
-    {
-      "date": "2026-09-08",
-      "title": "直方市高齢者保健福祉協議会を開催します",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_13211.html"
     },
     {
       "date": "2026-09-08",
@@ -289,11 +294,6 @@
       "date": "2026-09-07",
       "title": "ユメニティのおがた大ホールの貸館を再開します",
       "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17179.html"
-    },
-    {
-      "date": "2026-09-07",
-      "title": "シニア向け職場見学会（筑豊地区）",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_17252.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-10T00:35:45Z"
+  "generatedAt": "2026-09-10T06:35:56Z"
 }

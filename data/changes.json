@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-10T00:35:45Z",
+  "generatedAt": "2026-09-10T06:35:56Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1243/_3493/_15497.html",
+      "kind": "new",
+      "title": "職員採用試験合格者発表",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_3493/_15497.html",
+      "sourcePublished": "2026-09-10",
+      "detectedAt": "2026-09-10T06:35:56Z"
+    },
+    {
+      "id": "latest-update:https://www.city.nogata.fukuoka.jp/kenko/_1158/_13211.html",
+      "kind": "updated",
+      "title": "直方市高齢者保健福祉協議会を開催します",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_13211.html",
+      "sourcePublished": "2026-09-10",
+      "detectedAt": "2026-09-10T06:35:56Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_4287/_17155.html",
       "kind": "new",
