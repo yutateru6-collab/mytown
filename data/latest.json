@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-2377f79a0a2f",
+      "id": "rss-bf351d748750",
       "category": "その他",
-      "title": "職員採用試験合格者発表",
+      "title": "#きらきらのおがた作品紹介",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-09-10",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_3493/_15497.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html"
     }
   ],
   "council": {
@@ -237,6 +237,16 @@
   "latest": [
     {
       "date": "2026-09-10",
+      "title": "#きらきらのおがた作品紹介",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html"
+    },
+    {
+      "date": "2026-09-10",
+      "title": "自分を輝かせ、素敵な就職と未来を手に入れよう！（令和8年度女性のための就職サポートセミナー）",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17158.html"
+    },
+    {
+      "date": "2026-09-10",
       "title": "職員採用試験合格者発表",
       "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_3493/_15497.html"
     },
@@ -284,16 +294,6 @@
       "date": "2026-09-07",
       "title": "のおがたSDGsフェスタ2026inイオンモール直方を開催します",
       "url": "https://www.city.nogata.fukuoka.jp/shisei/_1235/_11442/_11940/_11942/_17169.html"
-    },
-    {
-      "date": "2026-09-07",
-      "title": "保育士等就職支援補助金のご案内",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_17279.html"
-    },
-    {
-      "date": "2026-09-07",
-      "title": "ユメニティのおがた大ホールの貸館を再開します",
-      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17179.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-10T06:35:56Z"
+  "generatedAt": "2026-09-10T12:36:24Z"
 }
