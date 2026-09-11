@@ -1,7 +1,39 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-10T12:36:24Z",
+  "generatedAt": "2026-09-11T06:35:13Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17314.html",
+      "kind": "new",
+      "title": "修繕工事入札結果【9月11日入札分】",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17314.html",
+      "sourcePublished": "2026-09-11",
+      "detectedAt": "2026-09-11T06:35:13Z"
+    },
+    {
+      "id": "latest-update:https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17158.html",
+      "kind": "updated",
+      "title": "自分を輝かせ、素敵な就職と未来を手に入れよう！（令和8年度女性のための就職サポートセミナー）",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17158.html",
+      "sourcePublished": "2026-09-11",
+      "detectedAt": "2026-09-11T06:35:13Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_14439/_15787.html",
+      "kind": "new",
+      "title": "【福岡県主催キャンペーン】1万人のクリーンアップ大作戦！",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_14439/_15787.html",
+      "sourcePublished": "2026-09-11",
+      "detectedAt": "2026-09-11T06:35:13Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2727/_16804.html",
+      "kind": "new",
+      "title": "令和8年9月15日締切分～修繕工事簡易競争入札情報",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2727/_16804.html",
+      "sourcePublished": "2026-09-11",
+      "detectedAt": "2026-09-11T06:35:13Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html",
       "kind": "new",
