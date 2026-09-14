@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-8f5b45667b3e",
+      "id": "rss-6268ba5d08e8",
       "category": "その他",
-      "title": "修繕工事入札結果【9月11日入札分】",
+      "title": "GX戦略地域制度（データセンター集積型）に認定されました",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-11",
+      "published": "2026-09-14",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17314.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1229/_17315.html"
     }
   ],
   "council": {
@@ -236,6 +236,16 @@
   },
   "latest": [
     {
+      "date": "2026-09-14",
+      "title": "GX戦略地域制度（データセンター集積型）に認定されました",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1229/_17315.html"
+    },
+    {
+      "date": "2026-09-14",
+      "title": "【募集中】発掘調査員（屋外）",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_17294.html"
+    },
+    {
       "date": "2026-09-11",
       "title": "修繕工事入札結果【9月11日入札分】",
       "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17314.html"
@@ -284,16 +294,6 @@
       "date": "2026-09-08",
       "title": "直方市省エネルギー設備導入費等補助金",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_14323.html"
-    },
-    {
-      "date": "2026-09-08",
-      "title": "保育実習生受入強化事業補助金のご案内",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_17280.html"
-    },
-    {
-      "date": "2026-09-08",
-      "title": "建設工事入札結果【9月8日入札分】",
-      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17298.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-13T18:30:51Z"
+  "generatedAt": "2026-09-14T00:37:48Z"
 }

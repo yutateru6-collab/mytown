@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-11T18:32:20Z",
+  "generatedAt": "2026-09-14T00:37:48Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1229/_17315.html",
+      "kind": "new",
+      "title": "GX戦略地域制度（データセンター集積型）に認定されました",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1229/_17315.html",
+      "sourcePublished": "2026-09-14",
+      "detectedAt": "2026-09-14T00:37:48Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1243/_17294.html",
+      "kind": "new",
+      "title": "【募集中】発掘調査員（屋外）",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_17294.html",
+      "sourcePublished": "2026-09-14",
+      "detectedAt": "2026-09-14T00:37:48Z"
+    },
     {
       "id": "council-update:2026-09-11T18:32:20Z",
       "kind": "updated",
