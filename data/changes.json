@@ -1,7 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-14T06:38:16Z",
+  "generatedAt": "2026-09-14T12:36:57Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1243/_17113.html",
+      "kind": "new",
+      "title": "【募集中】不登校児童支援員",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_17113.html",
+      "sourcePublished": "2026-09-14",
+      "detectedAt": "2026-09-14T12:36:57Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17317.html",
       "kind": "new",
