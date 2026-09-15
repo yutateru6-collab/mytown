@@ -1,7 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-15T12:35:12Z",
+  "generatedAt": "2026-09-15T18:30:44Z",
   "changes": [
+    {
+      "id": "council-update:2026-09-15T18:30:44Z",
+      "kind": "updated",
+      "title": "市議会の日程が更新されました",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html",
+      "sourcePublished": "2026-09-01",
+      "detectedAt": "2026-09-15T18:30:44Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html",
       "kind": "new",
