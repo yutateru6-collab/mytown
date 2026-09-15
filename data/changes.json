@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-14T12:36:57Z",
+  "generatedAt": "2026-09-15T06:36:59Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3985/_17232.html",
+      "kind": "new",
+      "title": "令和8年度自衛官採用試験案内",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3985/_17232.html",
+      "sourcePublished": "2026-09-15",
+      "detectedAt": "2026-09-15T06:36:59Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/yukari/_1510/_1511/_1533.html",
+      "kind": "new",
+      "title": "直方市シニアクラブ連合会",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1511/_1533.html",
+      "sourcePublished": "2026-09-15",
+      "detectedAt": "2026-09-15T06:36:59Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1243/_17113.html",
       "kind": "new",
