@@ -1,7 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-15T06:36:59Z",
+  "generatedAt": "2026-09-15T12:35:12Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html",
+      "kind": "new",
+      "title": "#きらきらのおがた作品紹介",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html",
+      "sourcePublished": "2026-09-15",
+      "detectedAt": "2026-09-15T12:35:12Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3985/_17232.html",
       "kind": "new",
@@ -105,14 +113,6 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2727/_16804.html",
       "sourcePublished": "2026-09-11",
       "detectedAt": "2026-09-11T06:35:13Z"
-    },
-    {
-      "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html",
-      "kind": "new",
-      "title": "#きらきらのおがた作品紹介",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html",
-      "sourcePublished": "2026-09-10",
-      "detectedAt": "2026-09-10T12:36:24Z"
     },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17158.html",
