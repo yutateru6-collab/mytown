@@ -125,7 +125,7 @@
       "category": "その他",
       "title": "#きらきらのおがた作品紹介",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-15",
+      "published": "2026-09-16",
       "status": "新着",
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html"
     }
@@ -236,7 +236,7 @@
   },
   "latest": [
     {
-      "date": "2026-09-15",
+      "date": "2026-09-16",
       "title": "#きらきらのおがた作品紹介",
       "url": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html"
     },
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-15T18:30:44Z"
+  "generatedAt": "2026-09-16T00:35:39Z"
 }
