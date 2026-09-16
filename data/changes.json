@@ -1,7 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-16T06:36:13Z",
+  "generatedAt": "2026-09-16T12:36:10Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_16996.html",
+      "kind": "new",
+      "title": "直方市水道キャラクターコンクールについて",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_16996.html",
+      "sourcePublished": "2026-09-16",
+      "detectedAt": "2026-09-16T12:36:10Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html",
       "kind": "new",

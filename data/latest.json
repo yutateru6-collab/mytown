@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-5338fa568d9c",
-      "category": "観光・イベント",
-      "title": "マンホールカードを配布します",
+      "id": "rss-a7e0a0400ed9",
+      "category": "その他",
+      "title": "直方市水道キャラクターコンクールについて",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-09-16",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_16996.html"
     }
   ],
   "council": {
@@ -237,6 +237,11 @@
   "latest": [
     {
       "date": "2026-09-16",
+      "title": "直方市水道キャラクターコンクールについて",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_16996.html"
+    },
+    {
+      "date": "2026-09-16",
       "title": "マンホールカードを配布します",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
     },
@@ -289,11 +294,6 @@
       "date": "2026-09-11",
       "title": "修繕工事入札結果【9月11日入札分】",
       "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17314.html"
-    },
-    {
-      "date": "2026-09-11",
-      "title": "自分を輝かせ、素敵な就職と未来を手に入れよう！（令和8年度女性のための就職サポートセミナー）",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17158.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-16T06:36:13Z"
+  "generatedAt": "2026-09-16T12:36:10Z"
 }
