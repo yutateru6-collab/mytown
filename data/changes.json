@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-16T00:35:39Z",
+  "generatedAt": "2026-09-16T06:36:13Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html",
+      "kind": "new",
+      "title": "マンホールカードを配布します",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html",
+      "sourcePublished": "2026-09-16",
+      "detectedAt": "2026-09-16T06:36:13Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/yukari/_1510/_1511/_17332.html",
+      "kind": "new",
+      "title": "直方市シニアクラブ連合会",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1511/_17332.html",
+      "sourcePublished": "2026-09-16",
+      "detectedAt": "2026-09-16T06:36:13Z"
+    },
     {
       "id": "latest-update:https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html",
       "kind": "updated",
@@ -233,14 +249,6 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3986/_17266.html",
       "sourcePublished": "2026-09-08",
       "detectedAt": "2026-09-08T06:35:41Z"
-    },
-    {
-      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html",
-      "kind": "new",
-      "title": "マンホールカードを配布します",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html",
-      "sourcePublished": "2026-09-08",
-      "detectedAt": "2026-09-08T00:40:12Z"
     },
     {
       "id": "council-update:2026-09-07T18:32:25Z",

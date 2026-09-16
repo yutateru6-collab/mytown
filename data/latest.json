@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-bf351d748750",
-      "category": "その他",
-      "title": "#きらきらのおがた作品紹介",
+      "id": "rss-5338fa568d9c",
+      "category": "観光・イベント",
+      "title": "マンホールカードを配布します",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-09-16",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
     }
   ],
   "council": {
@@ -237,8 +237,18 @@
   "latest": [
     {
       "date": "2026-09-16",
+      "title": "マンホールカードを配布します",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
+    },
+    {
+      "date": "2026-09-16",
       "title": "#きらきらのおがた作品紹介",
       "url": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html"
+    },
+    {
+      "date": "2026-09-16",
+      "title": "直方市シニアクラブ連合会",
+      "url": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1511/_17332.html"
     },
     {
       "date": "2026-09-15",
@@ -276,11 +286,6 @@
       "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1229/_17315.html"
     },
     {
-      "date": "2026-09-14",
-      "title": "【募集中】発掘調査員（屋外）",
-      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_17294.html"
-    },
-    {
       "date": "2026-09-11",
       "title": "修繕工事入札結果【9月11日入札分】",
       "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17314.html"
@@ -289,11 +294,6 @@
       "date": "2026-09-11",
       "title": "自分を輝かせ、素敵な就職と未来を手に入れよう！（令和8年度女性のための就職サポートセミナー）",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17158.html"
-    },
-    {
-      "date": "2026-09-11",
-      "title": "【福岡県主催キャンペーン】1万人のクリーンアップ大作戦！",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_14439/_15787.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-16T00:35:39Z"
+  "generatedAt": "2026-09-16T06:36:13Z"
 }
