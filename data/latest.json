@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "city": "直方市",
-  "verifiedOn": "2026-09-17",
+  "verifiedOn": "2026-09-18",
   "population": {
     "asOf": "2026年（令和8年）8月末",
     "total": 53847,
@@ -121,19 +121,19 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-a7e0a0400ed9",
+      "id": "rss-ab2a09a852fd",
       "category": "その他",
-      "title": "直方市水道キャラクターコンクールについて",
+      "title": "【医療機関向け】高齢者定期予防接種に関するお知らせ",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-16",
+      "published": "2026-09-18",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_16996.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_14832.html"
     }
   ],
   "council": {
     "title": "令和8年9月定例会",
-    "status": "9/17予定",
-    "nextDateLabel": "9/17 10:00",
+    "status": "9/18予定",
+    "nextDateLabel": "9/18 10:00",
     "nextSummary": "委員会（付託議案審査）が予定されています。日程・開会時間は変更されることがあります。",
     "summary": "9月3日から9月25日までの日程が公表されています。",
     "sourceUpdated": "2026-09-01",
@@ -236,6 +236,11 @@
   },
   "latest": [
     {
+      "date": "2026-09-18",
+      "title": "【医療機関向け】高齢者定期予防接種に関するお知らせ",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_14832.html"
+    },
+    {
       "date": "2026-09-16",
       "title": "直方市水道キャラクターコンクールについて",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_16996.html"
@@ -289,11 +294,6 @@
       "date": "2026-09-14",
       "title": "GX戦略地域制度（データセンター集積型）に認定されました",
       "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1229/_17315.html"
-    },
-    {
-      "date": "2026-09-11",
-      "title": "修繕工事入札結果【9月11日入札分】",
-      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17314.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-16T18:32:26Z"
+  "generatedAt": "2026-09-17T18:32:46Z"
 }
