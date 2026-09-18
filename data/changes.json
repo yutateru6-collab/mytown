@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-17T18:32:46Z",
+  "generatedAt": "2026-09-18T06:34:27Z",
   "changes": [
+    {
+      "id": "latest-update:https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html",
+      "kind": "updated",
+      "title": "マンホールカードを配布します",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html",
+      "sourcePublished": "2026-09-18",
+      "detectedAt": "2026-09-18T06:34:27Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17319.html",
+      "kind": "new",
+      "title": "建設工事入札結果【9月18日入札分】",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17319.html",
+      "sourcePublished": "2026-09-18",
+      "detectedAt": "2026-09-18T06:34:27Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_1987/_14832.html",
       "kind": "new",

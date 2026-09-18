@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-ab2a09a852fd",
-      "category": "その他",
-      "title": "【医療機関向け】高齢者定期予防接種に関するお知らせ",
+      "id": "rss-5338fa568d9c",
+      "category": "観光・イベント",
+      "title": "マンホールカードを配布します",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-09-18",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_14832.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
     }
   ],
   "council": {
@@ -237,6 +237,16 @@
   "latest": [
     {
       "date": "2026-09-18",
+      "title": "マンホールカードを配布します",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
+    },
+    {
+      "date": "2026-09-18",
+      "title": "建設工事入札結果【9月18日入札分】",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17319.html"
+    },
+    {
+      "date": "2026-09-18",
       "title": "【医療機関向け】高齢者定期予防接種に関するお知らせ",
       "url": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_14832.html"
     },
@@ -244,11 +254,6 @@
       "date": "2026-09-16",
       "title": "直方市水道キャラクターコンクールについて",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_16996.html"
-    },
-    {
-      "date": "2026-09-16",
-      "title": "マンホールカードを配布します",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
     },
     {
       "date": "2026-09-16",
@@ -289,11 +294,6 @@
       "date": "2026-09-14",
       "title": "令和8年度直方市消防職員U・I・Jターン採用試験(職務経験者枠)",
       "url": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_1807/_17293.html"
-    },
-    {
-      "date": "2026-09-14",
-      "title": "GX戦略地域制度（データセンター集積型）に認定されました",
-      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1229/_17315.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-17T18:32:46Z"
+  "generatedAt": "2026-09-18T06:34:27Z"
 }
