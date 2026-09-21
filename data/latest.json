@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-5338fa568d9c",
-      "category": "観光・イベント",
-      "title": "マンホールカードを配布します",
+      "id": "rss-9719d8408f7c",
+      "category": "その他",
+      "title": "さわやかな秋の一日、遺跡公園を訪ねませんか？～古墳同時公開～",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-18",
+      "published": "2026-09-21",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17229.html"
     }
   ],
   "council": {
@@ -236,6 +236,11 @@
   },
   "latest": [
     {
+      "date": "2026-09-21",
+      "title": "さわやかな秋の一日、遺跡公園を訪ねませんか？～古墳同時公開～",
+      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17229.html"
+    },
+    {
       "date": "2026-09-18",
       "title": "マンホールカードを配布します",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
@@ -289,11 +294,6 @@
       "date": "2026-09-14",
       "title": "通学区域制度の弾力的運用について",
       "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_2418/_2478/_2482.html"
-    },
-    {
-      "date": "2026-09-14",
-      "title": "令和8年度直方市消防職員U・I・Jターン採用試験(職務経験者枠)",
-      "url": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_1807/_17293.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-20T18:29:49Z"
+  "generatedAt": "2026-09-21T00:36:15Z"
 }
