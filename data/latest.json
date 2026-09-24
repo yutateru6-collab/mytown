@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "city": "直方市",
-  "verifiedOn": "2026-09-24",
+  "verifiedOn": "2026-09-25",
   "population": {
     "asOf": "2026年（令和8年）8月末",
     "total": 53847,
@@ -132,9 +132,9 @@
   ],
   "council": {
     "title": "令和8年9月定例会",
-    "status": "9/24予定",
-    "nextDateLabel": "9/24 10:00",
-    "nextSummary": "委員会（付託議案審査）が予定されています。日程・開会時間は変更されることがあります。",
+    "status": "9/25予定",
+    "nextDateLabel": "9/25 10:00",
+    "nextSummary": "本会議（採決）が予定されています。日程・開会時間は変更されることがあります。",
     "summary": "9月3日から9月25日までの日程が公表されています。",
     "sourceUpdated": "2026-09-01",
     "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-24T04:57:21Z"
+  "generatedAt": "2026-09-24T17:15:15Z"
 }
