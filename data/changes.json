@@ -1,7 +1,39 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-21T18:32:28Z",
+  "generatedAt": "2026-09-24T04:57:21Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_1987/_13921.html",
+      "kind": "new",
+      "title": "高齢者(インフルエンザ・新型コロナ)の予防接種",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_13921.html",
+      "sourcePublished": "2026-09-24",
+      "detectedAt": "2026-09-24T04:57:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_4287/_17282.html",
+      "kind": "new",
+      "title": "【遠賀川を遊びつくそう】参加者募集",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_4287/_17282.html",
+      "sourcePublished": "2026-09-24",
+      "detectedAt": "2026-09-24T04:57:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_7482/_10575.html",
+      "kind": "new",
+      "title": "参加費用を一部補助します ～男女共同参画研修・セミナーなど～",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_7482/_10575.html",
+      "sourcePublished": "2026-09-24",
+      "detectedAt": "2026-09-24T04:57:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html",
+      "kind": "new",
+      "title": "筑豊炭田遺跡群オンラインシンポジウム「産炭地を比較する‐閉山後の福岡・筑豊と北海道・空知‐」を開催します！",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html",
+      "sourcePublished": "2026-09-24",
+      "detectedAt": "2026-09-24T04:57:21Z"
+    },
     {
       "id": "featured-update:pilates-2026-autumn:2026-09-21T18:32:28Z",
       "kind": "updated",
@@ -249,14 +281,6 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_4287/_17155.html",
       "sourcePublished": "2026-09-10",
       "detectedAt": "2026-09-10T00:35:45Z"
-    },
-    {
-      "id": "latest:https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html",
-      "kind": "new",
-      "title": "筑豊炭田遺跡群オンラインシンポジウム「産炭地を比較する‐閉山後の福岡・筑豊と北海道・空知‐」を開催します！",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html",
-      "sourcePublished": "2026-09-03",
-      "detectedAt": "2026-09-09T18:33:26Z"
     },
     {
       "id": "council-update:2026-09-09T18:33:26Z",
