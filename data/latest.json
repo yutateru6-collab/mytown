@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "city": "直方市",
-  "verifiedOn": "2026-09-25",
+  "verifiedOn": "2026-09-26",
   "population": {
     "asOf": "2026年（令和8年）8月末",
     "total": 53847,
@@ -130,15 +130,7 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_1807/_17293.html"
     }
   ],
-  "council": {
-    "title": "令和8年9月定例会",
-    "status": "9/25予定",
-    "nextDateLabel": "9/25 10:00",
-    "nextSummary": "本会議（採決）が予定されています。日程・開会時間は変更されることがあります。",
-    "summary": "9月3日から9月25日までの日程が公表されています。",
-    "sourceUpdated": "2026-09-01",
-    "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17055.html"
-  },
+  "council": null,
   "garbage": {
     "title": "ごみ・資源リサイクルの収集日",
     "summary": "市東部・市西部の収集日程を、アプリ内で確認できます。",
@@ -359,5 +351,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-25T11:55:27Z"
+  "generatedAt": "2026-09-25T17:15:54Z"
 }
