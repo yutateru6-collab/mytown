@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-24T17:15:15Z",
+  "generatedAt": "2026-09-25T11:55:27Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/syobo/_1247/_1807/_17293.html",
+      "kind": "new",
+      "title": "令和8年度直方市消防職員U・I・Jターン採用試験(職務経験者枠)",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_1807/_17293.html",
+      "sourcePublished": "2026-09-25",
+      "detectedAt": "2026-09-25T11:55:27Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1243/_17046.html",
+      "kind": "new",
+      "title": "人事行政の運営等の状況を公表します",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_17046.html",
+      "sourcePublished": "2026-09-25",
+      "detectedAt": "2026-09-25T11:55:27Z"
+    },
     {
       "id": "council-update:2026-09-24T17:15:15Z",
       "kind": "updated",
@@ -191,14 +207,6 @@
       "kind": "new",
       "title": "通学区域制度の弾力的運用について",
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_2418/_2478/_2482.html",
-      "sourcePublished": "2026-09-14",
-      "detectedAt": "2026-09-14T06:38:16Z"
-    },
-    {
-      "id": "latest:https://www.city.nogata.fukuoka.jp/syobo/_1247/_1807/_17293.html",
-      "kind": "new",
-      "title": "令和8年度直方市消防職員U・I・Jターン採用試験(職務経験者枠)",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_1807/_17293.html",
       "sourcePublished": "2026-09-14",
       "detectedAt": "2026-09-14T06:38:16Z"
     },

@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-30636e90b5ac",
-      "category": "その他",
-      "title": "高齢者(インフルエンザ・新型コロナ)の予防接種",
+      "id": "rss-e001bde9a1c8",
+      "category": "防災",
+      "title": "令和8年度直方市消防職員U・I・Jターン採用試験(職務経験者枠)",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-24",
+      "published": "2026-09-25",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_13921.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_1807/_17293.html"
     }
   ],
   "council": {
@@ -236,6 +236,16 @@
   },
   "latest": [
     {
+      "date": "2026-09-25",
+      "title": "令和8年度直方市消防職員U・I・Jターン採用試験(職務経験者枠)",
+      "url": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_1807/_17293.html"
+    },
+    {
+      "date": "2026-09-25",
+      "title": "人事行政の運営等の状況を公表します",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_17046.html"
+    },
+    {
       "date": "2026-09-24",
       "title": "高齢者(インフルエンザ・新型コロナ)の予防接種",
       "url": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_13921.html"
@@ -284,16 +294,6 @@
       "date": "2026-09-16",
       "title": "#きらきらのおがた作品紹介",
       "url": "https://www.city.nogata.fukuoka.jp/shisei/_1238/_2505/_16925.html"
-    },
-    {
-      "date": "2026-09-16",
-      "title": "直方市シニアクラブ連合会",
-      "url": "https://www.city.nogata.fukuoka.jp/yukari/_1510/_1511/_17332.html"
-    },
-    {
-      "date": "2026-09-15",
-      "title": "令和8年度自衛官採用試験案内",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3985/_17232.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-24T17:15:15Z"
+  "generatedAt": "2026-09-25T11:55:27Z"
 }
