@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "city": "直方市",
-  "verifiedOn": "2026-09-26",
+  "verifiedOn": "2026-09-27",
   "population": {
     "asOf": "2026年（令和8年）8月末",
     "total": 53847,
@@ -351,5 +351,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-25T17:15:54Z"
+  "generatedAt": "2026-09-26T16:27:15Z"
 }
