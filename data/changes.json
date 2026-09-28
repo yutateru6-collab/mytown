@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-25T11:55:27Z",
+  "generatedAt": "2026-09-28T05:29:13Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html",
+      "kind": "new",
+      "title": "親子で楽しむ環境学習プログラム",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html",
+      "sourcePublished": "2026-09-28",
+      "detectedAt": "2026-09-28T05:29:13Z"
+    },
+    {
+      "id": "latest-update:https://www.city.nogata.fukuoka.jp/kenko/_1987/_14832.html",
+      "kind": "updated",
+      "title": "【医療機関向け】高齢者定期予防接種に関するお知らせ",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_14832.html",
+      "sourcePublished": "2026-09-28",
+      "detectedAt": "2026-09-28T05:29:13Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/syobo/_1247/_1807/_17293.html",
       "kind": "new",
