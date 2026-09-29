@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-29T08:29:44.490979+09:00",
+  "generatedAt": "2026-09-29T15:10:43.529894+09:00",
   "events": [
     {
       "id": "community-nogata-shakyo-a5f34d031fbd",
@@ -20,13 +20,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:10.407118+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627089+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:24.549506+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098116+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-1d9b7931c6b4",
@@ -46,7 +46,7 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "occurrences": [
         "2026-09-01",
         "2026-10-02",
@@ -59,8 +59,8 @@
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:10.497874+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627132+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:24.577497+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098189+09:00"
     },
     {
       "id": "community-nogata-shakyo-9291129b4c37",
@@ -83,7 +83,7 @@
         "learn",
         "free"
       ],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "occurrences": [
         "2026-09-26",
         "2026-10-03",
@@ -97,8 +97,8 @@
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:11.295678+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627182+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:25.608087+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098250+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-79cd29bfb260",
@@ -118,7 +118,7 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "occurrences": [
         "2026-10-02",
         "2026-10-04",
@@ -129,8 +129,8 @@
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:11.401292+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627212+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:25.636651+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098288+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-30a7a8d0d0f6",
@@ -152,13 +152,13 @@
       "tags": [
         "learn"
       ],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:11.495983+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627237+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:25.666966+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098323+09:00"
     },
     {
       "id": "community-nogata-kankoh-bf72ac67fa94",
@@ -178,13 +178,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:12.281551+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627262+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:26.918601+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098359+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-3abc9d6bbad5",
@@ -204,13 +204,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:12.369776+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627287+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:26.947632+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098393+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-0c571fa3641c",
@@ -230,13 +230,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:12.463140+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627310+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:26.974937+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098424+09:00"
     },
     {
       "id": "community-nogata-kankoh-679e8255459d",
@@ -256,13 +256,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:13.104692+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627333+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:27.880785+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098455+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-6a114f62d785",
@@ -282,13 +282,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:13.195651+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627355+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:27.908305+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098486+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-1da201bafe0c",
@@ -310,13 +310,13 @@
       "tags": [
         "learn"
       ],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:13.290183+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627376+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:28.051661+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098517+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-b79ca2268d34",
@@ -336,13 +336,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:13.553217+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627399+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:28.082363+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098548+09:00"
     },
     {
       "id": "community-ongagawa-mizubekan-b5c0051759fa",
@@ -367,14 +367,14 @@
         "outdoor"
       ],
       "recurrence": "毎月最後の日曜日",
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "editoriallyReviewed": true,
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:14.440243+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627424+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:29.224062+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098583+09:00"
     },
     {
       "id": "community-nogata-kankoh-b6d504b21cb2",
@@ -394,7 +394,7 @@
       "statusLabel": "申込締切 10月20日",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "applicationDeadline": "2026-10-20",
       "applicationStatus": "open",
       "money": "1,000円",
@@ -413,8 +413,8 @@
         "公式掲載ページのHTML抽出では金額の先頭数字が欠落したため、主催者・日程・内容が一致する公開記事と照合し、参加費1,000円を確認しました。"
       ],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:15.088719+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627519+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:30.117821+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098696+09:00"
     },
     {
       "id": "community-nogata-kankoh-ee5c047debff",
@@ -439,7 +439,7 @@
         "family",
         "outdoor"
       ],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "occurrences": [
         "2026-11-17",
         "2026-11-18",
@@ -471,8 +471,8 @@
         "同期前のレビュー済み期限は10月9日でした。品質再検査が開催初日11月17日を期限として拾ったため、申込期限を10月9日に戻し、受付状態は現在日から毎回計算します。"
       ],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:15.731955+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627580+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:30.985421+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098772+09:00"
     },
     {
       "id": "community-nogata-shakyo-576cad36495b",
@@ -492,13 +492,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-09-29T08:29:44.490979+09:00",
+      "lastCheckedAt": "2026-09-29T15:10:43.529894+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-09-29T08:30:16.539241+09:00",
-      "stateCheckedAt": "2026-09-29T08:30:16.627626+09:00"
+      "contentCheckedAt": "2026-09-29T15:11:32.005292+09:00",
+      "stateCheckedAt": "2026-09-29T15:11:32.098831+09:00"
     }
   ],
   "sourceHealth": [
@@ -506,7 +506,7 @@
       "id": "nogata-shakyo",
       "name": "直方市社会福祉協議会",
       "status": "ok",
-      "checkedAt": "2026-09-29T08:29:44.490979+09:00",
+      "checkedAt": "2026-09-29T15:10:43.529894+09:00",
       "fetchStatus": "ok",
       "contentStatus": "verified",
       "contentIssueCount": 0,
@@ -517,7 +517,7 @@
       "id": "nogata-kankoh",
       "name": "直方市観光物産振興協会",
       "status": "ok",
-      "checkedAt": "2026-09-29T08:29:44.490979+09:00",
+      "checkedAt": "2026-09-29T15:10:43.529894+09:00",
       "fetchStatus": "ok",
       "contentStatus": "verified",
       "contentIssueCount": 0,
@@ -528,7 +528,7 @@
       "id": "aeon-mall-nogata",
       "name": "イオンモール直方",
       "status": "ok",
-      "checkedAt": "2026-09-29T08:29:44.490979+09:00",
+      "checkedAt": "2026-09-29T15:10:43.529894+09:00",
       "fetchStatus": "ok",
       "contentStatus": "verified",
       "contentIssueCount": 0,
@@ -539,7 +539,7 @@
       "id": "ongagawa-mizubekan",
       "name": "NPO法人直方川づくりの会",
       "status": "ok",
-      "checkedAt": "2026-09-29T08:29:44.490979+09:00",
+      "checkedAt": "2026-09-29T15:10:43.529894+09:00",
       "fetchStatus": "ok",
       "contentStatus": "verified",
       "contentIssueCount": 0,
@@ -547,7 +547,7 @@
       "contentEventCount": 1
     }
   ],
-  "qualityCheckedAt": "2026-09-29T08:30:16.539265+09:00",
+  "qualityCheckedAt": "2026-09-29T15:11:32.005314+09:00",
   "qualityFetchWarnings": [],
-  "stateCheckedAt": "2026-09-29T08:30:16.627633+09:00"
+  "stateCheckedAt": "2026-09-29T15:11:32.098838+09:00"
 }
