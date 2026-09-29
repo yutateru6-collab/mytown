@@ -121,13 +121,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-961029f96cd5",
+      "id": "rss-5c157509dde5",
       "category": "その他",
-      "title": "親子で楽しむ環境学習プログラム",
+      "title": "修繕工事入札結果【9月29日入札分】",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-28",
+      "published": "2026-09-29",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17327.html"
     }
   ],
   "council": null,
@@ -228,6 +228,16 @@
   },
   "latest": [
     {
+      "date": "2026-09-29",
+      "title": "修繕工事入札結果【9月29日入札分】",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17327.html"
+    },
+    {
+      "date": "2026-09-29",
+      "title": "令和8年9月定例会審議結果及び賛否一覧を掲載",
+      "url": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2743/_16304.html"
+    },
+    {
       "date": "2026-09-28",
       "title": "親子で楽しむ環境学習プログラム",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html"
@@ -276,16 +286,6 @@
       "date": "2026-09-18",
       "title": "マンホールカードを配布します",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
-    },
-    {
-      "date": "2026-09-18",
-      "title": "建設工事入札結果【9月18日入札分】",
-      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17319.html"
-    },
-    {
-      "date": "2026-09-16",
-      "title": "直方市水道キャラクターコンクールについて",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_16996.html"
     }
   ],
   "sourceHealth": [
@@ -351,5 +351,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-28T23:19:18Z"
+  "generatedAt": "2026-09-29T05:48:10Z"
 }

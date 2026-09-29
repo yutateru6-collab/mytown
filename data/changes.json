@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-28T05:29:13Z",
+  "generatedAt": "2026-09-29T05:48:10Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17327.html",
+      "kind": "new",
+      "title": "修繕工事入札結果【9月29日入札分】",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17327.html",
+      "sourcePublished": "2026-09-29",
+      "detectedAt": "2026-09-29T05:48:10Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2743/_16304.html",
+      "kind": "new",
+      "title": "令和8年9月定例会審議結果及び賛否一覧を掲載",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2743/_16304.html",
+      "sourcePublished": "2026-09-29",
+      "detectedAt": "2026-09-29T05:48:10Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html",
       "kind": "new",
