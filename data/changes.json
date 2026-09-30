@@ -1,7 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-30T05:37:35Z",
+  "generatedAt": "2026-09-30T12:40:43Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1236/_12739/_16616.html",
+      "kind": "new",
+      "title": "令和7年度当初予算書を掲載しました",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1236/_12739/_16616.html",
+      "sourcePublished": "2026-09-30",
+      "detectedAt": "2026-09-30T12:40:43Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16567/_15480/_17312.html",
       "kind": "new",
