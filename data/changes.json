@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-29T05:48:10Z",
+  "generatedAt": "2026-09-30T05:37:35Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16567/_15480/_17312.html",
+      "kind": "new",
+      "title": "10月は3R推進月間です",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16567/_15480/_17312.html",
+      "sourcePublished": "2026-09-30",
+      "detectedAt": "2026-09-30T05:37:35Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17357.html",
+      "kind": "new",
+      "title": "令和8年12月定例会会期日程案を掲載",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17357.html",
+      "sourcePublished": "2026-09-30",
+      "detectedAt": "2026-09-30T05:37:35Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17327.html",
       "kind": "new",

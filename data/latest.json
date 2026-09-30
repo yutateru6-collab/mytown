@@ -121,16 +121,24 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-5c157509dde5",
+      "id": "rss-738289a94e46",
       "category": "その他",
-      "title": "修繕工事入札結果【9月29日入札分】",
+      "title": "10月は3R推進月間です",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-29",
+      "published": "2026-09-30",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17327.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16567/_15480/_17312.html"
     }
   ],
-  "council": null,
+  "council": {
+    "title": "令和8年12月定例会日程（案）",
+    "status": "11/27予定",
+    "nextDateLabel": "11/27 10:00",
+    "nextSummary": "本会議（議案の提案説明）が予定されています。日程・開会時間は変更されることがあります。",
+    "summary": "11月27日から12月11日までの日程が公表されています。",
+    "sourceUpdated": "2026-09-30",
+    "sourceUrl": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17357.html"
+  },
   "garbage": {
     "title": "ごみ・資源リサイクルの収集日",
     "summary": "市東部・市西部の収集日程を、アプリ内で確認できます。",
@@ -228,6 +236,16 @@
   },
   "latest": [
     {
+      "date": "2026-09-30",
+      "title": "10月は3R推進月間です",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16567/_15480/_17312.html"
+    },
+    {
+      "date": "2026-09-30",
+      "title": "令和8年12月定例会会期日程案を掲載",
+      "url": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17357.html"
+    },
+    {
       "date": "2026-09-29",
       "title": "修繕工事入札結果【9月29日入札分】",
       "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17327.html"
@@ -276,16 +294,6 @@
       "date": "2026-09-24",
       "title": "筑豊炭田遺跡群オンラインシンポジウム「産炭地を比較する‐閉山後の福岡・筑豊と北海道・空知‐」を開催します！",
       "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_15676.html"
-    },
-    {
-      "date": "2026-09-21",
-      "title": "さわやかな秋の一日、遺跡公園を訪ねませんか？～古墳同時公開～",
-      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17229.html"
-    },
-    {
-      "date": "2026-09-18",
-      "title": "マンホールカードを配布します",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1332/_17114.html"
     }
   ],
   "sourceHealth": [
@@ -351,5 +359,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-29T22:19:30Z"
+  "generatedAt": "2026-09-30T05:37:35Z"
 }
