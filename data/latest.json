@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "city": "直方市",
-  "verifiedOn": "2026-09-30",
+  "verifiedOn": "2026-10-01",
   "population": {
     "asOf": "2026年（令和8年）8月末",
     "total": 53847,
@@ -15,11 +15,11 @@
       "id": "community-bus-20261001",
       "category": "交通",
       "title": "コミュニティバスの路線と時刻表が10月1日から変わります",
-      "summary": "直方市コミュニティバスは2026年10月1日から路線・時刻表を変更します。新しいバス停の設置、路線名の変更、路線の統合・廃止などがあります。",
+      "summary": "この公式ページは公開後に更新されています。同期システムが変更を検知したため、最新内容は公式ページで確認してください。",
       "published": "2026-09-01",
-      "status": "10/1から変更",
+      "status": "公式ページ更新あり",
       "when": "2026年10月1日から",
-      "why": "直方市公式ページでは、利用面の改善、交通空白への対応、他路線の廃止・統合への対応などが路線ごとに説明されています。",
+      "why": "更新後の内容を自動推測せず、公式ページの確認を優先しています。",
       "money": null,
       "decision": "関連する直方市地域公共交通協議会の資料と、2026年10月1日の変更案内を時系列で表示しています。変更項目すべての最終決定・承認に当たる会議資料と日付は、現在確認した公開資料だけでは特定できません。",
       "decisionTimeline": [
@@ -71,13 +71,10 @@
           "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
         }
       ],
-      "bullets": [
-        "上頓野線に『もち吉工場直売所』『アグリー福智の郷』バス停を新設",
-        "鴨生田団地線は『新入線』へ名称変更",
-        "武谷線は『中泉線』へ名称変更",
-        "赤地新入線は新入線と中泉線へ統合して廃止"
-      ],
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
+      "bullets": [],
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html",
+      "sourceUpdated": "2026-10-01",
+      "needsReview": true
     },
     {
       "id": "school-health-check-2026",
@@ -121,13 +118,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-cabe62af5706",
+      "id": "rss-dc737799e425",
       "category": "その他",
-      "title": "令和7年度当初予算書を掲載しました",
+      "title": "「敷金・原状回復費用・建物明渡に関する無料電話相談会」開催",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-09-30",
+      "published": "2026-10-01",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1236/_12739/_16616.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_6801.html"
     }
   ],
   "council": {
@@ -236,64 +233,64 @@
   },
   "latest": [
     {
-      "date": "2026-09-30",
-      "title": "令和7年度当初予算書を掲載しました",
-      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1236/_12739/_16616.html"
+      "date": "2026-10-01",
+      "title": "「敷金・原状回復費用・建物明渡に関する無料電話相談会」開催",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_6801.html"
     },
     {
-      "date": "2026-09-30",
-      "title": "10月は3R推進月間です",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1200/_16567/_15480/_17312.html"
-    },
-    {
-      "date": "2026-09-30",
-      "title": "令和8年12月定例会会期日程案を掲載",
-      "url": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2736/_17357.html"
-    },
-    {
-      "date": "2026-09-29",
-      "title": "修繕工事入札結果【9月29日入札分】",
-      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17327.html"
-    },
-    {
-      "date": "2026-09-29",
-      "title": "令和8年9月定例会審議結果及び賛否一覧を掲載",
-      "url": "https://www.city.nogata.fukuoka.jp/sigikai/_1254/_2743/_16304.html"
-    },
-    {
-      "date": "2026-09-28",
-      "title": "親子で楽しむ環境学習プログラム",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_17139.html"
-    },
-    {
-      "date": "2026-09-28",
-      "title": "【医療機関向け】高齢者定期予防接種に関するお知らせ",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_14832.html"
-    },
-    {
-      "date": "2026-09-25",
-      "title": "令和8年度直方市消防職員U・I・Jターン採用試験(職務経験者枠)",
-      "url": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_1807/_17293.html"
-    },
-    {
-      "date": "2026-09-25",
-      "title": "人事行政の運営等の状況を公表します",
-      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_17046.html"
-    },
-    {
-      "date": "2026-09-24",
+      "date": "2026-10-01",
       "title": "高齢者(インフルエンザ・新型コロナ)の予防接種",
       "url": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_13921.html"
     },
     {
-      "date": "2026-09-24",
-      "title": "【遠賀川を遊びつくそう】参加者募集",
-      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_4287/_17282.html"
+      "date": "2026-10-01",
+      "title": "令和8年度第58回直方市民文化祭へのご来場をお待ちしております♪",
+      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17027/_17028.html"
     },
     {
-      "date": "2026-09-24",
-      "title": "参加費用を一部補助します ～男女共同参画研修・セミナーなど～",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_7482/_10575.html"
+      "date": "2026-10-01",
+      "title": "路線と時刻表を令和8年10月1日付で改正しました",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
+    },
+    {
+      "date": "2026-10-01",
+      "title": "初心者でも安心！大人のための塗り絵教室",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1209/_9289/_17219.html"
+    },
+    {
+      "date": "2026-10-01",
+      "title": "筑豊市民大学公開講演会「月・火星探査と基地」",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3983/_17233.html"
+    },
+    {
+      "date": "2026-10-01",
+      "title": "認知症＆介護予防講座「認知症や生活習慣病を予防する　口腔ケアを学びませんか？」",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_2287/_17243.html"
+    },
+    {
+      "date": "2026-10-01",
+      "title": "令和8年度父と子の料理教室  ～第3弾～",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17259.html"
+    },
+    {
+      "date": "2026-10-01",
+      "title": "困っていることありませんか？無料ビジネスセミナーを開催します",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1229/_17262.html"
+    },
+    {
+      "date": "2026-10-01",
+      "title": "アンケート調査にご協力ください",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_2984/_17304.html"
+    },
+    {
+      "date": "2026-10-01",
+      "title": "令和8年度海外派遣事業報告会～フィンランドでの学びと気づき、その先に見つけたもの～",
+      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_16562/_17339.html"
+    },
+    {
+      "date": "2026-09-30",
+      "title": "令和7年度当初予算書を掲載しました",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1236/_12739/_16616.html"
     }
   ],
   "sourceHealth": [
@@ -359,5 +356,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-30T12:40:43Z"
+  "generatedAt": "2026-09-30T22:20:21Z"
 }

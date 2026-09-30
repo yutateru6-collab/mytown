@@ -1,7 +1,95 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-30T12:40:43Z",
+  "generatedAt": "2026-09-30T22:20:21Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_6801.html",
+      "kind": "new",
+      "title": "「敷金・原状回復費用・建物明渡に関する無料電話相談会」開催",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_6801.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-09-30T22:20:21Z"
+    },
+    {
+      "id": "latest-update:https://www.city.nogata.fukuoka.jp/kenko/_1987/_13921.html",
+      "kind": "updated",
+      "title": "高齢者(インフルエンザ・新型コロナ)の予防接種",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_13921.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-09-30T22:20:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17027/_17028.html",
+      "kind": "new",
+      "title": "令和8年度第58回直方市民文化祭へのご来場をお待ちしております♪",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17027/_17028.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-09-30T22:20:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html",
+      "kind": "new",
+      "title": "路線と時刻表を令和8年10月1日付で改正しました",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-09-30T22:20:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_1209/_9289/_17219.html",
+      "kind": "new",
+      "title": "初心者でも安心！大人のための塗り絵教室",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1209/_9289/_17219.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-09-30T22:20:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3983/_17233.html",
+      "kind": "new",
+      "title": "筑豊市民大学公開講演会「月・火星探査と基地」",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3983/_17233.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-09-30T22:20:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_1158/_2287/_17243.html",
+      "kind": "new",
+      "title": "認知症＆介護予防講座「認知症や生活習慣病を予防する　口腔ケアを学びませんか？」",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_2287/_17243.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-09-30T22:20:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17259.html",
+      "kind": "new",
+      "title": "令和8年度父と子の料理教室  ～第3弾～",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17259.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-09-30T22:20:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1229/_17262.html",
+      "kind": "new",
+      "title": "困っていることありませんか？無料ビジネスセミナーを開催します",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1229/_17262.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-09-30T22:20:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_2984/_17304.html",
+      "kind": "new",
+      "title": "アンケート調査にご協力ください",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_2984/_17304.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-09-30T22:20:21Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_16562/_17339.html",
+      "kind": "new",
+      "title": "令和8年度海外派遣事業報告会～フィンランドでの学びと気づき、その先に見つけたもの～",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_16562/_17339.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-09-30T22:20:21Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1236/_12739/_16616.html",
       "kind": "new",
