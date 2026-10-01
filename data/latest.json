@@ -118,13 +118,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-dc737799e425",
+      "id": "rss-92336703a5a0",
       "category": "その他",
-      "title": "「敷金・原状回復費用・建物明渡に関する無料電話相談会」開催",
+      "title": "税理士による無料相談会",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
       "published": "2026-10-01",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_6801.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_11817.html"
     }
   ],
   "council": {
@@ -234,6 +234,26 @@
   "latest": [
     {
       "date": "2026-10-01",
+      "title": "税理士による無料相談会",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_11817.html"
+    },
+    {
+      "date": "2026-10-01",
+      "title": "「スマートフォン初心者講座」を開催します！",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1204/_1377/_11873.html"
+    },
+    {
+      "date": "2026-10-01",
+      "title": "シニアのためのしごと・ボランティア相談セミナーが開催されます",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_14673.html"
+    },
+    {
+      "date": "2026-10-01",
+      "title": "令和8年度福岡県ひとり親世帯等実態調査について",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_17215.html"
+    },
+    {
+      "date": "2026-10-01",
       "title": "「敷金・原状回復費用・建物明渡に関する無料電話相談会」開催",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_6801.html"
     },
@@ -271,26 +291,6 @@
       "date": "2026-10-01",
       "title": "令和8年度父と子の料理教室  ～第3弾～",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17259.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "困っていることありませんか？無料ビジネスセミナーを開催します",
-      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1229/_17262.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "アンケート調査にご協力ください",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_2984/_17304.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "令和8年度海外派遣事業報告会～フィンランドでの学びと気づき、その先に見つけたもの～",
-      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2410/_16562/_17339.html"
-    },
-    {
-      "date": "2026-09-30",
-      "title": "令和7年度当初予算書を掲載しました",
-      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1236/_12739/_16616.html"
     }
   ],
   "sourceHealth": [
@@ -356,5 +356,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-09-30T22:20:21Z"
+  "generatedAt": "2026-10-01T06:01:26Z"
 }

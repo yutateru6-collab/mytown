@@ -1,7 +1,39 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-30T22:20:21Z",
+  "generatedAt": "2026-10-01T06:01:26Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_11817.html",
+      "kind": "new",
+      "title": "税理士による無料相談会",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_11817.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-10-01T06:01:26Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1204/_1377/_11873.html",
+      "kind": "new",
+      "title": "「スマートフォン初心者講座」を開催します！",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1204/_1377/_11873.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-10-01T06:01:26Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_1158/_14673.html",
+      "kind": "new",
+      "title": "シニアのためのしごと・ボランティア相談セミナーが開催されます",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_14673.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-10-01T06:01:26Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_2051/_17215.html",
+      "kind": "new",
+      "title": "令和8年度福岡県ひとり親世帯等実態調査について",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_17215.html",
+      "sourcePublished": "2026-10-01",
+      "detectedAt": "2026-10-01T06:01:26Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_6801.html",
       "kind": "new",
