@@ -118,13 +118,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-92336703a5a0",
+      "id": "rss-6c726bb96844",
       "category": "その他",
-      "title": "税理士による無料相談会",
+      "title": "建設工事入札結果【10月2日入札分】",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-10-01",
+      "published": "2026-10-02",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_11817.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_6232/_16732/_17373.html"
     }
   ],
   "council": {
@@ -233,6 +233,26 @@
   },
   "latest": [
     {
+      "date": "2026-10-02",
+      "title": "建設工事入札結果【10月2日入札分】",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_6232/_16732/_17373.html"
+    },
+    {
+      "date": "2026-10-02",
+      "title": "【募集中】不登校児童支援員",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_17113.html"
+    },
+    {
+      "date": "2026-10-02",
+      "title": "【募集開始】社会福祉士",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_15544.html"
+    },
+    {
+      "date": "2026-10-02",
+      "title": "【福岡県事業】生物多様性アドバイザーと福岡生きものステーションを紹介！",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14280/_14421/_17333.html"
+    },
+    {
       "date": "2026-10-01",
       "title": "税理士による無料相談会",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_11817.html"
@@ -271,26 +291,6 @@
       "date": "2026-10-01",
       "title": "路線と時刻表を令和8年10月1日付で改正しました",
       "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "初心者でも安心！大人のための塗り絵教室",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1209/_9289/_17219.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "筑豊市民大学公開講演会「月・火星探査と基地」",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3983/_17233.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "認知症＆介護予防講座「認知症や生活習慣病を予防する　口腔ケアを学びませんか？」",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_2287/_17243.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "令和8年度父と子の料理教室  ～第3弾～",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_danjo/_1384/_17259.html"
     }
   ],
   "sourceHealth": [
@@ -356,5 +356,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-10-01T22:44:03Z"
+  "generatedAt": "2026-10-02T12:42:44Z"
 }
