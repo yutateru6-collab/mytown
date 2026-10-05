@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-05T05:47:23Z",
+  "generatedAt": "2026-10-05T13:51:55Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_17366.html",
+      "kind": "new",
+      "title": "【福岡県事業】福岡県脱炭素化人材育成事業 経営者向け講座を開催します！",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_17366.html",
+      "sourcePublished": "2026-10-05",
+      "detectedAt": "2026-10-05T13:51:55Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1204/_15466/_16221.html",
+      "kind": "new",
+      "title": "見て、学んで、もらえる！ 世界的庭園デザイナー石原和幸氏による講演会の参加者募集 ～プロの植栽実演＆福岡県産花苗プレゼントも！～",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1204/_15466/_16221.html",
+      "sourcePublished": "2026-10-05",
+      "detectedAt": "2026-10-05T13:51:55Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kanko/_1227/_13890.html",
       "kind": "new",
