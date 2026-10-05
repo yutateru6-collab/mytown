@@ -51,6 +51,8 @@ jobs:
 
       - name: JavaScript and Python syntax
         run: |
+          node --check scripts/civic-browser-fixtures.mjs
+          node scripts/test_civic_browser_fixtures.mjs
           node --check event-schedule.js
           node scripts/test_bulletin_ui.js
           node scripts/test_offline_assets.js
