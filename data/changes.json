@@ -1,7 +1,55 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-02T12:42:44Z",
+  "generatedAt": "2026-10-05T05:47:23Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kanko/_1227/_13890.html",
+      "kind": "new",
+      "title": "「第70回高取焼陶器まつり」が開催されます",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kanko/_1227/_13890.html",
+      "sourcePublished": "2026-10-05",
+      "detectedAt": "2026-10-05T05:47:23Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_2051/_2066/_16181.html",
+      "kind": "new",
+      "title": "物価高対応子育て応援手当について",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2066/_16181.html",
+      "sourcePublished": "2026-10-05",
+      "detectedAt": "2026-10-05T05:47:23Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17328.html",
+      "kind": "new",
+      "title": "修繕工事入札結果【10月5日入札分】",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17328.html",
+      "sourcePublished": "2026-10-05",
+      "detectedAt": "2026-10-05T05:47:23Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_12946.html",
+      "kind": "new",
+      "title": "直方市指定給水装置工事事業者一覧表",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_12946.html",
+      "sourcePublished": "2026-10-05",
+      "detectedAt": "2026-10-05T05:47:23Z"
+    },
+    {
+      "id": "latest-update:https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17027/_17028.html",
+      "kind": "updated",
+      "title": "令和8年度第58回直方市民文化祭へのご来場をお待ちしております♪",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17027/_17028.html",
+      "sourcePublished": "2026-10-05",
+      "detectedAt": "2026-10-05T05:47:23Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html",
+      "kind": "new",
+      "title": "新年度保育所・認定こども園（保育）入所の申し込みが始まります",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html",
+      "sourcePublished": "2026-10-05",
+      "detectedAt": "2026-10-05T05:47:23Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_6232/_16732/_17373.html",
       "kind": "new",

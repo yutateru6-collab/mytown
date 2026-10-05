@@ -118,13 +118,13 @@
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
     },
     {
-      "id": "rss-6c726bb96844",
-      "category": "その他",
-      "title": "建設工事入札結果【10月2日入札分】",
+      "id": "rss-074bad5e4bef",
+      "category": "観光・イベント",
+      "title": "「第70回高取焼陶器まつり」が開催されます",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-10-02",
+      "published": "2026-10-05",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_6232/_16732/_17373.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kanko/_1227/_13890.html"
     }
   ],
   "council": {
@@ -233,6 +233,36 @@
   },
   "latest": [
     {
+      "date": "2026-10-05",
+      "title": "「第70回高取焼陶器まつり」が開催されます",
+      "url": "https://www.city.nogata.fukuoka.jp/kanko/_1227/_13890.html"
+    },
+    {
+      "date": "2026-10-05",
+      "title": "物価高対応子育て応援手当について",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2066/_16181.html"
+    },
+    {
+      "date": "2026-10-05",
+      "title": "修繕工事入札結果【10月5日入札分】",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17328.html"
+    },
+    {
+      "date": "2026-10-05",
+      "title": "直方市指定給水装置工事事業者一覧表",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_12946.html"
+    },
+    {
+      "date": "2026-10-05",
+      "title": "令和8年度第58回直方市民文化祭へのご来場をお待ちしております♪",
+      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17027/_17028.html"
+    },
+    {
+      "date": "2026-10-05",
+      "title": "新年度保育所・認定こども園（保育）入所の申し込みが始まります",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html"
+    },
+    {
       "date": "2026-10-02",
       "title": "建設工事入札結果【10月2日入札分】",
       "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_6232/_16732/_17373.html"
@@ -261,36 +291,6 @@
       "date": "2026-10-01",
       "title": "「スマートフォン初心者講座」を開催します！",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1204/_1377/_11873.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "シニアのためのしごと・ボランティア相談セミナーが開催されます",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1158/_14673.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "令和8年度福岡県ひとり親世帯等実態調査について",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_17215.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "「敷金・原状回復費用・建物明渡に関する無料電話相談会」開催",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1109/_1163/_6801.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "高齢者(インフルエンザ・新型コロナ)の予防接種",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1987/_13921.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "令和8年度第58回直方市民文化祭へのご来場をお待ちしております♪",
-      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17027/_17028.html"
-    },
-    {
-      "date": "2026-10-01",
-      "title": "路線と時刻表を令和8年10月1日付で改正しました",
-      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html"
     }
   ],
   "sourceHealth": [
@@ -356,5 +356,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-10-04T21:32:27Z"
+  "generatedAt": "2026-10-05T05:47:23Z"
 }
