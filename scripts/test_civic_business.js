@@ -64,6 +64,12 @@ setImmediate(()=>{
   runtime.document.getElementById=()=>({querySelector(tag){return tag==='details'?{set open(value){opened=value;}}:{setAttribute(){},focus(){focused=true;}};},scrollIntoView(){scrolled=true;}});
   runtime.location.hash='#projects/'+data.items[0].id;runtime.v2ApplyHashRoute();runtime.render();
   assert.ok(opened && scrolled && focused, 'direct related route opens and reveals its target');
-  console.log('Civic/business browser runtime routing, filters and related deep link passed');
+  const frames=[];runtime.requestAnimationFrame=(callback)=>frames.push(callback);
+  runtime.location.hash='#projects/'+data.items[1].id;runtime.v2ApplyHashRoute();runtime.render();
+  let liveScrolled=false;
+  runtime.document.getElementById=()=>({querySelector(tag){return tag==='details'?{}:{setAttribute(){},focus(){}};},scrollIntoView(){liveScrolled=true;}});
+  runtime.render();frames.forEach(callback=>callback());
+  assert.ok(liveScrolled, 'scheduled deep-link reveal uses current DOM after async re-render');
+  console.log('Civic/business runtime routing, filters, deep link and render-race checks passed');
  } catch(error){console.error(error);process.exitCode=1;}
 });

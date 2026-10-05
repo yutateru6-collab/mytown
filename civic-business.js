@@ -31,11 +31,13 @@
     const details = item.querySelector('details');
     if (details) details.open = true;
     if (hash === focusedHash) return;
-    focusedHash = hash;
     requestAnimationFrame(() => {
       if (location.hash !== hash) return;
-      item.scrollIntoView({ block: 'start', behavior: 'auto' });
-      const title = item.querySelector('h2');
+      const currentItem = document.getElementById(`cb-${id}`);
+      if (!currentItem || focusedHash === hash) return;
+      focusedHash = hash;
+      currentItem.scrollIntoView({ block: 'start', behavior: 'auto' });
+      const title = currentItem.querySelector('h2');
       if (title) { title.setAttribute('tabindex', '-1'); title.focus({ preventScroll: true }); }
     });
   }
