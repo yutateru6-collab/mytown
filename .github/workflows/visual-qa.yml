@@ -126,6 +126,12 @@ jobs:
           VISUAL_QA_DIR: visual-qa-output
         run: node scripts/test_p0_browser.mjs
 
+      - name: Test civic and business guide
+        env:
+          VISUAL_QA_URL: ${{ github.event_name == 'workflow_run' && 'https://yutateru6-collab.github.io/mytown/' || 'http://127.0.0.1:4173/' }}
+          VISUAL_QA_DIR: visual-qa-output
+        run: node scripts/test_civic_business_browser.mjs
+
       - name: Upload screenshots and diagnostics
         if: always()
         uses: actions/upload-artifact@v4
