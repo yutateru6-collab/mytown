@@ -208,8 +208,11 @@ try {
   let calendarText = "";
   for await (const chunk of stream) calendarText += chunk.toString("utf8");
   assert.equal((calendarText.match(/BEGIN:VEVENT/g) || []).length, 5, "future occurrences must be separate calendar events");
-  for (const date of fixtures.futureDates.map((key) => key.replaceAll("-", ""))) {
+  for (const key of fixtures.futureDates) {
+    const date = key.replaceAll("-", "");
+    const exclusiveEnd = new Date(Date.parse(`${key}T00:00:00Z`) + 86400000).toISOString().slice(0, 10).replaceAll("-", "");
     assert.match(calendarText, new RegExp(`DTSTART;VALUE=DATE:${date}`));
+    assert.match(calendarText, new RegExp(`DTEND;VALUE=DATE:${exclusiveEnd}`));
   }
   assert.doesNotMatch(calendarText, new RegExp(`DTSTART;VALUE=DATE:${fixtures.events.at(-1).startDate.replaceAll("-", "")}`), "past occurrences must not be exported");
   report.checks.push("save and multi-occurrence iCalendar download");
@@ -220,6 +223,12 @@ try {
   assert.match(await page.locator("#ca-dialog-body").innerText(), /参加した/);
   await page.screenshot({ path: path.join(outputDir, "civic-saved-events.png"), fullPage: false, scale: "css" });
   report.checks.push("saved-event follow-through");
+  const dialogOverflow = await page.locator(".ca-dialog").evaluate((dialog) => ({
+    scrollWidth: dialog.scrollWidth,
+    clientWidth: dialog.clientWidth,
+  }));
+  assert.ok(dialogOverflow.scrollWidth <= dialogOverflow.clientWidth + 1, "saved-events dialog has horizontal overflow");
+
   await page.locator("[data-ca-remove-id='qa-calendar-event']").click();
   assert.equal(await page.locator(".ca-saved-card").count(), 0, "saved removal empties the isolated test list");
   assert.equal(await page.locator(".ca-dialog-close").evaluate((button) => document.activeElement === button), true, "focus remains on the dialog close button");
@@ -227,15 +236,8 @@ try {
   const unsaved = page.locator(".v4-event-list-card").filter({ hasText: "テスト：複数開催日の保存とカレンダー" }).first();
   await unsaved.locator("[data-ca-save-event-id]").waitFor({ state: "visible" });
   assert.equal(await unsaved.locator("[data-ca-open-saved].is-saved").count(), 0, "underlying list updates after removal");
-  // Open a dialog again for the original mobile-overflow assertion below.
-  await page.locator("[data-ca-open-saved]").first().click();
   report.checks.push("saved removal, focus and underlying-card synchronization");
 
-  const dialogOverflow = await page.locator(".ca-dialog").evaluate((dialog) => ({
-    scrollWidth: dialog.scrollWidth,
-    clientWidth: dialog.clientWidth,
-  }));
-  assert.ok(dialogOverflow.scrollWidth <= dialogOverflow.clientWidth + 1, "saved-events dialog has horizontal overflow");
   assert.deepEqual(report.pageErrors, [], "browser page errors during civic-action flow");
   assert.deepEqual(report.consoleErrors, [], "browser console errors during civic-action flow");
   assert.deepEqual(criticalFailures(), [], "same-origin resource failures during civic-action flow");

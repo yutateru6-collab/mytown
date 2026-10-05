@@ -11,6 +11,8 @@ on:
       - "data/**"
       - "scripts/capture_visual_qa.mjs"
       - "scripts/test_civic_actions_browser.mjs"
+      - "scripts/civic-browser-fixtures.mjs"
+      - "scripts/test_civic_browser_fixtures.mjs"
       - "scripts/test_p0_browser.mjs"
       - "scripts/finalize_event_state.py"
       - ".github/workflows/visual-qa.yml"
