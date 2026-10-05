@@ -22,6 +22,15 @@ try {
    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth),false,`${route}: overflow at ${width}`);
    await page.screenshot({path:path.join(output,`business-${route}-${width}.png`),fullPage:true});
   }
+  const related = page.locator('[data-cb-related]').first();
+  const relatedId = await related.getAttribute('data-cb-related');
+  await related.click();
+  const linked = page.locator(`#cb-${relatedId}`);
+  assert.equal(await linked.locator('details').evaluate(element=>element.open),true);
+  await page.reload({waitUntil:'networkidle'});
+  await linked.waitFor();
+  assert.equal(await linked.locator('details').evaluate(element=>element.open),true,'direct link survives reload');
+  assert.ok(await linked.evaluate(element=>element.getBoundingClientRect().top < innerHeight),'linked item is visible after reload');
   await page.locator('.cb-filters input').fill('存在しない案件');
   await page.locator('.cb-filters button[type="submit"]').click();
   assert.match(await page.locator('.cb-empty').innerText(), /この条件に合う案件はありません/);

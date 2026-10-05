@@ -14,11 +14,31 @@
   function card(item, items) {
     const links = (item.sources || []).map((s) => { const url = safeUrl(s.url); return url ? `<a href="${escape(url)}" target="_blank" rel="noopener noreferrer">${escape(s.title)} ↗</a>` : ''; }).join('');
     const related = (item.relatedIds || []).map((id) => items.find((i) => i.id === id)).filter(Boolean);
-    return `<article class="cb-card" id="cb-${escape(item.id)}"><div class="cb-card-meta"><span class="cb-stage">${escape(item.stage)}</span><small>対象：${escape(item.targetDate)}</small></div><p class="cb-stage-note">${escape(item.stageNote || '')}</p><h2>${escape(item.title)}</h2><p class="cb-summary-label">AIによる非公式要約・原典照合済み</p><p>${escape(item.summary)}</p><dl class="cb-numbers"><div><dt>金額</dt><dd>${escape(item.amount)}</dd></div><div><dt>期限・受付</dt><dd>${escape(item.deadline)}</dd></div></dl><details><summary>論点と一次資料を読む</summary><div class="cb-detail"><h3>公式資料で確認した事実</h3><ul>${(item.officialFacts || []).map((x) => `<li>${escape(x)}</li>`).join('')}</ul><h3>確認しておきたいこと</h3><ul>${(item.issues || []).map((x) => `<li>${escape(x)}</li>`).join('')}</ul><h3>商売への影響を考える（推論）</h3><p>${escape(item.businessImpact)}</p><p class="cb-disclosure">事業への効果や採択・受注を保証するものではありません。</p>${related.length ? `<h3>つながる地域案件</h3>${related.map((i) => `<button type="button" data-cb-related="${escape(i.id)}">${escape(i.title)} →</button>`).join('')}` : ''}<h3>一次資料</h3><div class="cb-sources">${links}</div><p class="cb-checked">最終確認：${escape(item.checkedAt)}。確認後に変更されることがあります。申請・入札前に原典を確認してください。</p></div></details></article>`;
+    return `<article class="cb-card" id="cb-${escape(item.id)}"><div class="cb-card-meta"><span class="cb-stage">${escape(item.stage)}</span><small>対象：${escape(item.targetDate)}</small></div><p class="cb-stage-note">${escape(item.stageNote || '')}</p><h2>${escape(item.title)}</h2><p class="cb-summary-label">AIによる非公式要約（出典付き）</p><p>${escape(item.summary)}</p><dl class="cb-numbers"><div><dt>金額</dt><dd>${escape(item.amount)}</dd></div><div><dt>期限・受付</dt><dd>${escape(item.deadline)}</dd></div></dl><details><summary>論点と一次資料を読む</summary><div class="cb-detail"><h3>公式資料で確認した事実</h3><ul>${(item.officialFacts || []).map((x) => `<li>${escape(x)}</li>`).join('')}</ul><h3>確認しておきたいこと</h3><ul>${(item.issues || []).map((x) => `<li>${escape(x)}</li>`).join('')}</ul><h3>商売への影響を考える（推論）</h3><p>${escape(item.businessImpact)}</p><p class="cb-disclosure">事業への効果や採択・受注を保証するものではありません。</p>${related.length ? `<h3>つながる地域案件</h3>${related.map((i) => `<button type="button" data-cb-related="${escape(i.id)}">${escape(i.title)} →</button>`).join('')}` : ''}<h3>一次資料</h3><div class="cb-sources">${links}</div><p class="cb-checked">最終確認：${escape(item.checkedAt)}。確認後に変更されることがあります。申請・入札前に原典を確認してください。</p></div></details></article>`;
   }
   const api = { ROUTES, escape, safeUrl, selectItems, entries, card };
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
-  let data = { items: [] }, loading = true, error = false, query = '', stage = '';
+  let data = { items: [] }, loading = true, error = false, query = '', stage = '', focusedHash = '';
+  function revealLinkedItem() {
+    const hash = location.hash;
+    if (loading) return;
+    const encodedId = hash.slice(1).split('/')[1];
+    if (!encodedId) { focusedHash = ''; return; }
+    let id;
+    try { id = decodeURIComponent(encodedId); } catch { return; }
+    const item = document.getElementById(`cb-${id}`);
+    if (!item) return;
+    const details = item.querySelector('details');
+    if (details) details.open = true;
+    if (hash === focusedHash) return;
+    focusedHash = hash;
+    requestAnimationFrame(() => {
+      if (location.hash !== hash) return;
+      item.scrollIntoView({ block: 'start', behavior: 'auto' });
+      const title = item.querySelector('h2');
+      if (title) { title.setAttribute('tabindex', '-1'); title.focus({ preventScroll: true }); }
+    });
+  }
   function route() { return location.hash.slice(1).split('/')[0]; }
   function page() {
     const key = route(), [title, note] = ROUTES[key];
@@ -26,12 +46,13 @@
     const statuses = [...new Set(selectItems(data.items, key).map((i) => i.stage))];
     return `<section class="page cb-page"><button class="back-button" type="button" data-v2-action="home">‹ きょうへ</button><header class="cb-hero"><p class="cb-eyebrow">のおがた日和 · 市政とビジネス</p><h1>${title}</h1><p>${note}</p></header>${entries()}<div class="cb-note"><strong>議論・提案・議決・実施・報告を区別します</strong><p>議決は議会の判断、実施は事業の進行、報告は公表された記録です。発注見通しは契約や募集の確定ではありません。</p><p>AIによる要約、公式資料の事実、商売への影響の推論を分けて掲載しています。全案件・全議員の活動を網羅するものではありません。</p></div><form class="cb-filters"><label>案件を探す<input name="query" value="${escape(query)}" placeholder="出店、工事、産業団地…" type="search"></label><label>資料の状態<select name="stage"><option value="">すべて</option>${statuses.map((s) => `<option ${stage === s ? 'selected' : ''} value="${escape(s)}">${escape(s)}</option>`).join('')}</select></label><button type="submit">絞り込む</button><button type="button" data-cb-clear>条件を消す</button></form><p class="cb-count" role="status">${loading ? '資料を読み込んでいます。' : `${items.length}件を掲載`}</p>${error ? '<div class="cb-empty" role="alert"><p>案件データを読み込めませんでした。</p><button type="button" data-cb-retry>もう一度読み込む</button></div>' : !loading && !items.length ? '<div class="cb-empty"><p>この条件に合う案件はありません。条件を消して探し直せます。</p></div>' : ''}<div class="cb-list">${items.map((i) => card(i, data.items)).join('')}</div><footer class="cb-footer">掲載範囲：公式資料を確認した地域案件のみ。議員のランキングや政治的な自動評価は行いません。</footer></section>`;
   }
-  function go(key, id) { query = ''; stage = ''; v2CloseSheet(false); v2SetRoute({ tab: 'politics', page: null, hash: `#${key}${id ? '/' + id : ''}` }); if (id) document.getElementById(`cb-${id}`)?.scrollIntoView({ block: 'start' }); else window.scrollTo({ top: 0, behavior: 'auto' }); }
+  function go(key, id) { query = ''; stage = ''; v2CloseSheet(false); v2SetRoute({ tab: 'politics', page: null, hash: `#${key}${id ? '/' + encodeURIComponent(id) : ''}` }); if (!id) window.scrollTo({ top: 0, behavior: 'auto' }); }
   const baseHash = v2ApplyHashRoute;
   v2ApplyHashRoute = function () { if (ROUTES[route()]) { state.tab = 'politics'; state.view = 'tab'; state.v2Page = null; state.selectedId = null; return; } baseHash(); };
   const baseRender = render;
   render = function () {
-    if (ROUTES[route()] && state.view === 'tab' && state.tab === 'politics') { main.innerHTML = page(); v2SyncNav(); return; }
+    if (ROUTES[route()] && state.view === 'tab' && state.tab === 'politics') { main.innerHTML = page(); v2SyncNav(); revealLinkedItem(); return; }
+    focusedHash = '';
     baseRender();
     if (state.view === 'tab' && ((state.tab === 'today' && !state.v2Page) || state.tab === 'politics') && !main.querySelector('.cb-entry')) {
       const container = main.querySelector('.v2-home-page, .politics-page, .civic-page');

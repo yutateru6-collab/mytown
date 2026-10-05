@@ -11,7 +11,7 @@ assert.equal(new Set(data.items.map(i => i.id)).size, data.items.length);
 for (const item of data.items) {
  for (const field of ['id','title','stage','targetDate','summary','businessImpact','amount','deadline','checkedAt']) assert.ok(typeof item[field] === 'string' && item[field].trim(), `${item.id}: missing ${field}`);
  assert.ok(['議論','提案','議決','実施','報告','要確認'].includes(item.stage));
- assert.equal(item.checkedAt, '2026年10月5日');
+ assert.equal(item.checkedAt, '2026年10月6日（日本時間）');
  assert.ok(item.sources.length && item.officialFacts.length && item.issues.length);
  for (const source of item.sources) assert.ok(new URL(source.url).hostname === 'www.city.nogata.fukuoka.jp', `unverified host: ${source.url}`);
  for (const id of item.relatedIds || []) assert.ok(data.items.some(i => i.id === id));
@@ -44,6 +44,7 @@ const runtime = {
  main:rootElement, render(){fallbackRenders++;}, v2ApplyHashRoute(){this.state.tab='today';},
  v2SyncNav(){}, v2CloseSheet(){}, v2SetRoute({tab,page,hash}){runtime.state.tab=tab;runtime.state.v2Page=page;runtime.state.view='tab';runtime.location.hash=hash;runtime.render();},
  document:{addEventListener(name,handler){handlers[name]=handler;},getElementById(){return null;}}, window:{scrollTo(){}},
+ requestAnimationFrame(callback){callback();},
  async fetch(){return {ok:true,async json(){return data;}};}, FormData:class { constructor(form){this.form=form;} get(key){return this.form[key];} },
 };
 vm.createContext(runtime);vm.runInContext(source,runtime);
@@ -59,6 +60,10 @@ setImmediate(()=>{
   assert.ok(rootElement.innerHTML.includes('cb-card'));
   runtime.location.hash='#politics';runtime.render();assert.ok(fallbackRenders>0);
   runtime.location.hash='#projects';runtime.v2ApplyHashRoute();runtime.render();assert.ok(rootElement.innerHTML.includes('地域事業を追う'));
-  console.log('Civic/business browser runtime routing and filter isolation passed');
+  let opened=false,scrolled=false,focused=false;
+  runtime.document.getElementById=()=>({querySelector(tag){return tag==='details'?{set open(value){opened=value;}}:{setAttribute(){},focus(){focused=true;}};},scrollIntoView(){scrolled=true;}});
+  runtime.location.hash='#projects/'+data.items[0].id;runtime.v2ApplyHashRoute();runtime.render();
+  assert.ok(opened && scrolled && focused, 'direct related route opens and reveals its target');
+  console.log('Civic/business browser runtime routing, filters and related deep link passed');
  } catch(error){console.error(error);process.exitCode=1;}
 });
