@@ -61,6 +61,7 @@ const context = {
 };
 
 vm.createContext(context);
+vm.runInContext(fs.readFileSync(path.join(root, "event-schedule.js"), "utf8"), context);
 vm.runInContext(source, context, { filename: "ui-home-v4.js" });
 
 const home = context.todayV2View();
@@ -84,4 +85,6 @@ assert.match(main.innerHTML, /地域参加/);
 assert.match(main.innerHTML, /掲載元で確認/);
 assert.doesNotMatch(main.innerHTML, />scheduled</);
 
+context.v2FindDeadlines = () => [{id:"d1"},{id:"d2"},{id:"d3"},{id:"d4"}];
+assert.match(context.v2SearchIntro(), /締切のある情報<\/strong><span>4件掲載中/);
 console.log("Community event UI checks passed");

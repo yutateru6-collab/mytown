@@ -70,7 +70,9 @@
     location: "場所",
     money: "費用",
     applicationDeadline: "申込期限",
+    applicationStatus: "受付状況",
     statusLabel: "状態",
+    occurrences: "開催日程",
   });
 
   let caRoutes = CA_ROUTE_FALLBACK;
@@ -130,20 +132,11 @@
   }
 
   function caTokyoDateKey(value = new Date()) {
-    const parts = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Tokyo",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).formatToParts(value);
-    const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
-    return `${values.year}-${values.month}-${values.day}`;
+    return EventSchedule.today(value);
   }
 
   function caDayNumber(dateKey) {
-    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateKey || ""));
-    if (!match) return null;
-    return Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])) / 86400000;
+    return EventSchedule.day(dateKey);
   }
 
   function caDateOffset(dateKey, offset) {
@@ -201,6 +194,8 @@
       location: String(event.location || ""),
       money: String(event.money || ""),
       applicationDeadline: String(event.applicationDeadline || ""),
+      applicationStatus: String(event.applicationStatus || ""),
+      status: String(event.status || ""),
       statusLabel: String(event.statusLabel || event.status || ""),
       occurrences: Array.isArray(event.occurrences) ? event.occurrences.filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)) : [],
     };
@@ -208,8 +203,13 @@
 
   function caSnapshotChanges(previous = {}, current = {}) {
     return Object.keys(CA_EVENT_FIELD_LABELS).flatMap((key) => {
-      const before = String(previous[key] || "").trim();
-      const after = String(current[key] || "").trim();
+      const display = (value) => {
+        if (key === "applicationStatus") return ({ closed: "受付終了", open: "受付中", due_today: "申込期限は今日", upcoming: "受付開始前", unconfirmed: "掲載元で確認", not_required_or_unknown: "申込不要または未確認" })[value] || String(value || "");
+        if (key === "occurrences" && Array.isArray(value)) return value.map(caDateLabel).join("・");
+        return String(value || "").trim();
+      };
+      const before = display(previous[key]);
+      const after = display(current[key]);
       if (before === after) return [];
       return [{ key, label: CA_EVENT_FIELD_LABELS[key], before: before || "記載なし", after: after || "記載なし" }];
     });
@@ -244,6 +244,7 @@
       const pendingChanges = caSnapshotChanges(baseline, latestSnapshot);
       const nextItem = {
         ...item,
+        ...latestSnapshot,
         title: current.title || item.title,
         sourceUrl: current.sourceUrl || item.sourceUrl,
         latestSnapshot,
@@ -312,18 +313,24 @@
   }
 
   function caReminderFor(item = {}) {
+    if (["cancelled", "postponed"].includes(item.status)) return { tone: "muted", label: EventSchedule.status(item), priority: 0 };
     const today = caDayNumber(caTokyoDateKey());
     const deadline = caDayNumber(item.applicationDeadline);
     const occurrenceKeys = Array.isArray(item.occurrences) ? item.occurrences.filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)).sort() : [];
     const nextOccurrence = occurrenceKeys.find((value) => caDayNumber(value) >= today);
-    const startKey = nextOccurrence || item.startDate;
+    const startKey = EventSchedule.nextDate(item, caTokyoDateKey()) || nextOccurrence || item.startDate;
     const start = caDayNumber(startKey);
     if (today === null) return { tone: "neutral", label: "日程を確認", priority: 0 };
+    if (deadline === null && item.applicationStatus === "closed" && start !== null && start >= today) {
+      const untilEvent = start - today;
+      const eventLabel = untilEvent === 0 ? "今日開催" : untilEvent === 1 ? "明日開催" : `${caDateLabel(startKey)}開催`;
+      return { tone: "muted", label: `受付終了・${eventLabel}`, priority: untilEvent <= 1 ? 50 : 10 };
+    }
     if (deadline !== null) {
       const days = deadline - today;
       if (days === 0) return { tone: "danger", label: "申込期限は今日", priority: 100 };
-      if (days <= 3) return { tone: "danger", label: `申込締切まであと${days}日`, priority: 90 - days };
-      if (days <= 7) return { tone: "warning", label: `申込締切まであと${days}日`, priority: 70 - days };
+      if (days > 0 && days <= 3) return { tone: "danger", label: `申込締切まであと${days}日`, priority: 90 - days };
+      if (days > 0 && days <= 7) return { tone: "warning", label: `申込締切まであと${days}日`, priority: 70 - days };
       if (days < 0 && start !== null && start >= today) {
         const untilEvent = start - today;
         const eventLabel = untilEvent === 0 ? "今日開催" : untilEvent === 1 ? "明日開催" : `${caDateLabel(startKey)}開催`;
@@ -416,7 +423,8 @@
     caReportPhotoUrl = "";
     caReportPhoto = null;
     caReportCoordinates = null;
-    caDialogReturnFocus?.focus?.();
+    if (caDialogReturnFocus?.isConnected) caDialogReturnFocus.focus?.();
+    else document.querySelector("[data-ca-open-saved], #main")?.focus();
     caDialogReturnFocus = null;
   }
 
@@ -806,8 +814,8 @@
       if (!event) return;
       const saved = caIsSaved(event);
       const saveAction = saved
-        ? '<button type="button" data-ca-open-saved class="is-saved">✓ 保存済みを確認</button>'
-        : `<button type="button" data-ca-save-event-id="${caEscape(caEventId(event))}">🔖 保存する</button>`;
+        ? `<button type="button" data-ca-save-state-id="${caEscape(caEventId(event))}" data-ca-open-saved class="is-saved">✓ 保存済みを確認</button>`
+        : `<button type="button" data-ca-save-state-id="${caEscape(caEventId(event))}" data-ca-save-event-id="${caEscape(caEventId(event))}">🔖 保存する</button>`;
       card.insertAdjacentHTML("beforeend", `<div class="ca-event-actions">${saveAction}<button type="button" data-ca-calendar-event-id="${caEscape(caEventId(event))}">カレンダー</button>${event.sourceUrl ? `<a href="${caEscape(event.sourceUrl)}" target="_blank" rel="noopener noreferrer">当日の変更を確認 ↗</a>` : ""}</div>`);
       if (event.contentStatus === "needs_review" || (event.contentIssues || []).length) {
         card.insertAdjacentHTML("beforeend", `<p class="ca-card-quality-warning">⚠ 日時・料金・申込状況の一部を再確認中です。掲載元で最終確認してください。</p>`);
@@ -828,8 +836,8 @@
     if (!layer || layer.querySelector(".ca-event-actions")) return;
     const saved = caIsSaved(item);
     const saveAction = saved
-      ? '<button type="button" data-ca-open-saved class="is-saved">✓ 保存済みを確認</button>'
-      : `<button type="button" data-ca-save-event-id="${caEscape(caEventId(item))}">🔖 保存する</button>`;
+      ? `<button type="button" data-ca-save-state-id="${caEscape(caEventId(item))}" data-ca-open-saved class="is-saved">✓ 保存済みを確認</button>`
+      : `<button type="button" data-ca-save-state-id="${caEscape(caEventId(item))}" data-ca-save-event-id="${caEscape(caEventId(item))}">🔖 保存する</button>`;
     layer.insertAdjacentHTML("beforeend", `<div class="ca-event-actions">${saveAction}<button type="button" data-ca-calendar-event-id="${caEscape(caEventId(item))}">カレンダーに追加</button><button type="button" data-v2-action="events">イベント一覧を見る</button></div>`);
   }
 
@@ -878,6 +886,29 @@
 
   function caEventById(id) {
     return caAllEvents().find((event) => caEventId(event) === id) || null;
+  }
+
+  function caRefreshSaveActions() {
+    document.querySelectorAll("[data-ca-save-state-id]").forEach((button) => {
+      const item = caEventById(button.dataset.caSaveStateId);
+      if (!item) return;
+      const saved = caIsSaved(item);
+      button.classList.toggle("is-saved", saved);
+      button.textContent = saved ? "✓ 保存済みを確認" : "🔖 保存する";
+      if (saved) {
+        button.setAttribute("data-ca-open-saved", "");
+        button.removeAttribute("data-ca-save-event-id");
+      } else {
+        button.removeAttribute("data-ca-open-saved");
+        button.setAttribute("data-ca-save-event-id", caEventId(item));
+      }
+    });
+    const homeSaved = document.querySelector(".ca-home-saved");
+    if (homeSaved) {
+      const summary = caSavedSummary();
+      if (summary.count) homeSaved.outerHTML = caHomeSavedMarkup(summary);
+      else homeSaved.remove();
+    }
   }
 
   function caRefreshSavedDialog() {
@@ -960,6 +991,8 @@
       caRemoveSavedEvent(removeButton.dataset.caRemoveId);
       caToast("保存から外しました");
       caRefreshSavedDialog();
+      caRefreshSaveActions();
+      document.querySelector("#ca-dialog-root button[data-ca-close]")?.focus();
       return;
     }
     const ackButton = event.target.closest("[data-ca-ack-id]");

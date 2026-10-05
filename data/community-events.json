@@ -5,11 +5,11 @@
     {
       "id": "community-nogata-shakyo-a5f34d031fbd",
       "title": "10月25日(日)第48回のおがた福祉まつり開催のお知らせ",
-      "summary": "直方市社会福祉協議会が公開しているイベント情報です。",
-      "startDate": "2026-06-03",
+      "summary": "ゆずりあと古町商店街の2会場で開催します。",
+      "startDate": "2026-10-25",
       "endDate": "2026-10-25",
-      "when": "6月3日・10月25日",
-      "location": "で 「福祉まつり」を開催します",
+      "when": "10月25日（日）10:00～15:00",
+      "location": "直方市保健福祉センターゆずりあ・古町商店街",
       "organizerName": "",
       "publisherName": "直方市社会福祉協議会",
       "sourceUrl": "https://nogatashakyo.org/pages/25?detail=1&b_id=118&r_id=101#block118",
@@ -26,15 +26,23 @@
       "contentNotes": [],
       "contentStatus": "verified",
       "contentCheckedAt": "2026-10-05T15:12:33.942987+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.212910+09:00"
+      "stateCheckedAt": "2026-10-05T15:12:42.212910+09:00",
+      "editoriallyReviewed": true,
+      "scheduleReview": {
+        "verifiedOn": "2026-10-05",
+        "evidenceUrls": [
+          "https://nogatashakyo.org/pages/25?detail=1&b_id=118&r_id=101#block118"
+        ],
+        "note": "本文の開催日時・会場を照合。添付チラシの更新日を開催日から除外。"
+      }
     },
     {
       "id": "community-aeon-mall-nogata-1d9b7931c6b4",
       "title": "iAEON 5th Anniversary開催中",
-      "summary": "イオンモール直方が公開しているイベント情報です。",
+      "summary": "iAEONの5周年企画。各企画の期間・条件は掲載元で確認してください。",
       "startDate": "2026-09-01",
       "endDate": "2026-11-30",
-      "when": "9月1日ほか全6日",
+      "when": "9月1日～11月30日（企画により期間が異なります）",
       "location": "イオンモール直方",
       "organizerName": "",
       "publisherName": "イオンモール直方",
@@ -47,20 +55,20 @@
       "category": "イベント",
       "tags": [],
       "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
-      "occurrences": [
-        "2026-09-01",
-        "2026-10-09",
-        "2026-10-14",
-        "2026-10-19",
-        "2026-10-25",
-        "2026-11-30"
-      ],
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
       "contentCheckedAt": "2026-10-05T15:12:33.987005+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.212964+09:00"
+      "stateCheckedAt": "2026-10-05T15:12:42.212964+09:00",
+      "editoriallyReviewed": true,
+      "scheduleReview": {
+        "verifiedOn": "2026-10-05",
+        "evidenceUrls": [
+          "https://nogata.aeonmall.jp/event/b6d19054-6756-414c-a42e-19b40c22e66f"
+        ],
+        "note": "日程欄と本文の期間を照合。関連イベントの日付を除外。"
+      }
     },
     {
       "id": "community-nogata-shakyo-9291129b4c37",
@@ -103,10 +111,10 @@
     {
       "id": "community-aeon-mall-nogata-5e0374d05da3",
       "title": "【限定ドリンク】しなこ限定スリーブ♡マジカルブルベリミルク",
-      "summary": "イオンモール直方が公開しているイベント情報です。",
+      "summary": "限定スリーブ付きドリンクの販売期間です。数量限定。",
       "startDate": "2026-10-05",
       "endDate": "2026-11-01",
-      "when": "10月5日ほか全6日",
+      "when": "10月5日～11月1日（数量限定）",
       "location": "イオンモール直方",
       "organizerName": "",
       "publisherName": "イオンモール直方",
@@ -119,20 +127,20 @@
       "category": "イベント",
       "tags": [],
       "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
-      "occurrences": [
-        "2026-10-05",
-        "2026-10-09",
-        "2026-10-14",
-        "2026-10-19",
-        "2026-10-25",
-        "2026-11-01"
-      ],
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
       "contentCheckedAt": "2026-10-05T15:12:34.976483+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213062+09:00"
+      "stateCheckedAt": "2026-10-05T15:12:42.213062+09:00",
+      "editoriallyReviewed": true,
+      "scheduleReview": {
+        "verifiedOn": "2026-10-05",
+        "evidenceUrls": [
+          "https://nogata.aeonmall.jp/event/855015b5-8959-4d2e-bd4b-4faff180ace2"
+        ],
+        "note": "日程欄の連続販売期間を照合。関連イベントの日付を除外。"
+      }
     },
     {
       "id": "community-aeon-mall-nogata-3abc9d6bbad5",
@@ -140,7 +148,7 @@
       "summary": "イオンモール直方が公開しているイベント情報です。",
       "startDate": "2026-10-05",
       "endDate": "2026-11-01",
-      "when": "10月5日・11月1日",
+      "when": "10月5日～11月1日",
       "location": "イオンモール直方",
       "organizerName": "",
       "publisherName": "イオンモール直方",
@@ -158,7 +166,14 @@
       "contentNotes": [],
       "contentStatus": "verified",
       "contentCheckedAt": "2026-10-05T15:12:35.013276+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213094+09:00"
+      "stateCheckedAt": "2026-10-05T15:12:42.213094+09:00",
+      "scheduleReview": {
+        "verifiedOn": "2026-10-05",
+        "evidenceUrls": [
+          "https://nogata.aeonmall.jp/event/e4bfb04e-d6a8-441e-825c-f3f45b758ed9"
+        ],
+        "note": "公式日程欄と本文の本催し期間を照合。子企画の日時は本催し日程に混ぜない。"
+      }
     },
     {
       "id": "community-aeon-mall-nogata-0c571fa3641c",
@@ -166,7 +181,7 @@
       "summary": "イオンモール直方が公開しているイベント情報です。",
       "startDate": "2026-10-09",
       "endDate": "2026-10-19",
-      "when": "10月9日・19日 10:00～20:00",
+      "when": "10月9日～19日 10:00～20:00",
       "location": "イオンモール直方 1F 中央エスカレーター前",
       "organizerName": "",
       "publisherName": "イオンモール直方",
@@ -250,8 +265,8 @@
       "summary": "イオンモール直方が公開しているイベント情報です。",
       "startDate": "2026-10-23",
       "endDate": "2026-10-26",
-      "when": "10月23日・26日 11:00～18:30",
-      "location": "イオンモール直方 2Fイオンホール 入場無料 日程:10月23日(金)~10月26日(月) 時間:11:00~18:30",
+      "when": "10月23日～26日 11:00～18:30",
+      "location": "イオンモール直方 2Fイオンホール",
       "organizerName": "",
       "publisherName": "イオンモール直方",
       "sourceUrl": "https://nogata.aeonmall.jp/event/aaddc1fd-98e0-4446-8844-56fe4b97bec6",

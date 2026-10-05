@@ -76,6 +76,19 @@
 
 .v4-event-quick-filters::-webkit-scrollbar { display: none; }
 
+/* 狭い画面でも、横にある絞り込みを見落とさない。 */
+.ui-v2 .v2-filter-scrollable { scrollbar-width: thin; scrollbar-color: #a8b9ad transparent; padding-bottom: 8px; }
+.ui-v2 .v2-filter-scrollable::-webkit-scrollbar { display: block; height: 4px; }
+.ui-v2 .v2-filter-scrollable::-webkit-scrollbar-thumb { border-radius: 999px; background: #a8b9ad; }
+.v2-filter-continuation { display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: 8px; margin: 4px 0 8px; color: #59675e; font-size: .75rem; }
+.v2-filter-continuation[hidden] { display: none; }
+.v2-filter-continuation > div { display: flex; flex: 0 0 auto; gap: 6px; }
+.v2-filter-continuation button { min-height: 44px; padding: 6px 10px; border: 1px solid #becdc2; border-radius: 12px; background: #fffdf8; color: #355b43; font: inherit; font-weight: 800; cursor: pointer; }
+.v2-filter-continuation button:disabled { color: #8a938c; border-color: #dce3de; cursor: default; }
+.ui-v2 .v2-filter-scrollable:focus-visible,
+.ui-v2 .v2-filter-scrollable button:focus-visible,
+.v2-filter-continuation button:focus-visible { outline: 3px solid rgba(54, 109, 76, .4); outline-offset: 2px; }
+
 .v4-event-quick-filters button {
   flex: 0 0 auto;
   min-height: 38px;

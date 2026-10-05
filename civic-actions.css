@@ -70,6 +70,20 @@
 .ca-inline-tip-form button { min-height: 48px; padding: 0 15px; border: 0; border-radius: 13px; background: #246f58; color: #fff; font: inherit; font-weight: 800; }
 .ca-public-note { display: block; width: 100%; color: #66776f; font-size: .76rem; line-height: 1.5; }
 
+/* 追加されたフォーム・保存ボタンを、紹介文と同じ列へ自動配置しない。 */
+.v4-events-page .v4-event-contribute { grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 12px 16px; }
+.v4-events-page .v4-event-contribute > div:first-child { grid-column: 1 / -1; min-width: 0; }
+.v4-events-page .v4-event-contribute > .ca-inline-tip-form { grid-column: 1; width: min(100%, 440px); min-width: 0; }
+.v4-event-contribute .ca-inline-tip-form input { min-width: 0; }
+.v4-events-page .v4-event-contribute > .ca-saved-inline-button { grid-column: 2; justify-self: end; }
+.v4-events-page .v4-event-contribute > .ca-public-note { grid-column: 1 / -1; overflow-wrap: anywhere; }
+
+@media (max-width: 720px) {
+  .v4-events-page .v4-event-contribute { grid-template-columns: minmax(0, 1fr); }
+  .v4-events-page .v4-event-contribute > .ca-inline-tip-form,
+  .v4-events-page .v4-event-contribute > .ca-saved-inline-button { grid-column: 1 / -1; width: 100%; justify-self: stretch; }
+}
+
 .ca-home-saved { margin: 12px 0 20px; }
 .ca-home-saved > button { display: grid; width: 100%; min-height: 76px; grid-template-columns: 42px minmax(0, 1fr) 22px; align-items: center; gap: 10px; padding: 13px 15px; border: 1px solid #b5c9c0; border-radius: 18px; background: #f3faf6; color: #29443a; text-align: left; cursor: pointer; }
 .ca-home-saved > button > span { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 14px; background: #fff; font-size: 1.3rem; }
