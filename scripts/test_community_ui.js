@@ -53,6 +53,7 @@ const context = {
 };
 
 vm.createContext(context);
+vm.runInContext(fs.readFileSync(path.join(root, "event-schedule.js"), "utf8"), context);
 vm.runInContext(source, context, { filename: "ui-home-v4.js" });
 context.render();
 

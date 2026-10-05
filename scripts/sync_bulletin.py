@@ -19,7 +19,7 @@ from datetime import datetime, timedelta, timezone
 from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse, urlunparse
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -231,18 +231,73 @@ def category_for(value: str) -> str:
     return "市報"
 
 
+def bulletin_pdf_identity(url: str) -> tuple[int, int, str, str] | None:
+    """Read an issue identity from an official PDF path, without guessing URLs.
+
+    Older, unnamed PDF anchors still appear inside the current issue's first
+    list item.  A label or proximity to a current heading is not evidence that
+    the PDF belongs to that issue.  Match both the era-year directory and the
+    release date in the filename; if a month directory exists, check it too.
+    """
+    parsed = urlparse(url)
+    if parsed.scheme != "https" or parsed.netloc.lower() != "www.city.nogata.fukuoka.jp":
+        return None
+    match = re.fullmatch(
+        r"/library/data/siseijouhou/PDF/shihounoogata/R0*(\d+)/"
+        r"(?:(\d{2}|\d{4})/)?(\d{2})(\d{2})(\d{2})_shiho_web_"
+        r"(all|\d{1,3}(?:-\d{1,3})?)\.pdf",
+        parsed.path,
+        re.I,
+    )
+    if not match:
+        return None
+    directory_year, directory_month, file_year, file_month, day, part = match.groups()
+    era_year, month = int(file_year), int(file_month)
+    if int(directory_year) != era_year or not 1 <= month <= 12:
+        return None
+    if directory_month not in {None, file_month, f"{file_year}{file_month}"}:
+        return None
+    try:
+        datetime(2018 + era_year, month, int(day))
+    except ValueError:
+        return None
+    return era_year, month, f"{file_year}{file_month}{day}", part.lower()
+
+
+def issue_pdf_links(issue: dict, issue_html: str, issue_url: str) -> list[dict]:
+    """Keep only explicitly identified PDFs from this issue, once per file."""
+    parser = BulletinParser()
+    parser.feed(issue_html)
+    expected_key = str(issue.get("issueKey") or "")
+    links: list[dict] = []
+    seen: dict[str, int] = {}
+    for link in parser.links:
+        href = urljoin(issue_url, link["href"])
+        identity = bulletin_pdf_identity(href)
+        if identity is None or f"R{identity[0]}-{identity[1]:02d}" != expected_key:
+            continue
+        # Fragment/query variants of the same official file are not separate pages.
+        parsed = urlparse(href)
+        key = urlunparse((parsed.scheme, parsed.netloc.lower(), parsed.path, "", "", ""))
+        candidate = {**link, "pdfUrl": key, "pdfPart": identity[3]}
+        if key in seen:
+            previous = links[seen[key]]
+            if not previous["text"] and candidate["text"]:
+                links[seen[key]] = candidate
+            continue
+        seen[key] = len(links)
+        links.append(candidate)
+    return links
+
+
 def make_pages(issue: dict[str, str | int], issue_html: str, issue_url: str) -> list[dict]:
     parser = BulletinParser()
     parser.feed(issue_html)
     pages: list[dict] = []
-    seen: set[str] = set()
-    for link in parser.links:
-        href = urljoin(issue_url, link["href"])
-        if ".pdf" not in urlparse(href).path.lower() or href in seen:
-            continue
-        seen.add(href)
+    for link in issue_pdf_links(issue, issue_html, issue_url):
+        href = link["pdfUrl"]
         label = normalized(link["text"])
-        if "一括" in label or "市報PDF" in label or re.search(r"_all(?:\.|$)", urlparse(href).path, re.I):
+        if link["pdfPart"] == "all" or not label:
             continue
         description = page_description(parser, href, issue_url)
         combined = clean(f"{label} {description}")
@@ -293,16 +348,12 @@ def build_data(old: dict) -> dict:
     western_year = 2018 + era_year
     issue_date = f"{western_year:04d}-{month:02d}-01"
     whole_pdf = next(
-        (
-            urljoin(issue_url, link["href"])
-            for link in BulletinParserLinks(issue_html)
-            if ("一括" in normalized(link["text"])
-                or "市報PDF" in normalized(link["text"])
-                or re.search(r"_all(?:\.|$)", urlparse(urljoin(issue_url, link["href"])).path, re.I))
-            and ".pdf" in urlparse(urljoin(issue_url, link["href"])).path.lower()
-        ),
+        (link["pdfUrl"] for link in issue_pdf_links(latest, issue_html, issue_url)
+         if link["pdfPart"] == "all"),
         None,
     )
+    if not whole_pdf and not pages:
+        raise RuntimeError("no PDF matching the newest bulletin issue was found")
     issue = {
         "id": f"bulletin-{latest['issueKey']}",
         "issueKey": latest["issueKey"],
@@ -335,18 +386,6 @@ def build_data(old: dict) -> dict:
             "message": "市報の新号と公式ページ上のPDF見出しを検知しました。記事内容は確認待ちです。",
         },
     }
-
-
-class BulletinParserLinks:
-    """Small iterable adapter to avoid exposing parser state to PDF lookup."""
-
-    def __init__(self, html: str) -> None:
-        parser = BulletinParser()
-        parser.feed(html)
-        self.links = parser.links
-
-    def __iter__(self):
-        return iter(self.links)
 
 
 def main() -> int:

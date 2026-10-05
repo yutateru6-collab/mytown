@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v38-trust-ux";
+const CACHE = "mytown-civic-v39-event-schedule";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -13,6 +13,7 @@ const STATIC_ASSETS = [
   "./civic-actions.css",
   "./civic-portal.css",
   "./p0-stability.css",
+  "./event-schedule.js",
   "./app.js",
   "./app-runtime.js",
   "./politics.js",
@@ -102,13 +103,16 @@ self.addEventListener("fetch", (event) => {
   }
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
+    caches.match(event.request, { ignoreSearch: STATIC_ASSETS.some((asset) => new URL(asset, self.location.href).pathname === url.pathname) }).then((cached) => {
       const network = fetch(event.request).then((response) => {
         if (response.ok) {
           const copy = response.clone();
           caches.open(CACHE).then((cache) => cache.put(event.request, copy));
         }
         return response;
+      }).catch((error) => {
+        if (cached) return cached;
+        throw error;
       });
       return cached || network;
     })

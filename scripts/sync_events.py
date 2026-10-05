@@ -14,6 +14,7 @@ import json
 import re
 import unicodedata
 import urllib.request
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 from html import unescape
 from html.parser import HTMLParser
@@ -43,6 +44,14 @@ PARTICIPATION_PATTERN = re.compile(r"ボランティア|清掃|地域活動|球�
 LEARNING_PATTERN = re.compile(r"体験|学習|講座|教室|研修|展示|アート|ワークショップ|観察")
 MUSIC_PATTERN = re.compile(r"音楽|ライブ|コンサート|演奏|Music", re.IGNORECASE)
 SPORTS_PATTERN = re.compile(r"スポーツ|健康|運動|ピラティス|ヨガ|バレー")
+BLOCK_START_TAGS = {
+    "p", "div", "dt", "dd", "th", "td", "tr", "li", "br", "section",
+    "article", "main", "header", "footer", "nav", "h1", "h2", "h3", "h4", "h5", "h6",
+}
+BLOCK_END_TAGS = {
+    "p", "dd", "tr", "li", "section", "article", "main", "header", "footer",
+    "nav", "h1", "h2", "h3", "h4", "h5", "h6",
+}
 
 
 class LinkCollector(HTMLParser):
@@ -52,15 +61,27 @@ class LinkCollector(HTMLParser):
         super().__init__()
         self.links: list[tuple[str, str]] = []
         self.parts: list[str] = []
+        self._structured_parts: list[str] = []
         self._href: str | None = None
         self._link_parts: list[str] = []
         self._ignored_depth = 0
+
+    def _boundary(self, value: str) -> None:
+        if self._structured_parts and self._structured_parts[-1] in {"\n", "\n\n"}:
+            if value == "\n\n":
+                self._structured_parts[-1] = value
+        else:
+            self._structured_parts.append(value)
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         if tag.lower() in {"script", "style", "noscript"}:
             self._ignored_depth += 1
             return
-        if self._ignored_depth or tag.lower() != "a":
+        if self._ignored_depth:
+            return
+        if tag.lower() in BLOCK_START_TAGS:
+            self._boundary("\n")
+        if tag.lower() != "a":
             return
         self._href = dict(attrs).get("href")
         self._link_parts = []
@@ -69,7 +90,13 @@ class LinkCollector(HTMLParser):
         if tag.lower() in {"script", "style", "noscript"} and self._ignored_depth:
             self._ignored_depth -= 1
             return
-        if self._ignored_depth or tag.lower() != "a" or self._href is None:
+        if self._ignored_depth:
+            return
+        if tag.lower() in BLOCK_END_TAGS:
+            self._boundary("\n\n")
+        elif tag.lower() in {"div", "dt", "th", "td"}:
+            self._boundary("\n")
+        if tag.lower() != "a" or self._href is None:
             return
         self.links.append((self._href, clean_text(" ".join(self._link_parts))))
         self._href = None
@@ -82,12 +109,19 @@ class LinkCollector(HTMLParser):
         if not value:
             return
         self.parts.append(value)
+        self._structured_parts.append(f" {value} ")
         if self._href is not None:
             self._link_parts.append(value)
 
     @property
     def text(self) -> str:
         return clean_text(" ".join(self.parts))
+
+    @property
+    def structured_text(self) -> str:
+        """Keep field/block boundaries for metadata extraction."""
+        lines = [clean_text(line) for line in "".join(self._structured_parts).splitlines()]
+        return re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
 
 
 def clean_text(value: str) -> str:
@@ -129,94 +163,129 @@ def explicit_year_hint(text: str, fallback: int) -> int:
     return int(match.group(1)) if match else fallback
 
 
-def date_tokens(text: str, year_hint: int) -> list[date]:
-    """Return explicit dates in visual order, filling only omitted years."""
+@dataclass(frozen=True)
+class EventSchedule:
+    dates: tuple[date, ...] = ()
+    continuous: bool = False
+
+
+DATE_TOKEN_PATTERN = re.compile(
+    r"(?<![\d/.\-])(?P<iso_year>20\d{2})[/.\-](?P<iso_month>\d{1,2})[/.\-](?P<iso_day>\d{1,2})(?!\d)|"
+    r"(?<!\d)(?:(?P<jp_year>20\d{2})年|令和(?P<reiwa_year>元|\d{1,2})年)?(?P<jp_month>\d{1,2})月(?P<jp_day>\d{1,2})日|"
+    r"(?<![\d/.\-])(?P<slash_month>\d{1,2})/(?P<slash_day>\d{1,2})(?![\d/])|"
+    r"(?<![\d/.\-])(?P<short_day>\d{1,2})(?:日)?(?![\d:/時分円年月])"
+)
+DATE_JOIN_PATTERN = re.compile(r"\s*(?:\([^)]*\))?\s*(?P<join>[~〜\-]|から|・|、|,|及び|および|と)\s*")
+RANGE_JOINS = {"~", "〜", "-", "から"}
+
+
+def dated_tokens(text: str, year_hint: int) -> list[tuple[date, int, int]]:
+    """Parse dates once in source order, inheriting omitted month/year only."""
     text = clean_text(text)
-    pattern = re.compile(
-        r"(?P<iso_year>20\d{2})[/.\-](?P<iso_month>\d{1,2})[/.\-](?P<iso_day>\d{1,2})|"
-        r"(?:(?P<jp_year>20\d{2})年)?(?P<jp_month>\d{1,2})月(?P<jp_day>\d{1,2})日"
-    )
-    found: list[date] = []
+    found: list[tuple[date, int, int]] = []
     current_year = year_hint
     previous_month: int | None = None
-    for match in pattern.finditer(text):
-        if match.group("iso_year"):
-            year = int(match.group("iso_year"))
-            month = int(match.group("iso_month"))
-            day = int(match.group("iso_day"))
+    for match in DATE_TOKEN_PATTERN.finditer(text):
+        explicit_year = match.group("iso_year") or match.group("jp_year")
+        if match.group("reiwa_year"):
+            era_year = 1 if match.group("reiwa_year") == "元" else int(match.group("reiwa_year"))
+            explicit_year = str(2018 + era_year)
+        month_text = match.group("iso_month") or match.group("jp_month") or match.group("slash_month")
+        day_text = match.group("iso_day") or match.group("jp_day") or match.group("slash_day") or match.group("short_day")
+        if not month_text:
+            if not found or not DATE_JOIN_PATTERN.fullmatch(text[found[-1][2] : match.start()]):
+                continue
+            month = previous_month
         else:
-            explicit_year = match.group("jp_year")
-            month = int(match.group("jp_month"))
-            day = int(match.group("jp_day"))
-            if explicit_year:
-                current_year = int(explicit_year)
-            elif previous_month is not None and previous_month >= 11 and month <= 2:
-                current_year += 1
-            year = current_year
-        parsed = safe_date(year, month, day)
-        if parsed and parsed not in found:
-            found.append(parsed)
+            month = int(month_text)
+        if explicit_year:
+            current_year = int(explicit_year)
+        elif previous_month is not None and previous_month >= 11 and month <= 2:
+            current_year += 1
+        parsed = safe_date(current_year, month, int(day_text))
+        if parsed:
+            found.append((parsed, match.start(), match.end()))
             previous_month = month
-
-    # 「9月11日～12日」「9/11～12」のように、終了側の月が省かれた表記を補う。
-    shorthand_patterns = (
-        re.compile(
-            r"(?:(?P<year>20\d{2})年)?(?P<month>\d{1,2})月(?P<start>\d{1,2})日"
-            r"(?:\([^)]*\)|（[^）]*）)?\s*[~〜～\-]\s*(?P<end>\d{1,2})日"
-        ),
-        re.compile(
-            r"(?:(?P<year>20\d{2})/)?(?P<month>\d{1,2})/(?P<start>\d{1,2})"
-            r"(?:\([^)]*\)|（[^）]*）)?\s*[~〜～\-]\s*(?P<end>\d{1,2})(?!\d)"
-        ),
-    )
-    for range_pattern in shorthand_patterns:
-        for match in range_pattern.finditer(text):
-            year = int(match.group("year") or year_hint)
-            month = int(match.group("month"))
-            for day in (int(match.group("start")), int(match.group("end"))):
-                parsed = safe_date(year, month, day)
-                if parsed and parsed not in found:
-                    found.append(parsed)
-
-    # 一覧見出しで使われる「9/5」も、時刻と混同しない範囲で拾う。
-    for match in re.finditer(r"(?<!\d)(?P<month>\d{1,2})/(?P<day>\d{1,2})(?!\d)", text):
-        parsed = safe_date(year_hint, int(match.group("month")), int(match.group("day")))
-        if parsed and parsed not in found:
-            found.append(parsed)
     return found
 
 
+def date_tokens(text: str, year_hint: int) -> list[date]:
+    """Return explicit dates in visual order without reparsing ISO substrings."""
+    return list(dict.fromkeys(value for value, _start, _end in dated_tokens(text, year_hint)))
+
+
+def parse_schedule(text: str, year_hint: int) -> EventSchedule:
+    """Distinguish an explicit continuous range from separate event dates."""
+    text = clean_text(text)
+    tokens = dated_tokens(text, year_hint)
+    if not tokens:
+        return EventSchedule()
+    groups: list[list[date]] = [[tokens[0][0]]]
+    for previous, current in zip(tokens, tokens[1:]):
+        join = DATE_JOIN_PATTERN.fullmatch(text[previous[2] : current[1]])
+        if join and join.group("join") in RANGE_JOINS and current[0] >= previous[0]:
+            groups[-1].append(current[0])
+        else:
+            groups.append([current[0]])
+    if len(groups) == 1 and len(groups[0]) > 1:
+        return EventSchedule(tuple(sorted(set(groups[0]))), continuous=True)
+    dates: set[date] = set()
+    for group in groups:
+        if len(group) == 1:
+            dates.add(group[0])
+        else:
+            start, end = min(group), max(group)
+            dates.update(start + timedelta(days=offset) for offset in range((end - start).days + 1))
+    return EventSchedule(tuple(sorted(dates)))
+
+
 def labelled_segment(text: str, labels: Iterable[str], stop_labels: Iterable[str], limit: int = 520) -> str:
-    normalized = clean_text(text)
-    label_pattern = "|".join(re.escape(label) for label in labels)
-    match = re.search(rf"(?:{label_pattern})\s*[|:：]?\s*", normalized)
+    # Unlike clean_text(), retain HTML paragraph/field boundaries. The plain
+    # text API remains supported for publishers that use inline labelled copy.
+    normalized = "\n".join(clean_text(line) for line in text.splitlines()).strip()
+    label_pattern = "|".join(re.escape(label.lstrip("■")) for label in sorted(set(labels), key=len, reverse=True))
+    match = re.search(
+        rf"(?:^|(?<=[\s。;]))[■●・>]*[ \t]*(?:{label_pattern})(?=\s|[|:]|$)[ \t]*[|:]?[ \t]*(?:\n(?![ \t]*\n)[ \t]*)?",
+        normalized,
+    )
     if not match:
         return ""
     tail = normalized[match.end() : match.end() + limit]
-    stop_pattern = "|".join(re.escape(label) for label in stop_labels)
-    stop = re.search(rf"\s(?:{stop_pattern})\s*[|:：]?\s*", tail)
+    stops = (
+        *stop_labels, "最新のイベント", "関連イベント", "関連記事", "添付ファイル",
+        "一覧へ戻る", "チラシはこちらから", "駐車場", "お問合せ", "問合せ", "連絡先", "TEL", "FAX",
+    )
+    stop_pattern = "|".join(re.escape(label) for label in sorted(set(stops), key=len, reverse=True))
+    stop = re.search(
+        rf"\n\s*\n|(?:^|(?<=[\s。;]))[■●・>]*\s*(?:{stop_pattern})(?=\s|[|:(]|$)|(?:{stop_pattern})[|:]",
+        tail,
+    )
     return clean_text(tail[: stop.start()] if stop else tail)
 
 
-def event_dates(text: str, year_hint: int) -> list[date]:
+def event_schedule(text: str, year_hint: int) -> EventSchedule:
     segment = labelled_segment(
         text,
-        ("実施日", "開催日", "日程", "日時", "■日時"),
+        ("実施日", "開催日", "日程", "開催日時", "日時"),
         ("実施時間", "時間", "場所", "会場", "主会場", "参加費", "定員", "申込", "お問い合わせ"),
     )
-    return date_tokens(segment, year_hint) if segment else []
+    return parse_schedule(segment, year_hint)
+
+
+def event_dates(text: str, year_hint: int) -> list[date]:
+    return list(event_schedule(text, year_hint).dates)
 
 
 def event_time(text: str) -> str:
     segment = labelled_segment(
         text,
-        ("実施時間", "時間", "日時", "■日時"),
+        ("実施時間", "時間", "開催日時", "日時"),
         ("場所", "会場", "参加費", "定員", "申込", "お問い合わせ", "注意事項"),
         limit=220,
     )
     if not segment:
         return ""
-    token = r"\d{1,2}(?::\d{2}|時\d{2}(?:分)?)"
+    token = r"(?:午前|午後)?\d{1,2}(?::\d{2}|時(?:\d{1,2}(?:分)?)?)"
     ranges = re.findall(rf"{token}\s*(?:[~〜～\-]|から)\s*{token}", segment)
     remainder = segment
     for value in ranges:
@@ -231,7 +300,7 @@ def event_location(text: str, default: str = "") -> str:
     segment = labelled_segment(
         text,
         ("主会場", "場所", "■場所", "会場"),
-        ("参加費", "定員", "申込", "チケット", "お問い合わせ", "開催にあたって", "注意事項"),
+        ("日程", "開催日", "日時", "実施日", "時間", "入場無料", "参加費", "定員", "申込", "チケット", "お問い合わせ", "開催にあたって", "注意事項"),
         limit=180,
     )
     location = clean_text(segment).strip("|:： ")
@@ -296,15 +365,15 @@ def event_tags(title: str, body: str = "") -> tuple[str, list[str]]:
     return category, list(dict.fromkeys(tags))
 
 
-def format_when(dates: list[date], time_text: str = "") -> str:
+def format_when(dates: list[date], time_text: str = "", *, continuous: bool = False) -> str:
     if not dates:
         return ""
     if len(dates) == 1:
         base = f"{dates[0].month}月{dates[0].day}日"
+    elif continuous:
+        base = f"{dates[0].month}月{dates[0].day}日～{dates[-1].month}月{dates[-1].day}日"
     elif len(dates) == 2 and dates[0] != dates[1]:
-        if dates[1] - dates[0] == timedelta(days=1):
-            base = f"{dates[0].month}月{dates[0].day}日～{dates[1].month}月{dates[1].day}日"
-        elif dates[0].month == dates[1].month:
+        if dates[0].month == dates[1].month:
             base = f"{dates[0].month}月{dates[0].day}日・{dates[1].day}日"
         else:
             base = f"{dates[0].month}月{dates[0].day}日・{dates[1].month}月{dates[1].day}日"
@@ -322,6 +391,7 @@ def base_event(
     text: str,
     checked_at: str,
     default_location: str = "",
+    continuous: bool = False,
 ) -> dict:
     dates = sorted(set(dates))
     category, tags = event_tags(title)
@@ -338,7 +408,7 @@ def base_event(
         "summary": f"{source['name']}が公開しているイベント情報です。",
         "startDate": start_date,
         "endDate": end_date,
-        "when": format_when(dates, time_text),
+        "when": format_when(dates, time_text, continuous=continuous),
         "location": location,
         "organizerName": "",
         "publisherName": source["name"],
@@ -352,7 +422,7 @@ def base_event(
         "tags": tags,
         "lastCheckedAt": checked_at,
     }
-    if len(dates) > 2:
+    if len(dates) > 1 and not continuous:
         event["occurrences"] = [value.isoformat() for value in dates]
     if money:
         event["money"] = money
@@ -389,11 +459,14 @@ def parse_aeon(source: dict, index_html: str, fetcher: Callable[[str], str], now
         if NON_EVENT_PATTERN.search(listing_title):
             continue
         try:
-            detail = parse_html(fetcher(url)).text
+            detail = parse_html(fetcher(url)).structured_text
         except Exception:
             detail = listing_title
         year_hint = explicit_year_hint(detail, now.year)
-        dates = event_dates(detail, year_hint) or date_tokens(listing_title, year_hint)
+        schedule = event_schedule(detail, year_hint)
+        if not schedule.dates:
+            schedule = parse_schedule(listing_title, year_hint)
+        dates = list(schedule.dates)
         if not dates:
             continue
         title = strip_listing_noise(listing_title)
@@ -408,6 +481,7 @@ def parse_aeon(source: dict, index_html: str, fetcher: Callable[[str], str], now
                 text=detail,
                 checked_at=now.isoformat(),
                 default_location=source.get("defaultLocation", ""),
+                continuous=schedule.continuous,
             )
         )
     return events
@@ -425,11 +499,12 @@ def parse_shakyo(source: dict, index_html: str, fetcher: Callable[[str], str], n
         if title in {"もっと見る", "一覧へ戻る"} or NON_EVENT_PATTERN.search(title):
             continue
         try:
-            detail = parse_html(fetcher(url)).text
+            detail = parse_html(fetcher(url)).structured_text
         except Exception:
             continue
         year_hint = explicit_year_hint(detail, now.year)
-        dates = event_dates(detail, year_hint)
+        schedule = event_schedule(detail, year_hint)
+        dates = list(schedule.dates)
         if not dates:
             continue
         events.append(
@@ -440,6 +515,7 @@ def parse_shakyo(source: dict, index_html: str, fetcher: Callable[[str], str], n
                 dates=dates,
                 text=detail,
                 checked_at=now.isoformat(),
+                continuous=schedule.continuous,
             )
         )
     return events
@@ -457,13 +533,17 @@ def parse_tourism(source: dict, index_html: str, fetcher: Callable[[str], str], 
         if NON_EVENT_PATTERN.search(title):
             continue
         try:
-            detail = parse_html(fetcher(url)).text
+            detail = parse_html(fetcher(url)).structured_text
         except Exception:
             continue
         year_hint = explicit_year_hint(detail, now.year)
         bracket = re.search(r"【([^】]+)】", title)
-        title_dates = date_tokens(bracket.group(1), year_hint) if bracket else []
-        dates = title_dates or event_dates(detail, year_hint) or date_tokens(title, year_hint)
+        schedule = parse_schedule(bracket.group(1), year_hint) if bracket else EventSchedule()
+        if not schedule.dates:
+            schedule = event_schedule(detail, year_hint)
+        if not schedule.dates:
+            schedule = parse_schedule(title, year_hint)
+        dates = list(schedule.dates)
         if not dates:
             continue
         event = base_event(
@@ -474,6 +554,7 @@ def parse_tourism(source: dict, index_html: str, fetcher: Callable[[str], str], 
             text=detail,
             checked_at=now.isoformat(),
             default_location="遠賀川河川敷" if "球根植え" in title and "遠賀川河川敷" in detail else "",
+            continuous=schedule.continuous,
         )
         deadline_segment = labelled_segment(detail, ("申込締切",), ("実施日", "日時", "場所"), limit=80)
         deadlines = date_tokens(deadline_segment, year_hint)
@@ -617,6 +698,23 @@ def merge_reviewed_fields(event: dict, prior: dict | None) -> dict:
             if key in prior:
                 merged[key] = prior[key]
         merged["editoriallyReviewed"] = True
+    same_schedule = all(event.get(key) == prior.get(key) for key in ("startDate", "endDate", "occurrences"))
+    def reviewed_time(value: str) -> str:
+        time_text = event_time(f"日時: {value}")
+        def normalize(match: re.Match) -> str:
+            period, hour, minute, jp_minute = match.groups()
+            hour = int(hour)
+            if period == "午前" and hour == 12:
+                hour = 0
+            elif period == "午後" and hour < 12:
+                hour += 12
+            return f"{hour:02d}:{int(minute or jp_minute or 0):02d}"
+        return re.sub(r"(午前|午後)?(\d{1,2})(?::(\d{2})|時(?:(\d{1,2})分?)?)", normalize, time_text)
+    same_time = reviewed_time(str(event.get("when", ""))) == reviewed_time(str(prior.get("when", "")))
+    if same_schedule and same_time and prior.get("scheduleReview"):
+        merged["scheduleReview"] = prior["scheduleReview"]
+        if prior.get("when"):
+            merged["when"] = prior["when"]
     return merged
 
 

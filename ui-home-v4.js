@@ -71,25 +71,18 @@
     return [`${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`];
   }
 
-  function v4EventHappensOn(item, dateKey) {
-    const occurrences = Array.isArray(item.occurrences) ? item.occurrences : [];
-    if (occurrences.length) return occurrences.includes(dateKey);
+  function v4ScheduleItem(item) {
+    if (item.startDate || item.occurrences?.length) return item;
     const dates = v4EventDateKeys(item);
-    if (!dates.length) return false;
-    const start = item.startDate || dates[0];
-    const end = item.endDate || dates.at(-1) || start;
-    return dateKey >= start && dateKey <= end;
+    return { ...item, startDate: dates[0], endDate: dates.at(-1) };
+  }
+
+  function v4EventHappensOn(item, dateKey) {
+    return EventSchedule.happensOn(v4ScheduleItem(item), dateKey);
   }
 
   function v4EventNextDate(item, today = v4TokyoDateKey()) {
-    const occurrences = Array.isArray(item.occurrences) ? item.occurrences.filter((value) => value >= today).sort() : [];
-    if (occurrences.length) return occurrences[0];
-    const dates = v4EventDateKeys(item);
-    if (!dates.length) return "";
-    const start = item.startDate || dates[0];
-    const end = item.endDate || dates.at(-1) || start;
-    if (end < today) return "";
-    return start < today ? today : start;
+    return EventSchedule.nextDate(v4ScheduleItem(item), today);
   }
 
   function v4WeekendKeys(today = v4TokyoDateKey()) {
@@ -185,14 +178,7 @@
   }
 
   function v4TokyoDateKey(value = new Date()) {
-    const parts = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Tokyo",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).formatToParts(value);
-    const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
-    return `${values.year}-${values.month}-${values.day}`;
+    return EventSchedule.today(value);
   }
 
   function v4ChangesSinceLastVisit() {
@@ -206,9 +192,7 @@
   }
 
   function v4IsoDayNumber(value) {
-    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || ""));
-    if (!match) return null;
-    return Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])) / 86400000;
+    return EventSchedule.day(value);
   }
 
   function v4DeadlineNote(item) {
@@ -343,7 +327,7 @@
         <div class="v4-event-copy">
           <div class="v4-event-topline"><span>直方のイベント</span><small>${events.length ? `${events.length}件掲載中` : "更新中"}</small></div>
           <h2 id="v4-event-feature-title">直方で、なにする？</h2>
-          <p>市・地域団体・施設の情報を、近い日から3件。</p>
+          <p>市・地域団体・施設の情報を、近い日から最大3件。</p>
         </div>
         <div class="v4-event-art" aria-hidden="true"><img src="${V4_ASSETS.event}" alt="" decoding="async" fetchpriority="high"></div>
       </div>
@@ -579,6 +563,7 @@
       item.when ? `<span><b>日時</b>${esc(v4Short(item.when, 38))}</span>` : "",
       item.location ? `<span><b>場所</b>${esc(v4Short(item.location, 42))}</span>` : "",
       item.money ? `<span><b>費用</b>${esc(v4Short(item.money, 28))}</span>` : "",
+      item.target ? `<span><b>対象</b>${esc(v4Short(item.target, 42))}</span>` : "",
       item.organizerName ? `<span><b>主催</b>${esc(v4Short(item.organizerName, 38))}</span>` : item.publisherName ? `<span><b>掲載</b>${esc(v4Short(item.publisherName, 38))}</span>` : "",
     ].filter(Boolean);
     const icon = /地域参加/.test(category) ? "🤝" : /親子|子ども/.test(category) ? "🎈" : /音楽|文化/.test(category) ? "🎵" : /スポーツ|健康/.test(category) ? "🏃" : /講座|体験|学/.test(v4Text(item)) ? "🎨" : "🎪";
@@ -586,10 +571,10 @@
     return `<article class="v4-event-list-card">
       <div class="v4-event-list-icon" aria-hidden="true">${icon}</div>
       <div class="v4-event-list-copy">
-        <div class="v4-event-list-meta"><span>${esc(category)}</span><span class="is-source">${esc(v4EventSourceLabel(item))}</span>${item.statusLabel ? `<strong>${esc(item.statusLabel)}</strong>` : ""}</div>
+        <div class="v4-event-list-meta"><span>${esc(category)}</span><span class="is-source">${esc(v4EventSourceLabel(item))}</span><strong>${esc(EventSchedule.status(v4ScheduleItem(item)))}</strong></div>
         <h3>${esc(item.title || "イベント情報")}</h3>
-        <p>${esc(v4Short(item.summary || "日時や場所など、確認できた情報を掲載しています。", 104))}</p>
         ${facts.length ? `<div class="v4-event-facts">${facts.join("")}</div>` : ""}
+        <p>${esc(v4Short(item.summary || "詳しくは掲載元で確認してください。", 72))}</p>
         ${v4ItemControl(item, controlLabel, "what", "v4-event-card-cta")}
       </div>
     </article>`;
@@ -723,7 +708,7 @@
   }
 
   v2SearchIntro = function v4SearchIntro() {
-    const deadlines = typeof v2FindDeadlines === "function" ? v2FindDeadlines().slice(0, 2) : [];
+    const deadlines = typeof v2FindDeadlines === "function" ? v2FindDeadlines() : [];
     const eventCount = v4EventItems().length;
     const bulletin = typeof v2CurrentBulletin === "function" ? v2CurrentBulletin() : null;
     return `<div class="v2-search-intro"><section class="v2-popular-search" aria-labelledby="v2-popular-title"><h2 id="v2-popular-title">検索の例</h2><div class="v2-query-chips">${["イベント", "バス", "ごみ", "子育て", "学校"].map((query) => `<button type="button" data-v2-query="${esc(query)}">${esc(query)}</button>`).join("")}</div></section>

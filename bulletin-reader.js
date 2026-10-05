@@ -29,19 +29,49 @@
       .replace(/\s+ページ/g, "ページ");
   }
 
+  function currentIssuePdfUrl(value, issue) {
+    // The official page contains old, unnamed PDF anchors. Reject them even
+    // when a stale data file incorrectly assigns them to the current issue.
+    try {
+      const url = new URL(value);
+      if (url.protocol !== "https:" || url.host !== "www.city.nogata.fukuoka.jp") return null;
+      const match = url.pathname.match(/^\/library\/data\/siseijouhou\/PDF\/shihounoogata\/R0*(\d+)\/(?:(\d{2}|\d{4})\/)?(\d{2})(\d{2})(\d{2})_shiho_web_(all|\d{1,3}(?:-\d{1,3})?)\.pdf$/i);
+      if (!match) return null;
+      const [, directoryYear, directoryMonth, fileYear, fileMonth, day] = match;
+      const eraYear = Number(fileYear);
+      const month = Number(fileMonth);
+      if (Number(directoryYear) !== eraYear || month < 1 || month > 12) return null;
+      if (directoryMonth && directoryMonth !== fileMonth && directoryMonth !== `${fileYear}${fileMonth}`) return null;
+      const date = new Date(Date.UTC(2018 + eraYear, month - 1, Number(day)));
+      if (date.getUTCFullYear() !== 2018 + eraYear || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== Number(day)) return null;
+      if (`R${eraYear}-${fileMonth}` !== issue.issueKey) return null;
+      url.search = "";
+      url.hash = "";
+      return url.href;
+    } catch {
+      return null;
+    }
+  }
+
   function bulletinDocuments() {
     const issue = bulletinIssue();
     if (!issue) return [];
     const docs = [];
-    if (issue.wholePdfUrl) {
-      docs.push({ label: "全ページ", title: bulletinDisplayTitle(issue), url: issue.wholePdfUrl });
+    const seen = new Set();
+    const wholePdfUrl = currentIssuePdfUrl(issue.wholePdfUrl, issue);
+    if (wholePdfUrl && /_all\.pdf$/i.test(wholePdfUrl)) {
+      docs.push({ label: "全ページ", title: bulletinDisplayTitle(issue), url: wholePdfUrl });
+      seen.add(wholePdfUrl);
     }
     for (const page of bulletinData().pages || []) {
-      if (!page?.pdfUrl) continue;
+      if (!page?.pdfUrl || page.issueKey !== issue.issueKey) continue;
+      const url = currentIssuePdfUrl(page.pdfUrl, issue);
+      if (!url || seen.has(url) || /_all\.pdf$/i.test(url)) continue;
+      seen.add(url);
       docs.push({
         label: normalizeBulletinLabel(page.pageLabel),
         title: page.sourceDescription || page.title || "市報",
-        url: page.pdfUrl,
+        url,
       });
     }
     return docs;
@@ -133,14 +163,16 @@
     if (!button) return;
     event.preventDefault();
     const url = button.dataset.bulletinPdf || "";
-    if (!url) return;
+    const selected = bulletinDocuments().find((doc) => doc.url === url);
+    if (!selected) return;
     state.bulletinReaderUrl = url;
     const frame = document.querySelector(".bulletin-reader-frame");
     const fallback = document.querySelector("[data-bulletin-fallback]");
     const label = document.querySelector("[data-bulletin-current-label]");
     if (frame) frame.src = url;
+    if (frame) frame.title = `${bulletinIssue()?.title || "市報"} ${selected.label}`;
     if (fallback) fallback.href = url;
-    if (label) label.textContent = button.dataset.bulletinLabel || "市報";
+    if (label) label.textContent = selected.label;
     document.querySelectorAll("[data-bulletin-pdf]").forEach((candidate) => candidate.classList.toggle("is-active", candidate === button));
     document.querySelector(".bulletin-reader-card")?.scrollIntoView({ block: "start", behavior: "smooth" });
   });

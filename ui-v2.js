@@ -250,22 +250,44 @@ function v2SearchIntro() {
     <section class="v2-search-groups" aria-label="探し方"><button type="button" data-v2-action="deadline"><strong>締切のある情報</strong><span>${deadlines.length ? `${deadlines.length}件を確認` : "募集情報を探す"}</span></button><button type="button" data-v2-query="子育て 学校"><strong>暮らし</strong><span>制度・手続き・学校</span></button><button type="button" data-v2-action="works"><strong>工事情報</strong><span>市の公開資料から確認</span></button><button type="button" data-v2-action="decision"><strong>市政</strong><span>予算・議会・決まったこと</span></button>${bulletin ? `<button type="button" data-v2-action="bulletin"><strong>市報</strong><span>${esc(bulletin.title || "最新号")}</span></button>` : ""}</section><p class="v2-search-note">現在取り込んでいる市の公開情報から検索します。</p></div>`;
 }
 
+const V2_SEARCH_ALIAS_GROUPS = [
+  ["ごみ", "捨て方", "出し方", "収集", "分別", "粗大ごみ", "燃えるごみ", "もやせるごみ"],
+  ["バス", "交通", "路線", "時刻表", "バス停"],
+  ["子ども", "こども", "子育て", "出産", "生まれ", "保育", "児童"],
+  ["学校", "教育", "就学", "入学", "給食"],
+  ["工事", "道路", "通行", "工期"],
+];
+
+function v2SearchRelevanceScore(item, query) {
+  const q = normalizeQuery(query || "");
+  if (!q) return 0;
+  const title = normalizeQuery(item.title || "");
+  const summary = normalizeQuery(item.summary || "");
+  const category = normalizeQuery(item.category || classifyTitle(item.title));
+  const terms = normalizeQuery(String(item.searchTerms || ""));
+  let score = title.includes(q) ? 80 : summary.includes(q) ? 32 : category.includes(q) ? 24 : terms.includes(q) ? 16 : 0;
+  const tokens = q.split(/[\s、。・,]+/).filter((token) => token.length > 1);
+  if (tokens.length > 1 && tokens.every((token) => title.includes(token))) score = Math.max(score, 70);
+  const aliases = V2_SEARCH_ALIAS_GROUPS.filter((group) => group.some((term) => q.includes(normalizeQuery(term))));
+  if (aliases.some((group) => group.some((term) => title.includes(normalizeQuery(term))))) score += 20;
+  else if (aliases.some((group) => group.some((term) => `${summary} ${category} ${terms}`.includes(normalizeQuery(term))))) score += 8;
+
+  // 交通への言及だけの工事より、バス・路線・時刻表を主題にした情報を先に出す。
+  const transportQuery = /バス|交通|路線|時刻表|バス停/.test(q);
+  if (transportQuery && /バス|路線|時刻表|公共交通/.test(title)) score += 40;
+  if (transportQuery && category === "交通") score += 12;
+  return score;
+}
+
 function v2SearchHubView() {
   const all = combinedSearchItems();
   const q = normalizeQuery(state.discoverQuery);
   const category = state.discoverCategory;
   const hasSearch = Boolean(q || category);
-  const aliasGroups = [
-    ["ごみ", "捨て方", "出し方", "収集", "分別", "粗大ごみ", "燃えるごみ", "もやせるごみ"],
-    ["バス", "交通", "路線", "時刻表", "バス停"],
-    ["子ども", "こども", "子育て", "出産", "生まれ", "保育", "児童"],
-    ["学校", "教育", "就学", "入学", "給食"],
-    ["工事", "道路", "通行", "工期"],
-  ];
   const matchesQuery = (item) => {
-    const text = normalizeQuery(`${item.title} ${item.summary || ""} ${item.category || ""} ${item.searchTerms || ""}`);
+    const text = normalizeQuery(`${item.title || ""} ${item.summary || ""} ${item.category || ""} ${item.searchTerms || ""}`);
     if (!q || text.includes(q)) return true;
-    const aliasMatch = aliasGroups.some((group) => group.some((term) => q.includes(normalizeQuery(term))) && group.some((term) => text.includes(normalizeQuery(term))));
+    const aliasMatch = V2_SEARCH_ALIAS_GROUPS.some((group) => group.some((term) => q.includes(normalizeQuery(term))) && group.some((term) => text.includes(normalizeQuery(term))));
     if (aliasMatch) return true;
     const tokens = q.split(/[\s、。・,]+/).filter((token) => token.length > 1 && !/^(の|を|は|が|に|で|へ|と)$/.test(token));
     return tokens.length > 0 && tokens.every((token) => text.includes(token));
@@ -278,7 +300,9 @@ function v2SearchHubView() {
   };
   const results = hasSearch ? all
     .filter((item) => matchesQuery(item) && (!category || (item.category || classifyTitle(item.title)) === category))
-    .sort((a, b) => preferenceScore(b) - preferenceScore(a) || String(b.published || "").localeCompare(String(a.published || ""))) : [];
+    .sort((a, b) => v2SearchRelevanceScore(b, q) - v2SearchRelevanceScore(a, q)
+      || preferenceScore(b) - preferenceScore(a)
+      || String(b.published || "").localeCompare(String(a.published || ""))) : [];
   const noResults = state.discoverQuery
     ? `「${state.discoverQuery}」に関する情報は、まだ取り込めていません。直方市に情報がない、という意味ではありません。`
     : "この分類に合う情報は見つかりませんでした。分類を「すべて」に戻してください。";
@@ -420,6 +444,72 @@ function v2ActiveNav() {
   return "home";
 }
 
+let v2FilterRowSequence = 0;
+let v2FilterResizeObserver = null;
+let v2FilterScrollUpdates = [];
+
+function v2EnhanceFilterRows() {
+  v2FilterResizeObserver?.disconnect();
+  v2FilterScrollUpdates = [];
+  if (typeof ResizeObserver === "function") v2FilterResizeObserver = new ResizeObserver(() => v2FilterScrollUpdates.forEach((update) => update()));
+  document.querySelectorAll(".filter-row, .v4-event-filter-row, .v4-event-quick-filters").forEach((row) => {
+    // A render replaces these rows. Repeated nav syncs should not add controls twice.
+    if (row.v2FilterScrollUpdate) {
+      v2FilterScrollUpdates.push(row.v2FilterScrollUpdate);
+      v2FilterResizeObserver?.observe(row);
+      row.v2FilterScrollUpdate();
+      return;
+    }
+    const id = row.id || `v2-filter-row-${++v2FilterRowSequence}`;
+    const label = row.getAttribute("aria-label") || "絞り込み";
+    row.id = id;
+    row.classList.add("v2-filter-scrollable");
+    row.setAttribute("role", "group");
+    row.setAttribute("tabindex", "0");
+    const cue = document.createElement("div");
+    cue.className = "v2-filter-continuation";
+    cue.hidden = true;
+    cue.innerHTML = `<span id="${esc(id)}-hint">右に続きがあります</span><div><button type="button" data-filter-scroll="previous" aria-controls="${esc(id)}" aria-label="${esc(label)}：前の項目を見る">← 前へ</button><button type="button" data-filter-scroll="next" aria-controls="${esc(id)}" aria-label="${esc(label)}：次の項目を見る">次へ →</button></div>`;
+    row.setAttribute("aria-describedby", `${id}-hint`);
+    row.insertAdjacentElement("afterend", cue);
+    const previous = cue.querySelector('[data-filter-scroll="previous"]');
+    const next = cue.querySelector('[data-filter-scroll="next"]');
+    const hint = cue.querySelector("span");
+    const update = () => {
+      const maxScroll = Math.max(0, row.scrollWidth - row.clientWidth);
+      const hasPrevious = row.scrollLeft > 2;
+      const hasNext = row.scrollLeft < maxScroll - 2;
+      const overflows = maxScroll > 2;
+      cue.hidden = !overflows;
+      row.setAttribute("tabindex", overflows ? "0" : "-1");
+      if (overflows) row.setAttribute("aria-describedby", `${id}-hint`);
+      else row.removeAttribute("aria-describedby");
+      previous.disabled = !hasPrevious;
+      next.disabled = !hasNext;
+      hint.textContent = hasPrevious && hasNext ? "左右に続きがあります" : hasPrevious ? "左に続きがあります" : "右に続きがあります";
+    };
+    const scroll = (direction) => {
+      const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      row.scrollBy({ left: direction * Math.max(140, row.clientWidth * .75), behavior: reducedMotion ? "auto" : "smooth" });
+    };
+    previous.addEventListener("click", () => scroll(-1));
+    next.addEventListener("click", () => scroll(1));
+    row.addEventListener("scroll", update, { passive: true });
+    row.addEventListener("keydown", (event) => {
+      if (event.target !== row || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") scroll(event.key === "ArrowLeft" ? -1 : 1);
+      else row.scrollTo({ left: event.key === "Home" ? 0 : row.scrollWidth, behavior: "auto" });
+    });
+    row.v2FilterScrollUpdate = update;
+    v2FilterScrollUpdates.push(update);
+    v2FilterResizeObserver?.observe(row);
+    update();
+  });
+}
+
+window.addEventListener("resize", () => v2FilterScrollUpdates.forEach((update) => update()));
+
 function v2SyncNav() {
   const active = v2ActiveNav();
   document.querySelectorAll("[data-v2-nav]").forEach((button) => {
@@ -427,6 +517,7 @@ function v2SyncNav() {
     button.classList.toggle("is-active", isActive);
     if (["home", "civic", "search", "notifications", "menu"].includes(button.dataset.v2Nav)) button.setAttribute("aria-current", isActive ? "page" : "false");
   });
+  v2EnhanceFilterRows();
 }
 
 if (typeof guideBubble === "function") {

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
+import { civicBrowserFixtures } from "./civic-browser-fixtures.mjs";
 
 const baseURL = process.env.VISUAL_QA_URL || "http://127.0.0.1:4173/";
 const outputDir = process.env.VISUAL_QA_DIR || "visual-qa-output";
@@ -14,8 +15,17 @@ const context = await browser.newContext({
   hasTouch: true,
   locale: "ja-JP",
   timezoneId: "Asia/Tokyo",
+  serviceWorkers: "block",
 });
 const page = await context.newPage();
+// Closed applications may disappear from the live feed. Keep their display test
+// in this isolated browser; never modify the publisher data or repository feed.
+const fixtures = civicBrowserFixtures();
+await page.route("**/data/community-events.json*", async (route) => {
+  const response = await route.fetch();
+  const payload = await response.json();
+  await route.fulfill({ response, json: { ...payload, events: [...(payload.events || []), ...fixtures.events] } });
+});
 
 try {
   const url = new URL(baseURL);
@@ -116,7 +126,11 @@ try {
 
   // A 30-second entry opens only the short layer until the user asks for more.
   await page.evaluate(() => v2HandleAction("home"));
-  await page.locator('[data-v2-detail-id="community-bus-20261001"]').first().click();
+  const shortEntryId = await page.evaluate(() => [...document.querySelectorAll("[data-v2-detail-id]")]
+    .map((button) => button.dataset.v2DetailId)
+    .find((id) => state.data.featured.some((item) => item.id === id && !isCommunityEventItem(item))));
+  assert.ok(shortEntryId, "home must expose a short city-information entry");
+  await page.locator(`[data-v2-detail-id="${shortEntryId}"]`).first().click();
   assert.match(await page.locator("#main").innerText(), /3分で詳しく読む/);
   assert.equal(await page.locator("#main").getByText("背景・費用・決まり方", { exact: true }).count(), 0);
   await page.locator('[data-section="details"]').click();

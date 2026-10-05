@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "index.html"
+      - "event-schedule.js"
       - "app.js"
       - "app-runtime.js"
       - "politics.js"
@@ -50,6 +51,13 @@ jobs:
 
       - name: JavaScript and Python syntax
         run: |
+          node --check scripts/civic-browser-fixtures.mjs
+          node scripts/test_civic_browser_fixtures.mjs
+          node --check event-schedule.js
+          node scripts/test_bulletin_ui.js
+          node scripts/test_offline_assets.js
+          node scripts/test_event_schedule.js
+          node scripts/test_search_scroll_ux.js
           node --check app.js
           node --check app-runtime.js
           node --check politics.js
@@ -104,6 +112,7 @@ jobs:
       - name: Civic pipeline regression tests
         run: |
           python scripts/test_data_pipeline.py
+          python scripts/test_bulletin_pipeline.py
           python scripts/test_event_pipeline.py
           python scripts/test_community_pipeline.py
 
@@ -135,7 +144,7 @@ jobs:
           ! grep -q 'MutationObserver' index.html
           grep -q '>市政</span>' index.html
           grep -q '>さがす</span>' index.html
-          grep -q 'mytown-civic-v38-trust-ux' sw.js
+          grep -q 'mytown-civic-v39-event-schedule' sw.js
 
       - name: Required citizen-first UX wiring
         run: |
@@ -150,7 +159,7 @@ jobs:
           grep -q 'p0-stability.css?v=2' index.html
           grep -q 'bulletin-reader.js' index.html
           grep -q 'bulletin-reader.css' index.html
-          grep -q 'civic-actions.js?v=3' index.html
+          grep -q 'civic-actions.js?v=4' index.html
           grep -q 'data-v2-action="bulletin"' bulletin-reader.js
           grep -q 'bulletin-reader-frame' bulletin-reader.js
           grep -q 'wholePdfUrl' bulletin-reader.js

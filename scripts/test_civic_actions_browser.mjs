@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
+import { civicBrowserFixtures } from "./civic-browser-fixtures.mjs";
 
 const baseURL = process.env.VISUAL_QA_URL || "http://127.0.0.1:4173/";
 const outputDir = process.env.VISUAL_QA_DIR || "visual-qa-output";
@@ -66,6 +67,7 @@ try {
     timezoneId: "Asia/Tokyo",
     reducedMotion: "reduce",
     acceptDownloads: true,
+    serviceWorkers: "block", // Keep browser-only feed fixtures deterministic.
     geolocation: { latitude: 33.7436, longitude: 130.7296, accuracy: 25 },
     permissions: ["geolocation"],
   });
@@ -99,6 +101,14 @@ try {
     });
   });
 
+  // The real feed expires events normally. A date-relative, browser-only fixture
+  // keeps these behavior checks valid after September/October events disappear.
+  const fixtures = civicBrowserFixtures();
+  await page.route("**/data/community-events.json*", async (route) => {
+    const response = await route.fetch();
+    const payload = await response.json();
+    await route.fulfill({ response, json: { ...payload, events: [...(payload.events || []), ...fixtures.events] } });
+  });
   await openStablePage(page);
   await page.addStyleTag({ content: "*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}" });
 
@@ -166,42 +176,45 @@ try {
   }
   assert.match(await page.locator(".v4-event-contribute").innerText(), /このイベントも載せて！/);
 
-  const busCard = page.locator(".v4-event-list-card").filter({ hasText: "のおがたを知る一日" }).first();
+  const busCard = page.locator(".v4-event-list-card").filter({ hasText: "テスト：申込締切を過ぎたイベント" }).first();
   await busCard.waitFor({ state: "visible" });
   const busText = await busCard.innerText();
   assert.match(busText, /受付終了/);
   assert.match(busText, /5,000円/);
   assert.doesNotMatch(busText, /申込み受付中/);
 
-  const cinnaCard = page.locator(".v4-event-list-card").filter({ hasText: "シナモロールがあそびにくるよ" }).first();
+  const cinnaCard = page.locator(".v4-event-list-card").filter({ hasText: "テスト：商品購入額と参加費の区別" }).first();
   await cinnaCard.waitFor({ state: "visible" });
   assert.doesNotMatch(await cinnaCard.innerText(), /費用\s*1,100円/);
 
-  const walkCard = page.locator(".v4-event-list-card").filter({ hasText: "筑豊高校生と巡る直方まち歩き" }).first();
+  const walkCard = page.locator(".v4-event-list-card").filter({ hasText: "テスト：確認済み参加費" }).first();
   await walkCard.waitFor({ state: "visible" });
   const walkText = await walkCard.innerText();
   assert.doesNotMatch(walkText, /(?:^|\s)000円(?:\s|$)/);
   assert.match(walkText, /1,000円/);
   report.checks.push("event status, reviewed price and merchandise-price suppression");
 
-  const pokemonCard = page.locator(".v4-event-list-card").filter({ hasText: "ポケモンしんかラリー" }).first();
+  const pokemonCard = page.locator(".v4-event-list-card").filter({ hasText: "テスト：複数開催日の保存とカレンダー" }).first();
   await pokemonCard.waitFor({ state: "visible" });
   await pokemonCard.locator("[data-ca-save-event-id]").click();
   await page.locator(".v4-events-page").waitFor({ state: "visible" });
   await page.locator("[data-ca-open-saved].is-saved").first().waitFor({ state: "visible" });
 
   const downloadPromise = page.waitForEvent("download", { timeout: 15_000 });
-  await page.locator(".v4-event-list-card").filter({ hasText: "ポケモンしんかラリー" }).first().locator("[data-ca-calendar-event-id]").click();
+  await page.locator(".v4-event-list-card").filter({ hasText: "テスト：複数開催日の保存とカレンダー" }).first().locator("[data-ca-calendar-event-id]").click();
   const download = await downloadPromise;
   assert.match(download.suggestedFilename(), /\.ics$/);
   const stream = await download.createReadStream();
   let calendarText = "";
   for await (const chunk of stream) calendarText += chunk.toString("utf8");
   assert.equal((calendarText.match(/BEGIN:VEVENT/g) || []).length, 5, "future occurrences must be separate calendar events");
-  for (const date of ["20260911", "20260927", "20260928", "20261204", "20261225"]) {
+  for (const key of fixtures.futureDates) {
+    const date = key.replaceAll("-", "");
+    const exclusiveEnd = new Date(Date.parse(`${key}T00:00:00Z`) + 86400000).toISOString().slice(0, 10).replaceAll("-", "");
     assert.match(calendarText, new RegExp(`DTSTART;VALUE=DATE:${date}`));
+    assert.match(calendarText, new RegExp(`DTEND;VALUE=DATE:${exclusiveEnd}`));
   }
-  assert.doesNotMatch(calendarText, /DTSTART;VALUE=DATE:20260904[\s\S]*DTEND;VALUE=DATE:20261226/);
+  assert.doesNotMatch(calendarText, new RegExp(`DTSTART;VALUE=DATE:${fixtures.events.at(-1).startDate.replaceAll("-", "")}`), "past occurrences must not be exported");
   report.checks.push("save and multi-occurrence iCalendar download");
 
   await page.locator("[data-ca-open-saved]").first().click();
@@ -210,12 +223,21 @@ try {
   assert.match(await page.locator("#ca-dialog-body").innerText(), /参加した/);
   await page.screenshot({ path: path.join(outputDir, "civic-saved-events.png"), fullPage: false, scale: "css" });
   report.checks.push("saved-event follow-through");
-
   const dialogOverflow = await page.locator(".ca-dialog").evaluate((dialog) => ({
     scrollWidth: dialog.scrollWidth,
     clientWidth: dialog.clientWidth,
   }));
   assert.ok(dialogOverflow.scrollWidth <= dialogOverflow.clientWidth + 1, "saved-events dialog has horizontal overflow");
+
+  await page.locator("[data-ca-remove-id='qa-calendar-event']").click();
+  assert.equal(await page.locator(".ca-saved-card").count(), 0, "saved removal empties the isolated test list");
+  assert.equal(await page.locator(".ca-dialog-close").evaluate((button) => document.activeElement === button), true, "focus remains on the dialog close button");
+  await page.locator(".ca-dialog-close").click();
+  const unsaved = page.locator(".v4-event-list-card").filter({ hasText: "テスト：複数開催日の保存とカレンダー" }).first();
+  await unsaved.locator("[data-ca-save-event-id]").waitFor({ state: "visible" });
+  assert.equal(await unsaved.locator("[data-ca-open-saved].is-saved").count(), 0, "underlying list updates after removal");
+  report.checks.push("saved removal, focus and underlying-card synchronization");
+
   assert.deepEqual(report.pageErrors, [], "browser page errors during civic-action flow");
   assert.deepEqual(report.consoleErrors, [], "browser console errors during civic-action flow");
   assert.deepEqual(criticalFailures(), [], "same-origin resource failures during civic-action flow");

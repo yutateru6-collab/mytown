@@ -50,7 +50,7 @@ def main() -> None:
     for token in (
         './p0-stability.css?v=2',
         './p0-stability.js?v=3',
-        './civic-actions.js?v=3',
+        './civic-actions.js?v=4',
     ):
         require(index, token, "runtime wiring")
     forbid(index, "MutationObserver", "post-render label deletion observer")
@@ -151,7 +151,7 @@ def main() -> None:
 
     # Installed/offline app receives the same stabilized assets.
     for token in (
-        "mytown-civic-v38-trust-ux",
+        "mytown-civic-v39-event-schedule",
         "p0-stability.css",
         "p0-stability.js",
         "data/community-events.json",

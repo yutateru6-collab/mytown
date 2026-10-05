@@ -199,6 +199,7 @@ function sourceLink(url, label = "直方市のページを見る") {
 }
 
 function itemDisplayStatus(item = {}) {
+  if (typeof EventSchedule !== "undefined" && isCommunityEventItem(item)) return EventSchedule.status(item);
   const status = String(item.statusLabel || item.status || "").trim();
   const translations = {
     scheduled: "開催予定",
