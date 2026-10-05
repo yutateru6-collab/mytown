@@ -1,41 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-05T15:12:07.575797+09:00",
+  "generatedAt": "2026-10-06T00:15:10.739191+09:00",
   "events": [
-    {
-      "id": "community-nogata-shakyo-a5f34d031fbd",
-      "title": "10月25日(日)第48回のおがた福祉まつり開催のお知らせ",
-      "summary": "ゆずりあと古町商店街の2会場で開催します。",
-      "startDate": "2026-10-25",
-      "endDate": "2026-10-25",
-      "when": "10月25日（日）10:00～15:00",
-      "location": "直方市保健福祉センターゆずりあ・古町商店街",
-      "organizerName": "",
-      "publisherName": "直方市社会福祉協議会",
-      "sourceUrl": "https://nogatashakyo.org/pages/25?detail=1&b_id=118&r_id=101#block118",
-      "sourceType": "community",
-      "sourceLabel": "地域団体",
-      "verificationLevel": "publisher",
-      "status": "scheduled",
-      "statusLabel": "開催予定",
-      "category": "イベント",
-      "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
-      "applicationStatus": "not_required_or_unknown",
-      "contentIssues": [],
-      "contentNotes": [],
-      "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:33.942987+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.212910+09:00",
-      "editoriallyReviewed": true,
-      "scheduleReview": {
-        "verifiedOn": "2026-10-05",
-        "evidenceUrls": [
-          "https://nogatashakyo.org/pages/25?detail=1&b_id=118&r_id=101#block118"
-        ],
-        "note": "本文の開催日時・会場を照合。添付チラシの更新日を開催日から除外。"
-      }
-    },
     {
       "id": "community-aeon-mall-nogata-1d9b7931c6b4",
       "title": "iAEON 5th Anniversary開催中",
@@ -54,13 +20,7 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
-      "applicationStatus": "not_required_or_unknown",
-      "contentIssues": [],
-      "contentNotes": [],
-      "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:33.987005+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.212964+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "editoriallyReviewed": true,
       "scheduleReview": {
         "verifiedOn": "2026-10-05",
@@ -68,45 +28,13 @@
           "https://nogata.aeonmall.jp/event/b6d19054-6756-414c-a42e-19b40c22e66f"
         ],
         "note": "日程欄と本文の期間を照合。関連イベントの日付を除外。"
-      }
-    },
-    {
-      "id": "community-nogata-shakyo-9291129b4c37",
-      "title": "「介護未経験者向け入門研修」が開催されます。",
-      "summary": "直方市社会福祉協議会が公開しているイベント情報です。",
-      "startDate": "2026-09-26",
-      "endDate": "2026-12-10",
-      "when": "9月26日ほか全5日",
-      "location": "",
-      "organizerName": "",
-      "publisherName": "直方市社会福祉協議会",
-      "sourceUrl": "https://nogatashakyo.org/pages/25?detail=1&b_id=119&r_id=91#block119",
-      "sourceType": "community",
-      "sourceLabel": "地域団体",
-      "verificationLevel": "publisher",
-      "status": "scheduled",
-      "statusLabel": "開催予定",
-      "category": "体験・学び",
-      "tags": [
-        "learn",
-        "free"
-      ],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
-      "occurrences": [
-        "2026-09-26",
-        "2026-10-03",
-        "2026-11-07",
-        "2026-11-20",
-        "2026-12-10"
-      ],
-      "money": "無料",
-      "moneyVerification": "publisher_label",
+      },
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:34.941024+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213023+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:37.830775+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.880732+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-5e0374d05da3",
@@ -126,13 +54,7 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
-      "applicationStatus": "not_required_or_unknown",
-      "contentIssues": [],
-      "contentNotes": [],
-      "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:34.976483+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213062+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "editoriallyReviewed": true,
       "scheduleReview": {
         "verifiedOn": "2026-10-05",
@@ -140,7 +62,13 @@
           "https://nogata.aeonmall.jp/event/855015b5-8959-4d2e-bd4b-4faff180ace2"
         ],
         "note": "日程欄の連続販売期間を照合。関連イベントの日付を除外。"
-      }
+      },
+      "applicationStatus": "not_required_or_unknown",
+      "contentIssues": [],
+      "contentNotes": [],
+      "contentStatus": "verified",
+      "contentCheckedAt": "2026-10-06T00:15:37.921391+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.880782+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-3abc9d6bbad5",
@@ -160,20 +88,20 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
-      "applicationStatus": "not_required_or_unknown",
-      "contentIssues": [],
-      "contentNotes": [],
-      "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:35.013276+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213094+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "scheduleReview": {
         "verifiedOn": "2026-10-05",
         "evidenceUrls": [
           "https://nogata.aeonmall.jp/event/e4bfb04e-d6a8-441e-825c-f3f45b758ed9"
         ],
         "note": "公式日程欄と本文の本催し期間を照合。子企画の日時は本催し日程に混ぜない。"
-      }
+      },
+      "applicationStatus": "not_required_or_unknown",
+      "contentIssues": [],
+      "contentNotes": [],
+      "contentStatus": "verified",
+      "contentCheckedAt": "2026-10-06T00:15:38.010685+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.880820+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-0c571fa3641c",
@@ -181,7 +109,7 @@
       "summary": "イオンモール直方が公開しているイベント情報です。",
       "startDate": "2026-10-09",
       "endDate": "2026-10-19",
-      "when": "10月9日～19日 10:00～20:00",
+      "when": "10月9日～10月19日 10:00～20:00",
       "location": "イオンモール直方 1F 中央エスカレーター前",
       "organizerName": "",
       "publisherName": "イオンモール直方",
@@ -193,13 +121,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:35.054968+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213131+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:38.116879+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.880851+09:00"
     },
     {
       "id": "community-nogata-shakyo-ea800c06b8d1",
@@ -207,7 +135,7 @@
       "summary": "直方市社会福祉協議会が公開しているイベント情報です。",
       "startDate": "2026-10-09",
       "endDate": "2026-10-09",
-      "when": "10月9日 13時45分",
+      "when": "10月9日 14時～16時／13時45分",
       "location": "直方市保健福祉センターゆずりあ 3階 多目的室 直方市津田町7-25",
       "organizerName": "",
       "publisherName": "直方市社会福祉協議会",
@@ -222,7 +150,7 @@
         "learn",
         "free"
       ],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "money": "無料",
       "moneyVerification": "publisher_label",
       "applicationDeadline": "2026-10-08",
@@ -230,8 +158,8 @@
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:36.197493+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213256+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:39.197738+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.880993+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-6a114f62d785",
@@ -240,7 +168,7 @@
       "startDate": "2026-10-14",
       "endDate": "2026-10-14",
       "when": "10月14日 10:00～16:00",
-      "location": "イオンモール直方",
+      "location": "イオンモール直方 1F チューリップコート",
       "organizerName": "",
       "publisherName": "イオンモール直方",
       "sourceUrl": "https://nogata.aeonmall.jp/event/d6512d34-6202-4aa9-bb21-d8a19946d2d8",
@@ -251,13 +179,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:36.240164+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213299+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:39.289950+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881034+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-1da201bafe0c",
@@ -265,7 +193,7 @@
       "summary": "イオンモール直方が公開しているイベント情報です。",
       "startDate": "2026-10-23",
       "endDate": "2026-10-26",
-      "when": "10月23日～26日 11:00～18:30",
+      "when": "10月23日～10月26日 11:00～18:30",
       "location": "イオンモール直方 2Fイオンホール",
       "organizerName": "",
       "publisherName": "イオンモール直方",
@@ -279,13 +207,13 @@
       "tags": [
         "learn"
       ],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:36.274195+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213334+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:39.378205+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881070+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-b79ca2268d34",
@@ -305,13 +233,47 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:36.314553+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213366+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:39.515816+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881100+09:00"
+    },
+    {
+      "id": "community-nogata-shakyo-ed3a263c9cb7",
+      "title": "10月25日(日)第48回のおがた福祉まつり開催のお知らせ",
+      "summary": "ゆずりあと古町商店街の2会場で開催します。",
+      "startDate": "2026-10-25",
+      "endDate": "2026-10-25",
+      "when": "10月25日（日）10:00～15:00",
+      "location": "直方市保健福祉センターゆずりあ・古町商店街",
+      "organizerName": "",
+      "publisherName": "直方市社会福祉協議会",
+      "sourceUrl": "https://nogatashakyo.org/pages/25?detail=1&b_id=118&r_id=101#block118",
+      "sourceType": "community",
+      "sourceLabel": "地域団体",
+      "verificationLevel": "publisher",
+      "status": "scheduled",
+      "statusLabel": "開催予定",
+      "category": "イベント",
+      "tags": [],
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
+      "editoriallyReviewed": true,
+      "scheduleReview": {
+        "verifiedOn": "2026-10-05",
+        "evidenceUrls": [
+          "https://nogatashakyo.org/pages/25?detail=1&b_id=118&r_id=101#block118"
+        ],
+        "note": "本文の開催日時・会場を照合。添付チラシの更新日を開催日から除外。"
+      },
+      "applicationStatus": "not_required_or_unknown",
+      "contentIssues": [],
+      "contentNotes": [],
+      "contentStatus": "verified",
+      "contentCheckedAt": "2026-10-06T00:15:40.632508+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881153+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-2a371bbec385",
@@ -320,7 +282,7 @@
       "startDate": "2026-10-25",
       "endDate": "2026-10-25",
       "when": "10月25日 11:00／13:00／15:00",
-      "location": "イオンモール直方",
+      "location": "イオンモール直方 1F チューリップコート",
       "organizerName": "",
       "publisherName": "イオンモール直方",
       "sourceUrl": "https://nogata.aeonmall.jp/event/09db9d5d-6477-4245-ab1d-b809d3c7312b",
@@ -331,13 +293,13 @@
       "statusLabel": "受付終了",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "applicationStatus": "closed",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:36.355630+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213396+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:40.729075+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881183+09:00"
     },
     {
       "id": "community-ongagawa-mizubekan-b5c0051759fa",
@@ -362,14 +324,14 @@
         "outdoor"
       ],
       "recurrence": "毎月最後の日曜日",
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "editoriallyReviewed": true,
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:37.443305+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213429+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:41.597877+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881213+09:00"
     },
     {
       "id": "community-nogata-kankoh-b6d504b21cb2",
@@ -377,7 +339,7 @@
       "summary": "直方市観光物産振興協会が公開しているイベント情報です。",
       "startDate": "2026-10-31",
       "endDate": "2026-10-31",
-      "when": "10月31日 09:30～12:00／09:00",
+      "when": "10月31日",
       "location": "JR直方魁皇像前",
       "organizerName": "",
       "publisherName": "直方市観光物産振興協会",
@@ -389,7 +351,7 @@
       "statusLabel": "申込締切 10月20日",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "applicationDeadline": "2026-10-20",
       "applicationStatus": "open",
       "money": "1,000円",
@@ -408,8 +370,8 @@
         "公式掲載ページのHTML抽出では金額の先頭数字が欠落したため、主催者・日程・内容が一致する公開記事と照合し、参加費1,000円を確認しました。"
       ],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:38.488577+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213475+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:42.377116+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881254+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-b53c7211ae96",
@@ -429,13 +391,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:38.524339+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213513+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:42.464001+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881284+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-7fa8aaab873b",
@@ -455,13 +417,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:38.558769+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213546+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:42.581591+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881328+09:00"
     },
     {
       "id": "community-aeon-mall-nogata-c74eb5bcb30c",
@@ -470,7 +432,7 @@
       "startDate": "2026-10-31",
       "endDate": "2026-10-31",
       "when": "10月31日 12:00／15:00／17:00",
-      "location": "イオンモール直方",
+      "location": "イオンモール直方 1F チューリップコート",
       "organizerName": "",
       "publisherName": "イオンモール直方",
       "sourceUrl": "https://nogata.aeonmall.jp/event/b48088d7-cc08-4f00-a63a-ed5530139170",
@@ -481,13 +443,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:38.599065+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213582+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:42.692599+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881360+09:00"
     },
     {
       "id": "community-nogata-kankoh-ed94dc2637a4",
@@ -507,71 +469,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:39.398903+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213616+09:00"
-    },
-    {
-      "id": "community-nogata-kankoh-ee5c047debff",
-      "title": "チューリップの球根植えボランティア",
-      "summary": "遠賀川河川敷で球根を植える活動です。作業は1回30分程度で、参加日を選べます。",
-      "startDate": "2026-11-17",
-      "endDate": "2026-12-04",
-      "when": "11月17日ほか全9日 10:00～15:00",
-      "location": "遠賀川河川敷",
-      "organizerName": "直方市観光物産振興協会",
-      "publisherName": "直方市観光物産振興協会",
-      "sourceUrl": "https://nogata-kankoh.com/news/8291.html",
-      "sourceType": "tourism",
-      "sourceLabel": "観光・地域",
-      "verificationLevel": "publisher",
-      "status": "scheduled",
-      "statusLabel": "申込締切 10月9日",
-      "category": "地域参加",
-      "tags": [
-        "participation",
-        "volunteer",
-        "family",
-        "outdoor"
-      ],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
-      "occurrences": [
-        "2026-11-17",
-        "2026-11-18",
-        "2026-11-19",
-        "2026-11-25",
-        "2026-11-26",
-        "2026-11-28",
-        "2026-11-29",
-        "2026-12-02",
-        "2026-12-04"
-      ],
-      "applicationDeadline": "2026-10-09",
-      "reservationRequired": true,
-      "editoriallyReviewed": true,
-      "applicationStatus": "open",
-      "reviewedOverride": {
-        "verifiedOn": "2026-09-03",
-        "fields": [
-          "applicationDeadline",
-          "reservationRequired"
-        ],
-        "evidenceUrls": [
-          "https://nogata-kankoh.com/news/8291.html"
-        ]
-      },
-      "contentIssues": [],
-      "contentNotes": [
-        "申込期限を掲載元から再確認し『2026-11-17』に更新しました",
-        "同期前のレビュー済み期限は10月9日でした。品質再検査が開催初日11月17日を期限として拾ったため、申込期限を10月9日に戻し、受付状態は現在日から毎回計算します。"
-      ],
-      "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:40.378808+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213678+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:43.493548+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881388+09:00"
     },
     {
       "id": "community-nogata-shakyo-576cad36495b",
@@ -591,13 +495,13 @@
       "statusLabel": "開催予定",
       "category": "イベント",
       "tags": [],
-      "lastCheckedAt": "2026-10-05T15:12:07.575797+09:00",
+      "lastCheckedAt": "2026-10-06T00:15:10.739191+09:00",
       "applicationStatus": "not_required_or_unknown",
       "contentIssues": [],
       "contentNotes": [],
       "contentStatus": "verified",
-      "contentCheckedAt": "2026-10-05T15:12:42.114751+09:00",
-      "stateCheckedAt": "2026-10-05T15:12:42.213763+09:00"
+      "contentCheckedAt": "2026-10-06T00:15:44.768777+09:00",
+      "stateCheckedAt": "2026-10-06T00:15:44.881430+09:00"
     }
   ],
   "sourceHealth": [
@@ -605,18 +509,7 @@
       "id": "nogata-shakyo",
       "name": "直方市社会福祉協議会",
       "status": "ok",
-      "checkedAt": "2026-10-05T15:12:07.575797+09:00",
-      "fetchStatus": "ok",
-      "contentStatus": "verified",
-      "contentIssueCount": 0,
-      "contentVerifiedEvents": 4,
-      "contentEventCount": 4
-    },
-    {
-      "id": "nogata-kankoh",
-      "name": "直方市観光物産振興協会",
-      "status": "ok",
-      "checkedAt": "2026-10-05T15:12:07.575797+09:00",
+      "checkedAt": "2026-10-06T00:15:10.739191+09:00",
       "fetchStatus": "ok",
       "contentStatus": "verified",
       "contentIssueCount": 0,
@@ -624,10 +517,21 @@
       "contentEventCount": 3
     },
     {
+      "id": "nogata-kankoh",
+      "name": "直方市観光物産振興協会",
+      "status": "ok",
+      "checkedAt": "2026-10-06T00:15:10.739191+09:00",
+      "fetchStatus": "ok",
+      "contentStatus": "verified",
+      "contentIssueCount": 0,
+      "contentVerifiedEvents": 2,
+      "contentEventCount": 2
+    },
+    {
       "id": "aeon-mall-nogata",
       "name": "イオンモール直方",
       "status": "ok",
-      "checkedAt": "2026-10-05T15:12:07.575797+09:00",
+      "checkedAt": "2026-10-06T00:15:10.739191+09:00",
       "fetchStatus": "ok",
       "contentStatus": "verified",
       "contentIssueCount": 0,
@@ -638,7 +542,7 @@
       "id": "ongagawa-mizubekan",
       "name": "NPO法人直方川づくりの会",
       "status": "ok",
-      "checkedAt": "2026-10-05T15:12:07.575797+09:00",
+      "checkedAt": "2026-10-06T00:15:10.739191+09:00",
       "fetchStatus": "ok",
       "contentStatus": "verified",
       "contentIssueCount": 0,
@@ -646,7 +550,7 @@
       "contentEventCount": 1
     }
   ],
-  "qualityCheckedAt": "2026-10-05T15:12:42.114777+09:00",
+  "qualityCheckedAt": "2026-10-06T00:15:44.768807+09:00",
   "qualityFetchWarnings": [],
-  "stateCheckedAt": "2026-10-05T15:12:42.213773+09:00"
+  "stateCheckedAt": "2026-10-06T00:15:44.881436+09:00"
 }
