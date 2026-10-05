@@ -151,7 +151,7 @@ def main() -> None:
 
     # Installed/offline app receives the same stabilized assets.
     for token in (
-        "mytown-civic-v39-event-schedule",
+        "mytown-civic-v40-business-guide",
         "p0-stability.css",
         "p0-stability.js",
         "data/community-events.json",

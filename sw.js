@@ -1,4 +1,4 @@
-const CACHE = "mytown-civic-v39-event-schedule";
+const CACHE = "mytown-civic-v40-business-guide";
 const STATIC_ASSETS = [
   "./",
   "./index.html",
@@ -13,6 +13,8 @@ const STATIC_ASSETS = [
   "./civic-actions.css",
   "./civic-portal.css",
   "./p0-stability.css",
+  "./civic-business.css",
+  "./civic-business.js",
   "./event-schedule.js",
   "./app.js",
   "./app-runtime.js",
@@ -51,6 +53,7 @@ const STATIC_ASSETS = [
   "./data/politics.json",
   "./data/election-2023.json",
   "./data/civic-report-routes.json",
+  "./data/civic-business.json",
   "./data/civic-portal.json"
 ];
 
@@ -95,7 +98,8 @@ self.addEventListener("fetch", (event) => {
     url.pathname.endsWith("/data/politics.json") ||
     url.pathname.endsWith("/data/election-2023.json") ||
     url.pathname.endsWith("/data/civic-report-routes.json") ||
-    url.pathname.endsWith("/data/civic-portal.json");
+    url.pathname.endsWith("/data/civic-portal.json") ||
+    url.pathname.endsWith("/data/civic-business.json");
 
   if (isSyncedData || event.request.mode === "navigate") {
     event.respondWith(networkFirst(event.request).catch(() => caches.match("./index.html")));

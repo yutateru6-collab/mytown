@@ -58,6 +58,8 @@ jobs:
           node scripts/test_offline_assets.js
           node scripts/test_event_schedule.js
           node scripts/test_search_scroll_ux.js
+          node --check civic-business.js
+          node scripts/test_civic_business.js
           node --check app.js
           node --check app-runtime.js
           node --check politics.js
@@ -106,6 +108,13 @@ jobs:
           python -m json.tool data/civic-report-routes.json > /dev/null
           python -m json.tool data/civic-portal.json > /dev/null
 
+      - name: Static build and civic guide output
+        run: |
+          node scripts/build-static.mjs
+          test -s dist/civic-business.js
+          test -s dist/civic-business.css
+          test -s dist/data/civic-business.json
+
       - name: Official source registry
         run: python scripts/verify_sources.py
 
@@ -144,7 +153,7 @@ jobs:
           ! grep -q 'MutationObserver' index.html
           grep -q '>市政</span>' index.html
           grep -q '>さがす</span>' index.html
-          grep -q 'mytown-civic-v39-event-schedule' sw.js
+          grep -q 'mytown-civic-v40-business-guide' sw.js
 
       - name: Required citizen-first UX wiring
         run: |

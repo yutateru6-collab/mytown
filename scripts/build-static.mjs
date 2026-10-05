@@ -30,6 +30,8 @@ const files = [
   "ui-home-v4.js",
   "bulletin-reader.js",
   "civic-actions.js",
+  "civic-business.js",
+  "civic-business.css",
   "civic-portal.js"
 ];
 
