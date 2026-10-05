@@ -108,6 +108,13 @@ jobs:
           python -m json.tool data/civic-report-routes.json > /dev/null
           python -m json.tool data/civic-portal.json > /dev/null
 
+      - name: Static build and civic guide output
+        run: |
+          node scripts/build-static.mjs
+          test -s dist/civic-business.js
+          test -s dist/civic-business.css
+          test -s dist/data/civic-business.json
+
       - name: Official source registry
         run: python scripts/verify_sources.py
 
