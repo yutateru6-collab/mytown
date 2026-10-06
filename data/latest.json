@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "city": "直方市",
-  "verifiedOn": "2026-10-06",
+  "verifiedOn": "2026-10-07",
   "population": {
     "asOf": "2026年（令和8年）9月末",
     "total": 53847,
@@ -97,22 +97,22 @@
       "sourceUpdated": "2026-09-01"
     },
     {
-      "id": "rss-d33a43e33456",
-      "category": "その他",
-      "title": "【福岡県事業】福岡県脱炭素化人材育成事業 経営者向け講座を開催します！",
+      "id": "rss-b8e09498942e",
+      "category": "防災",
+      "title": "「令和8年熊本地震災害義援金」を受け付けています",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-10-05",
+      "published": "2026-10-06",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_17366.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1208/_11778/_17176.html"
     },
     {
-      "id": "rss-7ea5f1bd748b",
-      "category": "その他",
-      "title": "見て、学んで、もらえる！ 世界的庭園デザイナー石原和幸氏による講演会の参加者募集 ～プロの植栽実演＆福岡県産花苗プレゼントも！～",
+      "id": "rss-78cf7a4a9a94",
+      "category": "議会",
+      "title": "ワイヤーメッシュ柵の再入札についてお知らせします（直鞍地域鳥獣被害防止対策協議会より）",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-10-05",
+      "published": "2026-10-06",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1204/_15466/_16221.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1228/_4044/_13290/_17381.html"
     }
   ],
   "council": {
@@ -221,14 +221,29 @@
   },
   "latest": [
     {
-      "date": "2026-10-05",
-      "title": "【福岡県事業】福岡県脱炭素化人材育成事業 経営者向け講座を開催します！",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_17366.html"
+      "date": "2026-10-06",
+      "title": "「令和8年熊本地震災害義援金」を受け付けています",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1208/_11778/_17176.html"
+    },
+    {
+      "date": "2026-10-06",
+      "title": "ワイヤーメッシュ柵の再入札についてお知らせします（直鞍地域鳥獣被害防止対策協議会より）",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1228/_4044/_13290/_17381.html"
+    },
+    {
+      "date": "2026-10-06",
+      "title": "建設工事入札結果【10月6日入札分】",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17383.html"
+    },
+    {
+      "date": "2026-10-06",
+      "title": "世界が認める庭園デザイナー石原和幸氏が語る花と緑によるまちづくり講演会を開催！",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1204/_15466/_16221.html"
     },
     {
       "date": "2026-10-05",
-      "title": "見て、学んで、もらえる！ 世界的庭園デザイナー石原和幸氏による講演会の参加者募集 ～プロの植栽実演＆福岡県産花苗プレゼントも！～",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1204/_15466/_16221.html"
+      "title": "【福岡県事業】福岡県脱炭素化人材育成事業 経営者向け講座を開催します！",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_17366.html"
     },
     {
       "date": "2026-10-05",
@@ -264,21 +279,6 @@
       "date": "2026-10-02",
       "title": "建設工事入札結果【10月2日入札分】",
       "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_6232/_16732/_17373.html"
-    },
-    {
-      "date": "2026-10-02",
-      "title": "【募集中】不登校児童支援員",
-      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_17113.html"
-    },
-    {
-      "date": "2026-10-02",
-      "title": "【募集開始】社会福祉士",
-      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_15544.html"
-    },
-    {
-      "date": "2026-10-02",
-      "title": "【福岡県事業】生物多様性アドバイザーと福岡生きものステーションを紹介！",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14280/_14421/_17333.html"
     }
   ],
   "sourceHealth": [
@@ -344,5 +344,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-10-06T00:06:54Z"
+  "generatedAt": "2026-10-06T18:25:22Z"
 }

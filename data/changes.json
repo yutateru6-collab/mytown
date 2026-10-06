@@ -1,7 +1,39 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-05T13:51:55Z",
+  "generatedAt": "2026-10-06T18:25:22Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_1208/_11778/_17176.html",
+      "kind": "new",
+      "title": "「令和8年熊本地震災害義援金」を受け付けています",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1208/_11778/_17176.html",
+      "sourcePublished": "2026-10-06",
+      "detectedAt": "2026-10-06T18:25:22Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1228/_4044/_13290/_17381.html",
+      "kind": "new",
+      "title": "ワイヤーメッシュ柵の再入札についてお知らせします（直鞍地域鳥獣被害防止対策協議会より）",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1228/_4044/_13290/_17381.html",
+      "sourcePublished": "2026-10-06",
+      "detectedAt": "2026-10-06T18:25:22Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17383.html",
+      "kind": "new",
+      "title": "建設工事入札結果【10月6日入札分】",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_2999/_16730/_17383.html",
+      "sourcePublished": "2026-10-06",
+      "detectedAt": "2026-10-06T18:25:22Z"
+    },
+    {
+      "id": "latest-update:https://www.city.nogata.fukuoka.jp/kurashi/_1204/_15466/_16221.html",
+      "kind": "updated",
+      "title": "世界が認める庭園デザイナー石原和幸氏が語る花と緑によるまちづくり講演会を開催！",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1204/_15466/_16221.html",
+      "sourcePublished": "2026-10-06",
+      "detectedAt": "2026-10-06T18:25:22Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_17366.html",
       "kind": "new",
