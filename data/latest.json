@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "city": "直方市",
-  "verifiedOn": "2026-10-05",
+  "verifiedOn": "2026-10-06",
   "population": {
     "asOf": "2026年（令和8年）9月末",
     "total": 53847,
@@ -97,27 +97,6 @@
       "sourceUpdated": "2026-09-01"
     },
     {
-      "id": "pilates-2026-autumn",
-      "category": "健康・スポーツ",
-      "title": "ピラティス教室の参加者募集",
-      "summary": "直方市体育館で全10回のピラティス教室を開催。市内在住・在勤の18歳以上が対象で、申込期間は9月22日から10月5日です。",
-      "published": "2026-09-01",
-      "status": "受付中（10/5まで）",
-      "applicationStarts": "2026-09-22",
-      "applicationDeadline": "2026-10-05",
-      "when": "10月9日〜12月18日の指定金曜日・全10回",
-      "location": "直方市体育館（直方市大字直方674-25）",
-      "why": "直方市公式ページでは、インナーマッスルや体幹を鍛え、筋力不足や姿勢の改善にもつながる教室として案内されています。",
-      "money": "参加料 4,000円",
-      "moneyNote": "保険料込み。市の事業費や予算額ではなく、参加者が支払う参加料です。",
-      "bullets": [
-        "Aコース 9:30〜10:30、Bコース 10:45〜11:45",
-        "各コース定員20名",
-        "申込期間：9月22日〜10月5日（定員になり次第締切）"
-      ],
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_3987/_3982/_8968.html"
-    },
-    {
       "id": "rss-d33a43e33456",
       "category": "その他",
       "title": "【福岡県事業】福岡県脱炭素化人材育成事業 経営者向け講座を開催します！",
@@ -125,6 +104,15 @@
       "published": "2026-10-05",
       "status": "新着",
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_17366.html"
+    },
+    {
+      "id": "rss-7ea5f1bd748b",
+      "category": "その他",
+      "title": "見て、学んで、もらえる！ 世界的庭園デザイナー石原和幸氏による講演会の参加者募集 ～プロの植栽実演＆福岡県産花苗プレゼントも！～",
+      "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
+      "published": "2026-10-05",
+      "status": "新着",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_1204/_15466/_16221.html"
     }
   ],
   "council": {
@@ -322,7 +310,7 @@
     {
       "name": "ピラティス教室",
       "mode": "page-check",
-      "status": "ok"
+      "status": "failed"
     },
     {
       "name": "ごみ収集案内",
@@ -356,5 +344,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-10-05T13:51:55Z"
+  "generatedAt": "2026-10-06T00:06:54Z"
 }
