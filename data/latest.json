@@ -97,22 +97,22 @@
       "sourceUpdated": "2026-09-01"
     },
     {
-      "id": "rss-b8e09498942e",
-      "category": "防災",
-      "title": "「令和8年熊本地震災害義援金」を受け付けています",
+      "id": "rss-c92bca8d9c27",
+      "category": "その他",
+      "title": "新年度保育所・認定こども園（保育）入所の申し込みが始まります",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-10-06",
+      "published": "2026-10-07",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1208/_11778/_17176.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html"
     },
     {
-      "id": "rss-78cf7a4a9a94",
-      "category": "議会",
-      "title": "ワイヤーメッシュ柵の再入札についてお知らせします（直鞍地域鳥獣被害防止対策協議会より）",
+      "id": "rss-9c7432436953",
+      "category": "防災",
+      "title": "災害情報・火災案内",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-10-06",
+      "published": "2026-10-07",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1228/_4044/_13290/_17381.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
     }
   ],
   "council": {
@@ -221,6 +221,16 @@
   },
   "latest": [
     {
+      "date": "2026-10-07",
+      "title": "新年度保育所・認定こども園（保育）入所の申し込みが始まります",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html"
+    },
+    {
+      "date": "2026-10-07",
+      "title": "災害情報・火災案内",
+      "url": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
+    },
+    {
       "date": "2026-10-06",
       "title": "「令和8年熊本地震災害義援金」を受け付けています",
       "url": "https://www.city.nogata.fukuoka.jp/kenko/_1208/_11778/_17176.html"
@@ -269,16 +279,6 @@
       "date": "2026-10-05",
       "title": "令和8年度第58回直方市民文化祭へのご来場をお待ちしております♪",
       "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17027/_17028.html"
-    },
-    {
-      "date": "2026-10-05",
-      "title": "新年度保育所・認定こども園（保育）入所の申し込みが始まります",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html"
-    },
-    {
-      "date": "2026-10-02",
-      "title": "建設工事入札結果【10月2日入札分】",
-      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_6232/_16732/_17373.html"
     }
   ],
   "sourceHealth": [
@@ -344,5 +344,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-10-06T18:25:22Z"
+  "generatedAt": "2026-10-07T13:30:30Z"
 }

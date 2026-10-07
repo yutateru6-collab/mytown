@@ -1,7 +1,23 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-06T18:25:22Z",
+  "generatedAt": "2026-10-07T13:30:30Z",
   "changes": [
+    {
+      "id": "latest-update:https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html",
+      "kind": "updated",
+      "title": "新年度保育所・認定こども園（保育）入所の申し込みが始まります",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html",
+      "sourcePublished": "2026-10-07",
+      "detectedAt": "2026-10-07T13:30:30Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html",
+      "kind": "new",
+      "title": "災害情報・火災案内",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html",
+      "sourcePublished": "2026-10-07",
+      "detectedAt": "2026-10-07T13:30:30Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_1208/_11778/_17176.html",
       "kind": "new",
