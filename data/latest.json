@@ -97,6 +97,15 @@
       "sourceUpdated": "2026-09-01"
     },
     {
+      "id": "rss-9c7432436953",
+      "category": "防災",
+      "title": "災害情報・火災案内",
+      "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
+      "published": "2026-10-08",
+      "status": "新着",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
+    },
+    {
       "id": "rss-58848c2c4e08",
       "category": "健康・スポーツ",
       "title": "オストメイトのための健康教室",
@@ -104,15 +113,6 @@
       "published": "2026-10-08",
       "status": "新着",
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2079/_15599.html"
-    },
-    {
-      "id": "rss-5286ab5ab366",
-      "category": "防災",
-      "title": "クーリングシェルター（指定暑熱避難施設）を開設します！",
-      "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-10-08",
-      "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_15352/_15355.html"
     }
   ],
   "council": {
@@ -222,6 +222,11 @@
   "latest": [
     {
       "date": "2026-10-08",
+      "title": "災害情報・火災案内",
+      "url": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
+    },
+    {
+      "date": "2026-10-08",
       "title": "オストメイトのための健康教室",
       "url": "https://www.city.nogata.fukuoka.jp/kenko/_2079/_15599.html"
     },
@@ -244,11 +249,6 @@
       "date": "2026-10-07",
       "title": "新年度保育所・認定こども園（保育）入所の申し込みが始まります",
       "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html"
-    },
-    {
-      "date": "2026-10-07",
-      "title": "災害情報・火災案内",
-      "url": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
     },
     {
       "date": "2026-10-06",
@@ -344,5 +344,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-10-08T06:11:02Z"
+  "generatedAt": "2026-10-08T13:36:34Z"
 }

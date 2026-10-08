@@ -1,7 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-08T06:11:02Z",
+  "generatedAt": "2026-10-08T13:36:34Z",
   "changes": [
+    {
+      "id": "latest-update:https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html",
+      "kind": "updated",
+      "title": "災害情報・火災案内",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html",
+      "sourcePublished": "2026-10-08",
+      "detectedAt": "2026-10-08T13:36:34Z"
+    },
     {
       "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_2079/_15599.html",
       "kind": "new",
