@@ -1,7 +1,39 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-07T13:30:30Z",
+  "generatedAt": "2026-10-08T06:11:02Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_2079/_15599.html",
+      "kind": "new",
+      "title": "オストメイトのための健康教室",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2079/_15599.html",
+      "sourcePublished": "2026-10-08",
+      "detectedAt": "2026-10-08T06:11:02Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kurashi/_15345/_15352/_15355.html",
+      "kind": "new",
+      "title": "クーリングシェルター（指定暑熱避難施設）を開設します！",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_15352/_15355.html",
+      "sourcePublished": "2026-10-08",
+      "detectedAt": "2026-10-08T06:11:02Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2727/_16804.html",
+      "kind": "new",
+      "title": "令和8年10月13日締切分～修繕工事簡易競争入札情報",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2727/_16804.html",
+      "sourcePublished": "2026-10-08",
+      "detectedAt": "2026-10-08T06:11:02Z"
+    },
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_1209/_9289/_17219.html",
+      "kind": "new",
+      "title": "【定員に達しました】初心者でも安心！大人のための塗り絵教室",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1209/_9289/_17219.html",
+      "sourcePublished": "2026-10-08",
+      "detectedAt": "2026-10-08T06:11:02Z"
+    },
     {
       "id": "latest-update:https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html",
       "kind": "updated",
@@ -207,14 +239,6 @@
       "kind": "new",
       "title": "路線と時刻表を令和8年10月1日付で改正しました",
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1230/_13903/_17125.html",
-      "sourcePublished": "2026-10-01",
-      "detectedAt": "2026-09-30T22:20:21Z"
-    },
-    {
-      "id": "latest:https://www.city.nogata.fukuoka.jp/kenko/_1209/_9289/_17219.html",
-      "kind": "new",
-      "title": "初心者でも安心！大人のための塗り絵教室",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_1209/_9289/_17219.html",
       "sourcePublished": "2026-10-01",
       "detectedAt": "2026-09-30T22:20:21Z"
     },
@@ -567,14 +591,6 @@
       "kind": "new",
       "title": "【福岡県主催キャンペーン】1万人のクリーンアップ大作戦！",
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_14402/_14439/_15787.html",
-      "sourcePublished": "2026-09-11",
-      "detectedAt": "2026-09-11T06:35:13Z"
-    },
-    {
-      "id": "latest:https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2727/_16804.html",
-      "kind": "new",
-      "title": "令和8年9月15日締切分～修繕工事簡易競争入札情報",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2727/_16804.html",
       "sourcePublished": "2026-09-11",
       "detectedAt": "2026-09-11T06:35:13Z"
     },

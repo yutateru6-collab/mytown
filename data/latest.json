@@ -97,22 +97,22 @@
       "sourceUpdated": "2026-09-01"
     },
     {
-      "id": "rss-c92bca8d9c27",
-      "category": "その他",
-      "title": "新年度保育所・認定こども園（保育）入所の申し込みが始まります",
+      "id": "rss-58848c2c4e08",
+      "category": "健康・スポーツ",
+      "title": "オストメイトのための健康教室",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-10-07",
+      "published": "2026-10-08",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2079/_15599.html"
     },
     {
-      "id": "rss-9c7432436953",
+      "id": "rss-5286ab5ab366",
       "category": "防災",
-      "title": "災害情報・火災案内",
+      "title": "クーリングシェルター（指定暑熱避難施設）を開設します！",
       "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-10-07",
+      "published": "2026-10-08",
       "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_15352/_15355.html"
     }
   ],
   "council": {
@@ -221,6 +221,26 @@
   },
   "latest": [
     {
+      "date": "2026-10-08",
+      "title": "オストメイトのための健康教室",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_2079/_15599.html"
+    },
+    {
+      "date": "2026-10-08",
+      "title": "クーリングシェルター（指定暑熱避難施設）を開設します！",
+      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_15352/_15355.html"
+    },
+    {
+      "date": "2026-10-08",
+      "title": "令和8年10月13日締切分～修繕工事簡易競争入札情報",
+      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2727/_16804.html"
+    },
+    {
+      "date": "2026-10-08",
+      "title": "【定員に達しました】初心者でも安心！大人のための塗り絵教室",
+      "url": "https://www.city.nogata.fukuoka.jp/kenko/_1209/_9289/_17219.html"
+    },
+    {
       "date": "2026-10-07",
       "title": "新年度保育所・認定こども園（保育）入所の申し込みが始まります",
       "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2055/_3661.html"
@@ -259,26 +279,6 @@
       "date": "2026-10-05",
       "title": "「第70回高取焼陶器まつり」が開催されます",
       "url": "https://www.city.nogata.fukuoka.jp/kanko/_1227/_13890.html"
-    },
-    {
-      "date": "2026-10-05",
-      "title": "物価高対応子育て応援手当について",
-      "url": "https://www.city.nogata.fukuoka.jp/kenko/_2051/_2066/_16181.html"
-    },
-    {
-      "date": "2026-10-05",
-      "title": "修繕工事入札結果【10月5日入札分】",
-      "url": "https://www.city.nogata.fukuoka.jp/sangyo/_1231/_2726/_15330/_16734/_17328.html"
-    },
-    {
-      "date": "2026-10-05",
-      "title": "直方市指定給水装置工事事業者一覧表",
-      "url": "https://www.city.nogata.fukuoka.jp/kurashi/_1201/_1348/_12946.html"
-    },
-    {
-      "date": "2026-10-05",
-      "title": "令和8年度第58回直方市民文化祭へのご来場をお待ちしております♪",
-      "url": "https://www.city.nogata.fukuoka.jp/kyoikubunka/_2839/_17027/_17028.html"
     }
   ],
   "sourceHealth": [
@@ -344,5 +344,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-10-07T23:08:10Z"
+  "generatedAt": "2026-10-08T06:11:02Z"
 }
