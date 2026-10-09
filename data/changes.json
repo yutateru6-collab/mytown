@@ -1,7 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-08T13:36:34Z",
+  "generatedAt": "2026-10-09T06:14:33Z",
   "changes": [
+    {
+      "id": "latest:https://www.city.nogata.fukuoka.jp/shisei/_1243/_3493/_15437.html",
+      "kind": "new",
+      "title": "職員採用試験　募集開始しました",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_3493/_15437.html",
+      "sourcePublished": "2026-10-09",
+      "detectedAt": "2026-10-09T06:14:33Z"
+    },
     {
       "id": "latest-update:https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html",
       "kind": "updated",

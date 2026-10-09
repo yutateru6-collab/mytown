@@ -97,6 +97,15 @@
       "sourceUpdated": "2026-09-01"
     },
     {
+      "id": "rss-56b4ea563e8e",
+      "category": "その他",
+      "title": "職員採用試験　募集開始しました",
+      "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
+      "published": "2026-10-09",
+      "status": "新着",
+      "sourceUrl": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_3493/_15437.html"
+    },
+    {
       "id": "rss-9c7432436953",
       "category": "防災",
       "title": "災害情報・火災案内",
@@ -104,15 +113,6 @@
       "published": "2026-10-08",
       "status": "新着",
       "sourceUrl": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
-    },
-    {
-      "id": "rss-58848c2c4e08",
-      "category": "健康・スポーツ",
-      "title": "オストメイトのための健康教室",
-      "summary": "直方市公式サイトの新着情報です。内容は公式ページで確認できます。",
-      "published": "2026-10-08",
-      "status": "新着",
-      "sourceUrl": "https://www.city.nogata.fukuoka.jp/kenko/_2079/_15599.html"
     }
   ],
   "council": {
@@ -221,6 +221,11 @@
   },
   "latest": [
     {
+      "date": "2026-10-09",
+      "title": "職員採用試験　募集開始しました",
+      "url": "https://www.city.nogata.fukuoka.jp/shisei/_1243/_3493/_15437.html"
+    },
+    {
       "date": "2026-10-08",
       "title": "災害情報・火災案内",
       "url": "https://www.city.nogata.fukuoka.jp/syobo/_1247/_14641.html"
@@ -274,11 +279,6 @@
       "date": "2026-10-05",
       "title": "【福岡県事業】福岡県脱炭素化人材育成事業 経営者向け講座を開催します！",
       "url": "https://www.city.nogata.fukuoka.jp/kurashi/_15345/_9954/_14425/_17366.html"
-    },
-    {
-      "date": "2026-10-05",
-      "title": "「第70回高取焼陶器まつり」が開催されます",
-      "url": "https://www.city.nogata.fukuoka.jp/kanko/_1227/_13890.html"
     }
   ],
   "sourceHealth": [
@@ -344,5 +344,5 @@
     "meetingSource": "data/meetings.json",
     "sourceRegistry": "data/sources.json"
   },
-  "generatedAt": "2026-10-08T23:23:52Z"
+  "generatedAt": "2026-10-09T06:14:33Z"
 }
